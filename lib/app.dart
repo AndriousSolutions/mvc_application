@@ -25,3 +25,6 @@ export 'src/controller/app.dart';
 
 export 'package:mvc_pattern/mvc_pattern.dart' show AppMVC;
 
+/// App
+export 'package:mvc_application/src/controller/app.dart' show App;
+
