@@ -24,3 +24,27 @@
 export 'package:mvc_pattern/mvc_pattern.dart'
     show
      ControllerMVC;
+
+import 'package:mvc_application/controller.dart';
+
+class Controller extends ControllerMVC{
+  factory Controller() {
+    if (_this == null) _this = Controller._();
+    return _this;
+  }
+  static Controller _this;
+
+  Controller._();
+
+  /// Allow for easy access to 'the Controller' throughout the application.
+  static Controller get con => _this ?? Controller();
+
+
+
+
+
+
+
+
+
+}
