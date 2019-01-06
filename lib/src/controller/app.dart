@@ -180,8 +180,11 @@ class App extends StatelessWidget {
   static bool get showSemanticsDebugger => _vw.showSemanticsDebugger;
   static bool get debugShowCheckedModeBanner => _vw.debugShowCheckedModeBanner;
 
+  static BuildContext get context => _context;
   static BuildContext _context;
+
   static ThemeData _theme;
+
   static ScaffoldState _scaffold;
 
   @override
@@ -291,8 +294,8 @@ class _App extends AppMVC {
   }
 
   Future<bool> init() async {
+    super.init();
     _initInternal();
-
     return _vw.init();
   }
 
