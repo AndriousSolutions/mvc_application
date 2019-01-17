@@ -25,11 +25,8 @@
 export 'package:mvc_pattern/mvc_pattern.dart'
     show
         ViewMVC,
-        StateEvents,
         StateViewMVC,
-        StateMVC,
-        StatedWidget,
-        StatelessWidgetMVC;
+        StateMVC;
 
 /// Settings
 export 'package:mvc_application/src/view/utils/appsettings.dart';
