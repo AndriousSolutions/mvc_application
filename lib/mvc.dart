@@ -46,26 +46,27 @@ import 'package:flutter/material.dart'
         TransitionBuilder,
         WidgetBuilder;
 
-import 'app.dart' as app show App;
+import 'app.dart' show App;
 
 import 'controller.dart' show ControllerMVC;
 
 import 'view.dart' show AppController, AppView, LoadingScreen;
 
+/// Passed to runApp() but calls App()
 class MVC extends StatelessWidget {
   MVC(
     this.view, {
     Key key,
   }) : super(key: key);
-
-  final View view;
+  final AppView view;
 
   @protected
   Widget build(BuildContext context) {
-    return app.App(view);
+    return App(view);
   }
 }
 
+/// Passed as 'View' to MVC class for a simply app.
 class View extends AppView {
   View({
     this.con,
@@ -91,7 +92,7 @@ class View extends AppView {
     bool checkerboardOffscreenLayers,
     bool showSemanticsDebugger,
     bool debugShowCheckedModeBanner,
-  }): super(
+  }) : super(
           controller: AppController(),
           navigatorKey: navigatorKey,
           routes: routes,
@@ -114,7 +115,10 @@ class View extends AppView {
           checkerboardOffscreenLayers: checkerboardOffscreenLayers,
           showSemanticsDebugger: showSemanticsDebugger,
           debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-        );
+        ) {
+    /// Add the passed Controller to the State's lifecycle.
+    this.add(con);
+  }
 
   final ControllerMVC con;
   final Widget home;
