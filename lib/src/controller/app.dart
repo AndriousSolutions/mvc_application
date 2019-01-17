@@ -118,6 +118,26 @@ import 'package:flutter/widgets.dart'
 import 'package:mvc_application/src/view/utils/loading_screen.dart'
     show LoadingScreen;
 
+/// Highlights UI while debugging.
+import 'package:flutter/rendering.dart' as debugPaint;
+
+/// High-level function to highlights UI while debugging.
+void _debugPaint({
+  bool debugPaintSizeEnabled = false,
+  bool debugPaintBaselinesEnabled = false,
+  bool debugPaintPointersEnabled = false,
+  bool debugPaintLayerBordersEnabled = false,
+  bool debugRepaintRainbowEnabled = false,
+}) {
+  /// Highlights UI while debugging.
+  debugPaint.debugPaintSizeEnabled = debugPaintSizeEnabled;
+  debugPaint.debugPaintBaselinesEnabled = debugPaintBaselinesEnabled;
+  debugPaint.debugPaintPointersEnabled = debugPaintPointersEnabled;
+  debugPaint.debugPaintLayerBordersEnabled = debugPaintLayerBordersEnabled;
+  debugPaint.debugRepaintRainbowEnabled = debugRepaintRainbowEnabled;
+}
+
+/// Auth and Firebase must be in a separate class for now.
 //import 'package:auth/auth.dart' show Auth;
 
 //import 'package:firebase_auth/firebase_auth.dart' show FirebaseUser;
@@ -412,7 +432,21 @@ abstract class AppView extends StateMVC {
     this.checkerboardOffscreenLayers: false,
     this.showSemanticsDebugger: false,
     this.debugShowCheckedModeBanner: true,
-  }) : super(controller);
+    this.debugPaintSizeEnabled = false,
+    this.debugPaintBaselinesEnabled = false,
+    this.debugPaintPointersEnabled = false,
+    this.debugPaintLayerBordersEnabled = false,
+    this.debugRepaintRainbowEnabled = false,
+  }) : super(controller) {
+    /// Highlights UI while debugging.
+    _debugPaint(
+      debugPaintSizeEnabled: debugPaintSizeEnabled,
+      debugPaintBaselinesEnabled: debugPaintBaselinesEnabled,
+      debugPaintPointersEnabled: debugPaintPointersEnabled,
+      debugPaintLayerBordersEnabled: debugPaintLayerBordersEnabled,
+      debugRepaintRainbowEnabled: debugRepaintRainbowEnabled,
+    );
+  }
 
   final AppController controller;
 
@@ -437,6 +471,12 @@ abstract class AppView extends StateMVC {
   final bool checkerboardOffscreenLayers;
   final bool showSemanticsDebugger;
   final bool debugShowCheckedModeBanner;
+  /// Highlights UI while debugging.
+  final bool debugPaintSizeEnabled;
+  final bool debugPaintBaselinesEnabled;
+  final bool debugPaintPointersEnabled;
+  final bool debugPaintLayerBordersEnabled;
+  final bool debugRepaintRainbowEnabled;
 
   @mustCallSuper
   Future<bool> init() {
@@ -471,6 +511,7 @@ class AppController extends ControllerMVC {
   void dispose() {
 //    Auth.dispose();
     Prefs.dispose();
+    /// Assets.init(context); called in App.build() -gp
     Assets.dispose();
     super.dispose();
   }
