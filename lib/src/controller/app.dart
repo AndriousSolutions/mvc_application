@@ -72,13 +72,11 @@ import 'package:flutter/material.dart'
 import 'package:connectivity/connectivity.dart'
     show Connectivity, ConnectivityResult;
 
-import 'package:mvc_application/app.dart'
-    show AppMVC;
+import 'package:mvc_application/app.dart' show AppMVC;
 
 import 'package:mvc_application/controller.dart' show ControllerMVC;
 
-import 'package:mvc_application/view.dart'
-    show LoadingScreen, StateMVC;
+import 'package:mvc_application/view.dart' show LoadingScreen, StateMVC;
 
 import 'package:file_utils/files.dart' show Files;
 
@@ -127,30 +125,23 @@ import 'package:mvc_application/src/view/utils/loading_screen.dart'
 //import 'package:firebase/firebase.dart' show FireBase;
 
 class App extends StatelessWidget {
+  /// All is static
   factory App(AppView view, {Key key}) {
-    if (_this == null) {
-      /// The default is to dump the error to the console.
-      oldError = FlutterError.onError;
-
-      /// Instead, a custom function is called.
-      FlutterError.onError = (FlutterErrorDetails details) async {
-        await _reportError(details);
-      };
-      _this = App._(view, key);
-    }
+    if (_this == null) _this = App._(view, key);
     return _this;
   }
-  static FlutterExceptionHandler oldError;
 
   /// Make only one instance of this class.
   static App _this;
 
   App._(AppView view, Key key) : super(key: key) {
     _vw = view;
-    _app = _App(view: _vw);
+    _app = _App();
   }
 
   static _App _app;
+
+  /// Needs to be static for the getters below.
   static AppView _vw;
 
   static GlobalKey<NavigatorState> get navigatorKey => _vw.navigatorKey;
@@ -226,29 +217,20 @@ class App extends StatelessWidget {
 
   /// Called in the _App dispose() function.
   static void dispose() {
-    _app.dispose();
     _context = null;
     _theme = null;
     _scaffold = null;
-    FlutterError.onError = oldError;
   }
 
   static Future<String> getInstallNum() => _App.getInstallNum();
-
   static bool get isOnline => _App.isOnline;
-
   static String get installNum => _App.installNum;
-
   static addConnectivityListener(ConnectivityListener listener) =>
       _App.addConnectivityListener(listener);
-
   static removeConnectivityListener(ConnectivityListener listener) =>
       _App.removeConnectivityListener(listener);
-
   static clearConnectivityListener() => _App.clearConnectivityListener();
-
   static bool get inDebugger => _App.inDebugger;
-
   static ThemeData _getTheme() {
     if (_theme == null) _theme = Theme.of(_context);
     return _theme;
@@ -262,24 +244,19 @@ class App extends StatelessWidget {
 }
 
 class _App extends AppMVC {
-  //StatefulWidget {
-
-  factory _App({AppView view, ControllerMVC con, Key key}) {
-    //_App(MCView view,{Key key}){
-    if (_this == null) _this = _App._(view: view, con: con, key: key);
+  factory _App({Key key}) {
+    if (_this == null) _this = _App._(key: key);
     return _this;
   }
-
-  /// Make only one instance of this class.
   static _App _this;
 
-  _App._({AppView view, ControllerMVC con, Key key})
-      : _vw = view,
-        _state = view,
-        super(con: con, key: key);
+  _App._({Key key})
+      : _vw = App._vw,
+        _state = App._vw,
+        super(con: null, key: key);
 
   final AppView _vw;
-  final State _state; //AppController _state;
+  final State _state;
 
   @override
   @protected
@@ -290,7 +267,7 @@ class _App extends AppMVC {
     _vw.dispose();
     _connectivitySubscription.cancel();
     _connectivitySubscription = null;
-    super.dispose();
+    App.dispose();
   }
 
   Future<bool> init() async {
@@ -302,9 +279,7 @@ class _App extends AppMVC {
   static getThemeData() {
     Prefs.getStringF('theme').then((value) {
       var theme = value ?? 'light';
-
       ThemeData themeData;
-
       switch (theme) {
         case 'light':
           themeData = ThemeData.light();
@@ -332,21 +307,14 @@ class _App extends AppMVC {
   }
 
   static final Connectivity _connectivity = Connectivity();
-
   static StreamSubscription<ConnectivityResult> _connectivitySubscription;
-
   static String _path;
   static get filesDir => _path;
-
   static String _connectivityStatus;
   static String get connectivity => _connectivityStatus;
-
   static bool get isOnline => _connectivityStatus != 'none';
-
   static Set _listeners = new Set();
-
   static Future<String> getInstallNum() => InstallFile.id();
-
   static String get installNum =>
       _installNum ??
       App.getInstallNum().then((id) {
@@ -503,7 +471,6 @@ class AppController extends ControllerMVC {
   void dispose() {
 //    Auth.dispose();
     Prefs.dispose();
-    App.dispose();
     Assets.dispose();
     super.dispose();
   }
