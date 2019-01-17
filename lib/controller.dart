@@ -23,7 +23,8 @@
 
 export 'package:mvc_pattern/mvc_pattern.dart'
     show
-     ControllerMVC;
+     ControllerMVC,
+     StateListener;
 
 import 'package:mvc_application/controller.dart';
 
