@@ -219,6 +219,7 @@ class Field<T> extends Item {
   TextFormField _textFormField;
   Text _text;
   Text _richText;
+  DefaultTextStyle _defaultTextStyle;
   ListTile _listTile;
   CheckboxListTile _checkboxListTile;
   CircleAvatar _circleAvatar;
@@ -442,6 +443,42 @@ class Field<T> extends Item {
     _richText = oldWidget;
     return newWidget;
   }
+
+  DefaultTextStyle get defaultTextStyle{
+    if(_defaultTextStyle == null)
+      _defaultTextStyle = DefaultTextStyle(
+        key: Key('DefaultTextStyle' + _key),
+        style: style,
+        textAlign: textAlign,
+        softWrap: softWrap,
+        overflow: overflow,
+        maxLines: maxLines,
+        child: text,
+      );
+    return _defaultTextStyle;
+  }
+
+  DefaultTextStyle onDefaultTextStyle(
+  TextStyle style,
+  TextAlign textAlign,
+  bool softWrap,
+  TextOverflow overflow,
+  int maxLines,
+  Widget child,
+  ){
+    this.style = style ?? this.style;
+    this.textAlign = textAlign ?? this.textAlign;
+    this.softWrap = softWrap ?? this.softWrap;
+    this.overflow = overflow ?? this.overflow;
+    this.maxLines = maxLines ?? this.maxLines;
+    this.child = child ?? this.child;
+    DefaultTextStyle oldWidget = _defaultTextStyle;
+    _defaultTextStyle = null;
+    DefaultTextStyle newWidget = defaultTextStyle;
+    _defaultTextStyle = oldWidget;
+    return newWidget;
+  }
+
 
   ListTile get listTile {
     if (_listTile == null)
