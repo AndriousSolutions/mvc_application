@@ -56,17 +56,32 @@ import 'view.dart' show AppController, AppView, LoadingScreen;
 class MVC extends StatelessWidget {
   MVC(
     this.view, {
-    Key key,
-  }) : super(key: key);
+    this.key,
+  }) : super();
   final AppView view;
+  final Key key;
 
   @protected
   Widget build(BuildContext context) {
-    return App(view);
+    return App(view, key: key);
   }
 }
 
-/// Passed as 'View' to MVC class for a simply app.
+/// The Controller for a simple app.
+class Controller extends ControllerMVC{
+  factory Controller() {
+    if (_this == null) _this = Controller._();
+    return _this;
+  }
+  static Controller _this;
+
+  Controller._();
+
+  /// Allow for easy access to 'the Controller' throughout the application.
+  static Controller get con => _this ?? Controller();
+}
+
+/// Passed as 'View' to MVC class for a simple app.
 class View extends AppView {
   View({
     this.con,
@@ -92,7 +107,7 @@ class View extends AppView {
     bool checkerboardOffscreenLayers,
     bool showSemanticsDebugger,
     bool debugShowCheckedModeBanner,
-  }) : super(
+  }) : super(/// Pass these parameters to the class in App.dart.
           controller: AppController(),
           navigatorKey: navigatorKey,
           routes: routes,
