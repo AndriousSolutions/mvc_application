@@ -23,7 +23,7 @@ library mvc_enterprise;
 
 export 'src/controller/app.dart';
 
-export 'package:mvc_pattern/mvc_pattern.dart' show AppMVC;
+export 'package:mvc_pattern/mvc_pattern.dart' show AppMVC, AppConMVC;
 
 /// App
 export 'package:mvc_application/src/controller/app.dart' show App;

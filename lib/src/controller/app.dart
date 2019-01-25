@@ -24,9 +24,6 @@ import 'dart:async' show Future, StreamSubscription;
 
 import 'package:flutter/foundation.dart'
     show
-        FlutterError,
-        FlutterErrorDetails,
-        FlutterExceptionHandler,
         Key,
         mustCallSuper,
         protected;
@@ -40,8 +37,6 @@ import 'package:flutter/material.dart'
         Color,
         Drawer,
         DrawerHeader,
-        FlutterError,
-        FlutterErrorDetails,
         FutureBuilder,
         GenerateAppTitle,
         GlobalKey,
@@ -72,7 +67,7 @@ import 'package:flutter/material.dart'
 import 'package:connectivity/connectivity.dart'
     show Connectivity, ConnectivityResult;
 
-import 'package:mvc_application/app.dart' show AppMVC;
+import 'package:mvc_application/app.dart' show AppMVC, AppConMVC;
 
 import 'package:mvc_application/controller.dart' show ControllerMVC;
 
@@ -92,8 +87,6 @@ import 'package:flutter/widgets.dart'
         BoxDecoration,
         BuildContext,
         Color,
-        FlutterError,
-        FlutterErrorDetails,
         FutureBuilder,
         GenerateAppTitle,
         GlobalKey,
@@ -146,17 +139,17 @@ void _debugPaint({
 
 class App extends StatelessWidget {
   /// All is static
-  factory App(AppView view, {Key key}) {
-    if (_this == null) _this = App._(view, key);
+  factory App(AppView view, {AppConMVC con, Key key}) {
+    if (_this == null) _this = App._(view, con, key);
     return _this;
   }
 
   /// Make only one instance of this class.
   static App _this;
 
-  App._(AppView view, Key key) : super(key: key) {
+  App._(AppView view, AppConMVC con, Key key) : super(key: key) {
     _vw = view;
-    _app = _App();
+    _app = _App(con: con);
   }
 
   static _App _app;
@@ -263,17 +256,18 @@ class App extends StatelessWidget {
   }
 }
 
+
 class _App extends AppMVC {
-  factory _App({Key key}) {
-    if (_this == null) _this = _App._(key: key);
+  factory _App({AppConMVC con, Key key}) {
+    if (_this == null) _this = _App._(con: con, key: key);
     return _this;
   }
   static _App _this;
 
-  _App._({Key key})
+  _App._({AppConMVC con, Key key})
       : _vw = App._vw,
         _state = App._vw,
-        super(con: null, key: key);
+        super(con: con, key: key);
 
   final AppView _vw;
   final State _state;
@@ -288,6 +282,7 @@ class _App extends AppMVC {
     _connectivitySubscription.cancel();
     _connectivitySubscription = null;
     App.dispose();
+    super.dispose();
   }
 
   Future<bool> init() async {
@@ -566,10 +561,4 @@ class AppDrawer extends StatelessWidget {
 
 abstract class ConnectivityListener {
   onConnectivityChanged(ConnectivityResult result);
-}
-
-/// Reports [error] along with its [stackTrace]
-Future<Null> _reportError(FlutterErrorDetails details) async {
-  // details.exception, details.stack
-  FlutterError.dumpErrorToConsole(details);
 }
