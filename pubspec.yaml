@@ -1,6 +1,6 @@
 name: mvc_application
 description: Application Framework in the MVC Design Pattern
-version: 0.4.0
+version: 0.5.0
 author: Greg Perry <support@andrioussolutions.com>
 homepage: andrioussolutions.com
 
@@ -21,8 +21,8 @@ dependencies:
   # used in AppSettings.dart
   url_launcher:
 
-  mvc_pattern: ^3.0.0
-#    path: ../../packages/mvc_pattern
+  mvc_pattern:
+    path: ../../packages/mvc_pattern
 
   prefs:
 #    path: ../../libs/prefs

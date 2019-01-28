@@ -243,7 +243,15 @@ class App extends StatelessWidget {
   static removeConnectivityListener(ConnectivityListener listener) =>
       _App.removeConnectivityListener(listener);
   static clearConnectivityListener() => _App.clearConnectivityListener();
-  static bool get inDebugger => _App.inDebugger;
+
+  /// Determines if running in an IDE or in production.
+  static bool get inDebugger {
+    var inDebugMode = false;
+    // assert is removed in production.
+    assert(inDebugMode = true);
+    return inDebugMode;
+  }
+
   static ThemeData _getTheme() {
     if (_theme == null) _theme = Theme.of(_context);
     return _theme;
@@ -387,12 +395,6 @@ class _App extends AppMVC {
       _listeners.remove(listener);
 
   static clearConnectivityListener() => _listeners.clear();
-
-  static bool get inDebugger {
-    var inDebugMode = false;
-    assert(inDebugMode = true);
-    return inDebugMode;
-  }
 }
 
 class _ViewWidget extends StatefulWidget {

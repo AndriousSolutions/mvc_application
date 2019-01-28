@@ -9,3 +9,5 @@
 ## [0.2.0] - 2019-01-17: class AppView extends StateMVC Highlights UI while debugging.
 ## [0.3.0] - 2019-01-17: Moved the class, Controller, into mvc.dart.
 ## [0.4.0] - 2019-01-25: factory _App({AppConMVC con, Key key}) {
+## [0.5.0] - 2019-01-28: if (_firstCon == null) _firstCon = this;  get inDebugger in class App 
+

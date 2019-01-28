@@ -32,7 +32,6 @@ import 'package:flutter/material.dart'
         Key,
         StatelessWidget,
         Widget,
-        protected,
         Color,
         GenerateAppTitle,
         GlobalKey,
@@ -50,7 +49,7 @@ import 'app.dart' show App;
 
 import 'controller.dart' show ControllerMVC;
 
-import 'view.dart' show AppController, AppView, LoadingScreen;
+import 'view.dart' show AppController, AppView, LoadingScreen, StateMVC;
 
 /// Passed to runApp() but calls App()
 class MVC extends StatelessWidget {
@@ -61,24 +60,28 @@ class MVC extends StatelessWidget {
   final AppView view;
   final Key key;
 
-  @protected
-  Widget build(BuildContext context) {
-    return App(view, key: key);
-  }
+  Widget build(BuildContext context) => App(view, key: key);
 }
 
-/// The Controller for a simple app.
-class Controller extends ControllerMVC{
-  factory Controller() {
-    if (_this == null) _this = Controller._();
-    return _this;
-  }
-  static Controller _this;
+//abstract class StaticState<T extends StatefulWidget> extends StateMVC<T>{
+//
+//  StaticState(ControllerMVC con): super(con){
+//    if(_con == null) _con = con;
+//  }
+//  /// Now have 'app wide' access to the Controller.
+//  static ControllerMVC get con => _con;
+//  static ControllerMVC _con;
+//}
 
-  Controller._();
+/// The Controller for a simple app.
+class Controller extends ControllerMVC {
+  Controller([StateMVC state]): super(state) {
+    if (_firstCon == null) _firstCon = this;
+  }
+  static Controller _firstCon;
 
   /// Allow for easy access to 'the Controller' throughout the application.
-  static Controller get con => _this ?? Controller();
+  static Controller get con => _firstCon ?? Controller();
 }
 
 /// Passed as 'View' to MVC class for a simple app.
@@ -107,7 +110,8 @@ class View extends AppView {
     bool checkerboardOffscreenLayers,
     bool showSemanticsDebugger,
     bool debugShowCheckedModeBanner,
-  }) : super(/// Pass these parameters to the class in App.dart.
+  }) : super(
+          /// Pass these parameters to the class in App.dart.
           controller: AppController(),
           navigatorKey: navigatorKey,
           routes: routes,
