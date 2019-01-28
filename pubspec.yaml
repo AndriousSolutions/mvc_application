@@ -22,7 +22,7 @@ dependencies:
   url_launcher:
 
   mvc_pattern:
-    path: ../../packages/mvc_pattern
+#    path: ../../packages/mvc_pattern
 
   prefs:
 #    path: ../../libs/prefs
