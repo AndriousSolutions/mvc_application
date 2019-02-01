@@ -495,6 +495,7 @@ class AppController extends ControllerMVC {
   /// Initialize any 'time-consuming' operations at the beginning.
   /// Initialize items essential to the Mobile Applications.
   /// Called by the _App.init() function.
+  @mustCallSuper
   Future<bool> init() async {
 //    Auth.init(listener: listener);
     Prefs.init();

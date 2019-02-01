@@ -74,19 +74,30 @@ class MVC extends StatelessWidget {
 //}
 
 /// The Controller for a simple app.
-class Controller extends ControllerMVC {
-  Controller([StateMVC state]): super(state) {
+class Con extends ControllerMVC {
+  Con([StateMVC state]): super(state) {
     if (_firstCon == null) _firstCon = this;
   }
-  static Controller _firstCon;
+  static Con _firstCon;
 
-  /// Allow for easy access to 'the Controller' throughout the application.
-  static Controller get con => _firstCon ?? Controller();
+  /// Allow for easy access to 'the first Controller' throughout the application.
+  static Con get con => _firstCon ?? Con();
+}
+
+/// The Model for a simple app.
+class ModelMVC {
+  ModelMVC() {
+    if (_firstMod == null) _firstMod = this;
+  }
+  static ModelMVC _firstMod;
+
+  /// Allow for easy access to 'the first Model' throughout the application.
+  static ModelMVC get mod => _firstMod ?? ModelMVC();
 }
 
 /// Passed as 'View' to MVC class for a simple app.
-class View extends AppView {
-  View({
+class ViewMVC extends AppView {
+  ViewMVC({
     this.con,
     this.home,
     GlobalKey<NavigatorState> navigatorKey,
