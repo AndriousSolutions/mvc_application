@@ -444,8 +444,8 @@ class Field<T> extends Item {
     return newWidget;
   }
 
-  DefaultTextStyle get defaultTextStyle{
-    if(_defaultTextStyle == null)
+  DefaultTextStyle get defaultTextStyle {
+    if (_defaultTextStyle == null)
       _defaultTextStyle = DefaultTextStyle(
         key: Key('DefaultTextStyle' + _key),
         style: style,
@@ -459,13 +459,13 @@ class Field<T> extends Item {
   }
 
   DefaultTextStyle onDefaultTextStyle(
-  TextStyle style,
-  TextAlign textAlign,
-  bool softWrap,
-  TextOverflow overflow,
-  int maxLines,
-  Widget child,
-  ){
+    TextStyle style,
+    TextAlign textAlign,
+    bool softWrap,
+    TextOverflow overflow,
+    int maxLines,
+    Widget child,
+  ) {
     this.style = style ?? this.style;
     this.textAlign = textAlign ?? this.textAlign;
     this.softWrap = softWrap ?? this.softWrap;
@@ -479,7 +479,6 @@ class Field<T> extends Item {
     return newWidget;
   }
 
-
   ListTile get listTile {
     if (_listTile == null)
       _listTile = ListTile(
@@ -487,7 +486,7 @@ class Field<T> extends Item {
         leading: leading ?? onLeading(),
         title: title ?? onTitle(),
         subtitle: subtitle ?? onSubtitle(),
-        trailing: trailing ?? text,
+        trailing: trailing,
         isThreeLine: isThreeLine ?? false,
         dense: dense,
         contentPadding: contentPadding,
@@ -533,10 +532,10 @@ class Field<T> extends Item {
   //for LisTile
   Widget onLeading() => null;
 
-  Widget onTitle() => Text(label);
+  Widget onTitle() => text;
 
   // Override to produce a subtitle.
-  Widget onSubtitle() => null;
+  Widget onSubtitle() => Text(label);
 
   Widget onTrailing() => null;
 
@@ -744,6 +743,36 @@ class Field<T> extends Item {
   void onChanged(bool value) {}
 
   ListItems get listItems => ListItems(title: label, items: (value ?? [this]));
+
+  ListItems onListItems({
+    String title,
+    List<Item> items,
+    MapItemFunction mapItem,
+  }) {
+    return ListItems(
+      title: title ?? label,
+      items: items ?? (value ?? [this]),
+      mapItem: mapItem,
+    );
+  }
+
+  ListItems get editItems => onListItems(mapItem: mapIt);
+
+  Widget mapIt(Item i) => ListTile(
+        subtitle: Text(i.label ?? ""),
+        title: textFormField,
+        trailing: phoneTypes,
+      );
+
+  Widget phoneTypes = DropdownButton<String>(
+    items: <String>['Home', 'Work', 'Mobile', 'Other'].map((String value) {
+      return DropdownMenuItem<String>(
+        value: value,
+        child: Text(value),
+      );
+    }).toList(),
+    onChanged: (_) {},
+  );
 }
 
 /// Item class used for contact fields which only have a [label] and a [value]
@@ -751,34 +780,54 @@ class Item {
   Item({this.label, this.value});
   String label;
   dynamic value;
+  String _label = 'label';
+  String _value = 'value';
 
-  Item.fromMap(Map m) {
-    label = m["label"];
-    value = m["value"];
+  Item.fromMap(Map m,[String label, String value]) {
+    keys(label, value);
+    this.label = m[_label];
+    this.value = m[_value];
   }
 
-  Map get toMap => {"label": label, "value": value};
+  keys(String label, String value){
+      if(label != null && label.isNotEmpty)
+        _label = label;
+      if(value != null && value.isNotEmpty)
+        _value = value;
+  }
+
+  Map get toMap => {_label: label, _value: value};
 }
 
 class ListItems extends StatelessWidget {
-  ListItems({this.title, this.items});
+  ListItems({this.title, this.items, this.mapItem});
   final String title;
   final List<Item> items;
+  final MapItemFunction mapItem;
 
   @override
   Widget build(BuildContext context) {
+    MapItemFunction _map;
+    if (mapItem == null) {
+      _map = mapIt;
+    } else {
+      _map = mapItem;
+    }
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          ListTile(title: Text(title)),
+          ListTile(subtitle: Text(title)),
           Column(
               children: items
                   .map((i) => Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: ListTile(
-                          title: Text(i.label ?? ""),
-                          trailing: Text(i.value ?? ""))))
+                      child: _map(i)))
                   .toList())
         ]);
   }
+
+  Widget mapIt(Item i) =>
+      ListTile(subtitle: Text(i.label ?? ""), title: Text(i.value ?? ""));
 }
+
+typedef Widget MapItemFunction(Item i);

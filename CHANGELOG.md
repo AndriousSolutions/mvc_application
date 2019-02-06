@@ -11,4 +11,5 @@
 ## [0.4.0] - 2019-01-25: factory _App({AppConMVC con, Key key}) {
 ## [0.5.0] - 2019-01-28: if (_firstCon == null) _firstCon = this;  get inDebugger in class App 
 ## [0.6.0] - 2019-01-28: Renamed the classes Controller and View to ConMVC and ViewMVC
+## [0.7.1] - 2019-02-06: Removed class ConMVC, SDK Constraint to <3.0.0, keys() in class Item
 

@@ -73,16 +73,16 @@ class MVC extends StatelessWidget {
 //  static ControllerMVC _con;
 //}
 
-/// The Controller for a simple app.
-class ConMVC extends ControllerMVC {
-  ConMVC([StateMVC state]): super(state) {
-    if (_firstCon == null) _firstCon = this;
-  }
-  static ConMVC _firstCon;
-
-  /// Allow for easy access to 'the first Controller' throughout the application.
-  static ConMVC get con => _firstCon ?? ConMVC();
-}
+///// The Controller for a simple app.
+//class ConMVC extends ControllerMVC {
+//  ConMVC([StateMVC state]): super(state) {
+//    if (_firstCon == null) _firstCon = this;
+//  }
+//  static ConMVC _firstCon;
+//
+//  /// Allow for easy access to 'the first Controller' throughout the application.
+//  static ConMVC get con => _firstCon ?? ConMVC();
+//}
 
 /// The Model for a simple app.
 class ModelMVC {
