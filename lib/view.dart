@@ -35,7 +35,7 @@ export 'package:mvc_application/src/view/utils/appsettings.dart';
 export 'package:mvc_application/src/view/utils/loading_screen.dart';
 
 /// Fields
-export 'package:mvc_application/src/view/utils/fields.dart';
+export 'package:mvc_application/src/view/utils/fields_widgets.dart';
 
 /// App
 export 'package:mvc_application/src/controller/app.dart'

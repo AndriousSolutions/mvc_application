@@ -49,7 +49,7 @@ import 'app.dart' show App;
 
 import 'controller.dart' show ControllerMVC;
 
-import 'view.dart' show AppController, AppView, LoadingScreen, StateMVC;
+import 'view.dart' show AppController, AppView, LoadingScreen;
 
 /// Passed to runApp() but calls App()
 class MVC extends StatelessWidget {

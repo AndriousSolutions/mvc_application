@@ -35,8 +35,8 @@ import 'package:mvc_application/app.dart' show App;
 
 typedef OnSavedFunc = Function<E>(E v);
 
-class Field<T> extends Item {
-  Field({
+class FieldWidgets<T> extends Item {
+  FieldWidgets({
     Object key,
     this.object,
     String label,
