@@ -65,11 +65,7 @@ class AppMenu {
     return PopupMenuButton<String>(
       onSelected: _showMenuSelection,
       itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-            const PopupMenuItem<String>(
-                value: 'Toolbar menu', child: Text('Toolbar menu')),
             PopupMenuItem<String>(value: 'Color', child: ColorPicker.title),
-            const PopupMenuItem<String>(
-                value: 'Hooray!', child: Text('Hooray!')),
           ],
     );
   }
@@ -82,26 +78,16 @@ class AppMenu {
             onColorChange: AppMenu.onColorChange,
             onChange: AppMenu.onChange);
         break;
-      case 'PENDING':
-        break;
-      case 'APPROVED':
-        break;
-      case 'DENIED':
-        break;
-      case 'OPEN':
-        break;
       default:
     }
   }
 
   static void onColorChange(Color value) {
     /// Implement to take in a color change.
-    print('here');
   }
 
   static void onChange(ColorSwatch value) {
     Prefs.setInt('colorTheme', ColorPicker.colors.indexOf(value));
-
     /// Rebuild the state.
     _state.setState(() {});
   }

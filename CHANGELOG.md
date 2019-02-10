@@ -14,4 +14,5 @@
 ## [0.7.1] - 2019-02-06: Removed class ConMVC, SDK Constraint to <3.0.0, keys() in class Item
 ## [0.7.2] - 2019-02-06: class FieldWidgets<T> extends Item {
 ## [0.7.3] - 2019-02-09: await Prefs.init(); get colorTheme => AppMenu.colorTheme;
+## [0.7.4] - 2019-02-09: Color Theme Menu Popup
 
