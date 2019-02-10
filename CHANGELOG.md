@@ -13,4 +13,5 @@
 ## [0.6.0] - 2019-01-28: Renamed the classes Controller and View to ConMVC and ViewMVC
 ## [0.7.1] - 2019-02-06: Removed class ConMVC, SDK Constraint to <3.0.0, keys() in class Item
 ## [0.7.2] - 2019-02-06: class FieldWidgets<T> extends Item {
+## [0.7.3] - 2019-02-09: await Prefs.init(); get colorTheme => AppMenu.colorTheme;
 

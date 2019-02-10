@@ -1,6 +1,6 @@
 name: mvc_application
 description: Application Framework in the MVC Design Pattern
-version: 0.7.2
+version: 0.7.3
 author: Greg Perry <support@andrioussolutions.com>
 homepage: andrioussolutions.com
 
@@ -45,6 +45,11 @@ dependencies:
 #    path: ../../libs/files/file_utils
     git:
       url: git://github.com/AndriousSolutions/files.git
+
+  uxutils:
+#    path: ../../libs/uxutils
+    git:
+      url: git://github.com/AndriousSolutions/uxutils.git
 
 dev_dependencies:
   flutter_test:

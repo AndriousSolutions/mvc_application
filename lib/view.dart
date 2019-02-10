@@ -37,6 +37,12 @@ export 'package:mvc_application/src/view/utils/loading_screen.dart';
 /// Fields
 export 'package:mvc_application/src/view/utils/fields_widgets.dart';
 
+/// Menus
+export 'package:mvc_application/src/view/appmenu.dart' show AppMenu;
+
+/// UX Utils
+export 'package:uxutils/view.dart';
+
 /// App
 export 'package:mvc_application/src/controller/app.dart'
     show AppController, AppView;

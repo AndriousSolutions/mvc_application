@@ -28,41 +28,7 @@ import 'package:flutter/foundation.dart'
         mustCallSuper,
         protected;
 
-import 'package:flutter/material.dart'
-    show
-        StatefulWidget,
-        AppLifecycleState,
-        BoxDecoration,
-        BuildContext,
-        Color,
-        Drawer,
-        DrawerHeader,
-        FutureBuilder,
-        GenerateAppTitle,
-        GlobalKey,
-        Key,
-        ListTile,
-        ListView,
-        Locale,
-        LocaleResolutionCallback,
-        LocalizationsDelegate,
-        MaterialApp,
-        Navigator,
-        NavigatorObserver,
-        NavigatorState,
-        RouteFactory,
-        Scaffold,
-        ScaffoldState,
-        State,
-        StatelessWidget,
-        Text,
-        Theme,
-        ThemeData,
-        TransitionBuilder,
-        Widget,
-        WidgetBuilder,
-        mustCallSuper,
-        protected;
+import 'package:flutter/material.dart';
 
 import 'package:connectivity/connectivity.dart'
     show Connectivity, ConnectivityResult;
@@ -71,7 +37,7 @@ import 'package:mvc_application/app.dart' show AppMVC, AppConMVC;
 
 import 'package:mvc_application/controller.dart' show ControllerMVC;
 
-import 'package:mvc_application/view.dart' show LoadingScreen, StateMVC;
+import 'package:mvc_application/view.dart' show AppMenu, LoadingScreen, StateMVC;
 
 import 'package:file_utils/files.dart' show Files;
 
@@ -262,6 +228,8 @@ class App extends StatelessWidget {
     if (_scaffold == null) _scaffold = Scaffold.of(_context, nullOk: true);
     return _scaffold;
   }
+
+  static ColorSwatch get colorTheme => AppMenu.colorTheme;
 }
 
 
@@ -498,7 +466,7 @@ class AppController extends ControllerMVC {
   @mustCallSuper
   Future<bool> init() async {
 //    Auth.init(listener: listener);
-    Prefs.init();
+    await Prefs.init();
     return Future.value(true);
   }
 
