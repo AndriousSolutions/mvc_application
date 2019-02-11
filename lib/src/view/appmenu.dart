@@ -43,15 +43,7 @@
 ///          Created  09 Feb 2019
 ///
 ///
-import 'package:flutter/material.dart'
-    show
-        BuildContext,
-        Color,
-        ColorSwatch,
-        PopupMenuButton,
-        PopupMenuItem,
-        State,
-        Text;
+import 'package:flutter/material.dart';
 
 import 'package:mvc_application/controller.dart';
 
@@ -66,6 +58,7 @@ class AppMenu {
       onSelected: _showMenuSelection,
       itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
             PopupMenuItem<String>(value: 'Color', child: ColorPicker.title),
+            const PopupMenuItem<String>(value: 'About', child: Text('About')),
           ],
     );
   }
@@ -77,6 +70,14 @@ class AppMenu {
             context: _state.context,
             onColorChange: AppMenu.onColorChange,
             onChange: AppMenu.onChange);
+        break;
+      case 'About':
+        showAboutDialog(
+            context: _state.context,
+            applicationName: "Greg's App Example",
+            applicationVersion: App.version + '  buld: ${App.buildNumber}',
+            children: [Text('A simple contact app demonstration.')]
+        );
         break;
       default:
     }

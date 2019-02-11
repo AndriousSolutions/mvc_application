@@ -15,4 +15,6 @@
 ## [0.7.2] - 2019-02-06: class FieldWidgets<T> extends Item {
 ## [0.7.3] - 2019-02-09: await Prefs.init(); get colorTheme => AppMenu.colorTheme;
 ## [0.7.4] - 2019-02-09: Color Theme Menu Popup
+## [0.8.1] - 2019-02-10: showAboutDialog(); PackageInfo.fromPlatform(); show Prefs; 
+
 

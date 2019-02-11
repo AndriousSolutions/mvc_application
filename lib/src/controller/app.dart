@@ -22,13 +22,44 @@
 
 import 'dart:async' show Future, StreamSubscription;
 
-import 'package:flutter/foundation.dart'
+import 'package:flutter/foundation.dart' show Key, mustCallSuper, protected;
+
+import 'package:flutter/material.dart'
     show
+        AppLifecycleState,
+        BoxDecoration,
+        BuildContext,
+        Color,
+        ColorSwatch,
+        Drawer,
+        DrawerHeader,
+        FutureBuilder,
+        GenerateAppTitle,
+        GlobalKey,
         Key,
+        ListTile,
+        ListView,
+        Locale,
+        LocaleResolutionCallback,
+        LocalizationsDelegate,
+        MaterialApp,
+        Navigator,
+        NavigatorObserver,
+        NavigatorState,
+        RouteFactory,
+        Scaffold,
+        ScaffoldState,
+        State,
+        StatefulWidget,
+        StatelessWidget,
+        Text,
+        Theme,
+        ThemeData,
+        TransitionBuilder,
+        Widget,
+        WidgetBuilder,
         mustCallSuper,
         protected;
-
-import 'package:flutter/material.dart';
 
 import 'package:connectivity/connectivity.dart'
     show Connectivity, ConnectivityResult;
@@ -37,7 +68,8 @@ import 'package:mvc_application/app.dart' show AppMVC, AppConMVC;
 
 import 'package:mvc_application/controller.dart' show ControllerMVC;
 
-import 'package:mvc_application/view.dart' show AppMenu, LoadingScreen, StateMVC;
+import 'package:mvc_application/view.dart'
+    show AppMenu, LoadingScreen, StateMVC;
 
 import 'package:file_utils/files.dart' show Files;
 
@@ -46,6 +78,8 @@ import 'package:file_utils/InstallFile.dart' show InstallFile;
 import 'package:prefs/prefs.dart' show Prefs;
 
 import 'package:assets/assets.dart' show Assets;
+
+import 'package:package_info/package_info.dart';
 
 import 'package:flutter/widgets.dart'
     show
@@ -156,6 +190,12 @@ class App extends StatelessWidget {
   static ThemeData _theme;
 
   static ScaffoldState _scaffold;
+  /// Application information
+  static PackageInfo _packageInfo;
+  static String appName = _packageInfo.appName;
+  static String packageName = _packageInfo.packageName;
+  static String version = _packageInfo.version;
+  static String buildNumber = _packageInfo.buildNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -232,7 +272,6 @@ class App extends StatelessWidget {
   static ColorSwatch get colorTheme => AppMenu.colorTheme;
 }
 
-
 class _App extends AppMVC {
   factory _App({AppConMVC con, Key key}) {
     if (_this == null) _this = _App._(con: con, key: key);
@@ -263,6 +302,7 @@ class _App extends AppMVC {
 
   Future<bool> init() async {
     super.init();
+    App._packageInfo = await PackageInfo.fromPlatform();
     _initInternal();
     return _vw.init();
   }
@@ -316,7 +356,7 @@ class _App extends AppMVC {
   static String _installNum;
 
   /// Internal Initialization routines.
-  static void _initInternal() {
+  void _initInternal() {
     /// Get the installation number
     InstallFile.id().then((id) {
       _installNum = id;
@@ -436,6 +476,7 @@ abstract class AppView extends StateMVC {
   final bool checkerboardOffscreenLayers;
   final bool showSemanticsDebugger;
   final bool debugShowCheckedModeBanner;
+
   /// Highlights UI while debugging.
   final bool debugPaintSizeEnabled;
   final bool debugPaintBaselinesEnabled;
@@ -477,6 +518,7 @@ class AppController extends ControllerMVC {
   void dispose() {
 //    Auth.dispose();
     Prefs.dispose();
+
     /// Assets.init(context); called in App.build() -gp
     Assets.dispose();
     super.dispose();
@@ -502,14 +544,13 @@ class AppController extends ControllerMVC {
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new Drawer(
-        child: new ListView(
+    return Drawer(
+        child: ListView(
       children: <Widget>[
-        new DrawerHeader(
-          child: new Text("DRAWER HEADER.."),
-          decoration: new BoxDecoration(),
+        DrawerHeader(
+          child: Text("DRAWER HEADER.."),
         ),
-        new ListTile(
+        ListTile(
           title: new Text("Item => 1"),
           onTap: () {
             Navigator.pop(context);
@@ -517,7 +558,7 @@ class AppDrawer extends StatelessWidget {
 //                    new MaterialPageRoute(builder: (context) => new FirstPage()));
           },
         ),
-        new ListTile(
+        ListTile(
           title: new Text("Item => 2"),
           onTap: () {
             Navigator.pop(context);
