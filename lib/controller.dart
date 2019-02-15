@@ -34,3 +34,5 @@ export 'package:mvc_pattern/mvc_pattern.dart' show AppMVC, AppConMVC;
 
 /// App
 export 'package:mvc_application/src/controller/app.dart' show App;
+
+export 'package:mvc_application/src/controller/deviceinfo.dart' show DeviceInfo;

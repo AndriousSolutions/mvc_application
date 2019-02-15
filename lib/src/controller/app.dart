@@ -66,7 +66,7 @@ import 'package:connectivity/connectivity.dart'
 
 import 'package:mvc_application/app.dart' show AppMVC, AppConMVC;
 
-import 'package:mvc_application/controller.dart' show ControllerMVC;
+import 'package:mvc_application/controller.dart' show ControllerMVC, DeviceInfo;
 
 import 'package:mvc_application/view.dart'
     show AppMenu, LoadingScreen, StateMVC;
@@ -138,13 +138,13 @@ void _debugPaint({
 //import 'package:firebase/firebase.dart' show FireBase;
 
 class App extends StatelessWidget {
-  /// All is static
+  // All is static
   factory App(AppView view, {AppConMVC con, Key key}) {
     if (_this == null) _this = App._(view, con, key);
     return _this;
   }
 
-  /// Make only one instance of this class.
+  // Make only one instance of this class.
   static App _this;
 
   App._(AppView view, AppConMVC con, Key key) : super(key: key) {
@@ -154,7 +154,7 @@ class App extends StatelessWidget {
 
   static _App _app;
 
-  /// Needs to be static for the getters below.
+  // Needs to be static for the getters below.
   static AppView _vw;
 
   static GlobalKey<NavigatorState> get navigatorKey => _vw.navigatorKey;
@@ -190,12 +190,12 @@ class App extends StatelessWidget {
   static ThemeData _theme;
 
   static ScaffoldState _scaffold;
-  /// Application information
+  // Application information
   static PackageInfo _packageInfo;
-  static String appName = _packageInfo.appName;
-  static String packageName = _packageInfo.packageName;
-  static String version = _packageInfo.version;
-  static String buildNumber = _packageInfo.buildNumber;
+  static String get appName => _packageInfo.appName;
+  static String get packageName => _packageInfo.packageName;
+  static String get version => _packageInfo.version;
+  static String get buildNumber => _packageInfo.buildNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -234,7 +234,7 @@ class App extends StatelessWidget {
     );
   }
 
-  /// Called in the _App dispose() function.
+  // Called in the _App dispose() function.
   static void dispose() {
     _context = null;
     _theme = null;
@@ -291,7 +291,7 @@ class _App extends AppMVC {
   @protected
   Widget build(BuildContext context) => _ViewWidget(_state);
 
-  /// Called in the State object's dispose() function.
+  // Called in the State object's dispose() function.
   void dispose() {
     _vw.dispose();
     _connectivitySubscription.cancel();
@@ -508,6 +508,7 @@ class AppController extends ControllerMVC {
   Future<bool> init() async {
 //    Auth.init(listener: listener);
     await Prefs.init();
+    await DeviceInfo.init();
     return Future.value(true);
   }
 
