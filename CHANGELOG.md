@@ -17,6 +17,7 @@
 ## [0.7.4] - 2019-02-09: Color Theme Menu Popup
 ## [0.8.1] - 2019-02-10: showAboutDialog(); PackageInfo.fromPlatform(); show Prefs; 
 ## [0.9.0] - 2019-02-14: static String get appName => _packageInfo.appName; await DeviceInfo.init(); Introduced DeviceInfo
+## [0.9.1] - 2019-02-16: mvc_pattern: in pubspec.yaml
 
 
 

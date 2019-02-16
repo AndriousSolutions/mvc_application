@@ -1,6 +1,6 @@
 name: mvc_application
 description: Application Framework in the MVC Design Pattern
-version: 0.8.1
+version: 0.9.1
 author: Greg Perry <support@andrioussolutions.com>
 homepage: andrioussolutions.com
 
@@ -22,7 +22,7 @@ dependencies:
   url_launcher:
 
   mvc_pattern:
-    path: ../../packages/mvc_pattern
+#    path: ../../packages/mvc_pattern
 
   prefs:
 #    path: ../../libs/prefs
@@ -47,9 +47,9 @@ dependencies:
       url: git://github.com/AndriousSolutions/files.git
 
   uxutils:
-    path: ../../libs/uxutils
-#    git:
-#      url: git://github.com/AndriousSolutions/uxutils.git
+#    path: ../../libs/uxutils
+    git:
+      url: git://github.com/AndriousSolutions/uxutils.git
 
 # https://pub.dartlang.org/packages/package_info#-changelog-tab-
   package_info: any
