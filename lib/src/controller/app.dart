@@ -22,12 +22,11 @@
 
 import 'dart:async' show Future, StreamSubscription;
 
-import 'package:flutter/foundation.dart' show Key, mustCallSuper, protected;
+import 'package:flutter/foundation.dart' show Key, mustCallSuper, required;
 
 import 'package:flutter/material.dart'
     show
         AppLifecycleState,
-        BoxDecoration,
         BuildContext,
         Color,
         ColorSwatch,
@@ -58,8 +57,7 @@ import 'package:flutter/material.dart'
         TransitionBuilder,
         Widget,
         WidgetBuilder,
-        mustCallSuper,
-        protected;
+        mustCallSuper;
 
 import 'package:connectivity/connectivity.dart'
     show Connectivity, ConnectivityResult;
@@ -84,7 +82,6 @@ import 'package:package_info/package_info.dart';
 import 'package:flutter/widgets.dart'
     show
         AppLifecycleState,
-        BoxDecoration,
         BuildContext,
         Color,
         FutureBuilder,
@@ -105,8 +102,7 @@ import 'package:flutter/widgets.dart'
         TransitionBuilder,
         Widget,
         WidgetBuilder,
-        mustCallSuper,
-        protected;
+        mustCallSuper;
 
 import 'package:mvc_application/src/view/utils/loading_screen.dart'
     show LoadingScreen;
@@ -137,51 +133,83 @@ void _debugPaint({
 
 //import 'package:firebase/firebase.dart' show FireBase;
 
-class App extends StatelessWidget {
+class App extends AppMVC {
   // All is static
-  factory App(AppView view, {AppConMVC con, Key key}) {
+  factory App(AppView view, {ControllerMVC con, Key key}) {
     if (_this == null) _this = App._(view, con, key);
     return _this;
   }
-
   // Make only one instance of this class.
   static App _this;
 
-  App._(AppView view, AppConMVC con, Key key) : super(key: key) {
+  App._(AppView view, ControllerMVC con, Key key) : super(con: con, key: key) {
     _vw = view;
-    _app = _App(con: con);
   }
-
-  static _App _app;
-
-  // Needs to be static for the getters below.
   static AppView _vw;
 
+  @override
+  Widget build(BuildContext context) {
+    Assets.init(context);
+    App._context = context;
+    return FutureBuilder(
+      future: init(),
+      builder: (_, snapshot) {
+        return snapshot.hasData ? _AppWidget() : LoadingScreen();
+      },
+    );
+  }
+
+  Future<bool> init() async {
+    bool init = await super.init();
+    if(init) init = await _vw.init();
+    return init;
+  }
+
   static GlobalKey<NavigatorState> get navigatorKey => _vw.navigatorKey;
+
   static Map<String, WidgetBuilder> get routes => _vw.routes;
+
   static String get initialRoute => _vw.initialRoute;
+
   static RouteFactory get onGenerateRoute => _vw.onGenerateRoute;
+
   static RouteFactory get onUnknownRoute => _vw.onUnknownRoute;
+
   static List<NavigatorObserver> get navigatorObservers =>
       _vw.navigatorObservers;
+
   static TransitionBuilder get builder => _vw.builder;
+
   static String get title => _vw.title;
+
   static GenerateAppTitle get onGenerateTitle => _vw.onGenerateTitle;
+
   static ThemeData get theme => _vw.theme ?? App._getTheme();
+
   static Color get color => _vw.color;
+
   static Locale get locale => _vw.locale;
+
   static Iterable<LocalizationsDelegate<dynamic>> get localizationsDelegates =>
       _vw.localizationsDelegates;
+
   static LocaleResolutionCallback get localeResolutionCallback =>
       _vw.localeResolutionCallback;
+
   static Iterable<Locale> get supportedLocales => _vw.supportedLocales;
+
   static bool get debugShowMaterialGrid => _vw.debugShowMaterialGrid;
+
   static bool get showPerformanceOverlay => _vw.showPerformanceOverlay;
+
   static bool get checkerboardRasterCacheImages =>
       _vw.checkerboardRasterCacheImages;
+
   static bool get checkerboardOffscreenLayers =>
       _vw.checkerboardOffscreenLayers;
+
   static bool get showSemanticsDebugger => _vw.showSemanticsDebugger;
+
   static bool get debugShowCheckedModeBanner => _vw.debugShowCheckedModeBanner;
 
   static BuildContext get context => _context;
@@ -190,65 +218,17 @@ class App extends StatelessWidget {
   static ThemeData _theme;
 
   static ScaffoldState _scaffold;
+
   // Application information
   static PackageInfo _packageInfo;
-  static String get appName => _packageInfo.appName;
-  static String get packageName => _packageInfo.packageName;
-  static String get version => _packageInfo.version;
-  static String get buildNumber => _packageInfo.buildNumber;
 
-  @override
-  Widget build(BuildContext context) {
-    Assets.init(context);
-    _context = context;
-    return MaterialApp(
-      key: key,
-      navigatorKey: _vw.navigatorKey,
-      routes: _vw.routes ?? const <String, WidgetBuilder>{},
-      initialRoute: _vw.initialRoute,
-      onGenerateRoute: _vw.onGenerateRoute,
-      onUnknownRoute: _vw.onUnknownRoute,
-      navigatorObservers: _vw.navigatorObservers ?? const <NavigatorObserver>[],
-      builder: _vw.builder,
-      title: _vw.title,
-      onGenerateTitle: _vw.onGenerateTitle,
-      color: _vw.color,
-      theme: _vw.theme ?? _App.getThemeData(),
-      locale: _vw.locale,
-      localizationsDelegates: _vw.localizationsDelegates,
-      localeResolutionCallback: _vw.localeResolutionCallback,
-      supportedLocales:
-          _vw.supportedLocales ?? const <Locale>[Locale('en', 'US')],
-      debugShowMaterialGrid: _vw.debugShowMaterialGrid ?? false,
-      showPerformanceOverlay: _vw.showPerformanceOverlay ?? false,
-      checkerboardRasterCacheImages: _vw.checkerboardRasterCacheImages ?? false,
-      checkerboardOffscreenLayers: _vw.checkerboardOffscreenLayers ?? false,
-      showSemanticsDebugger: _vw.showSemanticsDebugger ?? false,
-      debugShowCheckedModeBanner: _vw.debugShowCheckedModeBanner ?? true,
-      home: FutureBuilder(
-        future: _app.init(),
-        builder: (_, snapshot) {
-          return snapshot.hasData ? _app : LoadingScreen();
-        },
-      ),
-    );
-  }
+  static String get appName => _packageInfo?.appName;
 
-  // Called in the _App dispose() function.
-  static void dispose() {
-    _context = null;
-    _theme = null;
-    _scaffold = null;
-  }
+  static String get packageName => _packageInfo?.packageName;
 
-  static Future<String> getInstallNum() => _App.getInstallNum();
-  static bool get isOnline => _App.isOnline;
-  static String get installNum => _App.installNum;
-  static addConnectivityListener(ConnectivityListener listener) =>
-      _App.addConnectivityListener(listener);
-  static removeConnectivityListener(ConnectivityListener listener) =>
-      _App.removeConnectivityListener(listener);
-  static clearConnectivityListener() => _App.clearConnectivityListener();
+  static String get version => _packageInfo?.version;
+
+  static String get buildNumber => _packageInfo?.buildNumber;
 
   /// Determines if running in an IDE or in production.
   static bool get inDebugger {
@@ -258,53 +238,18 @@ class App extends StatelessWidget {
     return inDebugMode;
   }
 
-  static ThemeData _getTheme() {
-    if (_theme == null) _theme = Theme.of(_context);
-    return _theme;
-  }
-
   static ScaffoldState get scaffold => App._getScaffold();
+
   static ScaffoldState _getScaffold() {
     if (_scaffold == null) _scaffold = Scaffold.of(_context, nullOk: true);
     return _scaffold;
   }
 
   static ColorSwatch get colorTheme => AppMenu.colorTheme;
-}
 
-class _App extends AppMVC {
-  factory _App({AppConMVC con, Key key}) {
-    if (_this == null) _this = _App._(con: con, key: key);
-    return _this;
-  }
-  static _App _this;
-
-  _App._({AppConMVC con, Key key})
-      : _vw = App._vw,
-        _state = App._vw,
-        super(con: con, key: key);
-
-  final AppView _vw;
-  final State _state;
-
-  @override
-  @protected
-  Widget build(BuildContext context) => _ViewWidget(_state);
-
-  // Called in the State object's dispose() function.
-  void dispose() {
-    _vw.dispose();
-    _connectivitySubscription.cancel();
-    _connectivitySubscription = null;
-    App.dispose();
-    super.dispose();
-  }
-
-  Future<bool> init() async {
-    super.init();
-    App._packageInfo = await PackageInfo.fromPlatform();
-    _initInternal();
-    return _vw.init();
+  static ThemeData _getTheme() {
+    if (_theme == null) _theme = Theme.of(_context);
+    return _theme;
   }
 
   static getThemeData() {
@@ -338,14 +283,35 @@ class _App extends AppMVC {
   }
 
   static final Connectivity _connectivity = Connectivity();
+
   static StreamSubscription<ConnectivityResult> _connectivitySubscription;
-  static String _path;
+
+  @mustCallSuper
+  static void _dispose() {
+    _connectivitySubscription.cancel();
+    _connectivitySubscription = null;
+  }
+
   static get filesDir => _path;
-  static String _connectivityStatus;
+  static String _path;
+
   static String get connectivity => _connectivityStatus;
+  static String _connectivityStatus;
+
   static bool get isOnline => _connectivityStatus != 'none';
+
   static Set _listeners = new Set();
+
+  static addConnectivityListener(ConnectivityListener listener) =>
+      _listeners.add(listener);
+
+  static removeConnectivityListener(ConnectivityListener listener) =>
+      _listeners.remove(listener);
+
+  static clearConnectivityListener() => _listeners.clear();
+
   static Future<String> getInstallNum() => InstallFile.id();
+
   static String get installNum =>
       _installNum ??
       App.getInstallNum().then((id) {
@@ -355,17 +321,13 @@ class _App extends AppMVC {
       });
   static String _installNum;
 
-  /// Internal Initialization routines.
-  void _initInternal() {
-    /// Get the installation number
-    InstallFile.id().then((id) {
-      _installNum = id;
-    }).catchError((e) {});
+  // Internal Initialization routines.
+  static Future<void> _initInternal() async {
+    // Get the installation number
+    _installNum = await InstallFile.id();
 
-    /// Determine the location to the files directory.
-    Files.localPath.then((path) {
-      _path = path;
-    }).catchError((e) {});
+    // Determine the location to the files directory.
+    _path = await Files.localPath;
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
@@ -396,26 +358,144 @@ class _App extends AppMVC {
     return connectionStatus;
   }
 
-  static addConnectivityListener(ConnectivityListener listener) =>
-      _listeners.add(listener);
-
-  static removeConnectivityListener(ConnectivityListener listener) =>
-      _listeners.remove(listener);
-
-  static clearConnectivityListener() => _listeners.clear();
+//  final GlobalKey<AppView> key = new GlobalKey<AppView>();
 }
 
-class _ViewWidget extends StatefulWidget {
-  _ViewWidget(this.state);
-  final StateMVC state;
+class _AppWidget extends StatefulWidget{
+  _AppWidget({Key key}):super(key: key);
+  State createState() => App._vw;
+}
+
+class AppState extends AppView<_AppWidget> {
+  AppState(
+      {this.key,
+      @required this.home,
+      AppController con,
+      GlobalKey<NavigatorState> navigatorKey,
+      Map<String, WidgetBuilder> routes,
+      String initialRoute,
+      RouteFactory onGenerateRoute,
+      RouteFactory onUnknownRoute,
+      List<NavigatorObserver> navigatorObservers,
+      TransitionBuilder builder,
+      String title,
+      GenerateAppTitle onGenerateTitle,
+      ThemeData theme,
+      Color color,
+      Locale locale,
+      Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates,
+      LocaleResolutionCallback localeResolutionCallback,
+      Iterable<Locale> supportedLocales,
+      bool debugShowMaterialGrid,
+      bool showPerformanceOverlay,
+      bool checkerboardRasterCacheImages,
+      bool checkerboardOffscreenLayers,
+      bool showSemanticsDebugger,
+      bool debugShowCheckedModeBanner,
+      bool debugPaintSizeEnabled,
+      bool debugPaintBaselinesEnabled,
+      bool debugPaintPointersEnabled,
+      bool debugPaintLayerBordersEnabled,
+      bool debugRepaintRainbowEnabled})
+      : super(
+          con: con,
+          navigatorKey: navigatorKey,
+          routes: routes,
+          initialRoute: initialRoute,
+          onGenerateRoute: onGenerateRoute,
+          onUnknownRoute: onUnknownRoute,
+          navigatorObservers: navigatorObservers,
+          builder: builder,
+          title: title,
+          onGenerateTitle: onGenerateTitle,
+          theme: theme,
+          color: color,
+          locale: locale,
+          localizationsDelegates: localizationsDelegates,
+          localeResolutionCallback: localeResolutionCallback,
+          supportedLocales: supportedLocales,
+          debugShowMaterialGrid: debugShowMaterialGrid,
+          showPerformanceOverlay: showPerformanceOverlay,
+          checkerboardRasterCacheImages: checkerboardRasterCacheImages,
+          checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+          showSemanticsDebugger: showSemanticsDebugger,
+          debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+        );
+  final Key key;
+  final Widget home;
+
   @override
-  @protected
-  State createState() => state;
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      key: key,
+      navigatorKey: navigatorKey ?? onNavigatorKey(),
+      home: home,
+      routes: routes ?? onRoutes(),
+      initialRoute: initialRoute ?? onInitialRoute(),
+      onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
+      onUnknownRoute: onUnknownRoute ?? onOnUnknownRoute(),
+      navigatorObservers: navigatorObservers ?? onNavigatorObservers(),
+      builder: builder ?? onBuilder(),
+      title: title ?? onTitle(),
+      onGenerateTitle: onGenerateTitle?? onOnGenerateTitle(),
+      color: color ?? onColor(),
+      theme: theme ?? onTheme(),
+      locale: locale ?? onLocale(),
+      localizationsDelegates: localizationsDelegates ?? onLocalizationsDelegates(),
+      localeResolutionCallback: localeResolutionCallback ?? onLocaleResolutionCallback(),
+      supportedLocales: supportedLocales ?? onSupportedLocales(),
+      debugShowMaterialGrid: debugShowMaterialGrid ?? onDebugShowMaterialGrid(),
+      showPerformanceOverlay: showPerformanceOverlay ?? onShowPerformanceOverlay(),
+      checkerboardRasterCacheImages: checkerboardRasterCacheImages ?? onCheckerboardRasterCacheImages(),
+      checkerboardOffscreenLayers: checkerboardOffscreenLayers ?? onCheckerboardOffscreenLayers(),
+      showSemanticsDebugger: showSemanticsDebugger ?? onShowSemanticsDebugger(),
+      debugShowCheckedModeBanner: debugShowCheckedModeBanner ?? onDebugShowCheckedModeBanner(),
+    );
+  }
+
+  @mustCallSuper
+  Future<bool> init() async {
+    await App._initInternal();
+    App._packageInfo = await PackageInfo.fromPlatform();
+    bool init = await super.init();
+    return init;
+  }
+
+  // Called in the _App dispose() function.
+  void dispose() {
+    App._dispose();
+    App._context = null;
+    App._theme = null;
+    App._scaffold = null;
+    super.dispose();
+  }
+
+  GlobalKey<NavigatorState> onNavigatorKey() =>  null; //GlobalKey<NavigatorState>();
+  Map<String, WidgetBuilder> onRoutes() => const <String, WidgetBuilder>{};
+  String onInitialRoute() => null;
+  RouteFactory onOnGenerateRoute() => null;
+  RouteFactory onOnUnknownRoute() => null;
+  List<NavigatorObserver> onNavigatorObservers() => const <NavigatorObserver>[];
+  TransitionBuilder onBuilder() => null;
+  String onTitle() => null;
+  GenerateAppTitle onOnGenerateTitle() => null;
+  Color onColor() => null;
+  ThemeData onTheme() => App.getThemeData();
+  Locale onLocale() => null;
+  Iterable<LocalizationsDelegate<dynamic>> onLocalizationsDelegates() => null;
+  LocaleResolutionCallback onLocaleResolutionCallback() => null;
+  Iterable<Locale> onSupportedLocales() => const <Locale>[Locale('en', 'US')];
+  bool onDebugShowMaterialGrid() => false;
+  bool onShowPerformanceOverlay() => false;
+  bool onCheckerboardRasterCacheImages() => false;
+  bool onCheckerboardOffscreenLayers() => false;
+  bool onShowSemanticsDebugger() => false;
+  bool onDebugShowCheckedModeBanner() => true;
 }
 
-abstract class AppView extends StateMVC {
+abstract class AppView<T extends StatefulWidget> extends StateMVC<T> {
   AppView({
-    this.controller,
+    this.con,
     this.navigatorKey,
     this.routes: const <String, WidgetBuilder>{},
     this.initialRoute,
@@ -442,7 +522,7 @@ abstract class AppView extends StateMVC {
     this.debugPaintPointersEnabled = false,
     this.debugPaintLayerBordersEnabled = false,
     this.debugRepaintRainbowEnabled = false,
-  }) : super(controller) {
+  }) : super(con) {
     /// Highlights UI while debugging.
     _debugPaint(
       debugPaintSizeEnabled: debugPaintSizeEnabled,
@@ -453,7 +533,7 @@ abstract class AppView extends StateMVC {
     );
   }
 
-  final AppController controller;
+  final AppController con;
 
   final GlobalKey<NavigatorState> navigatorKey;
   final Map<String, WidgetBuilder> routes;
@@ -485,14 +565,15 @@ abstract class AppView extends StateMVC {
   final bool debugRepaintRainbowEnabled;
 
   @mustCallSuper
-  Future<bool> init() {
-    return controller.init();
+  Future<bool> init() async {
+    bool init = await con.init();
+    return init;
   }
 
   /// Override to dispose anything initialized in your init() function.
   @mustCallSuper
   void dispose() {
-    controller.dispose();
+    con.dispose();
     super.dispose();
   }
 
