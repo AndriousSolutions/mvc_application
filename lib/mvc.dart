@@ -94,7 +94,7 @@ class ModelMVC {
 }
 
 /// Passed as 'View' to MVC class for a simple app.
-class ViewMVC extends AppState {
+class ViewMVC extends AppView {
   ViewMVC({
     Widget home,
     AppController con,

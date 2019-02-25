@@ -110,21 +110,6 @@ import 'package:mvc_application/src/view/utils/loading_screen.dart'
 /// Highlights UI while debugging.
 import 'package:flutter/rendering.dart' as debugPaint;
 
-/// High-level function to highlights UI while debugging.
-void _debugPaint({
-  bool debugPaintSizeEnabled = false,
-  bool debugPaintBaselinesEnabled = false,
-  bool debugPaintPointersEnabled = false,
-  bool debugPaintLayerBordersEnabled = false,
-  bool debugRepaintRainbowEnabled = false,
-}) {
-  /// Highlights UI while debugging.
-  debugPaint.debugPaintSizeEnabled = debugPaintSizeEnabled;
-  debugPaint.debugPaintBaselinesEnabled = debugPaintBaselinesEnabled;
-  debugPaint.debugPaintPointersEnabled = debugPaintPointersEnabled;
-  debugPaint.debugPaintLayerBordersEnabled = debugPaintLayerBordersEnabled;
-  debugPaint.debugRepaintRainbowEnabled = debugRepaintRainbowEnabled;
-}
 
 /// Auth and Firebase must be in a separate class for now.
 //import 'package:auth/auth.dart' show Auth;
@@ -134,18 +119,19 @@ void _debugPaint({
 //import 'package:firebase/firebase.dart' show FireBase;
 
 class App extends AppMVC {
-  // All is static
-  factory App(AppView view, {ControllerMVC con, Key key}) {
+  // You must supply a 'View.'
+  factory App(AppViewState view, {ControllerMVC con, Key key}) {
+    // Supply a 'Controller' if need be.
     if (_this == null) _this = App._(view, con, key);
     return _this;
   }
   // Make only one instance of this class.
   static App _this;
 
-  App._(AppView view, ControllerMVC con, Key key) : super(con: con, key: key) {
+  App._(AppViewState view, ControllerMVC con, Key key) : super(con: con, key: key) {
     _vw = view;
   }
-  static AppView _vw;
+  static AppViewState _vw;
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +145,13 @@ class App extends AppMVC {
     );
   }
 
+  @override
+  void initApp() {
+    super.initApp();
+    _vw.con.initApp();
+  }
+
+  @override
   Future<bool> init() async {
     bool init = await super.init();
     if(init) init = await _vw.init();
@@ -366,8 +359,8 @@ class _AppWidget extends StatefulWidget{
   State createState() => App._vw;
 }
 
-class AppState extends AppView<_AppWidget> {
-  AppState(
+class AppView extends AppViewState<_AppWidget> {
+  AppView(
       {this.key,
       @required this.home,
       AppController con,
@@ -493,8 +486,8 @@ class AppState extends AppView<_AppWidget> {
   bool onDebugShowCheckedModeBanner() => true;
 }
 
-abstract class AppView<T extends StatefulWidget> extends StateMVC<T> {
-  AppView({
+abstract class AppViewState<T extends StatefulWidget> extends StateMVC<T> {
+  AppViewState({
     this.con,
     this.navigatorKey,
     this.routes: const <String, WidgetBuilder>{},
@@ -581,7 +574,13 @@ abstract class AppView<T extends StatefulWidget> extends StateMVC<T> {
   Widget build(BuildContext context);
 }
 
-class AppController extends ControllerMVC {
+class AppController extends ControllerMVC implements AppConMVC{
+
+  AppController([StateMVC state]) : super(state);
+
+  /// Initialize any immediate 'none time-consuming' operations at the very beginning.
+  void initApp() {}
+
   /// Initialize any 'time-consuming' operations at the beginning.
   /// Initialize items essential to the Mobile Applications.
   /// Called by the _App.init() function.
@@ -604,12 +603,6 @@ class AppController extends ControllerMVC {
     /// Assets.init(context); called in App.build() -gp
     Assets.dispose();
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-//    _App.didChangeAppLifecycleState(state);
   }
 
 //  /// Authentication listener
@@ -655,4 +648,20 @@ class AppDrawer extends StatelessWidget {
 
 abstract class ConnectivityListener {
   onConnectivityChanged(ConnectivityResult result);
+}
+
+/// High-level function to highlights UI while debugging.
+void _debugPaint({
+  bool debugPaintSizeEnabled = false,
+  bool debugPaintBaselinesEnabled = false,
+  bool debugPaintPointersEnabled = false,
+  bool debugPaintLayerBordersEnabled = false,
+  bool debugRepaintRainbowEnabled = false,
+}) {
+  /// Highlights UI while debugging.
+  debugPaint.debugPaintSizeEnabled = debugPaintSizeEnabled;
+  debugPaint.debugPaintBaselinesEnabled = debugPaintBaselinesEnabled;
+  debugPaint.debugPaintPointersEnabled = debugPaintPointersEnabled;
+  debugPaint.debugPaintLayerBordersEnabled = debugPaintLayerBordersEnabled;
+  debugPaint.debugRepaintRainbowEnabled = debugRepaintRainbowEnabled;
 }
