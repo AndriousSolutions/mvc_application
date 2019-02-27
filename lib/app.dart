@@ -1,4 +1,5 @@
 library mvc_enterprise;
+
 ///
 /// Copyright (C) 2018 Andrious Solutions
 ///
@@ -21,12 +22,10 @@ library mvc_enterprise;
 ///          Created  24 Dec 2018
 ///
 
-export 'src/controller/app.dart';
-
 export 'package:prefs/prefs.dart' show Prefs;
 
+/// App
 export 'package:mvc_pattern/mvc_pattern.dart' show AppMVC, AppConMVC;
 
-/// App
-export 'package:mvc_application/src/controller/app.dart' show App, AppDrawer;
-
+export 'package:mvc_application/src/controller/app.dart'
+    show App, AppController, AppDrawer;
