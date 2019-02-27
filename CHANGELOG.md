@@ -20,5 +20,6 @@
 ## [0.9.1] - 2019-02-16: mvc_pattern: in pubspec.yaml
 ## [0.10.0] - 2019-02-20: class App extends AppMVC { class ViewMVC extends AppState {
 ## [0.11.0] - 2019-02-22: Rename class AppView to AppViewState; AppState to AppView
+## [0.12.0] - 2019-02-27: delete export 'src/controller/app.dart';
 
 
