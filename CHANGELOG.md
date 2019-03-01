@@ -22,5 +22,6 @@
 ## [0.11.0] - 2019-02-22: Rename class AppView to AppViewState; AppState to AppView
 ## [0.12.0] - 2019-02-27: delete export 'src/controller/app.dart';
 ## [0.12.1] - 2019-02-27: 'package:mvc_application/src/controller/app.dart' show App, AppController;
+## [0.13.0] - 2019-03-01: prefs: library package
 
 
