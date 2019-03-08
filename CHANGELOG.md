@@ -23,5 +23,8 @@
 ## [0.12.0] - 2019-02-27: delete export 'src/controller/app.dart';
 ## [0.12.1] - 2019-02-27: 'package:mvc_application/src/controller/app.dart' show App, AppController;
 ## [0.13.0] - 2019-03-01: prefs: library package
-
-
+## [0.14.0] - 2019-03-07: get isInit; AndroidX dependencies
+##                        
+##                        
+##                        
+##                        

@@ -1,5 +1,3 @@
-library mvc_enterprise;
-
 ///
 /// Copyright (C) 2018 Andrious Solutions
 ///

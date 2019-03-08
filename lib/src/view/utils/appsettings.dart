@@ -20,25 +20,49 @@
 ///          Created  11 Sep 2018
 ///
 
-import 'package:flutter/material.dart' show AlignmentDirectional, BoxConstraints, BuildContext, Container, DefaultTextStyle, EdgeInsets, EdgeInsetsDirectional, FlatButton, IconTheme, Key, MediaQuery, MergeSemantics, StatelessWidget, Text, TextOverflow, TextSpan, TextStyle, Theme, ThemeData, VoidCallback, Widget, required, showAboutDialog;
+import 'package:flutter/material.dart'
+    show
+        AlignmentDirectional,
+        BoxConstraints,
+        BuildContext,
+        Container,
+        DefaultTextStyle,
+        EdgeInsets,
+        EdgeInsetsDirectional,
+        FlatButton,
+        IconTheme,
+        Key,
+        MediaQuery,
+        MergeSemantics,
+        StatelessWidget,
+        Text,
+        TextOverflow,
+        TextSpan,
+        TextStyle,
+        Theme,
+        ThemeData,
+        VoidCallback,
+        Widget,
+        required,
+        showAboutDialog;
 
 import 'package:flutter/gestures.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:flutter/foundation.dart' as Plat show defaultTargetPlatform ;
+import 'package:flutter/foundation.dart' as Plat show defaultTargetPlatform;
 
-
-class AppSettings{
-
+class AppSettings {
   static get defaultTargetPlatform => Plat.defaultTargetPlatform;
 
-  static StatelessWidget tapText(String text, VoidCallback onTap, {TextStyle style}){
+  static StatelessWidget tapText(String text, VoidCallback onTap,
+      {TextStyle style}) {
     return _TapText(text, onTap, style: style);
   }
 
-  static _LinkTextSpan linkTextSpan({ TextStyle style, String url, String text }){
-    return  _LinkTextSpan(style: style, url: url, text: text);
+  static _LinkTextSpan linkTextSpan(
+      {TextStyle style, String url, String text}) {
+    return _LinkTextSpan(style: style, url: url, text: text);
   }
 
   static void showAbout({
@@ -60,7 +84,6 @@ class AppSettings{
   }
 }
 
-
 class _TapText extends StatelessWidget {
   const _TapText(this.text, this.onTap, {this.style});
 
@@ -80,18 +103,17 @@ class _TapText extends StatelessWidget {
   }
 }
 
-
 class _OptionsItem extends StatelessWidget {
-  const _OptionsItem({ Key key, this.child }) : super(key: key);
+  const _OptionsItem({Key key, this.child}) : super(key: key);
 
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-
     return MergeSemantics(
       child: Container(
-        constraints: BoxConstraints(minHeight: 48.0 * MediaQuery.textScaleFactorOf(context)),
+        constraints: BoxConstraints(
+            minHeight: 48.0 * MediaQuery.textScaleFactorOf(context)),
         padding: EdgeInsetsDirectional.only(start: 56.0),
         alignment: AlignmentDirectional.centerStart,
         child: DefaultTextStyle(
@@ -109,10 +131,12 @@ class _OptionsItem extends StatelessWidget {
 }
 
 class _FlatButton extends StatelessWidget {
-  const _FlatButton({ Key key,
+  const _FlatButton({
+    Key key,
     this.onPressed,
     this.child,
-    this.style,}) : super(key: key);
+    this.style,
+  }) : super(key: key);
 
   final VoidCallback onPressed;
   final Widget child;
@@ -132,7 +156,6 @@ class _FlatButton extends StatelessWidget {
 }
 
 class _LinkTextSpan extends TextSpan {
-
   // Beware!
   //
   // This class is only safe because the TapGestureRecognizer is not
@@ -146,11 +169,12 @@ class _LinkTextSpan extends TextSpan {
   // manage the recognizer from outside the TextSpan, e.g. in the State of a
   // stateful widget that then hands the recognizer to the TextSpan.
 
-  _LinkTextSpan({ TextStyle style, String url, String text }) : super(
-      style: style,
-      text: text ?? url,
-      recognizer: TapGestureRecognizer()..onTap = () {
-        launch(url, forceSafariVC: false);
-      }
-  );
+  _LinkTextSpan({TextStyle style, String url, String text})
+      : super(
+            style: style,
+            text: text ?? url,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launch(url, forceSafariVC: false);
+              });
 }

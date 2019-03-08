@@ -137,7 +137,7 @@ class App extends AppMVC {
   Widget build(BuildContext context) {
     Assets.init(context);
     App._context = context;
-    return FutureBuilder(
+    return FutureBuilder<bool>(
       future: init(),
       builder: (_, snapshot) {
         return snapshot.hasData ? _AppWidget() : LoadingScreen();
@@ -153,10 +153,13 @@ class App extends AppMVC {
 
   @override
   Future<bool> init() async {
-    bool init = await super.init();
-    if(init) init = await _vw.init();
-    return init;
+    _isInit = await super.init();
+    if(_isInit) _isInit = await _vw.init();
+    return _isInit;
   }
+  /// Determine if the App initialized successfully.
+  static bool get isInit => _isInit;
+  static bool _isInit;
 
   static GlobalKey<NavigatorState> get navigatorKey => _vw.navigatorKey;
 

@@ -1,6 +1,6 @@
 name: mvc_application
 description: Application Framework in the MVC Design Pattern
-version: 0.13.0
+version: 0.14.0
 author: Greg Perry <support@andrioussolutions.com>
 homepage: www.andrioussolutions.com
 repository: https://github.com/AndriousSolutions/mvc_application
@@ -13,22 +13,26 @@ dependencies:
     sdk: flutter
 
   # https://pub.dartlang.org/packages/connectivity#-changelog-tab-
-  connectivity:
+  connectivity: ^0.4.2
 
   # https://pub.dartlang.org/packages/sqflite#-changelog-tab-
-  sqflite:
+  sqflite: ^1.1.2
 
-  # https://pub.dartlang.org/packages/url_launcher
+  # https://pub.dartlang.org/packages/url_launcher#-changelog-tab-
   # used in AppSettings.dart
-  url_launcher:
+  url_launcher: ^5.0.1
+
+  # https://pub.dartlang.org/packages/package_info#-changelog-tab-
+  package_info: ^0.4.0+1
+
+  # https://pub.dartlang.org/packages/device_info#-changelog-tab-
+  device_info: ^0.4.0
 
   mvc_pattern:
 #    path: ../../packages/mvc_pattern
 
   prefs:
 #    path: ../../libs/prefs
-#    git:
-#      url: git://github.com/AndriousSolutions/prefs.git
 
   assets:
 #    path: ../../libs/assets
@@ -51,11 +55,6 @@ dependencies:
 #    path: ../../libs/uxutils
     git:
       url: git://github.com/AndriousSolutions/uxutils.git
-
-# https://pub.dartlang.org/packages/package_info#-changelog-tab-
-  package_info: any
-
-  device_info: any
 
 dev_dependencies:
   flutter_test:
