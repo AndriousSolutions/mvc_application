@@ -23,18 +23,14 @@
 
 //Controller
 
-
-export 'package:mvc_pattern/mvc_pattern.dart'
-    show
-     ControllerMVC,
-     StateListener;
+export 'package:mvc_pattern/mvc_pattern.dart' show ControllerMVC, StateListener;
 
 export 'package:prefs/prefs.dart' show Prefs;
 
 // App
 export 'package:mvc_pattern/mvc_pattern.dart' show AppMVC, AppConMVC;
 
-export 'package:mvc_application/src/controller/app.dart' show App, AppController;
+export 'package:mvc_application/src/controller/app.dart'
+    show App, AppController;
 
 export 'package:mvc_application/src/controller/deviceinfo.dart' show DeviceInfo;
-

@@ -1,6 +1,6 @@
 name: mvc_application
 description: Application Framework in the MVC Design Pattern
-version: 0.14.0
+version: 0.14.1
 author: Greg Perry <support@andrioussolutions.com>
 homepage: www.andrioussolutions.com
 repository: https://github.com/AndriousSolutions/mvc_application
@@ -35,26 +35,26 @@ dependencies:
 #    path: ../../libs/prefs
 
   assets:
-#    path: ../../libs/assets
-    git:
-      url: git://github.com/AndriousSolutions/assets.git
+    path: ../../libs/assets
+#    git:
+#      url: git://github.com/AndriousSolutions/assets.git
 
   # Database utilities from my library
   dbutils:
-#    path: ../../libs/dbutils
-     git:
-       url: git://github.com/AndriousSolutions/dbutils.git
+    path: ../../libs/dbutils
+#     git:
+#       url: git://github.com/AndriousSolutions/dbutils.git
 
   # Files utilities from my library
   file_utils:
-#    path: ../../libs/files/file_utils
-    git:
-      url: git://github.com/AndriousSolutions/files.git
+    path: ../../libs/files/file_utils
+#    git:
+#      url: git://github.com/AndriousSolutions/files.git
 
   uxutils:
-#    path: ../../libs/uxutils
-    git:
-      url: git://github.com/AndriousSolutions/uxutils.git
+    path: ../../libs/uxutils
+#    git:
+#      url: git://github.com/AndriousSolutions/uxutils.git
 
 dev_dependencies:
   flutter_test:

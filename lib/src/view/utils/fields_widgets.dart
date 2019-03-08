@@ -21,7 +21,62 @@
 ///
 ///
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    show
+        Border,
+        BorderSide,
+        BoxDecoration,
+        Brightness,
+        BuildContext,
+        Checkbox,
+        CheckboxListTile,
+        CircleAvatar,
+        Color,
+        Colors,
+        Column,
+        Container,
+        CrossAxisAlignment,
+        DefaultTextStyle,
+        DismissDirection,
+        DismissDirectionCallback,
+        Dismissible,
+        DropdownButton,
+        DropdownMenuItem,
+        EdgeInsets,
+        EdgeInsetsGeometry,
+        FocusNode,
+        FormFieldSetter,
+        FormFieldValidator,
+        GestureLongPressCallback,
+        GestureTapCallback,
+        Icon,
+        Icons,
+        ImageProvider,
+        InputDecoration,
+        Key,
+        ListTile,
+        ListTileControlAffinity,
+        Locale,
+        MaterialTapTargetSize,
+        ObjectKey,
+        Padding,
+        StatelessWidget,
+        Text,
+        TextAlign,
+        TextCapitalization,
+        TextDirection,
+        TextEditingController,
+        TextFormField,
+        TextInputAction,
+        TextInputType,
+        TextOverflow,
+        TextSpan,
+        TextStyle,
+        ThemeData,
+        ValueChanged,
+        VoidCallback,
+        Widget,
+        required;
 
 import 'package:flutter/services.dart'
     show
@@ -783,17 +838,15 @@ class Item {
   String _label = 'label';
   String _value = 'value';
 
-  Item.fromMap(Map m,[String label, String value]) {
+  Item.fromMap(Map m, [String label, String value]) {
     keys(label, value);
     this.label = m[_label];
     this.value = m[_value];
   }
 
-  keys(String label, String value){
-      if(label != null && label.isNotEmpty)
-        _label = label;
-      if(value != null && value.isNotEmpty)
-        _value = value;
+  keys(String label, String value) {
+    if (label != null && label.isNotEmpty) _label = label;
+    if (value != null && value.isNotEmpty) _value = value;
   }
 
   Map get toMap => {_label: label, _value: value};

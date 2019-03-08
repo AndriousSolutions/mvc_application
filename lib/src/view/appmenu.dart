@@ -43,11 +43,20 @@
 ///          Created  09 Feb 2019
 ///
 ///
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    show
+        BuildContext,
+        Color,
+        ColorSwatch,
+        PopupMenuButton,
+        PopupMenuItem,
+        State,
+        Text,
+        showAboutDialog;
 
-import 'package:mvc_application/controller.dart';
+import 'package:mvc_application/controller.dart' show App, Prefs;
 
-import 'package:uxutils/view.dart';
+import 'package:uxutils/view.dart' show ColorPicker;
 
 class AppMenu {
   static State _state;
@@ -76,8 +85,7 @@ class AppMenu {
             context: _state.context,
             applicationName: "Greg's App Example",
             applicationVersion: App.version + '  buld: ${App.buildNumber}',
-            children: [Text('A simple contact app demonstration.')]
-        );
+            children: [Text('A simple contact app demonstration.')]);
         break;
       default:
     }
@@ -89,6 +97,7 @@ class AppMenu {
 
   static void onChange(ColorSwatch value) {
     Prefs.setInt('colorTheme', ColorPicker.colors.indexOf(value));
+
     /// Rebuild the state.
     _state.setState(() {});
   }

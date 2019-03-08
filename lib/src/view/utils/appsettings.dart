@@ -46,9 +46,9 @@ import 'package:flutter/material.dart'
         required,
         showAboutDialog;
 
-import 'package:flutter/gestures.dart';
+import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' show launch;
 
 import 'package:flutter/foundation.dart' as Plat show defaultTargetPlatform;
 

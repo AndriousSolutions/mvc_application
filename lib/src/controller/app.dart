@@ -77,7 +77,7 @@ import 'package:prefs/prefs.dart' show Prefs;
 
 import 'package:assets/assets.dart' show Assets;
 
-import 'package:package_info/package_info.dart';
+import 'package:package_info/package_info.dart' show PackageInfo;
 
 import 'package:flutter/widgets.dart'
     show
@@ -110,7 +110,6 @@ import 'package:mvc_application/src/view/utils/loading_screen.dart'
 /// Highlights UI while debugging.
 import 'package:flutter/rendering.dart' as debugPaint;
 
-
 /// Auth and Firebase must be in a separate class for now.
 //import 'package:auth/auth.dart' show Auth;
 
@@ -128,7 +127,8 @@ class App extends AppMVC {
   // Make only one instance of this class.
   static App _this;
 
-  App._(AppViewState view, ControllerMVC con, Key key) : super(con: con, key: key) {
+  App._(AppViewState view, ControllerMVC con, Key key)
+      : super(con: con, key: key) {
     _vw = view;
   }
   static AppViewState _vw;
@@ -154,9 +154,10 @@ class App extends AppMVC {
   @override
   Future<bool> init() async {
     _isInit = await super.init();
-    if(_isInit) _isInit = await _vw.init();
+    if (_isInit) _isInit = await _vw.init();
     return _isInit;
   }
+
   /// Determine if the App initialized successfully.
   static bool get isInit => _isInit;
   static bool _isInit;
@@ -357,8 +358,8 @@ class App extends AppMVC {
 //  final GlobalKey<AppView> key = new GlobalKey<AppView>();
 }
 
-class _AppWidget extends StatefulWidget{
-  _AppWidget({Key key}):super(key: key);
+class _AppWidget extends StatefulWidget {
+  _AppWidget({Key key}) : super(key: key);
   State createState() => App._vw;
 }
 
@@ -433,19 +434,25 @@ class AppView extends AppViewState<_AppWidget> {
       navigatorObservers: navigatorObservers ?? onNavigatorObservers(),
       builder: builder ?? onBuilder(),
       title: title ?? onTitle(),
-      onGenerateTitle: onGenerateTitle?? onOnGenerateTitle(),
+      onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(),
       color: color ?? onColor(),
       theme: theme ?? onTheme(),
       locale: locale ?? onLocale(),
-      localizationsDelegates: localizationsDelegates ?? onLocalizationsDelegates(),
-      localeResolutionCallback: localeResolutionCallback ?? onLocaleResolutionCallback(),
+      localizationsDelegates:
+          localizationsDelegates ?? onLocalizationsDelegates(),
+      localeResolutionCallback:
+          localeResolutionCallback ?? onLocaleResolutionCallback(),
       supportedLocales: supportedLocales ?? onSupportedLocales(),
       debugShowMaterialGrid: debugShowMaterialGrid ?? onDebugShowMaterialGrid(),
-      showPerformanceOverlay: showPerformanceOverlay ?? onShowPerformanceOverlay(),
-      checkerboardRasterCacheImages: checkerboardRasterCacheImages ?? onCheckerboardRasterCacheImages(),
-      checkerboardOffscreenLayers: checkerboardOffscreenLayers ?? onCheckerboardOffscreenLayers(),
+      showPerformanceOverlay:
+          showPerformanceOverlay ?? onShowPerformanceOverlay(),
+      checkerboardRasterCacheImages:
+          checkerboardRasterCacheImages ?? onCheckerboardRasterCacheImages(),
+      checkerboardOffscreenLayers:
+          checkerboardOffscreenLayers ?? onCheckerboardOffscreenLayers(),
       showSemanticsDebugger: showSemanticsDebugger ?? onShowSemanticsDebugger(),
-      debugShowCheckedModeBanner: debugShowCheckedModeBanner ?? onDebugShowCheckedModeBanner(),
+      debugShowCheckedModeBanner:
+          debugShowCheckedModeBanner ?? onDebugShowCheckedModeBanner(),
     );
   }
 
@@ -466,7 +473,8 @@ class AppView extends AppViewState<_AppWidget> {
     super.dispose();
   }
 
-  GlobalKey<NavigatorState> onNavigatorKey() =>  null; //GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState> onNavigatorKey() =>
+      null; //GlobalKey<NavigatorState>();
   Map<String, WidgetBuilder> onRoutes() => const <String, WidgetBuilder>{};
   String onInitialRoute() => null;
   RouteFactory onOnGenerateRoute() => null;
@@ -577,8 +585,7 @@ abstract class AppViewState<T extends StatefulWidget> extends StateMVC<T> {
   Widget build(BuildContext context);
 }
 
-class AppController extends ControllerMVC implements AppConMVC{
-
+class AppController extends ControllerMVC implements AppConMVC {
   AppController([StateMVC state]) : super(state);
 
   /// Initialize any immediate 'none time-consuming' operations at the very beginning.

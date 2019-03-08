@@ -23,10 +23,7 @@
 
 /// mvc
 export 'package:mvc_pattern/mvc_pattern.dart'
-    show
-        ViewMVC,
-        StateViewMVC,
-        StateMVC;
+    show ViewMVC, StateViewMVC, StateMVC;
 
 /// Settings
 export 'package:mvc_application/src/view/utils/appsettings.dart';

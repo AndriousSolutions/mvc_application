@@ -22,17 +22,17 @@
 ///          Created  11 Feb 2019
 ///
 ///
-import 'dart:io';
-import 'package:device_info/device_info.dart';
+import 'dart:io' show Platform;
+import 'package:device_info/device_info.dart'
+    show AndroidDeviceInfo, DeviceInfoPlugin, IosDeviceInfo;
 
 class DeviceInfo {
-
   static bool _init = false;
   static Map<String, dynamic> _deviceParameters = Map();
   static Map<String, dynamic> _applicationParameters = Map();
 
   static Future<Map<String, dynamic>> init() async {
-    if(_init) return _deviceParameters;
+    if (_init) return _deviceParameters;
     _init = true;
     if (Platform.isAndroid) {
       AndroidDeviceInfo info = await DeviceInfoPlugin().androidInfo;
@@ -55,30 +55,36 @@ class DeviceInfo {
   static String get fingerprint => _deviceParameters["fingerprint"] ?? '';
   static String get hardware => _deviceParameters["hardware"] ?? '';
   static String get host => _deviceParameters["host"] ?? '';
-  static String get isPhysicalDevice => _deviceParameters["isPhysicalDevice"] ?? '';
+  static String get isPhysicalDevice =>
+      _deviceParameters["isPhysicalDevice"] ?? '';
   static String get manufacturer => _deviceParameters["manufacturer"] ?? '';
   static String get model => _deviceParameters["model"] ?? '';
   static String get product => _deviceParameters["product"] ?? '';
   static String get tags => _deviceParameters["tags"] ?? '';
   static String get type => _deviceParameters["type"] ?? '';
   static String get versionBaseOs => _deviceParameters["versionBaseOs"] ?? '';
-  static String get versionCodename => _deviceParameters["versionCodename"] ?? '';
-  static String get versionIncremental => _deviceParameters["versionIncremental"] ?? '';
-  static String get versionPreviewSdk => _deviceParameters["versionPreviewSdk"] ?? '';
+  static String get versionCodename =>
+      _deviceParameters["versionCodename"] ?? '';
+  static String get versionIncremental =>
+      _deviceParameters["versionIncremental"] ?? '';
+  static String get versionPreviewSdk =>
+      _deviceParameters["versionPreviewSdk"] ?? '';
   static String get versionRelease => _deviceParameters["versionRelease"] ?? '';
   static String get versionSdk => _deviceParameters["versionSdk"] ?? '';
-  static String get versionSecurityPatch => _deviceParameters["versionSecurityPatch"] ?? '';
+  static String get versionSecurityPatch =>
+      _deviceParameters["versionSecurityPatch"] ?? '';
   // iOS
   static String get name => _deviceParameters["name"] ?? '';
-  static String get identifierForVendor => _deviceParameters["identifierForVendor"] ?? '';
+  static String get identifierForVendor =>
+      _deviceParameters["identifierForVendor"] ?? '';
   static String get localizedModel => _deviceParameters["localizedModel"] ?? '';
   static String get systemName => _deviceParameters["systemName"] ?? '';
   static String get utsnameVersion => _deviceParameters["utsnameVersion"] ?? '';
   static String get utsnameRelease => _deviceParameters["utsnameRelease"] ?? '';
   static String get utsnameMachine => _deviceParameters["utsnameMachine"] ?? '';
-  static String get utsnameNodename => _deviceParameters["utsnameNodename"] ?? '';
+  static String get utsnameNodename =>
+      _deviceParameters["utsnameNodename"] ?? '';
   static String get utsnameSysname => _deviceParameters["utsnameSysname"] ?? '';
-
 
   static void _loadAndroidParameters(AndroidDeviceInfo androidDeviceInfo) {
     _deviceParameters["id"] = androidDeviceInfo.id;
