@@ -25,6 +25,6 @@
 ## [0.13.0] - 2019-03-01: prefs: library package
 ## [0.14.0] - 2019-03-07: get isInit; AndroidX dependencies
 ## [0.14.1] - 2019-03-08: dartfmt and show directive all code                      
-##                        
+## [0.14.2] - 2019-03-09: factory App(AppView view                    
 ##                        
 ##                        

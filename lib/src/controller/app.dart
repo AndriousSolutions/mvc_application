@@ -119,7 +119,7 @@ import 'package:flutter/rendering.dart' as debugPaint;
 
 class App extends AppMVC {
   // You must supply a 'View.'
-  factory App(AppViewState view, {ControllerMVC con, Key key}) {
+  factory App(AppView view, {ControllerMVC con, Key key}) {
     // Supply a 'Controller' if need be.
     if (_this == null) _this = App._(view, con, key);
     return _this;
@@ -127,11 +127,11 @@ class App extends AppMVC {
   // Make only one instance of this class.
   static App _this;
 
-  App._(AppViewState view, ControllerMVC con, Key key)
+  App._(AppView view, ControllerMVC con, Key key)
       : super(con: con, key: key) {
     _vw = view;
   }
-  static AppViewState _vw;
+  static AppView _vw;
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +160,7 @@ class App extends AppMVC {
 
   /// Determine if the App initialized successfully.
   static bool get isInit => _isInit;
-  static bool _isInit;
+  static bool _isInit = false;
 
   static GlobalKey<NavigatorState> get navigatorKey => _vw.navigatorKey;
 
