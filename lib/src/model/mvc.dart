@@ -1,5 +1,5 @@
 ///
-/// Copyright (C) 2018 Andrious Solutions
+/// Copyright (C) 2019 Andrious Solutions
 ///
 /// This program is free software; you can redistribute it and/or
 /// modify it under the terms of the GNU General Public License
@@ -17,30 +17,18 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-///          Created  25 Dec 2018
+///          Created  12 Mar 2019
 ///
 ///
 
-/// mvc
-export 'package:mvc_pattern/mvc_pattern.dart'
-    show ViewMVC, StateViewMVC, StateMVC;
 
-/// Settings
-export 'package:mvc_application/src/view/utils/appsettings.dart';
+/// The Model for a simple app.
+class ModelMVC {
+  ModelMVC() {
+    if (_firstMod == null) _firstMod = this;
+  }
+  static ModelMVC _firstMod;
 
-/// Screens
-export 'package:mvc_application/src/view/utils/loading_screen.dart';
-
-/// Fields
-export 'package:mvc_application/src/view/utils/fields_widgets.dart';
-
-/// Menus
-export 'package:mvc_application/src/view/appmenu.dart' show AppMenu;
-
-/// UX Utils
-export 'package:uxutils/view.dart';
-
-/// App
-export 'package:mvc_application/src/controller/app.dart'
-    show AppController, AppView;
-
+  /// Allow for easy access to 'the first Model' throughout the application.
+  static ModelMVC get mod => _firstMod ?? ModelMVC();
+}

@@ -21,33 +21,27 @@
 ///
 ///
 
-export "app.dart";
-export 'model.dart';
-export 'controller.dart';
-export 'view.dart';
+export 'package:mvc_application/app.dart';
+
+export 'package:mvc_application/model.dart';
+export 'package:mvc_application/src/model/mvc.dart' show ModelMVC;
+
+export 'package:mvc_application/view.dart' hide ViewMVC;
+export 'package:mvc_application/src/view/mvc.dart' show ViewMVC;
+
+export 'package:mvc_application/controller.dart';
+
 
 import 'package:flutter/material.dart'
     show
         BuildContext,
         Key,
         StatelessWidget,
-        Widget,
-        Color,
-        GenerateAppTitle,
-        GlobalKey,
-        Locale,
-        LocaleResolutionCallback,
-        LocalizationsDelegate,
-        NavigatorObserver,
-        NavigatorState,
-        RouteFactory,
-        ThemeData,
-        TransitionBuilder,
-        WidgetBuilder;
+        Widget;
 
-import 'app.dart' show App, AppState;
+import 'package:mvc_application/app.dart' show App;
 
-import 'view.dart' show AppController, AppView;
+import 'package:mvc_application/view.dart' show AppView;
 
 /// Passed to runApp() but calls App()
 class MVC extends StatelessWidget {
@@ -61,87 +55,4 @@ class MVC extends StatelessWidget {
   Widget build(BuildContext context) => App(view, key: key);
 }
 
-//abstract class StaticState<T extends StatefulWidget> extends StateMVC<T>{
-//
-//  StaticState(ControllerMVC con): super(con){
-//    if(_con == null) _con = con;
-//  }
-//  /// Now have 'app wide' access to the Controller.
-//  static ControllerMVC get con => _con;
-//  static ControllerMVC _con;
-//}
 
-///// The Controller for a simple app.
-//class ConMVC extends ControllerMVC {
-//  ConMVC([StateMVC state]): super(state) {
-//    if (_firstCon == null) _firstCon = this;
-//  }
-//  static ConMVC _firstCon;
-//
-//  /// Allow for easy access to 'the first Controller' throughout the application.
-//  static ConMVC get con => _firstCon ?? ConMVC();
-//}
-
-/// The Model for a simple app.
-class ModelMVC {
-  ModelMVC() {
-    if (_firstMod == null) _firstMod = this;
-  }
-  static ModelMVC _firstMod;
-
-  /// Allow for easy access to 'the first Model' throughout the application.
-  static ModelMVC get mod => _firstMod ?? ModelMVC();
-}
-
-/// Passed as 'View' to MVC class for a simple app.
-class ViewMVC extends AppView {
-  ViewMVC({
-    Widget home,
-    AppController con,
-    GlobalKey<NavigatorState> navigatorKey,
-    Map<String, WidgetBuilder> routes,
-    String initialRoute,
-    RouteFactory onGenerateRoute,
-    RouteFactory onUnknownRoute,
-    List<NavigatorObserver> navigatorObservers,
-    TransitionBuilder builder,
-    String title,
-    GenerateAppTitle onGenerateTitle,
-    ThemeData theme,
-    Color color,
-    Locale locale,
-    Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates,
-    LocaleResolutionCallback localeResolutionCallback,
-    Iterable<Locale> supportedLocales,
-    bool debugShowMaterialGrid,
-    bool showPerformanceOverlay,
-    bool checkerboardRasterCacheImages,
-    bool checkerboardOffscreenLayers,
-    bool showSemanticsDebugger,
-    bool debugShowCheckedModeBanner,
-  }) : super(
-          home: home,
-          con: con ?? AppController(),
-          navigatorKey: navigatorKey,
-          routes: routes,
-          initialRoute: initialRoute,
-          onGenerateRoute: onGenerateRoute,
-          onUnknownRoute: onUnknownRoute,
-          navigatorObservers: navigatorObservers,
-          builder: builder,
-          title: title,
-          onGenerateTitle: onGenerateTitle,
-          theme: theme,
-          color: color,
-          locale: locale,
-          localizationsDelegates: localizationsDelegates,
-          localeResolutionCallback: localeResolutionCallback,
-          supportedLocales: supportedLocales,
-          debugShowMaterialGrid: debugShowMaterialGrid,
-          showPerformanceOverlay: showPerformanceOverlay,
-          checkerboardRasterCacheImages: checkerboardRasterCacheImages,
-          checkerboardOffscreenLayers: checkerboardOffscreenLayers,
-          showSemanticsDebugger: showSemanticsDebugger,
-          debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-        );
-}
