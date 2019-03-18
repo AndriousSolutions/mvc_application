@@ -29,7 +29,7 @@ import 'package:device_info/device_info.dart'
 class DeviceInfo {
   static bool _init = false;
   static Map<String, dynamic> _deviceParameters = Map();
-  static Map<String, dynamic> _applicationParameters = Map();
+//  static Map<String, dynamic> _applicationParameters = Map();
 
   static Future<Map<String, dynamic>> init() async {
     if (_init) return _deviceParameters;

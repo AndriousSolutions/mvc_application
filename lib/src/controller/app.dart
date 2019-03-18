@@ -127,13 +127,13 @@ class App extends AppMVC {
   // Make only one instance of this class.
   static App _this;
 
-  App._(AppView view, ControllerMVC con, Key key, this._loadingScreen)
+  App._(AppView view, ControllerMVC con, Key key, this.loadingScreen)
       : super(con: con, key: key) {
     _vw = view;    
   }
   static AppView _vw;
   
-  final Widget _loadingScreen;
+  final Widget loadingScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +142,7 @@ class App extends AppMVC {
     return FutureBuilder<bool>(
       future: init(),
       builder: (_, snapshot) {
-        return snapshot.hasData ? _AppWidget() : _loadingScreen ?? LoadingScreen();
+        return snapshot.hasData ? _AppWidget() : loadingScreen ?? LoadingScreen();
       },
     );
   }
