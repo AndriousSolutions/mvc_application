@@ -110,3 +110,7 @@
 - final Widget loadingScreen;
 - uxutils.git in pubspec.yaml
 - Comment out _applicationParameters
+
+## 0.15.2
+ 2019-03-19:
+- Supply the AsyncSnapshot in App.snapshot

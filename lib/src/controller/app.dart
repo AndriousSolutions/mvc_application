@@ -26,10 +26,12 @@ import 'package:flutter/foundation.dart' show Key, mustCallSuper, required;
 
 import 'package:flutter/material.dart'
     show
+        AsyncSnapshot,
         AppLifecycleState,
         BuildContext,
         Color,
         ColorSwatch,
+        ConnectionState,
         Drawer,
         DrawerHeader,
         FutureBuilder,
@@ -119,7 +121,8 @@ import 'package:flutter/rendering.dart' as debugPaint;
 
 class App extends AppMVC {
   // You must supply a 'View.'
-  factory App(AppView view, {ControllerMVC con, Key key, Widget loadingScreen}) {
+  factory App(AppView view,
+      {ControllerMVC con, Key key, Widget loadingScreen}) {
     // Supply a 'Controller' if need be.
     if (_this == null) _this = App._(view, con, key, loadingScreen);
     return _this;
@@ -129,10 +132,13 @@ class App extends AppMVC {
 
   App._(AppView view, ControllerMVC con, Key key, this.loadingScreen)
       : super(con: con, key: key) {
-    _vw = view;    
+    _vw = view;
   }
   static AppView _vw;
-  
+
+  static AsyncSnapshot get snapshot => _snapshot;
+  static AsyncSnapshot _snapshot;
+
   final Widget loadingScreen;
 
   @override
@@ -142,7 +148,9 @@ class App extends AppMVC {
     return FutureBuilder<bool>(
       future: init(),
       builder: (_, snapshot) {
-        return snapshot.hasData ? _AppWidget() : loadingScreen ?? LoadingScreen();
+        return snapshot.connectionState == ConnectionState.done
+            ? _AppWidget(snapshot)
+            : loadingScreen ?? LoadingScreen();
       },
     );
   }
@@ -361,7 +369,10 @@ class App extends AppMVC {
 }
 
 class _AppWidget extends StatefulWidget {
-  _AppWidget({Key key}) : super(key: key);
+  _AppWidget(AsyncSnapshot snapshot, {Key key}) : super(key: key) {
+    /// Supply the AsyncSnapshot
+    App._snapshot = snapshot;
+  }
   State createState() => App._vw;
 }
 
