@@ -21,38 +21,155 @@
 ///
 ///
 
-export 'package:mvc_application/app.dart';
-
+export "package:mvc_application/app.dart";
 export 'package:mvc_application/model.dart';
-export 'package:mvc_application/src/model/mvc.dart' show ModelMVC;
-
-export 'package:mvc_application/view.dart' hide ViewMVC;
-export 'package:mvc_application/src/view/mvc.dart' show ViewMVC;
-
 export 'package:mvc_application/controller.dart';
-
+export 'package:mvc_application/view.dart';
 
 import 'package:flutter/material.dart'
     show
         BuildContext,
         Key,
+        State,
+        StatefulWidget,
         StatelessWidget,
-        Widget;
+        Widget,
+        Center,
+        Color,
+        GenerateAppTitle,
+        GlobalKey,
+        Locale,
+        LocaleResolutionCallback,
+        LocalizationsDelegate,
+        NavigatorObserver,
+        NavigatorState,
+        RouteFactory,
+        Scaffold,
+        Text,
+        ThemeData,
+        TransitionBuilder,
+        WidgetBuilder;
 
-import 'package:mvc_application/app.dart' show App;
+import 'app.dart' show App;
 
-import 'package:mvc_application/view.dart' show AppView;
+import 'view.dart' show AppController, AppView;
+
+import 'controller.dart' show ControllerMVC;
+
+typedef CreateView = AppView Function();
+CreateView _createVW;
 
 /// Passed to runApp() but calls App()
+/// No longer effective alternative.
+@deprecated
 class MVC extends StatelessWidget {
   MVC(
-    this.view, {
+    CreateView createVW, {
     this.key,
-  }) : super();
-  final AppView view;
+    this.con,
+    this.loadingScreen,
+  }) : super() {
+    _createVW = createVW;
+  }
   final Key key;
+  final ControllerMVC con;
+  final Widget loadingScreen;
 
-  Widget build(BuildContext context) => App(view, key: key);
+  Widget build(BuildContext context) => _MyApp(
+        key: key,
+        con: con,
+        loadingScreen: loadingScreen,
+      );
 }
 
+class _MyApp extends App {
+  _MyApp({Key key, ControllerMVC con, Widget loadingScreen})
+      : super(key: key, con: con, loadingScreen: loadingScreen);
 
+  @override
+  AppView createView() => _createVW();
+}
+
+/// The Model for a simple app.
+class ModelMVC {
+  ModelMVC() {
+    if (_firstMod == null) _firstMod = this;
+  }
+  static ModelMVC _firstMod;
+
+  /// Allow for easy access to 'the first Model' throughout the application.
+  static ModelMVC get mod => _firstMod ?? ModelMVC();
+}
+
+class AppError extends ViewMVC {
+  AppError(Object exception, {Key key})
+      : super(home: _AppError(exception, key: key));
+}
+
+class _AppError extends StatefulWidget {
+  _AppError(this.exception, {Key key}) : super(key: key);
+  final Object exception;
+  @override
+  State<StatefulWidget> createState() => _AppErrorState();
+}
+
+class _AppErrorState extends State<_AppError> {
+  Widget build(BuildContext context) => Scaffold(
+        body: Center(
+          child: Text("${widget.exception.toString()}"),
+        ),
+      );
+}
+
+/// Passed as 'View' to MVC class for a simple app.
+class ViewMVC extends AppView {
+  ViewMVC({
+    Widget home,
+    AppController con,
+    GlobalKey<NavigatorState> navigatorKey,
+    Map<String, WidgetBuilder> routes,
+    String initialRoute,
+    RouteFactory onGenerateRoute,
+    RouteFactory onUnknownRoute,
+    List<NavigatorObserver> navigatorObservers,
+    TransitionBuilder builder,
+    String title,
+    GenerateAppTitle onGenerateTitle,
+    ThemeData theme,
+    Color color,
+    Locale locale,
+    Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates,
+    LocaleResolutionCallback localeResolutionCallback,
+    Iterable<Locale> supportedLocales,
+    bool debugShowMaterialGrid,
+    bool showPerformanceOverlay,
+    bool checkerboardRasterCacheImages,
+    bool checkerboardOffscreenLayers,
+    bool showSemanticsDebugger,
+    bool debugShowCheckedModeBanner,
+  }) : super(
+          home: home,
+          con: con ?? AppController(),
+          navigatorKey: navigatorKey,
+          routes: routes,
+          initialRoute: initialRoute,
+          onGenerateRoute: onGenerateRoute,
+          onUnknownRoute: onUnknownRoute,
+          navigatorObservers: navigatorObservers,
+          builder: builder,
+          title: title,
+          onGenerateTitle: onGenerateTitle,
+          theme: theme,
+          color: color,
+          locale: locale,
+          localizationsDelegates: localizationsDelegates,
+          localeResolutionCallback: localeResolutionCallback,
+          supportedLocales: supportedLocales,
+          debugShowMaterialGrid: debugShowMaterialGrid,
+          showPerformanceOverlay: showPerformanceOverlay,
+          checkerboardRasterCacheImages: checkerboardRasterCacheImages,
+          checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+          showSemanticsDebugger: showSemanticsDebugger,
+          debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+        );
+}
