@@ -56,7 +56,9 @@ import 'package:flutter/material.dart'
 
 import 'package:mvc_application/controller.dart' show App, Prefs;
 
-import 'package:uxutils/view.dart' show ColorPicker;
+//import 'package:uxutils/view.dart' show ColorPicker;
+import 'package:mvc_application/view.dart' show ColorPicker;
+
 
 class AppMenu {
   static State _state;
@@ -66,9 +68,9 @@ class AppMenu {
     return PopupMenuButton<String>(
       onSelected: _showMenuSelection,
       itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-            PopupMenuItem<String>(value: 'Color', child: ColorPicker.title),
-            const PopupMenuItem<String>(value: 'About', child: Text('About')),
-          ],
+        PopupMenuItem<String>(value: 'Color', child: ColorPicker.title),
+        const PopupMenuItem<String>(value: 'About', child: Text('About')),
+      ],
     );
   }
 
@@ -103,7 +105,8 @@ class AppMenu {
   }
 
   static ColorSwatch get colorTheme {
-    ColorPicker.colorSwatch = ColorPicker.colors[Prefs.getInt('colorTheme')];
+    final theme = Prefs.getInt('colorTheme');
+    ColorPicker.colorSwatch = ColorPicker.colors[theme];
     return ColorPicker.colorSwatch;
   }
 }
