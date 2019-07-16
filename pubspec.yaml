@@ -1,6 +1,6 @@
 name: mvc_application
 description: Application Framework in the MVC Design Pattern
-version: 0.15.2
+version: 1.0.0
 author: Greg Perry <support@andrioussolutions.com>
 homepage: www.andrioussolutions.com
 repository: https://github.com/AndriousSolutions/mvc_application
@@ -13,48 +13,52 @@ dependencies:
     sdk: flutter
 
   # https://pub.dartlang.org/packages/connectivity#-changelog-tab-
-  connectivity: ^0.4.2
-
-  # https://pub.dartlang.org/packages/sqflite#-changelog-tab-
-  sqflite: ^1.1.2
+  connectivity: #^0.4.2
 
   # https://pub.dartlang.org/packages/url_launcher#-changelog-tab-
   # used in AppSettings.dart
-  url_launcher: ^5.0.1
+  url_launcher: #^5.0.1
 
   # https://pub.dartlang.org/packages/package_info#-changelog-tab-
-  package_info: ^0.4.0+1
+  package_info: #^0.4.0+1
 
   # https://pub.dartlang.org/packages/device_info#-changelog-tab-
-  device_info: ^0.4.0
+  device_info: #^0.4.0
 
+  # https://pub.dev/packages/flutter_material_color_picker#-changelog-tab-
+  flutter_material_color_picker:
+
+  # https://pub.dartlang.org/packages/mvc_pattern#-changelog-tab-
   mvc_pattern:
-#    path: ../../packages/mvc_pattern
+ #   path: ../../packages/mvc_pattern
 
+  # https://pub.dartlang.org/packages/prefs#-changelog-tab-
   prefs:
 #    path: ../../libs/prefs
 
-  assets:
-#    path: ../../libs/assets
-    git:
-      url: git://github.com/AndriousSolutions/assets.git
+#  assets:
+##    path: ../../libs/assets
+#    git:
+#      url: git://github.com/AndriousSolutions/assets.git
 
   # Database utilities from my library
   dbutils:
 #    path: ../../libs/dbutils
-     git:
-       url: git://github.com/AndriousSolutions/dbutils.git
+#     git:
+#       url: git://github.com/AndriousSolutions/dbutils.git
 
-  # Files utilities from my library
-  file_utils:
-#    path: ../../libs/files/file_utils
-    git:
-      url: git://github.com/AndriousSolutions/files.git
+#  # Files utilities from my library
+#  file_utils:
+##    path: ../../libs/files/file_utils
+#    git:
+#      url: git://github.com/AndriousSolutions/files.git
+  # https://pub.dartlang.org/packages/uuid#-changelog-tab-
+  uuid:
 
-  uxutils:
-#    path: ../../libs/uxutils
-    git:
-      url: git://github.com/AndriousSolutions/uxutils.git
+#  uxutils:
+##    path: ../../libs/uxutils
+#    git:
+#      url: git://github.com/AndriousSolutions/uxutils.git
 
 dev_dependencies:
   flutter_test:
