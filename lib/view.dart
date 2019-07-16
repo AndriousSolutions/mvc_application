@@ -38,9 +38,8 @@ export 'package:mvc_application/src/view/utils/fields_widgets.dart';
 export 'package:mvc_application/src/view/appmenu.dart' show AppMenu;
 
 /// UX Utils
-export 'package:uxutils/view.dart';
+export 'package:mvc_application/src/view/uxutils/view.dart';
 
 /// App
 export 'package:mvc_application/src/controller/app.dart'
     show AppController, AppView;
-
