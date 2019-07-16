@@ -23,22 +23,21 @@
 
 import 'package:flutter/material.dart'
     show
-    Widget,
-    Color,
-    GenerateAppTitle,
-    GlobalKey,
-    Locale,
-    LocaleResolutionCallback,
-    LocalizationsDelegate,
-    NavigatorObserver,
-    NavigatorState,
-    RouteFactory,
-    ThemeData,
-    TransitionBuilder,
-    WidgetBuilder;
+        Widget,
+        Color,
+        GenerateAppTitle,
+        GlobalKey,
+        Locale,
+        LocaleResolutionCallback,
+        LocalizationsDelegate,
+        NavigatorObserver,
+        NavigatorState,
+        RouteFactory,
+        ThemeData,
+        TransitionBuilder,
+        WidgetBuilder;
 
 import 'package:mvc_application/view.dart' show AppController, AppView;
-
 
 /// Passed as 'View' to MVC class for a simple app.
 class ViewMVC extends AppView {
@@ -67,29 +66,28 @@ class ViewMVC extends AppView {
     bool showSemanticsDebugger,
     bool debugShowCheckedModeBanner,
   }) : super(
-    home: home,
-    con: con ?? AppController(),
-    navigatorKey: navigatorKey,
-    routes: routes,
-    initialRoute: initialRoute,
-    onGenerateRoute: onGenerateRoute,
-    onUnknownRoute: onUnknownRoute,
-    navigatorObservers: navigatorObservers,
-    builder: builder,
-    title: title,
-    onGenerateTitle: onGenerateTitle,
-    theme: theme,
-    color: color,
-    locale: locale,
-    localizationsDelegates: localizationsDelegates,
-    localeResolutionCallback: localeResolutionCallback,
-    supportedLocales: supportedLocales,
-    debugShowMaterialGrid: debugShowMaterialGrid,
-    showPerformanceOverlay: showPerformanceOverlay,
-    checkerboardRasterCacheImages: checkerboardRasterCacheImages,
-    checkerboardOffscreenLayers: checkerboardOffscreenLayers,
-    showSemanticsDebugger: showSemanticsDebugger,
-    debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-  );
+          home: home,
+          con: con ?? AppController(),
+          navigatorKey: navigatorKey,
+          routes: routes,
+          initialRoute: initialRoute,
+          onGenerateRoute: onGenerateRoute,
+          onUnknownRoute: onUnknownRoute,
+          navigatorObservers: navigatorObservers,
+          builder: builder,
+          title: title,
+          onGenerateTitle: onGenerateTitle,
+          theme: theme,
+          color: color,
+          locale: locale,
+          localizationsDelegates: localizationsDelegates,
+          localeResolutionCallback: localeResolutionCallback,
+          supportedLocales: supportedLocales,
+          debugShowMaterialGrid: debugShowMaterialGrid,
+          showPerformanceOverlay: showPerformanceOverlay,
+          checkerboardRasterCacheImages: checkerboardRasterCacheImages,
+          checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+          showSemanticsDebugger: showSemanticsDebugger,
+          debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+        );
 }
-

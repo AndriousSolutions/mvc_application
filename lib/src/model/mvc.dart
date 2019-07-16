@@ -21,7 +21,6 @@
 ///
 ///
 
-
 /// The Model for a simple app.
 class ModelMVC {
   ModelMVC() {
