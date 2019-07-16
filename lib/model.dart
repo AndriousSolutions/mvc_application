@@ -26,3 +26,9 @@ export 'package:sqflite/sqflite.dart';
 
 /// dbutils library
 export 'package:dbutils/sqllitedb.dart';
+
+/// file utils
+export 'package:mvc_application/src/model/fileutils/files.dart';
+
+/// Install file
+export 'package:mvc_application/src/model/fileutils/installfile.dart';
