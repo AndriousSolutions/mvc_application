@@ -22,7 +22,8 @@
 
 import 'dart:async' show Future, StreamSubscription;
 
-import 'package:flutter/foundation.dart' show Key, mustCallSuper, required;
+import 'package:flutter/foundation.dart'
+    show Key, mustCallSuper, protected;
 
 import 'package:flutter/material.dart'
     show
@@ -64,6 +65,8 @@ import 'package:flutter/material.dart'
 import 'package:connectivity/connectivity.dart'
     show Connectivity, ConnectivityResult;
 
+import 'package:mvc_application/mvc.dart' show AppError;
+
 import 'package:mvc_application/app.dart' show AppMVC, AppConMVC;
 
 import 'package:mvc_application/controller.dart' show ControllerMVC, DeviceInfo;
@@ -71,13 +74,13 @@ import 'package:mvc_application/controller.dart' show ControllerMVC, DeviceInfo;
 import 'package:mvc_application/view.dart'
     show AppMenu, LoadingScreen, StateMVC;
 
-import 'package:file_utils/files.dart' show Files;
+import 'package:mvc_application/controller.dart' show Assets;
 
-import 'package:file_utils/InstallFile.dart' show InstallFile;
+import 'package:mvc_application/model.dart' show Files;
+
+import 'package:mvc_application/model.dart' show InstallFile;
 
 import 'package:prefs/prefs.dart' show Prefs;
-
-import 'package:assets/assets.dart' show Assets;
 
 import 'package:package_info/package_info.dart' show PackageInfo;
 
@@ -112,60 +115,73 @@ import 'package:mvc_application/src/view/utils/loading_screen.dart'
 /// Highlights UI while debugging.
 import 'package:flutter/rendering.dart' as debugPaint;
 
-/// Auth and Firebase must be in a separate class for now.
-//import 'package:auth/auth.dart' show Auth;
-
-//import 'package:firebase_auth/firebase_auth.dart' show FirebaseUser;
-
-//import 'package:firebase/firebase.dart' show FireBase;
-
-class App extends AppMVC {
+abstract class App extends AppMVC {
   // You must supply a 'View.'
-  factory App(AppView view,
-      {ControllerMVC con, Key key, Widget loadingScreen}) {
-    // Supply a 'Controller' if need be.
-    if (_this == null) _this = App._(view, con, key, loadingScreen);
-    return _this;
-  }
-  // Make only one instance of this class.
-  static App _this;
+  App({ControllerMVC con, Key key, this.loadingScreen})
+      : super(con: con, key: key);
 
-  App._(AppView view, ControllerMVC con, Key key, this.loadingScreen)
-      : super(con: con, key: key) {
-    _vw = view;
-  }
+  @protected
+  AppView createView();
+
   static AppView _vw;
-
   static AsyncSnapshot get snapshot => _snapshot;
   static AsyncSnapshot _snapshot;
-
   final Widget loadingScreen;
+  static bool hotLoad = false;
+
+  /// More efficient widget tree rebuilds
+  static final materialKey = GlobalKey();
+
+  @override
+  void initApp() {
+    _vw = createView();
+    super.initApp();
+    _vw.con?.initApp();
+  }
 
   @override
   Widget build(BuildContext context) {
     Assets.init(context);
-    App._context = context;
+    _context = context;
     return FutureBuilder<bool>(
       future: init(),
+      initialData: false,
       builder: (_, snapshot) {
+        _snapshot = snapshot;
+        if (snapshot.hasError) {
+          _vw = AppError(snapshot.error);
+          return _AppWidget(snapshot);
+        }
         return snapshot.connectionState == ConnectionState.done
-            ? _AppWidget(snapshot)
+            ? (snapshot.hasData && snapshot.data
+                ? _AppWidget(snapshot)
+                : LoadingScreen())
             : loadingScreen ?? LoadingScreen();
       },
     );
   }
 
   @override
-  void initApp() {
-    super.initApp();
-    _vw.con.initApp();
-  }
-
-  @override
   Future<bool> init() async {
+    if (hotLoad) {
+      _vw = createView();
+      _vw.con?.initApp();
+    } else {
+      await _initInternal();
+      _packageInfo = await PackageInfo.fromPlatform();
+    }
     _isInit = await super.init();
     if (_isInit) _isInit = await _vw.init();
     return _isInit;
+  }
+
+  @mustCallSuper
+  void dispose() {
+    _context = null;
+    _scaffold = null;
+    _connectivitySubscription?.cancel();
+    _connectivitySubscription = null;
+    super.dispose();
   }
 
   /// Determine if the App initialized successfully.
@@ -173,56 +189,145 @@ class App extends AppMVC {
   static bool _isInit = false;
 
   static GlobalKey<NavigatorState> get navigatorKey => _vw.navigatorKey;
+  static set navigatorKey(GlobalKey<NavigatorState> v) {
+    if (v != null) _vw.navigatorKey = v;
+  }
 
   static Map<String, WidgetBuilder> get routes => _vw.routes;
+  static set routes(Map<String, WidgetBuilder> v) {
+    if (v != null) _vw.routes = v;
+  }
 
   static String get initialRoute => _vw.initialRoute;
+  static set initialRoute(String v) {
+    if (v != null) _vw.initialRoute = v;
+  }
 
   static RouteFactory get onGenerateRoute => _vw.onGenerateRoute;
+  static set onGenerateRoute(RouteFactory v) {
+    if (v != null) _vw.onGenerateRoute = v;
+  }
 
   static RouteFactory get onUnknownRoute => _vw.onUnknownRoute;
+  static set onUnknownRoute(RouteFactory v) {
+    if (v != null) _vw.onUnknownRoute = v;
+  }
 
   static List<NavigatorObserver> get navigatorObservers =>
       _vw.navigatorObservers;
+  static set navigatorObservers(List<NavigatorObserver> v) {
+    if (v != null) _vw.navigatorObservers = v;
+  }
 
   static TransitionBuilder get builder => _vw.builder;
+  static set builder(TransitionBuilder v) {
+    if (v != null) _vw.builder = v;
+  }
 
   static String get title => _vw.title;
+  static set title(String v) {
+    if (v != null) _vw.title = v;
+  }
 
   static GenerateAppTitle get onGenerateTitle => _vw.onGenerateTitle;
+  static set onGenerateTitle(GenerateAppTitle v) {
+    if (v != null) _vw.onGenerateTitle = v;
+  }
 
-  static ThemeData get theme => _vw.theme ?? App._getTheme();
+  static ThemeData get theme => _vw.theme;
+  static set theme(ThemeData v) {
+    // Let it assign null. gp
+    _vw.theme = v;
+  }
 
   static Color get color => _vw.color;
+  static set color(Color v) {
+    if (v != null) _vw.color = v;
+  }
 
   static Locale get locale => _vw.locale;
+  static set locale(Locale v) {
+    if (v != null) _vw.locale = v;
+  }
 
   static Iterable<LocalizationsDelegate<dynamic>> get localizationsDelegates =>
       _vw.localizationsDelegates;
+  static set localizationsDelegates(
+      Iterable<LocalizationsDelegate<dynamic>> v) {
+    if (v != null) _vw.localizationsDelegates = v;
+  }
 
   static LocaleResolutionCallback get localeResolutionCallback =>
       _vw.localeResolutionCallback;
+  static set localeResolutionCallback(LocaleResolutionCallback v) {
+    if (v != null) _vw.localeResolutionCallback = v;
+  }
 
   static Iterable<Locale> get supportedLocales => _vw.supportedLocales;
+  static set supportedLocales(Iterable<Locale> v) {
+    if (v != null) _vw.supportedLocales = v;
+  }
 
   static bool get debugShowMaterialGrid => _vw.debugShowMaterialGrid;
+  static set debugShowMaterialGrid(bool v) {
+    if (v != null) _vw.debugShowMaterialGrid = v;
+  }
 
   static bool get showPerformanceOverlay => _vw.showPerformanceOverlay;
+  static set showPerformanceOverlay(bool v) {
+    if (v != null) _vw.showPerformanceOverlay = v;
+  }
 
   static bool get checkerboardRasterCacheImages =>
       _vw.checkerboardRasterCacheImages;
+  static set checkerboardRasterCacheImages(bool v) {
+    if (v != null) _vw.checkerboardRasterCacheImages = v;
+  }
 
   static bool get checkerboardOffscreenLayers =>
       _vw.checkerboardOffscreenLayers;
+  static set checkerboardOffscreenLayers(bool v) {
+    if (v != null) _vw.checkerboardOffscreenLayers = v;
+  }
 
   static bool get showSemanticsDebugger => _vw.showSemanticsDebugger;
+  static set showSemanticsDebugger(bool v) {
+    if (v != null) _vw.showSemanticsDebugger = v;
+  }
 
   static bool get debugShowCheckedModeBanner => _vw.debugShowCheckedModeBanner;
+  static set debugShowCheckedModeBanner(bool v) {
+    if (v != null) _vw.debugShowCheckedModeBanner = v;
+  }
+
+  static bool get debugPaintSizeEnabled => _vw.debugPaintSizeEnabled;
+  static set debugPaintSizeEnabled(bool v) {
+    if (v != null) _vw.debugPaintSizeEnabled = v;
+  }
+
+  static bool get debugPaintBaselinesEnabled => _vw.debugPaintBaselinesEnabled;
+  static set debugPaintBaselinesEnabled(bool v) {
+    if (v != null) _vw.debugPaintBaselinesEnabled = v;
+  }
+
+  static bool get debugPaintPointersEnabled => _vw.debugPaintPointersEnabled;
+  static set debugPaintPointersEnabled(bool v) {
+    if (v != null) _vw.debugPaintPointersEnabled = v;
+  }
+
+  static bool get debugPaintLayerBordersEnabled =>
+      _vw.debugPaintLayerBordersEnabled;
+  static set debugPaintLayerBordersEnabled(bool v) {
+    if (v != null) _vw.debugPaintLayerBordersEnabled = v;
+  }
+
+  static bool get debugRepaintRainbowEnabled => _vw.debugRepaintRainbowEnabled;
+  static set debugRepaintRainbowEnabled(bool v) {
+    if (v != null) _vw.debugRepaintRainbowEnabled = v;
+  }
 
   static BuildContext get context => _context;
   static BuildContext _context;
-
-  static ThemeData _theme;
 
   static ScaffoldState _scaffold;
 
@@ -253,11 +358,6 @@ class App extends AppMVC {
   }
 
   static ColorSwatch get colorTheme => AppMenu.colorTheme;
-
-  static ThemeData _getTheme() {
-    if (_theme == null) _theme = Theme.of(_context);
-    return _theme;
-  }
 
   static getThemeData() {
     Prefs.getStringF('theme').then((value) {
@@ -292,12 +392,6 @@ class App extends AppMVC {
   static final Connectivity _connectivity = Connectivity();
 
   static StreamSubscription<ConnectivityResult> _connectivitySubscription;
-
-  @mustCallSuper
-  static void _dispose() {
-    _connectivitySubscription.cancel();
-    _connectivitySubscription = null;
-  }
 
   static get filesDir => _path;
   static String _path;
@@ -369,17 +463,14 @@ class App extends AppMVC {
 }
 
 class _AppWidget extends StatefulWidget {
-  _AppWidget(AsyncSnapshot snapshot, {Key key}) : super(key: key) {
-    /// Supply the AsyncSnapshot
-    App._snapshot = snapshot;
-  }
+  _AppWidget(AsyncSnapshot snapshot, {Key key}) : super(key: key);
   State createState() => App._vw;
 }
 
 class AppView extends AppViewState<_AppWidget> {
   AppView(
       {this.key,
-      @required this.home,
+      this.home,
       AppController con,
       GlobalKey<NavigatorState> navigatorKey,
       Map<String, WidgetBuilder> routes,
@@ -391,24 +482,28 @@ class AppView extends AppViewState<_AppWidget> {
       String title,
       GenerateAppTitle onGenerateTitle,
       ThemeData theme,
+      ThemeData darkTheme,
       Color color,
       Locale locale,
       Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates,
       LocaleResolutionCallback localeResolutionCallback,
-      Iterable<Locale> supportedLocales,
-      bool debugShowMaterialGrid,
-      bool showPerformanceOverlay,
-      bool checkerboardRasterCacheImages,
-      bool checkerboardOffscreenLayers,
-      bool showSemanticsDebugger,
-      bool debugShowCheckedModeBanner,
-      bool debugPaintSizeEnabled,
-      bool debugPaintBaselinesEnabled,
-      bool debugPaintPointersEnabled,
-      bool debugPaintLayerBordersEnabled,
-      bool debugRepaintRainbowEnabled})
+      Iterable<Locale> supportedLocales = const <Locale>[
+        const Locale('en', 'US')
+      ],
+      bool debugShowMaterialGrid = false,
+      bool showPerformanceOverlay = false,
+      bool checkerboardRasterCacheImages = false,
+      bool checkerboardOffscreenLayers = false,
+      bool showSemanticsDebugger = false,
+      bool debugShowCheckedModeBanner = false,
+      bool debugShowWidgetInspector = false,
+      bool debugPaintSizeEnabled = false,
+      bool debugPaintBaselinesEnabled = false,
+      bool debugPaintPointersEnabled = false,
+      bool debugPaintLayerBordersEnabled = false,
+      bool debugRepaintRainbowEnabled = false})
       : super(
-          con: con,
+          con: con ?? AppController(),
           navigatorKey: navigatorKey,
           routes: routes,
           initialRoute: initialRoute,
@@ -419,6 +514,7 @@ class AppView extends AppViewState<_AppWidget> {
           title: title,
           onGenerateTitle: onGenerateTitle,
           theme: theme,
+          darkTheme: darkTheme,
           color: color,
           locale: locale,
           localizationsDelegates: localizationsDelegates,
@@ -429,15 +525,33 @@ class AppView extends AppViewState<_AppWidget> {
           checkerboardRasterCacheImages: checkerboardRasterCacheImages,
           checkerboardOffscreenLayers: checkerboardOffscreenLayers,
           showSemanticsDebugger: showSemanticsDebugger,
+          debugShowWidgetInspector: debugShowWidgetInspector,
           debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+          debugPaintSizeEnabled: debugPaintSizeEnabled,
+          debugPaintBaselinesEnabled: debugPaintBaselinesEnabled,
+          debugPaintPointersEnabled: debugPaintPointersEnabled,
+          debugPaintLayerBordersEnabled: debugPaintLayerBordersEnabled,
+          debugRepaintRainbowEnabled: debugRepaintRainbowEnabled,
         );
   final Key key;
   final Widget home;
 
   @override
   Widget build(BuildContext context) {
+    assert(() {
+      /// Highlights UI while debugging.
+      debugPaint.debugPaintSizeEnabled = debugPaintSizeEnabled ?? false;
+      debugPaint.debugPaintBaselinesEnabled =
+          debugPaintBaselinesEnabled ?? false;
+      debugPaint.debugPaintPointersEnabled = debugPaintPointersEnabled ?? false;
+      debugPaint.debugPaintLayerBordersEnabled =
+          debugPaintLayerBordersEnabled ?? false;
+      debugPaint.debugRepaintRainbowEnabled =
+          debugRepaintRainbowEnabled ?? false;
+      return true;
+    }());
     return MaterialApp(
-      key: key,
+      key: key ?? App.materialKey,
       navigatorKey: navigatorKey ?? onNavigatorKey(),
       home: home,
       routes: routes ?? onRoutes(),
@@ -449,55 +563,65 @@ class AppView extends AppViewState<_AppWidget> {
       title: title ?? onTitle(),
       onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(),
       color: color ?? onColor(),
-      theme: theme ?? onTheme(),
+      theme: theme ?? onTheme() ?? App.getThemeData(),
+      darkTheme: darkTheme ?? onDarkTheme(),
       locale: locale ?? onLocale(),
       localizationsDelegates:
           localizationsDelegates ?? onLocalizationsDelegates(),
       localeResolutionCallback:
           localeResolutionCallback ?? onLocaleResolutionCallback(),
-      supportedLocales: supportedLocales ?? onSupportedLocales(),
-      debugShowMaterialGrid: debugShowMaterialGrid ?? onDebugShowMaterialGrid(),
+      supportedLocales: supportedLocales ??
+          onSupportedLocales() ??
+          const <Locale>[Locale('en', 'US')],
+      debugShowMaterialGrid:
+          debugShowMaterialGrid ?? onDebugShowMaterialGrid() ?? false,
       showPerformanceOverlay:
-          showPerformanceOverlay ?? onShowPerformanceOverlay(),
-      checkerboardRasterCacheImages:
-          checkerboardRasterCacheImages ?? onCheckerboardRasterCacheImages(),
-      checkerboardOffscreenLayers:
-          checkerboardOffscreenLayers ?? onCheckerboardOffscreenLayers(),
-      showSemanticsDebugger: showSemanticsDebugger ?? onShowSemanticsDebugger(),
+          showPerformanceOverlay ?? onShowPerformanceOverlay() ?? false,
+      checkerboardRasterCacheImages: checkerboardRasterCacheImages ??
+          onCheckerboardRasterCacheImages() ??
+          false,
+      checkerboardOffscreenLayers: checkerboardOffscreenLayers ??
+          onCheckerboardOffscreenLayers() ??
+          false,
+      showSemanticsDebugger:
+          showSemanticsDebugger ?? onShowSemanticsDebugger() ?? false,
       debugShowCheckedModeBanner:
-          debugShowCheckedModeBanner ?? onDebugShowCheckedModeBanner(),
+          debugShowCheckedModeBanner ?? onDebugShowCheckedModeBanner() ?? true,
     );
   }
 
-  @mustCallSuper
-  Future<bool> init() async {
-    await App._initInternal();
-    App._packageInfo = await PackageInfo.fromPlatform();
-    bool init = await super.init();
-    return init;
-  }
-
-  // Called in the _App dispose() function.
+  @override
   void dispose() {
-    App._dispose();
-    App._context = null;
-    App._theme = null;
-    App._scaffold = null;
+    _navigatorKey = null;
     super.dispose();
   }
 
-  GlobalKey<NavigatorState> onNavigatorKey() =>
-      null; //GlobalKey<NavigatorState>();
+  /// During development, if a hot reload occurs, the reassemble method is called.
+  @mustCallSuper
+  @override
+  void reassemble() {
+    App.hotLoad = true;
+    super.reassemble();
+  }
+
+  GlobalKey<NavigatorState> _navigatorKey;
+
+  GlobalKey<NavigatorState> onNavigatorKey() {
+    _navigatorKey ??= GlobalKey<NavigatorState>();
+    return _navigatorKey;
+  }
+
   Map<String, WidgetBuilder> onRoutes() => const <String, WidgetBuilder>{};
   String onInitialRoute() => null;
   RouteFactory onOnGenerateRoute() => null;
   RouteFactory onOnUnknownRoute() => null;
   List<NavigatorObserver> onNavigatorObservers() => const <NavigatorObserver>[];
   TransitionBuilder onBuilder() => null;
-  String onTitle() => null;
+  String onTitle() => '';
   GenerateAppTitle onOnGenerateTitle() => null;
   Color onColor() => null;
   ThemeData onTheme() => App.getThemeData();
+  ThemeData onDarkTheme() => null;
   Locale onLocale() => null;
   Iterable<LocalizationsDelegate<dynamic>> onLocalizationsDelegates() => null;
   LocaleResolutionCallback onLocaleResolutionCallback() => null;
@@ -514,88 +638,81 @@ abstract class AppViewState<T extends StatefulWidget> extends StateMVC<T> {
   AppViewState({
     this.con,
     this.navigatorKey,
-    this.routes: const <String, WidgetBuilder>{},
+    this.routes = const <String, WidgetBuilder>{},
     this.initialRoute,
     this.onGenerateRoute,
     this.onUnknownRoute,
     this.navigatorObservers: const <NavigatorObserver>[],
     this.builder,
-    this.title: '',
+    this.title = '',
     this.onGenerateTitle,
     this.color,
     this.theme,
+    this.darkTheme,
     this.locale,
     this.localizationsDelegates,
     this.localeResolutionCallback,
-    this.supportedLocales: const <Locale>[const Locale('en', 'US')],
-    this.debugShowMaterialGrid: false,
-    this.showPerformanceOverlay: false,
-    this.checkerboardRasterCacheImages: false,
-    this.checkerboardOffscreenLayers: false,
-    this.showSemanticsDebugger: false,
-    this.debugShowCheckedModeBanner: true,
+    this.supportedLocales = const <Locale>[const Locale('en', 'US')],
+    this.debugShowMaterialGrid = false,
+    this.showPerformanceOverlay = false,
+    this.checkerboardRasterCacheImages = false,
+    this.checkerboardOffscreenLayers = false,
+    this.showSemanticsDebugger = false,
+    this.debugShowWidgetInspector = false,
+    this.debugShowCheckedModeBanner = true,
     this.debugPaintSizeEnabled = false,
     this.debugPaintBaselinesEnabled = false,
     this.debugPaintPointersEnabled = false,
     this.debugPaintLayerBordersEnabled = false,
     this.debugRepaintRainbowEnabled = false,
   }) : super(con) {
-    /// Highlights UI while debugging.
-    _debugPaint(
-      debugPaintSizeEnabled: debugPaintSizeEnabled,
-      debugPaintBaselinesEnabled: debugPaintBaselinesEnabled,
-      debugPaintPointersEnabled: debugPaintPointersEnabled,
-      debugPaintLayerBordersEnabled: debugPaintLayerBordersEnabled,
-      debugRepaintRainbowEnabled: debugRepaintRainbowEnabled,
-    );
+    // A Controller was added by default instead.
+    if (con != null && con.stateMVC == null) {
+      con.addState(this);
+    }
   }
 
   final AppController con;
 
-  final GlobalKey<NavigatorState> navigatorKey;
-  final Map<String, WidgetBuilder> routes;
-  final String initialRoute;
-  final RouteFactory onGenerateRoute;
-  final RouteFactory onUnknownRoute;
-  final List<NavigatorObserver> navigatorObservers;
-  final TransitionBuilder builder;
-  final String title;
-  final GenerateAppTitle onGenerateTitle;
-  final ThemeData theme;
-  final Color color;
-  final Locale locale;
-  final Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates;
-  final LocaleResolutionCallback localeResolutionCallback;
-  final Iterable<Locale> supportedLocales;
-  final bool debugShowMaterialGrid;
-  final bool showPerformanceOverlay;
-  final bool checkerboardRasterCacheImages;
-  final bool checkerboardOffscreenLayers;
-  final bool showSemanticsDebugger;
-  final bool debugShowCheckedModeBanner;
+  GlobalKey<NavigatorState> navigatorKey;
+  Map<String, WidgetBuilder> routes;
+  String initialRoute;
+  RouteFactory onGenerateRoute;
+  RouteFactory onUnknownRoute;
+  List<NavigatorObserver> navigatorObservers;
+  TransitionBuilder builder;
+  String title;
+  GenerateAppTitle onGenerateTitle;
+  ThemeData theme;
+  ThemeData darkTheme;
+  Color color;
+  Locale locale;
+  Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates;
+  LocaleResolutionCallback localeResolutionCallback;
+  Iterable<Locale> supportedLocales;
+  bool debugShowMaterialGrid;
+  bool showPerformanceOverlay;
+  bool checkerboardRasterCacheImages;
+  bool checkerboardOffscreenLayers;
+  bool showSemanticsDebugger;
+  bool debugShowWidgetInspector;
+  bool debugShowCheckedModeBanner;
 
   /// Highlights UI while debugging.
-  final bool debugPaintSizeEnabled;
-  final bool debugPaintBaselinesEnabled;
-  final bool debugPaintPointersEnabled;
-  final bool debugPaintLayerBordersEnabled;
-  final bool debugRepaintRainbowEnabled;
-
-  @mustCallSuper
-  Future<bool> init() async {
-    bool init = await con.init();
-    return init;
-  }
-
-  /// Override to dispose anything initialized in your init() function.
-  @mustCallSuper
-  void dispose() {
-    con.dispose();
-    super.dispose();
-  }
+  bool debugPaintSizeEnabled;
+  bool debugPaintBaselinesEnabled;
+  bool debugPaintPointersEnabled;
+  bool debugPaintLayerBordersEnabled;
+  bool debugRepaintRainbowEnabled;
 
   /// Provide 'the view'
   Widget build(BuildContext context);
+
+  @mustCallSuper
+  Future<bool> init() async {
+    final init = await con?.init() ?? true;
+    return init;
+  }
 }
 
 class AppController extends ControllerMVC implements AppConMVC {
@@ -609,7 +726,6 @@ class AppController extends ControllerMVC implements AppConMVC {
   /// Called by the _App.init() function.
   @mustCallSuper
   Future<bool> init() async {
-//    Auth.init(listener: listener);
     await Prefs.init();
     await DeviceInfo.init();
     return Future.value(true);
@@ -620,23 +736,12 @@ class AppController extends ControllerMVC implements AppConMVC {
   @override
   @mustCallSuper
   void dispose() {
-//    Auth.dispose();
     Prefs.dispose();
 
     /// Assets.init(context); called in App.build() -gp
     Assets.dispose();
     super.dispose();
   }
-
-//  /// Authentication listener
-//  listener(FirebaseUser user){
-//    if (user != null) {
-//      var isAnonymous = user.isAnonymous;
-//      var uid = user.uid;
-////      print(
-////          'In FirestoreServices, isAnonymous = $isAnonymous and uid = $uid');
-//    }
-//  }
 }
 
 class AppDrawer extends StatelessWidget {
@@ -652,16 +757,12 @@ class AppDrawer extends StatelessWidget {
           title: new Text("Item => 1"),
           onTap: () {
             Navigator.pop(context);
-//                Navigator.push(context,
-//                    new MaterialPageRoute(builder: (context) => new FirstPage()));
           },
         ),
         ListTile(
           title: new Text("Item => 2"),
           onTap: () {
             Navigator.pop(context);
-//                Navigator.push(context,
-//                    new MaterialPageRoute(builder: (context) => new SecondPage()));
           },
         ),
       ],
@@ -671,20 +772,4 @@ class AppDrawer extends StatelessWidget {
 
 abstract class ConnectivityListener {
   onConnectivityChanged(ConnectivityResult result);
-}
-
-/// High-level function to highlights UI while debugging.
-void _debugPaint({
-  bool debugPaintSizeEnabled = false,
-  bool debugPaintBaselinesEnabled = false,
-  bool debugPaintPointersEnabled = false,
-  bool debugPaintLayerBordersEnabled = false,
-  bool debugRepaintRainbowEnabled = false,
-}) {
-  /// Highlights UI while debugging.
-  debugPaint.debugPaintSizeEnabled = debugPaintSizeEnabled;
-  debugPaint.debugPaintBaselinesEnabled = debugPaintBaselinesEnabled;
-  debugPaint.debugPaintPointersEnabled = debugPaintPointersEnabled;
-  debugPaint.debugPaintLayerBordersEnabled = debugPaintLayerBordersEnabled;
-  debugPaint.debugRepaintRainbowEnabled = debugRepaintRainbowEnabled;
 }
