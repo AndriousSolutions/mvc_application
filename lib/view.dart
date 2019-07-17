@@ -21,7 +21,11 @@
 ///
 ///
 
-/// mvc
+/// App
+export 'package:mvc_application/src/view/app.dart'
+    show App, AppView;
+
+/// MVC
 export 'package:mvc_pattern/mvc_pattern.dart'
     show ViewMVC, StateViewMVC, StateMVC;
 
@@ -40,6 +44,3 @@ export 'package:mvc_application/src/view/appmenu.dart' show AppMenu;
 /// UX Utils
 export 'package:mvc_application/src/view/uxutils/view.dart';
 
-/// App
-export 'package:mvc_application/src/controller/app.dart'
-    show AppController, AppView;

@@ -37,7 +37,9 @@ import 'package:flutter/material.dart'
         TransitionBuilder,
         WidgetBuilder;
 
-import 'package:mvc_application/view.dart' show AppController, AppView;
+import 'package:mvc_application/view.dart' show AppView;
+
+import 'package:mvc_application/controller.dart' show AppController;
 
 /// Passed as 'View' to MVC class for a simple app.
 class ViewMVC extends AppView {

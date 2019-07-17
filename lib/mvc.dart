@@ -52,9 +52,9 @@ import 'package:flutter/material.dart'
 
 import 'app.dart' show App;
 
-import 'view.dart' show AppController, AppView;
+import 'view.dart' show AppView;
 
-import 'controller.dart' show ControllerMVC;
+import 'controller.dart' show AppController, ControllerMVC;
 
 typedef CreateView = AppView Function();
 CreateView _createVW;

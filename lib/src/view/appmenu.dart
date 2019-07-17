@@ -54,10 +54,9 @@ import 'package:flutter/material.dart'
         Text,
         showAboutDialog;
 
-import 'package:mvc_application/controller.dart' show App, Prefs;
+import 'package:mvc_application/view.dart' show App, ColorPicker;
 
-//import 'package:uxutils/view.dart' show ColorPicker;
-import 'package:mvc_application/view.dart' show ColorPicker;
+import 'package:mvc_application/controller.dart' show Prefs;
 
 
 class AppMenu {
