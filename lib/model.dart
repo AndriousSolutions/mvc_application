@@ -32,3 +32,6 @@ export 'package:mvc_application/src/model/fileutils/files.dart';
 
 /// Install file
 export 'package:mvc_application/src/model/fileutils/installfile.dart';
+
+// Preferences
+export 'package:prefs/prefs.dart' show Prefs;

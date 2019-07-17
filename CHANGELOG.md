@@ -1,3 +1,7 @@
+## 1.0.2
+ July 17, 2019
+- export 'package:prefs/prefs.dart' show Prefs;
+
 ## 1.0.1
  July 17, 2019
 - Class App now in mvc_application/src/view/app.dart

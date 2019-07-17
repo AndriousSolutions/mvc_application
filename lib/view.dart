@@ -44,3 +44,5 @@ export 'package:mvc_application/src/view/appmenu.dart' show AppMenu;
 /// UX Utils
 export 'package:mvc_application/src/view/uxutils/view.dart';
 
+// Preferences
+export 'package:prefs/prefs.dart' show Prefs;

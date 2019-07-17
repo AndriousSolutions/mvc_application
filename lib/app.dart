@@ -20,11 +20,12 @@
 ///          Created  24 Dec 2018
 ///
 
-export 'package:prefs/prefs.dart' show Prefs;
-
 /// App
 export 'package:mvc_pattern/mvc_pattern.dart' show AppMVC, AppConMVC;
 
 export 'package:mvc_application/src/controller/app.dart' show AppController;
 
 export 'package:mvc_application/src/view/app.dart' show App, AppDrawer;
+
+// Preferences
+export 'package:prefs/prefs.dart' show Prefs;
