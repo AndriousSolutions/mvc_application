@@ -1,8 +1,8 @@
 name: mvc_application
 description: Application Framework in the MVC Design Pattern
-version: 1.0.2
+version: 1.0.3
 author: Greg Perry <support@andrioussolutions.com>
-homepage: www.andrioussolutions.com
+homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
 
 environment:
@@ -13,28 +13,28 @@ dependencies:
     sdk: flutter
 
   # https://pub.dartlang.org/packages/connectivity#-changelog-tab-
-  connectivity: #^0.4.2
+  connectivity: ^0.4.3+6
 
   # https://pub.dartlang.org/packages/url_launcher#-changelog-tab-
   # used in AppSettings.dart
-  url_launcher: #^5.0.1
+  url_launcher: ^5.1.0
 
   # https://pub.dartlang.org/packages/package_info#-changelog-tab-
-  package_info: #^0.4.0+1
+  package_info: ^0.4.0+5
 
   # https://pub.dartlang.org/packages/device_info#-changelog-tab-
-  device_info: #^0.4.0
+  device_info: ^0.4.0+2
 
   # https://pub.dev/packages/flutter_material_color_picker#-changelog-tab-
-  flutter_material_color_picker:
+  flutter_material_color_picker: ^1.0.0
 
   # https://pub.dartlang.org/packages/mvc_pattern#-changelog-tab-
   mvc_pattern: ^3.0.0
  #   path: ../../packages/mvc_pattern
 
   # https://pub.dartlang.org/packages/prefs#-changelog-tab-
-  prefs:
-#    path: ../../libs/prefs
+  prefs: ^3.0.0
+  #    path: ../../libs/prefs
 
 #  assets:
 ##    path: ../../libs/assets
@@ -42,8 +42,8 @@ dependencies:
 #      url: git://github.com/AndriousSolutions/assets.git
 
   # Database utilities from my library
-  dbutils:
-#    path: ../../libs/dbutils
+  dbutils: ^0.3.4
+  #    path: ../../libs/dbutils
 #     git:
 #       url: git://github.com/AndriousSolutions/dbutils.git
 
@@ -53,7 +53,7 @@ dependencies:
 #    git:
 #      url: git://github.com/AndriousSolutions/files.git
   # https://pub.dartlang.org/packages/uuid#-changelog-tab-
-  uuid:
+  uuid: ^2.0.2
 
 #  uxutils:
 ##    path: ../../libs/uxutils
