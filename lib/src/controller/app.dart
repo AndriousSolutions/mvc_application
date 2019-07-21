@@ -22,15 +22,13 @@
 
 import 'dart:async' show Future;
 
-import 'package:flutter/material.dart'
-    show mustCallSuper;
+import 'package:flutter/material.dart' show mustCallSuper;
 
 import 'package:mvc_application/app.dart' show AppConMVC;
 
 import 'package:mvc_application/controller.dart' show ControllerMVC, DeviceInfo;
 
-import 'package:mvc_application/view.dart'
-    show StateMVC;
+import 'package:mvc_application/view.dart' show StateMVC;
 
 import 'package:mvc_application/controller.dart' show Assets;
 
@@ -64,4 +62,3 @@ class AppController extends ControllerMVC implements AppConMVC {
     super.dispose();
   }
 }
-

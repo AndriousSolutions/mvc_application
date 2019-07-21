@@ -25,7 +25,9 @@ import 'dart:async' show Future;
 import 'dart:core'
     show Future, List, Map, MapEntry, String, bool, dynamic, int, override;
 
-import 'package:mvc_application/model.dart' show Database, DBInterface;
+import 'package:sqflite/sqflite.dart' show Database;
+
+import 'package:mvc_application/model.dart' show DBInterface;
 
 import '../../model.dart' show Contact;
 

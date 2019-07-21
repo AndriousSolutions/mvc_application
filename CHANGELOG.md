@@ -1,3 +1,10 @@
+## 1.0.3
+ July 21, 2019
+- Removed export 'package:sqflite/sqflite.dart';
+- Add sqflite: ^1.1.6+2
+- Add constraints in pubspec.yaml
+- Supply links to README.md
+
 ## 1.0.2
  July 17, 2019
 - export 'package:prefs/prefs.dart' show Prefs;

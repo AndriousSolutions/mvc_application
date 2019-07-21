@@ -22,8 +22,7 @@
 
 import 'dart:async' show Future, StreamSubscription;
 
-import 'package:flutter/foundation.dart'
-    show Key, mustCallSuper, protected;
+import 'package:flutter/foundation.dart' show Key, mustCallSuper, protected;
 
 import 'package:flutter/material.dart'
     show
@@ -65,8 +64,7 @@ import 'package:flutter/material.dart'
 import 'package:connectivity/connectivity.dart'
     show Connectivity, ConnectivityResult;
 
-import 'package:mvc_application/src/controller/app.dart'
-    show AppController;
+import 'package:mvc_application/src/controller/app.dart' show AppController;
 
 import 'package:mvc_application/mvc.dart' show AppError;
 

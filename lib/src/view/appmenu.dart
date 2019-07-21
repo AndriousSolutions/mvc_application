@@ -58,7 +58,6 @@ import 'package:mvc_application/view.dart' show App, ColorPicker;
 
 import 'package:mvc_application/controller.dart' show Prefs;
 
-
 class AppMenu {
   static State _state;
 
