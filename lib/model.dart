@@ -21,9 +21,6 @@
 ///
 ///
 
-/// SQLite
-export 'package:sqflite/sqflite.dart';
-
 /// dbutils library
 export 'package:dbutils/sqllitedb.dart';
 
