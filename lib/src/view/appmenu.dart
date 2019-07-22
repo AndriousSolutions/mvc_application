@@ -50,18 +50,17 @@ import 'package:flutter/material.dart'
         ColorSwatch,
         PopupMenuButton,
         PopupMenuItem,
-        State,
         Text,
         showAboutDialog;
 
-import 'package:mvc_application/view.dart' show App, ColorPicker;
+import 'package:mvc_application/view.dart' show App, ColorPicker, StateMVC;
 
 import 'package:mvc_application/controller.dart' show Prefs;
 
 class AppMenu {
-  static State _state;
+  static StateMVC _state;
 
-  static PopupMenuButton<String> show(State state) {
+  static PopupMenuButton<String> show(StateMVC state) {
     _state = state;
     return PopupMenuButton<String>(
       onSelected: _showMenuSelection,
@@ -99,7 +98,7 @@ class AppMenu {
     Prefs.setInt('colorTheme', ColorPicker.colors.indexOf(value));
 
     /// Rebuild the state.
-    _state.setState(() {});
+    _state.refresh();
   }
 
   static ColorSwatch get colorTheme {

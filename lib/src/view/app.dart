@@ -54,7 +54,6 @@ import 'package:flutter/material.dart'
         StatefulWidget,
         StatelessWidget,
         Text,
-        Theme,
         ThemeData,
         TransitionBuilder,
         Widget,
@@ -68,9 +67,9 @@ import 'package:mvc_application/src/controller/app.dart' show AppController;
 
 import 'package:mvc_application/mvc.dart' show AppError;
 
-import 'package:mvc_application/app.dart' show AppMVC, AppConMVC;
+import 'package:mvc_application/app.dart' show AppMVC;
 
-import 'package:mvc_application/controller.dart' show ControllerMVC, DeviceInfo;
+import 'package:mvc_application/controller.dart' show ControllerMVC;
 
 import 'package:mvc_application/view.dart'
     show AppMenu, LoadingScreen, StateMVC;
@@ -459,8 +458,6 @@ abstract class App extends AppMVC {
     }
     return connectionStatus;
   }
-
-//  final GlobalKey<AppView> key = new GlobalKey<AppView>();
 }
 
 class _AppWidget extends StatefulWidget {
