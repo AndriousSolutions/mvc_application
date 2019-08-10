@@ -134,9 +134,9 @@ abstract class App extends AppMVC {
 
   @override
   void initApp() {
-    _vw = createView();
     super.initApp();
-    _vw.con?.initApp();
+    _vw = createView();
+    _vw?.con?.initApp();
   }
 
   @override
@@ -165,7 +165,7 @@ abstract class App extends AppMVC {
   Future<bool> init() async {
     if (hotLoad) {
       _vw = createView();
-      _vw.con?.initApp();
+      _vw?.con?.initApp();
     } else {
       await _initInternal();
       _packageInfo = await PackageInfo.fromPlatform();
@@ -493,7 +493,7 @@ class AppView extends AppViewState<_AppWidget> {
       bool checkerboardRasterCacheImages = false,
       bool checkerboardOffscreenLayers = false,
       bool showSemanticsDebugger = false,
-      bool debugShowCheckedModeBanner = false,
+      bool debugShowCheckedModeBanner = true,
       bool debugShowWidgetInspector = false,
       bool debugPaintSizeEnabled = false,
       bool debugPaintBaselinesEnabled = false,

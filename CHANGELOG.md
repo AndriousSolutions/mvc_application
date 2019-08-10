@@ -1,9 +1,12 @@
+## 1.0.5
+ August 10, 2019
+- super.initApp(); in App class
+
 ## 1.0.4
  July 21, 2019
 - Lenghthen description in pubspec.yaml
 - AppMenu.show(StateMVC state) in appmenu.dart
 - Remove reference to AppConMVC DeviceInfo and Theme in app.dart
-
  
 ## 1.0.3
  July 21, 2019
