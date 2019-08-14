@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 ### A Flutter Framework using the MVC Design Pattern
-
+[![Dart Package](https://user-images.githubusercontent.com/32497443/62844114-9c918c00-bc84-11e9-9281-7700ac51ac04.png)](https://pub.dev/packages/mvc_application)
 Please, turn to the article, [MVC in Flutter](https://medium.com/@greg.perry/mvc-in-flutter-part-1-51d5eba081a3), for now for more inforamtion.
 [![MVCFlutter](https://user-images.githubusercontent.com/32497443/61597533-758cf080-abd7-11e9-8f76-8d6b45d26b0c.png)](https://medium.com/@greg.perry/mvc-in-flutter-part-1-51d5eba081a3)
 
