@@ -234,11 +234,13 @@ abstract class App extends AppMVC {
     if (v != null) _vw.onGenerateTitle = v;
   }
 
-  static ThemeData get theme => _vw.theme;
+  static ThemeData get theme => _theme;
   static set theme(ThemeData v) {
     // Let it assign null. gp
-    _vw.theme = v;
+    _theme = v;
   }
+
+  static ThemeData _theme;
 
   static Color get color => _vw.color;
   static set color(Color v) {
@@ -359,22 +361,20 @@ abstract class App extends AppMVC {
 
   static ColorSwatch get colorTheme => AppMenu.colorTheme;
 
-  static getThemeData() {
-    Prefs.getStringF('theme').then((value) {
-      var theme = value ?? 'light';
-      ThemeData themeData;
-      switch (theme) {
-        case 'light':
-          themeData = ThemeData.light();
-          break;
-        case 'dark':
-          themeData = ThemeData.dark();
-          break;
-        default:
-          themeData = ThemeData.fallback();
-      }
-      return themeData;
-    });
+  static getThemeData() async {
+    String theme = await Prefs.getStringF('theme');
+    ThemeData themeData;
+    switch (theme) {
+      case 'light':
+        themeData = ThemeData.light();
+        break;
+      case 'dark':
+        themeData = ThemeData.dark();
+        break;
+      default:
+        themeData = ThemeData.fallback();
+    }
+    return themeData;
   }
 
   static setThemeData(String theme) {
@@ -413,13 +413,7 @@ abstract class App extends AppMVC {
 
   static Future<String> getInstallNum() => InstallFile.id();
 
-  static String get installNum =>
-      _installNum ??
-      App.getInstallNum().then((id) {
-        _installNum = id;
-      }).catchError((e) {
-        _installNum = '';
-      });
+  static String get installNum => _installNum;
   static String _installNum;
 
   // Internal Initialization routines.
@@ -429,6 +423,10 @@ abstract class App extends AppMVC {
 
     // Determine the location to the files directory.
     _path = await Files.localPath;
+
+    // Determine the theme.
+    _theme ??= _vw?.theme;
+    _theme ??= await App.getThemeData();
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
@@ -561,7 +559,7 @@ class AppView extends AppViewState<_AppWidget> {
       title: title ?? onTitle(),
       onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(),
       color: color ?? onColor(),
-      theme: theme ?? onTheme() ?? App.getThemeData(),
+      theme: theme ?? onTheme(),
       darkTheme: darkTheme ?? onDarkTheme(),
       locale: locale ?? onLocale(),
       localizationsDelegates:
@@ -618,7 +616,7 @@ class AppView extends AppViewState<_AppWidget> {
   String onTitle() => '';
   GenerateAppTitle onOnGenerateTitle() => null;
   Color onColor() => null;
-  ThemeData onTheme() => App.getThemeData();
+  ThemeData onTheme() => App.theme;
   ThemeData onDarkTheme() => null;
   Locale onLocale() => null;
   Iterable<LocalizationsDelegate<dynamic>> onLocalizationsDelegates() => null;

@@ -1,3 +1,8 @@
+## 1.0.6
+ August 13, 2019
+- ThemeData onTheme() => App.theme;
+- _theme ??= await App.getThemeData();
+
 ## 1.0.5
  August 10, 2019
 - super.initApp(); in App class
