@@ -725,7 +725,9 @@ class _InheritedMVC<T extends Object> extends InheritedWidget {
 }
 
 class SetState extends StatelessWidget {
-  SetState({Key key, @required this.builder}) : super(key: key) {
+  SetState({Key key, @required this.builder})
+      : assert(builder != null,"Must provide a builder to SetState()"),
+        super(key: key) {
     // An SetState class has been instantiated.
     _InheritedMVC.setStates = true;
   }

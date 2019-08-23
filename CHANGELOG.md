@@ -1,3 +1,7 @@
+## 1.1.1
+ August 23, 2019
+- Add assert to SetState class
+
 ## 1.1.0
  August 23, 2019
 - Remove setter from App.theme
