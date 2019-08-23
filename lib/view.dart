@@ -22,11 +22,11 @@
 ///
 
 /// App
-export 'package:mvc_application/src/view/app.dart' show App, AppView;
+export 'package:mvc_application/src/view/app.dart'
+    show App, AppView, SetState, StateMVC;
 
 /// MVC
-export 'package:mvc_pattern/mvc_pattern.dart'
-    show ViewMVC, StateViewMVC, StateMVC;
+export 'package:mvc_pattern/mvc_pattern.dart' show ViewMVC, StateViewMVC;
 
 /// Settings
 export 'package:mvc_application/src/view/utils/appsettings.dart';
@@ -38,7 +38,7 @@ export 'package:mvc_application/src/view/utils/loading_screen.dart';
 export 'package:mvc_application/src/view/utils/fields_widgets.dart';
 
 /// Menus
-export 'package:mvc_application/src/view/appmenu.dart' show AppMenu;
+export 'package:mvc_application/src/view/appmenu.dart' show AppMenu, Menu;
 
 /// UX Utils
 export 'package:mvc_application/src/view/uxutils/view.dart';

@@ -43,11 +43,13 @@ import 'package:flutter/material.dart'
         Locale,
         LocaleResolutionCallback,
         LocalizationsDelegate,
+        InheritedWidget,
         MaterialApp,
         Navigator,
         NavigatorObserver,
         NavigatorState,
         RouteFactory,
+        required,
         Scaffold,
         ScaffoldState,
         State,
@@ -71,8 +73,9 @@ import 'package:mvc_application/app.dart' show AppMVC;
 
 import 'package:mvc_application/controller.dart' show ControllerMVC;
 
-import 'package:mvc_application/view.dart'
-    show AppMenu, LoadingScreen, StateMVC;
+import 'package:mvc_application/view.dart' show AppMenu, LoadingScreen;
+
+import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
 import 'package:mvc_application/controller.dart' show Assets;
 
@@ -234,13 +237,8 @@ abstract class App extends AppMVC {
     if (v != null) _vw.onGenerateTitle = v;
   }
 
-  static ThemeData get theme => _theme;
-  static set theme(ThemeData v) {
-    // Let it assign null. gp
-    _theme = v;
-  }
-
-  static ThemeData _theme;
+  // Allow it to be assigned null.
+  static ThemeData theme;
 
   static Color get color => _vw.color;
   static set color(Color v) {
@@ -345,11 +343,12 @@ abstract class App extends AppMVC {
   static String get buildNumber => _packageInfo?.buildNumber;
 
   /// Determines if running in an IDE or in production.
-  static bool get inDebugger {
-    var inDebugMode = false;
-    // assert is removed in production.
-    assert(inDebugMode = true);
-    return inDebugMode;
+  static bool get inDebugger => AppMVC.inDebugger;
+
+  /// Refresh the root State object, AppView.
+  static void refresh() {
+    // Don't if its InheritedWidget is updating already.
+    if (_InheritedMVC.shouldUpdate) _vw.refresh();
   }
 
   static ScaffoldState get scaffold => App._getScaffold();
@@ -401,7 +400,7 @@ abstract class App extends AppMVC {
 
   static bool get isOnline => _connectivityStatus != 'none';
 
-  static Set _listeners = new Set();
+  static Set<ConnectivityListener> _listeners = new Set();
 
   static addConnectivityListener(ConnectivityListener listener) =>
       _listeners.add(listener);
@@ -425,8 +424,8 @@ abstract class App extends AppMVC {
     _path = await Files.localPath;
 
     // Determine the theme.
-    _theme ??= _vw?.theme;
-    _theme ??= await App.getThemeData();
+    theme ??= _vw?.theme;
+    theme ??= await App.getThemeData();
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
@@ -532,6 +531,9 @@ class AppView extends AppViewState<_AppWidget> {
   final Key key;
   final Widget home;
 
+  /// The Widget Tree object supplied to the Widget Tree's descendants.
+  Object object;
+
   @override
   Widget build(BuildContext context) {
     assert(() {
@@ -546,49 +548,53 @@ class AppView extends AppViewState<_AppWidget> {
           debugRepaintRainbowEnabled ?? false;
       return true;
     }());
-    return MaterialApp(
-      key: key ?? App.materialKey,
-      navigatorKey: navigatorKey ?? onNavigatorKey(),
-      home: home,
-      routes: routes ?? onRoutes(),
-      initialRoute: initialRoute ?? onInitialRoute(),
-      onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
-      onUnknownRoute: onUnknownRoute ?? onOnUnknownRoute(),
-      navigatorObservers: navigatorObservers ?? onNavigatorObservers(),
-      builder: builder ?? onBuilder(),
-      title: title ?? onTitle(),
-      onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(),
-      color: color ?? onColor(),
-      theme: theme ?? onTheme(),
-      darkTheme: darkTheme ?? onDarkTheme(),
-      locale: locale ?? onLocale(),
-      localizationsDelegates:
-          localizationsDelegates ?? onLocalizationsDelegates(),
-      localeResolutionCallback:
-          localeResolutionCallback ?? onLocaleResolutionCallback(),
-      supportedLocales: supportedLocales ??
-          onSupportedLocales() ??
-          const <Locale>[Locale('en', 'US')],
-      debugShowMaterialGrid:
-          debugShowMaterialGrid ?? onDebugShowMaterialGrid() ?? false,
-      showPerformanceOverlay:
-          showPerformanceOverlay ?? onShowPerformanceOverlay() ?? false,
-      checkerboardRasterCacheImages: checkerboardRasterCacheImages ??
-          onCheckerboardRasterCacheImages() ??
-          false,
-      checkerboardOffscreenLayers: checkerboardOffscreenLayers ??
-          onCheckerboardOffscreenLayers() ??
-          false,
-      showSemanticsDebugger:
-          showSemanticsDebugger ?? onShowSemanticsDebugger() ?? false,
-      debugShowCheckedModeBanner:
-          debugShowCheckedModeBanner ?? onDebugShowCheckedModeBanner() ?? true,
-    );
+    return _InheritedMVC(
+        object: object,
+        child: MaterialApp(
+          key: key ?? App.materialKey,
+          navigatorKey: navigatorKey ?? onNavigatorKey(),
+          home: home,
+          routes: routes ?? onRoutes(),
+          initialRoute: initialRoute ?? onInitialRoute(),
+          onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
+          onUnknownRoute: onUnknownRoute ?? onOnUnknownRoute(),
+          navigatorObservers: navigatorObservers ?? onNavigatorObservers(),
+          builder: builder ?? onBuilder(),
+          title: title ?? onTitle(),
+          onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(),
+          color: color ?? onColor(),
+          theme: theme ?? onTheme(),
+          darkTheme: darkTheme ?? onDarkTheme(),
+          locale: locale ?? onLocale(),
+          localizationsDelegates:
+              localizationsDelegates ?? onLocalizationsDelegates(),
+          localeResolutionCallback:
+              localeResolutionCallback ?? onLocaleResolutionCallback(),
+          supportedLocales: supportedLocales ??
+              onSupportedLocales() ??
+              const <Locale>[Locale('en', 'US')],
+          debugShowMaterialGrid:
+              debugShowMaterialGrid ?? onDebugShowMaterialGrid() ?? false,
+          showPerformanceOverlay:
+              showPerformanceOverlay ?? onShowPerformanceOverlay() ?? false,
+          checkerboardRasterCacheImages: checkerboardRasterCacheImages ??
+              onCheckerboardRasterCacheImages() ??
+              false,
+          checkerboardOffscreenLayers: checkerboardOffscreenLayers ??
+              onCheckerboardOffscreenLayers() ??
+              false,
+          showSemanticsDebugger:
+              showSemanticsDebugger ?? onShowSemanticsDebugger() ?? false,
+          debugShowCheckedModeBanner: debugShowCheckedModeBanner ??
+              onDebugShowCheckedModeBanner() ??
+              true,
+        ));
   }
 
   @override
   void dispose() {
     _navigatorKey = null;
+    object = null;
     super.dispose();
   }
 
@@ -600,12 +606,12 @@ class AppView extends AppViewState<_AppWidget> {
     super.reassemble();
   }
 
-  GlobalKey<NavigatorState> _navigatorKey;
-
   GlobalKey<NavigatorState> onNavigatorKey() {
     _navigatorKey ??= GlobalKey<NavigatorState>();
     return _navigatorKey;
   }
+
+  GlobalKey<NavigatorState> _navigatorKey;
 
   Map<String, WidgetBuilder> onRoutes() => const <String, WidgetBuilder>{};
   String onInitialRoute() => null;
@@ -630,7 +636,7 @@ class AppView extends AppViewState<_AppWidget> {
   bool onDebugShowCheckedModeBanner() => true;
 }
 
-abstract class AppViewState<T extends StatefulWidget> extends StateMVC<T> {
+abstract class AppViewState<T extends StatefulWidget> extends mvc.StateMVC<T> {
   AppViewState({
     this.con,
     this.navigatorKey,
@@ -663,9 +669,7 @@ abstract class AppViewState<T extends StatefulWidget> extends StateMVC<T> {
     this.debugRepaintRainbowEnabled = false,
   }) : super(con) {
     // A Controller was added by default instead.
-    if (con != null && con.stateMVC == null) {
-      con.addState(this);
-    }
+    if (con != null && con.stateMVC == null) con.addState(this);
   }
 
   final AppController con;
@@ -708,6 +712,48 @@ abstract class AppViewState<T extends StatefulWidget> extends StateMVC<T> {
   Future<bool> init() async {
     final init = await con?.init() ?? true;
     return init;
+  }
+}
+
+class _InheritedMVC<T extends Object> extends InheritedWidget {
+  _InheritedMVC({Widget child, this.object}) : super(child: child);
+  final T object;
+  static bool inBuilder = false;
+  static bool setStates = false;
+  static bool get shouldUpdate => !inBuilder && setStates;
+  bool updateShouldNotify(_InheritedMVC oldWidget) => !inBuilder && setStates;
+}
+
+class SetState extends StatelessWidget {
+  SetState({Key key, @required this.builder}) : super(key: key) {
+    // An SetState class has been instantiated.
+    _InheritedMVC.setStates = true;
+  }
+
+  final BuilderWidget builder;
+  Widget build(BuildContext context) {
+    Object object =
+        (context.inheritFromWidgetOfExactType(_InheritedMVC) as _InheritedMVC)
+            .object;
+    _InheritedMVC.inBuilder = true;
+    Widget widget = builder(context, object);
+    _InheritedMVC.inBuilder = false;
+    return widget;
+  }
+}
+
+typedef Widget BuilderWidget<T extends Object>(BuildContext context, T object);
+
+/// Supply an MVC State object that hooks into the App class.
+abstract class StateMVC<T extends StatefulWidget> extends mvc.StateMVC<T> {
+  StateMVC([ControllerMVC controller]) : super(controller);
+
+  @override
+  void refresh() {
+    if (mounted) {
+      super.refresh();
+      App.refresh();
+    }
   }
 }
 

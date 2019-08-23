@@ -49,6 +49,8 @@ import 'package:flutter/material.dart'
         Color,
         ColorSwatch,
         PopupMenuButton,
+        PopupMenuDivider,
+        PopupMenuEntry,
         PopupMenuItem,
         Text,
         showAboutDialog;
@@ -59,19 +61,36 @@ import 'package:mvc_application/controller.dart' show Prefs;
 
 class AppMenu {
   static StateMVC _state;
+  static Menu _menu;
 
-  static PopupMenuButton<String> show(StateMVC state) {
+  static PopupMenuButton<dynamic> show(StateMVC state, [Menu menu]) {
     _state = state;
-    return PopupMenuButton<String>(
+    _menu = menu;
+
+    List<PopupMenuEntry<dynamic>> menuItems = [
+      PopupMenuItem<dynamic>(value: 'Color', child: ColorPicker.title),
+      const PopupMenuItem<dynamic>(value: 'About', child: Text('About')),
+    ];
+
+    if (_menu != null) {
+      List<PopupMenuEntry<dynamic>> temp = [];
+      temp.addAll(_menu.menuItems());
+      temp.add(PopupMenuDivider());
+      temp.addAll(menuItems);
+      menuItems = temp;
+    }
+
+    return PopupMenuButton<dynamic>(
       onSelected: _showMenuSelection,
-      itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-        PopupMenuItem<String>(value: 'Color', child: ColorPicker.title),
-        const PopupMenuItem<String>(value: 'About', child: Text('About')),
-      ],
+      itemBuilder: (BuildContext context) => menuItems,
     );
   }
 
-  static _showMenuSelection(String value) {
+  static _showMenuSelection(dynamic value) {
+    if (_menu != null) {
+      _menu.onSelected(value);
+    }
+    if (value is! String) return;
     switch (value) {
       case 'Color':
         ColorPicker.showColorPicker(
@@ -106,4 +125,16 @@ class AppMenu {
     ColorPicker.colorSwatch = ColorPicker.colors[theme];
     return ColorPicker.colorSwatch;
   }
+}
+
+abstract class Menu {
+  List<PopupMenuItem<dynamic>> menuItems();
+  void onSelected(dynamic menuItem);
+
+  PopupMenuButton<dynamic> show(StateMVC state) {
+    this.state = state;
+    return AppMenu.show(state, this);
+  }
+
+  StateMVC state;
 }

@@ -1,3 +1,12 @@
+## 1.1.0
+ August 23, 2019
+- Remove setter from App.theme
+- Introduce class StateMVC and ControllerMVC in App
+- New function refresh() in view/App
+- InheritedWidget to AppView class
+- SetState class in App
+- Introduce static PopupMenuButton<dynamic> show(StateMVC state, Menu menu)
+
 ## 1.0.6
  August 13, 2019
 - ThemeData onTheme() => App.theme;

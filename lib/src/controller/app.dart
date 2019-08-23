@@ -26,7 +26,9 @@ import 'package:flutter/material.dart' show mustCallSuper;
 
 import 'package:mvc_application/app.dart' show AppConMVC;
 
-import 'package:mvc_application/controller.dart' show ControllerMVC, DeviceInfo;
+import 'package:mvc_application/controller.dart' show DeviceInfo;
+
+import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
 import 'package:mvc_application/view.dart' show StateMVC;
 
@@ -61,4 +63,8 @@ class AppController extends ControllerMVC implements AppConMVC {
     Assets.dispose();
     super.dispose();
   }
+}
+
+class ControllerMVC extends mvc.ControllerMVC {
+  ControllerMVC([StateMVC state]) : super(state);
 }
