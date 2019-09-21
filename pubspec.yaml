@@ -1,64 +1,47 @@
 name: mvc_application
 description: Flutter Framework for Applications using the MVC Design Pattern
-version: 1.1.1
+version: 1.2.0
 author: Greg Perry <support@andrioussolutions.com>
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
   # https://pub.dartlang.org/packages/connectivity#-changelog-tab-
-  connectivity: ^0.4.3+6
+  connectivity: ^0.4.0
 
   # https://pub.dartlang.org/packages/url_launcher#-changelog-tab-
   # used in AppSettings.dart
-  url_launcher: ^5.1.0
+  url_launcher: ^5.0.0
 
   # https://pub.dartlang.org/packages/package_info#-changelog-tab-
-  package_info: ^0.4.0+5
+  package_info: ^0.4.0
 
   # https://pub.dartlang.org/packages/device_info#-changelog-tab-
-  device_info: ^0.4.0+2
+  device_info: ^0.4.0
 
   # https://pub.dev/packages/flutter_material_color_picker#-changelog-tab-
   flutter_material_color_picker: ^1.0.0
 
   # https://pub.dartlang.org/packages/mvc_pattern#-changelog-tab-
-  mvc_pattern: ^3.4.1
-#    path: ../../packages/mvc_pattern
+  mvc_pattern: ^3.0.0
+    #path: ../../packages/mvc_pattern
 
   # https://pub.dartlang.org/packages/prefs#-changelog-tab-
   prefs: ^3.0.0
   #    path: ../../libs/prefs
 
-#  assets:
-##    path: ../../libs/assets
-#    git:
-#      url: git://github.com/AndriousSolutions/assets.git
-
-  # Database utilities from my library
-  dbutils: ^0.3.4
+  # https://pub.dev/packages/dbutils#-changelog-tab-
+  dbutils: ^1.0.0
   #    path: ../../libs/dbutils
-#     git:
-#       url: git://github.com/AndriousSolutions/dbutils.git
 
-#  # Files utilities from my library
-#  file_utils:
-##    path: ../../libs/files/file_utils
-#    git:
-#      url: git://github.com/AndriousSolutions/files.git
   # https://pub.dartlang.org/packages/uuid#-changelog-tab-
-  uuid: ^2.0.2
-
-#  uxutils:
-##    path: ../../libs/uxutils
-#    git:
-#      url: git://github.com/AndriousSolutions/uxutils.git
+  uuid: ^2.0.0
 
 dev_dependencies:
   flutter_test:

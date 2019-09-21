@@ -112,13 +112,13 @@ class ContactList extends ContactFields {
 
   Future<List<Contact>> refresh() async {
     _contacts = await Controller.getContacts();
-    Controller.rebuild();
+    Controller().rebuild();
     return _contacts;
   }
 
   void sort() async {
     _contacts = await Controller.sort();
-    Controller.rebuild();
+    Controller().rebuild();
   }
 
   void init([Object contact]) {

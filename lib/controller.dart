@@ -32,6 +32,9 @@ export 'package:mvc_application/src/controller/deviceinfo.dart' show DeviceInfo;
 
 export 'package:mvc_application/src/controller/assets/assets.dart';
 
+// App's view
+export 'package:mvc_application/src/view/app.dart' show Controllers;
+
 // MVC
 export 'package:mvc_pattern/mvc_pattern.dart' show StateListener;
 

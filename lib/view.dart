@@ -23,10 +23,11 @@
 
 /// App
 export 'package:mvc_application/src/view/app.dart'
-    show App, AppView, SetState, StateMVC;
+    show App, AppView, Consumer, Controllers, StateMVC;
 
 /// MVC
-export 'package:mvc_pattern/mvc_pattern.dart' show ViewMVC, StateViewMVC;
+export 'package:mvc_pattern/mvc_pattern.dart'
+    show AppMVC, ViewMVC, SetState;
 
 /// Settings
 export 'package:mvc_application/src/view/utils/appsettings.dart';

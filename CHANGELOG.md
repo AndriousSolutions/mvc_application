@@ -1,3 +1,10 @@
+## 1.2.0
+ September 20, 2019
+- Provide List<ControllerMVC> controllers in AppView
+- class Controllers.of<T extends ControllerMVC>([BuildContext context, listen = true]) {
+- Widget buildView(BuildContext context) {
+- class SetState and class Consumer
+
 ## 1.1.1
  August 23, 2019
 - Add assert to SetState class

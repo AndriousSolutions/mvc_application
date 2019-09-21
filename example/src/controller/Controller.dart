@@ -63,8 +63,6 @@ class Controller extends ControllerMVC {
   void onError(FlutterErrorDetails details) =>
       FlutterError.dumpErrorToConsole(details);
 
-  static void rebuild() => _this?.refresh();
-
   static Future<List<Contact>> getContacts() async {
     List<Contact> contacts = await ContactsService.getContacts();
     if (_sortedAlpha) contacts.sort();
