@@ -1,3 +1,8 @@
+## 1.3.0
+- Introduced package:i10n_translator
+- Removed default: this.supportedLocales = const <Locale>[const Locale('en', 'US')]
+- Included LocaleListResolutionCallback localeListResolutionCallback;
+
 ## 1.2.0
  September 20, 2019
 - Provide List<ControllerMVC> controllers in AppView

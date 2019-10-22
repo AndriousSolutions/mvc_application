@@ -26,8 +26,7 @@ export 'package:mvc_application/src/view/app.dart'
     show App, AppView, Consumer, Controllers, StateMVC;
 
 /// MVC
-export 'package:mvc_pattern/mvc_pattern.dart'
-    show AppMVC, ViewMVC, SetState;
+export 'package:mvc_pattern/mvc_pattern.dart' show AppMVC, ViewMVC, SetState;
 
 /// Settings
 export 'package:mvc_application/src/view/utils/appsettings.dart';
@@ -44,5 +43,8 @@ export 'package:mvc_application/src/view/appmenu.dart' show AppMenu, Menu;
 /// UX Utils
 export 'package:mvc_application/src/view/uxutils/view.dart';
 
-// Preferences
+/// Preferences
 export 'package:prefs/prefs.dart' show Prefs;
+
+/// I18n Translations
+export 'package:i10n_translator/i10n.dart';

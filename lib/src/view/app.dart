@@ -42,6 +42,7 @@ import 'package:flutter/material.dart'
         ListView,
         Locale,
         LocaleResolutionCallback,
+        LocaleListResolutionCallback,
         LocalizationsDelegate,
         MaterialApp,
         Navigator,
@@ -484,9 +485,7 @@ class AppView extends AppViewState<_AppWidget> {
       Locale locale,
       Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates,
       LocaleResolutionCallback localeResolutionCallback,
-      Iterable<Locale> supportedLocales = const <Locale>[
-        const Locale('en', 'US')
-      ],
+      Iterable<Locale> supportedLocales,
       bool debugShowMaterialGrid = false,
       bool showPerformanceOverlay = false,
       bool checkerboardRasterCacheImages = false,
@@ -566,6 +565,8 @@ class AppView extends AppViewState<_AppWidget> {
       locale: locale ?? onLocale(),
       localizationsDelegates:
           localizationsDelegates ?? onLocalizationsDelegates(),
+      localeListResolutionCallback:
+          localeListResolutionCallback ?? onLocaleListResolutionCallback(),
       localeResolutionCallback:
           localeResolutionCallback ?? onLocaleResolutionCallback(),
       supportedLocales: supportedLocales ??
@@ -622,6 +623,7 @@ class AppView extends AppViewState<_AppWidget> {
   ThemeData onDarkTheme() => null;
   Locale onLocale() => null;
   Iterable<LocalizationsDelegate<dynamic>> onLocalizationsDelegates() => null;
+  LocaleListResolutionCallback onLocaleListResolutionCallback() => null;
   LocaleResolutionCallback onLocaleResolutionCallback() => null;
   Iterable<Locale> onSupportedLocales() => const <Locale>[Locale('en', 'US')];
   bool onDebugShowMaterialGrid() => false;
@@ -650,8 +652,9 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
     this.darkTheme,
     this.locale,
     this.localizationsDelegates,
+    this.localeListResolutionCallback,
     this.localeResolutionCallback,
-    this.supportedLocales = const <Locale>[const Locale('en', 'US')],
+    this.supportedLocales,
     this.debugShowMaterialGrid = false,
     this.showPerformanceOverlay = false,
     this.checkerboardRasterCacheImages = false,
@@ -683,6 +686,7 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   Color color;
   Locale locale;
   Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates;
+  LocaleListResolutionCallback localeListResolutionCallback;
   LocaleResolutionCallback localeResolutionCallback;
   Iterable<Locale> supportedLocales;
   bool debugShowMaterialGrid;
@@ -766,7 +770,8 @@ class Consumer<T extends ControllerMVC> extends StatelessWidget {
         super(key: key);
 
   /// The builder
-  final Widget Function(BuildContext context, T controller, Widget child) builder;
+  final Widget Function(BuildContext context, T controller, Widget child)
+      builder;
 
   /// The child widget to pass to [builder].
   final Widget child;

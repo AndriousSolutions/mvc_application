@@ -36,6 +36,8 @@ import 'package:mvc_application/controller.dart' show Assets;
 
 import 'package:prefs/prefs.dart' show Prefs;
 
+import 'package:i10n_translator/i10n.dart';
+
 class AppController extends ControllerMVC implements AppConMVC {
   AppController([StateMVC state]) : super(state);
 
@@ -49,7 +51,9 @@ class AppController extends ControllerMVC implements AppConMVC {
   Future<bool> init() async {
     await Prefs.init();
     await DeviceInfo.init();
-    return Future.value(true);
+    // Load any csv file of translations.
+    await I10n.init();
+    return true;
   }
 
   /// Ensure certain objects are 'disposed.'
@@ -58,7 +62,7 @@ class AppController extends ControllerMVC implements AppConMVC {
   @mustCallSuper
   void dispose() {
     Prefs.dispose();
-
+    I10n.dispose();
     /// Assets.init(context); called in App.build() -gp
     Assets.dispose();
     super.dispose();
