@@ -46,5 +46,5 @@ export 'package:mvc_application/src/view/uxutils/view.dart';
 /// Preferences
 export 'package:prefs/prefs.dart' show Prefs;
 
-/// I18n Translations
+/// I10n Translations
 export 'package:i10n_translator/i10n.dart';

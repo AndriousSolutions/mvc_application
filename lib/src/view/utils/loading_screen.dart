@@ -34,6 +34,7 @@ import 'package:flutter/material.dart'
         CurvedAnimation,
         Curves,
         Interval,
+        Key,
         MaterialApp,
         Scaffold,
         SingleTickerProviderStateMixin,
@@ -49,6 +50,7 @@ import 'package:flutter/material.dart'
 /// It's copied from the `flutter_gallery` example project in flutter/flutter
 ///
 class LoadingScreen extends StatefulWidget {
+  LoadingScreen({Key key}) : super(key: key);
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
 }

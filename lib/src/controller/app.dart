@@ -30,13 +30,11 @@ import 'package:mvc_application/controller.dart' show DeviceInfo;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
-import 'package:mvc_application/view.dart' show StateMVC;
+import 'package:mvc_application/view.dart' show StateMVC, I10n;
 
 import 'package:mvc_application/controller.dart' show Assets;
 
 import 'package:prefs/prefs.dart' show Prefs;
-
-import 'package:i10n_translator/i10n.dart';
 
 class AppController extends ControllerMVC implements AppConMVC {
   AppController([StateMVC state]) : super(state);
@@ -49,7 +47,9 @@ class AppController extends ControllerMVC implements AppConMVC {
   /// Called by the _App.init() function.
   @mustCallSuper
   Future<bool> init() async {
+    // Initialize System Preferences
     await Prefs.init();
+    // Collect Device Information
     await DeviceInfo.init();
     // Load any csv file of translations.
     await I10n.init();
@@ -62,13 +62,39 @@ class AppController extends ControllerMVC implements AppConMVC {
   @mustCallSuper
   void dispose() {
     Prefs.dispose();
-    I10n.dispose();
-    /// Assets.init(context); called in App.build() -gp
+    // Attempts to write a file. Not working right now. -gp
+    //   I10n.dispose();
+    // Assets.init(context); called in App.build() -gp
     Assets.dispose();
     super.dispose();
   }
 }
 
-class ControllerMVC extends mvc.ControllerMVC {
+class ControllerMVC extends mvc.ControllerMVC with ErrorHandler {
   ControllerMVC([StateMVC state]) : super(state);
+}
+
+mixin ErrorHandler {
+  /// Return the 'last' error if any.
+  Exception getError([dynamic error]) {
+    Exception ex = _error;
+    if (error == null) {
+      _error = null;
+    } else {
+      if (error is! Exception) {
+        _error = Exception(error.toString());
+      } else {
+        _error = error;
+      }
+      ex ??= _error;
+    }
+    return ex;
+  }
+
+  /// Determine if app is 'in error.'
+  bool get inError {
+    return _error != null;
+  }
+
+  Exception _error;
 }

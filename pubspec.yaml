@@ -1,6 +1,6 @@
 name: mvc_application
 description: Flutter Framework for Applications using the MVC Design Pattern
-version: 1.3.0
+version: 1.4.0
 author: Greg Perry <support@andrioussolutions.com>
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
@@ -30,11 +30,11 @@ dependencies:
 
   # https://pub.dartlang.org/packages/mvc_pattern#-changelog-tab-
   mvc_pattern: ^3.0.0
-    #path: ../../packages/mvc_pattern
+  # path: ../../packages/mvc_pattern
 
   # https://pub.dartlang.org/packages/prefs#-changelog-tab-
   prefs: ^3.0.0
-  #    path: ../../libs/prefs
+  # path: ../../libs/prefs
 
   # https://pub.dev/packages/dbutils#-changelog-tab-
   dbutils: ^1.0.0
@@ -42,7 +42,7 @@ dependencies:
 
   # https://pub.dev/packages/i10n_translator
   i10n_translator: ^1.0.0
-#    path: ../../packages/i10n_translator
+  #    path: ../../packages/i10n_translator
 
   # https://pub.dartlang.org/packages/uuid#-changelog-tab-
   uuid: ^2.0.0

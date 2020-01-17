@@ -1,5 +1,5 @@
 ///
-/// Copyright (C) 2018 Andrious Solutions
+/// Copyright (C) 2019 Andrious Solutions
 ///
 /// This program is free software; you can redistribute it and/or
 /// modify it under the terms of the GNU General Public License
@@ -17,16 +17,37 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-///          Created  24 Dec 2018
+///          Created  14 Nov 2019
+///
 ///
 
-/// App
-export 'package:mvc_pattern/mvc_pattern.dart' show AppMVC, AppConMVC;
+class VarStr {
+  static VariableString _varStr = VariableString();
 
-export 'package:mvc_application/src/controller/app.dart'
-    show AppController, ErrorHandler;
+  static String set(String str) {
+    _varStr.value = str;
+    return _varStr.value;
+  }
 
-export 'package:mvc_application/src/view/app.dart' show App, AppDrawer;
+  static String get get => _varStr.value;
+}
 
-// Preferences
-export 'package:prefs/prefs.dart' show Prefs;
+class VariableString {
+  VariableString() {
+    regExp = RegExp("'(.*?)'");
+  }
+
+  RegExp regExp;
+
+  String _value = "";
+
+  set value(String str) {
+    _value = "";
+    if (str != null && str.isNotEmpty) {
+      RegExpMatch match = regExp.firstMatch(str);
+      if (match != null) _value = match.group(0).replaceAll("'", "");
+    }
+  }
+
+  String get value => _value;
+}

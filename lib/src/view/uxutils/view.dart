@@ -26,3 +26,9 @@ export 'package:mvc_application/src/view/uxutils/src/view/SimpleBottomAppBar.dar
 export 'package:mvc_application/src/view/uxutils/src/view/DialogBox.dart';
 
 export 'package:mvc_application/src/view/uxutils/src/view/ColorPicker.dart';
+
+export 'package:mvc_application/src/view/uxutils/src/view/VariableString.dart';
+
+export 'package:mvc_application/src/view/uxutils/src/view/common_widgets/custom_raised_button.dart';
+
+export 'package:mvc_application/src/view/uxutils/src/view/NavBottomBar.dart';

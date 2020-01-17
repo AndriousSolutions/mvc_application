@@ -61,10 +61,12 @@ class ColorPicker {
 
   static Text title = Text('Color Theme');
 
-  static Future<ColorSwatch> showColorPicker(
-      {@required BuildContext context,
-      ValueChanged<Color> onColorChange,
-      ValueChanged<ColorSwatch> onChange}) {
+  static Future<ColorSwatch> showColorPicker({
+    @required BuildContext context,
+    ValueChanged<Color> onColorChange,
+    ValueChanged<ColorSwatch> onChange,
+    bool shrinkWrap = false,
+  }) {
     return showDialog<ColorSwatch>(
         context: context,
         builder: (BuildContext context) =>
@@ -88,6 +90,7 @@ class ColorPicker {
                 allowShades: allowShades, // default true
                 iconSelected: iconSelected,
                 circleSize: circleSize,
+                shrinkWrap: shrinkWrap,
               ),
             ]));
   }

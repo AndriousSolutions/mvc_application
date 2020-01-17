@@ -24,48 +24,17 @@ import 'dart:async' show Future, StreamSubscription;
 
 import 'package:flutter/foundation.dart' show Key, mustCallSuper, protected;
 
-import 'package:flutter/material.dart'
-    show
-        AsyncSnapshot,
-        AppLifecycleState,
-        BuildContext,
-        Color,
-        ColorSwatch,
-        ConnectionState,
-        Drawer,
-        DrawerHeader,
-        FutureBuilder,
-        GenerateAppTitle,
-        GlobalKey,
-        Key,
-        ListTile,
-        ListView,
-        Locale,
-        LocaleResolutionCallback,
-        LocaleListResolutionCallback,
-        LocalizationsDelegate,
-        MaterialApp,
-        Navigator,
-        NavigatorObserver,
-        NavigatorState,
-        RouteFactory,
-        required,
-        Scaffold,
-        ScaffoldState,
-        State,
-        StatefulWidget,
-        StatelessWidget,
-        Text,
-        ThemeData,
-        TransitionBuilder,
-        Widget,
-        WidgetBuilder,
-        mustCallSuper;
+import 'package:flutter/material.dart';
+
+import 'package:package_info/package_info.dart' show PackageInfo;
+
+import 'package:flutter/widgets.dart';
 
 import 'package:connectivity/connectivity.dart'
     show Connectivity, ConnectivityResult;
 
-import 'package:mvc_application/src/controller/app.dart' show AppController;
+import 'package:mvc_application/src/controller/app.dart'
+    show AppController, ErrorHandler;
 
 import 'package:mvc_application/mvc.dart' show AppError;
 
@@ -73,8 +42,7 @@ import 'package:mvc_application/app.dart' show AppMVC;
 
 import 'package:mvc_application/controller.dart' show ControllerMVC;
 
-import 'package:mvc_application/view.dart'
-    show AppMenu, LoadingScreen, SetState;
+import 'package:mvc_application/view.dart' show AppMenu, SetState;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
@@ -86,38 +54,12 @@ import 'package:mvc_application/model.dart' show InstallFile;
 
 import 'package:prefs/prefs.dart' show Prefs;
 
-import 'package:package_info/package_info.dart' show PackageInfo;
-
-import 'package:flutter/widgets.dart'
-    show
-        AppLifecycleState,
-        BuildContext,
-        Color,
-        FutureBuilder,
-        GenerateAppTitle,
-        GlobalKey,
-        Key,
-        ListView,
-        Locale,
-        LocaleResolutionCallback,
-        LocalizationsDelegate,
-        Navigator,
-        NavigatorObserver,
-        NavigatorState,
-        RouteFactory,
-        State,
-        StatelessWidget,
-        Text,
-        TransitionBuilder,
-        Widget,
-        WidgetBuilder,
-        mustCallSuper;
-
-import 'package:mvc_application/src/view/utils/loading_screen.dart'
-    show LoadingScreen;
-
 /// Highlights UI while debugging.
 import 'package:flutter/rendering.dart' as debugPaint;
+
+/// Error Screen Builder if an error occurs.
+typedef ErrorWidgetBuilder = Widget Function(
+    FlutterErrorDetails flutterErrorDetails);
 
 abstract class App extends AppMVC {
   // You must supply a 'View.'
@@ -154,18 +96,7 @@ abstract class App extends AppMVC {
     return FutureBuilder<bool>(
       future: init(),
       initialData: false,
-      builder: (_, snapshot) {
-        _snapshot = snapshot;
-        if (snapshot.hasError) {
-          _vw = AppError(snapshot.error);
-          return _AppWidget(snapshot);
-        }
-        return snapshot.connectionState == ConnectionState.done
-            ? (snapshot.hasData && snapshot.data
-                ? _AppWidget(snapshot)
-                : LoadingScreen())
-            : loadingScreen ?? LoadingScreen();
-      },
+      builder: (_, snapshot) => _App.show(snapshot, loadingScreen),
     );
   }
 
@@ -353,6 +284,9 @@ abstract class App extends AppMVC {
   /// Refresh the root State object, AppView.
   static void refresh() => _vw.refresh();
 
+  /// Catch and explicitly handle the error.
+  static void catchError(Exception ex) => _vw.catchError(ex);
+
   static ScaffoldState get scaffold => App._getScaffold();
 
   static ScaffoldState _getScaffold() {
@@ -459,46 +393,69 @@ abstract class App extends AppMVC {
   }
 }
 
+class _App {
+  static Widget home;
+
+  static Widget show(AsyncSnapshot snapshot, Widget loading) {
+    if (snapshot.hasError) {
+      App._vw.home = AppError(snapshot.error).home;
+    } else if (snapshot.connectionState == ConnectionState.done &&
+        snapshot.hasData &&
+        snapshot.data) {
+      if (home != null) {
+        App._vw.home = home;
+      }
+      return _AppWidget();
+    } else {
+      return MaterialApp(
+          color: Colors.white,
+          home: Container(child: Center(child: CircularProgressIndicator())));
+    }
+  }
+}
+
 class _AppWidget extends StatefulWidget {
-  _AppWidget(AsyncSnapshot snapshot, {Key key}) : super(key: key);
+  _AppWidget({Key key}) : super(key: key);
   State createState() => App._vw;
 }
 
 class AppView extends AppViewState<_AppWidget> {
-  AppView(
-      {this.key,
-      this.home,
-      AppController con,
-      List<ControllerMVC> controllers,
-      GlobalKey<NavigatorState> navigatorKey,
-      Map<String, WidgetBuilder> routes,
-      String initialRoute,
-      RouteFactory onGenerateRoute,
-      RouteFactory onUnknownRoute,
-      List<NavigatorObserver> navigatorObservers,
-      TransitionBuilder builder,
-      String title,
-      GenerateAppTitle onGenerateTitle,
-      ThemeData theme,
-      ThemeData darkTheme,
-      Color color,
-      Locale locale,
-      Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates,
-      LocaleResolutionCallback localeResolutionCallback,
-      Iterable<Locale> supportedLocales,
-      bool debugShowMaterialGrid = false,
-      bool showPerformanceOverlay = false,
-      bool checkerboardRasterCacheImages = false,
-      bool checkerboardOffscreenLayers = false,
-      bool showSemanticsDebugger = false,
-      bool debugShowCheckedModeBanner = true,
-      bool debugShowWidgetInspector = false,
-      bool debugPaintSizeEnabled = false,
-      bool debugPaintBaselinesEnabled = false,
-      bool debugPaintPointersEnabled = false,
-      bool debugPaintLayerBordersEnabled = false,
-      bool debugRepaintRainbowEnabled = false})
-      : super(
+  AppView({
+    this.key,
+    this.home,
+    AppController con,
+    List<ControllerMVC> controllers,
+    GlobalKey<NavigatorState> navigatorKey,
+    Map<String, WidgetBuilder> routes,
+    String initialRoute,
+    RouteFactory onGenerateRoute,
+    RouteFactory onUnknownRoute,
+    List<NavigatorObserver> navigatorObservers,
+    TransitionBuilder builder,
+    String title,
+    GenerateAppTitle onGenerateTitle,
+    ThemeData theme,
+    ThemeData darkTheme,
+    ThemeMode themeMode,
+    Color color,
+    Locale locale,
+    Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates,
+    LocaleResolutionCallback localeResolutionCallback,
+    Iterable<Locale> supportedLocales,
+    bool debugShowMaterialGrid = false,
+    bool showPerformanceOverlay = false,
+    bool checkerboardRasterCacheImages = false,
+    bool checkerboardOffscreenLayers = false,
+    bool showSemanticsDebugger = false,
+    bool debugShowCheckedModeBanner = true,
+    bool debugShowWidgetInspector = false,
+    bool debugPaintSizeEnabled = false,
+    bool debugPaintBaselinesEnabled = false,
+    bool debugPaintPointersEnabled = false,
+    bool debugPaintLayerBordersEnabled = false,
+    bool debugRepaintRainbowEnabled = false,
+    ErrorWidgetBuilder errorScreen,
+  }) : super(
           con: con ?? AppController(),
           controllers: controllers,
           navigatorKey: navigatorKey,
@@ -512,7 +469,8 @@ class AppView extends AppViewState<_AppWidget> {
           onGenerateTitle: onGenerateTitle,
           theme: theme,
           darkTheme: darkTheme,
-          color: color,
+          themeMode: themeMode,
+          color: color ?? Colors.white,
           locale: locale,
           localizationsDelegates: localizationsDelegates,
           localeResolutionCallback: localeResolutionCallback,
@@ -529,9 +487,10 @@ class AppView extends AppViewState<_AppWidget> {
           debugPaintPointersEnabled: debugPaintPointersEnabled,
           debugPaintLayerBordersEnabled: debugPaintLayerBordersEnabled,
           debugRepaintRainbowEnabled: debugRepaintRainbowEnabled,
+          errorScreen: errorScreen,
         );
   final Key key;
-  final Widget home;
+  Widget home;
 
   @override
   Widget buildView(BuildContext context) {
@@ -562,6 +521,7 @@ class AppView extends AppViewState<_AppWidget> {
       color: color ?? onColor(),
       theme: theme ?? onTheme(),
       darkTheme: darkTheme ?? onDarkTheme(),
+      themeMode: themeMode ?? onThemeMode(),
       locale: locale ?? onLocale(),
       localizationsDelegates:
           localizationsDelegates ?? onLocalizationsDelegates(),
@@ -595,6 +555,12 @@ class AppView extends AppViewState<_AppWidget> {
     super.dispose();
   }
 
+  /// Override to supply some error handling when starting up.
+  @override
+  void onError(FlutterErrorDetails details) {
+    super.onError(details);
+  }
+
   /// During development, if a hot reload occurs, the reassemble method is called.
   @mustCallSuper
   @override
@@ -621,6 +587,7 @@ class AppView extends AppViewState<_AppWidget> {
   Color onColor() => null;
   ThemeData onTheme() => App.theme;
   ThemeData onDarkTheme() => null;
+  ThemeMode onThemeMode() => ThemeMode.system;
   Locale onLocale() => null;
   Iterable<LocalizationsDelegate<dynamic>> onLocalizationsDelegates() => null;
   LocaleListResolutionCallback onLocaleListResolutionCallback() => null;
@@ -650,6 +617,7 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
     this.color,
     this.theme,
     this.darkTheme,
+    this.themeMode,
     this.locale,
     this.localizationsDelegates,
     this.localeListResolutionCallback,
@@ -667,7 +635,11 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
     this.debugPaintPointersEnabled = false,
     this.debugPaintLayerBordersEnabled = false,
     this.debugRepaintRainbowEnabled = false,
-  }) : super(controller: con, controllers: controllers);
+    ErrorWidgetBuilder errorScreen,
+  }) : super(
+            controller: con,
+            controllers: controllers,
+            errorScreen: errorScreen);
 
   final AppController con;
   final List<ControllerMVC> controllers;
@@ -683,6 +655,7 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   GenerateAppTitle onGenerateTitle;
   ThemeData theme;
   ThemeData darkTheme;
+  ThemeMode themeMode;
   Color color;
   Locale locale;
   Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates;
@@ -786,7 +759,9 @@ class Consumer<T extends ControllerMVC> extends StatelessWidget {
 }
 
 /// Supply an MVC State object that hooks into the App class.
-abstract class StateMVC<T extends StatefulWidget> extends mvc.StateMVC<T> {
+abstract class StateMVC<T extends StatefulWidget> extends mvc.StateMVC<T>
+    with ErrorHandler {
+  //
   StateMVC([ControllerMVC controller]) : super(controller);
 
   @override

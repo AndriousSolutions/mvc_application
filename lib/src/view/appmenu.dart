@@ -96,7 +96,8 @@ class AppMenu {
         ColorPicker.showColorPicker(
             context: _state.context,
             onColorChange: AppMenu.onColorChange,
-            onChange: AppMenu.onChange);
+            onChange: AppMenu.onChange,
+            shrinkWrap: true);
         break;
       case 'About':
         showAboutDialog(

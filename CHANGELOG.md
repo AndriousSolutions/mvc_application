@@ -1,4 +1,15 @@
+## 1.4.0
+ January 16, 2020
+- controllerByType()
+- setState() allowed at times.
+- import 'package:i10n_translator/i10n.dart';
+- ErrorWidgetBuilder errorScreen
+- static void catchError(Exception ex)
+- themeMode: themeMode
+- introduce VariableString.dart, custom_raised_button.dart', NavBottomBar.dart
+
 ## 1.3.0
+ October 21, 2019
 - Introduced package:i10n_translator
 - Removed default: this.supportedLocales = const <Locale>[const Locale('en', 'US')]
 - Included LocaleListResolutionCallback localeListResolutionCallback;
