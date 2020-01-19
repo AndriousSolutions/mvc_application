@@ -399,6 +399,7 @@ class _App {
   static Widget show(AsyncSnapshot snapshot, Widget loading) {
     if (snapshot.hasError) {
       App._vw.home = AppError(snapshot.error).home;
+      return _AppWidget();
     } else if (snapshot.connectionState == ConnectionState.done &&
         snapshot.hasData &&
         snapshot.data) {

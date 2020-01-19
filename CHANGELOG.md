@@ -1,3 +1,7 @@
+## 1.4.1
+ January 19, 2020
+- AppError(snapshot.error).home is returned when error
+
 ## 1.4.0
  January 16, 2020
 - controllerByType()
