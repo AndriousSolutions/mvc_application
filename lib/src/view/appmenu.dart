@@ -20,29 +20,6 @@
 ///          Created  09 Feb 2019
 ///
 ///
-
-///
-/// Copyright (C) 2019 Andrious Solutions
-///
-/// This program is free software; you can redistribute it and/or
-/// modify it under the terms of the GNU General Public License
-/// as published by the Free Software Foundation; either version 3
-/// of the License, or any later version.
-///
-/// You may obtain a copy of the License at
-///
-///  http://www.apache.org/licenses/LICENSE-2.0
-///
-///
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-///
-///          Created  09 Feb 2019
-///
-///
 import 'package:flutter/material.dart'
     show
         BuildContext,
@@ -52,8 +29,9 @@ import 'package:flutter/material.dart'
         PopupMenuDivider,
         PopupMenuEntry,
         PopupMenuItem,
+        showAboutDialog,
         Text,
-        showAboutDialog;
+        Widget;
 
 import 'package:mvc_application/view.dart' show App, ColorPicker, StateMVC;
 
@@ -62,10 +40,28 @@ import 'package:mvc_application/controller.dart' show Prefs;
 class AppMenu {
   static StateMVC _state;
   static Menu _menu;
+  static Menu _tail;
+  static String _applicationName;
+  static String _applicationVersion;
+  static Widget _applicationIcon;
+  static String _applicationLegalese;
+  static List<Widget> _children;
 
-  static PopupMenuButton<dynamic> show(StateMVC state, [Menu menu]) {
+    static PopupMenuButton<dynamic> show(StateMVC state, {
+    String applicationName = "Name of you app.",
+    Widget applicationIcon,
+    String applicationLegalese,
+    List<Widget> children,
+    bool useRootNavigator = true,
+    Menu menu,
+    }) {
     _state = state;
     _menu = menu;
+    _applicationName = applicationName;
+    _applicationVersion = "version: ${App.version} build: ${App.buildNumber}";
+    _applicationIcon = applicationIcon;
+    _applicationLegalese = applicationLegalese;
+    _children = children;
 
     List<PopupMenuEntry<dynamic>> menuItems = [
       PopupMenuItem<dynamic>(value: 'Color', child: ColorPicker.title),
@@ -78,6 +74,11 @@ class AppMenu {
       temp.add(PopupMenuDivider());
       temp.addAll(menuItems);
       menuItems = temp;
+
+      if(_menu.tailItems.isNotEmpty){
+        menuItems.add(PopupMenuDivider());
+        menuItems.addAll(_menu.tailItems);
+      }
     }
 
     return PopupMenuButton<dynamic>(
@@ -102,9 +103,11 @@ class AppMenu {
       case 'About':
         showAboutDialog(
             context: _state.context,
-            applicationName: "Greg's App Example",
-            applicationVersion: App.version + '  buld: ${App.buildNumber}',
-            children: [Text('A simple contact app demonstration.')]);
+            applicationName: _applicationName,
+            applicationVersion: _applicationVersion,
+            applicationIcon: _applicationIcon,
+            applicationLegalese: _applicationLegalese,
+            children: _children);
         break;
       default:
     }
@@ -130,11 +133,12 @@ class AppMenu {
 
 abstract class Menu {
   List<PopupMenuItem<dynamic>> menuItems();
+  List<PopupMenuItem<dynamic>> tailItems = [];
   void onSelected(dynamic menuItem);
 
-  PopupMenuButton<dynamic> show(StateMVC state) {
+  PopupMenuButton<dynamic> show(StateMVC state, {String applicationName}) {
     this.state = state;
-    return AppMenu.show(state, this);
+    return AppMenu.show(state, applicationName: applicationName, menu: this,);
   }
 
   StateMVC state;

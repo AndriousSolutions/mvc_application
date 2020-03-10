@@ -23,6 +23,7 @@
 ///
 ///
 import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:device_info/device_info.dart'
     show AndroidDeviceInfo, DeviceInfoPlugin, IosDeviceInfo;
 
@@ -34,13 +35,18 @@ class DeviceInfo {
   static Future<Map<String, dynamic>> init() async {
     if (_init) return _deviceParameters;
     _init = true;
+    // Running in the Web.
+    if(kIsWeb) return _deviceParameters;
     if (Platform.isAndroid) {
       AndroidDeviceInfo info = await DeviceInfoPlugin().androidInfo;
       _loadAndroidParameters(info);
-    } else {
+    } else if (Platform.isIOS) {
       IosDeviceInfo info = await DeviceInfoPlugin().iosInfo;
       _loadiOSParameters(info);
-    }
+    } else if (Platform.isWindows) {
+    } else if (Platform.isFuchsia) {
+    } else if (Platform.isLinux) {
+    } else if (Platform.isMacOS) {}
     return _deviceParameters;
   }
 

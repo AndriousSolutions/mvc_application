@@ -27,13 +27,13 @@ import 'dart:core'
 
 import 'package:sqflite/sqflite.dart' show Database;
 
-import 'package:mvc_application/model.dart' show DBInterface;
+import 'package:mvc_application/model.dart' show SQLiteDB;
 
 import '../../model.dart' show Contact;
 
 import '../../view.dart' show Item;
 
-class ContactsService extends DBInterface {
+class ContactsService extends SQLiteDB {
   factory ContactsService() {
     _this ??= ContactsService._();
     return _this;

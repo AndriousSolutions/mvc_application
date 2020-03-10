@@ -22,6 +22,8 @@
 
 import 'dart:async' show Future;
 
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 import 'package:flutter/material.dart' show mustCallSuper;
 
 import 'package:mvc_application/app.dart' show AppConMVC;
@@ -49,10 +51,13 @@ class AppController extends ControllerMVC implements AppConMVC {
   Future<bool> init() async {
     // Initialize System Preferences
     await Prefs.init();
-    // Collect Device Information
-    await DeviceInfo.init();
-    // Load any csv file of translations.
-    await I10n.init();
+    // If not running on the Web.
+    if (!kIsWeb) {
+      // Collect Device Information
+      await DeviceInfo.init();
+      // Load any csv file of translations.
+      await I10n.init();
+    }
     return true;
   }
 

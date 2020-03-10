@@ -1,3 +1,7 @@
+## 1.5.0
+ February 29, 2020
+- CupertinoApp, showAboutDialog(), foundation.dart' show kIsWeb;
+
 ## 1.4.1
  January 19, 2020
 - AppError(snapshot.error).home is returned when error

@@ -20,11 +20,16 @@
 ///          Created  24 Dec 2018
 ///
 
+import 'dart:io' show Platform;
+
 import 'dart:async' show Future, StreamSubscription;
 
-import 'package:flutter/foundation.dart' show Key, mustCallSuper, protected;
+import 'package:flutter/foundation.dart'
+    show Key, kIsWeb, mustCallSuper, protected;
 
 import 'package:flutter/material.dart';
+
+import 'package:flutter/cupertino.dart';
 
 import 'package:package_info/package_info.dart' show PackageInfo;
 
@@ -107,7 +112,7 @@ abstract class App extends AppMVC {
       _vw?.con?.initApp();
     } else {
       await _initInternal();
-      _packageInfo = await PackageInfo.fromPlatform();
+      if (!kIsWeb) _packageInfo = await PackageInfo.fromPlatform();
     }
     _isInit = await super.init();
     if (_isInit) _isInit = await _vw.init();
@@ -126,6 +131,18 @@ abstract class App extends AppMVC {
   /// Determine if the App initialized successfully.
   static bool get isInit => _isInit;
   static bool _isInit = false;
+
+  // Use Material UI when explicitly specified or even when running in iOS
+  static bool get useMaterial =>
+      _vw.useMaterial ||
+      (Platform.isAndroid && !_vw.switchUI) ||
+      (Platform.isIOS && _vw.switchUI);
+
+  // Use Cupertino UI when explicitly specified or even when running in Android
+  static bool get useCupertino =>
+      _vw.useCupertino ||
+      (Platform.isIOS && !_vw.switchUI) ||
+      (Platform.isAndroid && _vw.switchUI);
 
   static GlobalKey<NavigatorState> get navigatorKey => _vw.navigatorKey;
   static set navigatorKey(GlobalKey<NavigatorState> v) {
@@ -175,6 +192,7 @@ abstract class App extends AppMVC {
 
   // Allow it to be assigned null.
   static ThemeData theme;
+  static CupertinoThemeData iOSTheme;
 
   static Color get color => _vw.color;
   static set color(Color v) {
@@ -353,12 +371,6 @@ abstract class App extends AppMVC {
 
   // Internal Initialization routines.
   static Future<void> _initInternal() async {
-    // Get the installation number
-    _installNum = await InstallFile.id();
-
-    // Determine the location to the files directory.
-    _path = await Files.localPath;
-
     // Determine the theme.
     theme ??= _vw?.theme;
     theme ??= await App.getThemeData();
@@ -375,6 +387,15 @@ abstract class App extends AppMVC {
     }).catchError((e) {
       _connectivityStatus = 'none';
     });
+
+    // If running on the web the rest of the code in incompatible.
+    if (kIsWeb) return;
+
+    // Get the installation number
+    _installNum = await InstallFile.id();
+
+    // Determine the location to the files directory.
+    _path = await Files.localPath;
   }
 
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -443,6 +464,9 @@ class AppView extends AppViewState<_AppWidget> {
     Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates,
     LocaleResolutionCallback localeResolutionCallback,
     Iterable<Locale> supportedLocales,
+    this.useMaterial = false,
+    this.useCupertino = false,
+    this.switchUI = false,
     bool debugShowMaterialGrid = false,
     bool showPerformanceOverlay = false,
     bool checkerboardRasterCacheImages = false,
@@ -489,9 +513,20 @@ class AppView extends AppViewState<_AppWidget> {
           debugPaintLayerBordersEnabled: debugPaintLayerBordersEnabled,
           debugRepaintRainbowEnabled: debugRepaintRainbowEnabled,
           errorScreen: errorScreen,
-        );
+        ) {
+    // if both useMaterial & useCupertino are set then rely on the Platform.
+    useMaterial =
+        useMaterial && (!useCupertino || Platform.isAndroid || kIsWeb);
+    useCupertino = useCupertino && (!useMaterial || Platform.isIOS);
+  }
   final Key key;
   Widget home;
+  // Explicitly use the Material theme
+  bool useMaterial;
+  // Explicitly use the Cupertino theme
+  bool useCupertino;
+  // Use Cupertino UI in Android and vice versa.
+  final bool switchUI;
 
   @override
   Widget buildView(BuildContext context) {
@@ -507,47 +542,91 @@ class AppView extends AppViewState<_AppWidget> {
           debugRepaintRainbowEnabled ?? false;
       return true;
     }());
-    return MaterialApp(
-      key: key ?? App.materialKey,
-      navigatorKey: navigatorKey ?? onNavigatorKey(),
-      home: home,
-      routes: routes ?? onRoutes(),
-      initialRoute: initialRoute ?? onInitialRoute(),
-      onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
-      onUnknownRoute: onUnknownRoute ?? onOnUnknownRoute(),
-      navigatorObservers: navigatorObservers ?? onNavigatorObservers(),
-      builder: builder ?? onBuilder(),
-      title: title ?? onTitle(),
-      onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
-      color: color ?? onColor(),
-      theme: theme ?? onTheme(),
-      darkTheme: darkTheme ?? onDarkTheme(),
-      themeMode: themeMode ?? onThemeMode(),
-      locale: locale ?? onLocale(),
-      localizationsDelegates:
-          localizationsDelegates ?? onLocalizationsDelegates(),
-      localeListResolutionCallback:
-          localeListResolutionCallback ?? onLocaleListResolutionCallback(),
-      localeResolutionCallback:
-          localeResolutionCallback ?? onLocaleResolutionCallback(),
-      supportedLocales: supportedLocales ??
-          onSupportedLocales() ??
-          const <Locale>[Locale('en', 'US')],
-      debugShowMaterialGrid:
-          debugShowMaterialGrid ?? onDebugShowMaterialGrid() ?? false,
-      showPerformanceOverlay:
-          showPerformanceOverlay ?? onShowPerformanceOverlay() ?? false,
-      checkerboardRasterCacheImages: checkerboardRasterCacheImages ??
-          onCheckerboardRasterCacheImages() ??
-          false,
-      checkerboardOffscreenLayers: checkerboardOffscreenLayers ??
-          onCheckerboardOffscreenLayers() ??
-          false,
-      showSemanticsDebugger:
-          showSemanticsDebugger ?? onShowSemanticsDebugger() ?? false,
-      debugShowCheckedModeBanner:
-          debugShowCheckedModeBanner ?? onDebugShowCheckedModeBanner() ?? true,
-    );
+    if (useCupertino ||
+        (Platform.isIOS && !switchUI) ||
+        (Platform.isAndroid && switchUI)) {
+      return CupertinoApp(
+        key: key ?? App.materialKey,
+        navigatorKey: navigatorKey ?? onNavigatorKey(),
+        home: home,
+        routes: routes ?? onRoutes(),
+        initialRoute: initialRoute ?? onInitialRoute(),
+        onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
+        onUnknownRoute: onUnknownRoute ?? onOnUnknownRoute(),
+        navigatorObservers: navigatorObservers ?? onNavigatorObservers(),
+        builder: builder ?? onBuilder(),
+        title: title ?? onTitle(),
+        onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
+        color: color ?? onColor(),
+        theme: iOSTheme ?? oniOSTheme(),
+        locale: locale ?? onLocale(),
+        localizationsDelegates:
+            localizationsDelegates ?? onLocalizationsDelegates(),
+        localeListResolutionCallback:
+            localeListResolutionCallback ?? onLocaleListResolutionCallback(),
+        localeResolutionCallback:
+            localeResolutionCallback ?? onLocaleResolutionCallback(),
+        supportedLocales: supportedLocales ??
+            onSupportedLocales() ??
+            const <Locale>[Locale('en', 'US')],
+        showPerformanceOverlay:
+            showPerformanceOverlay ?? onShowPerformanceOverlay() ?? false,
+        checkerboardRasterCacheImages: checkerboardRasterCacheImages ??
+            onCheckerboardRasterCacheImages() ??
+            false,
+        checkerboardOffscreenLayers: checkerboardOffscreenLayers ??
+            onCheckerboardOffscreenLayers() ??
+            false,
+        showSemanticsDebugger:
+            showSemanticsDebugger ?? onShowSemanticsDebugger() ?? false,
+        debugShowCheckedModeBanner: debugShowCheckedModeBanner ??
+            onDebugShowCheckedModeBanner() ??
+            true,
+      );
+    } else {
+      return MaterialApp(
+        key: key ?? App.materialKey,
+        navigatorKey: navigatorKey ?? onNavigatorKey(),
+        home: home,
+        routes: routes ?? onRoutes(),
+        initialRoute: initialRoute ?? onInitialRoute(),
+        onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
+        onUnknownRoute: onUnknownRoute ?? onOnUnknownRoute(),
+        navigatorObservers: navigatorObservers ?? onNavigatorObservers(),
+        builder: builder ?? onBuilder(),
+        title: title ?? onTitle(),
+        onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
+        color: color ?? onColor(),
+        theme: theme ?? onTheme(),
+        darkTheme: darkTheme ?? onDarkTheme(),
+        themeMode: themeMode ?? onThemeMode(),
+        locale: locale ?? onLocale(),
+        localizationsDelegates:
+            localizationsDelegates ?? onLocalizationsDelegates(),
+        localeListResolutionCallback:
+            localeListResolutionCallback ?? onLocaleListResolutionCallback(),
+        localeResolutionCallback:
+            localeResolutionCallback ?? onLocaleResolutionCallback(),
+        supportedLocales: supportedLocales ??
+            onSupportedLocales() ??
+            const <Locale>[Locale('en', 'US')],
+        debugShowMaterialGrid:
+            debugShowMaterialGrid ?? onDebugShowMaterialGrid() ?? false,
+        showPerformanceOverlay:
+            showPerformanceOverlay ?? onShowPerformanceOverlay() ?? false,
+        checkerboardRasterCacheImages: checkerboardRasterCacheImages ??
+            onCheckerboardRasterCacheImages() ??
+            false,
+        checkerboardOffscreenLayers: checkerboardOffscreenLayers ??
+            onCheckerboardOffscreenLayers() ??
+            false,
+        showSemanticsDebugger:
+            showSemanticsDebugger ?? onShowSemanticsDebugger() ?? false,
+        debugShowCheckedModeBanner: debugShowCheckedModeBanner ??
+            onDebugShowCheckedModeBanner() ??
+            true,
+      );
+    }
   }
 
   @override
@@ -587,6 +666,7 @@ class AppView extends AppViewState<_AppWidget> {
   GenerateAppTitle onOnGenerateTitle(BuildContext context) => null;
   Color onColor() => null;
   ThemeData onTheme() => App.theme;
+  CupertinoThemeData oniOSTheme() => App.iOSTheme;
   ThemeData onDarkTheme() => null;
   ThemeMode onThemeMode() => ThemeMode.system;
   Locale onLocale() => null;
@@ -655,6 +735,7 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   String title;
   GenerateAppTitle onGenerateTitle;
   ThemeData theme;
+  CupertinoThemeData iOSTheme;
   ThemeData darkTheme;
   ThemeMode themeMode;
   Color color;
@@ -681,11 +762,14 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   /// Provide 'the view'
   Widget build(BuildContext context);
 
+//  @mustCallSuper
+//  Future<bool> init() async {
+//    final init = await con?.init() ?? true;
+//    return init;
+//  }
+
   @mustCallSuper
-  Future<bool> init() async {
-    final init = await con?.init() ?? true;
-    return init;
-  }
+  Future<bool> init() => con?.init() ?? Future.value(true);
 
   @override
   void dispose() {

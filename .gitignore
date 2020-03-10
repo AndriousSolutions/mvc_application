@@ -144,3 +144,4 @@ tmp/**/*
 # Google Services (e.g. APIs or Firebase)
 google-services.json
 
+/example/.flutter-plugins-dependencies
