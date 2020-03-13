@@ -97,9 +97,7 @@ mixin ErrorHandler {
   }
 
   /// Determine if app is 'in error.'
-  bool get inError {
-    return _error != null;
-  }
-
+  bool get inError => _error != null;
+  bool get hasError => _error != null;
   Exception _error;
 }

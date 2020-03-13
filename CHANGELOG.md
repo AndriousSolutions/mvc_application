@@ -1,3 +1,9 @@
+## 1.6.0
+ March 13, 2020
+- intro plugin android_alarm_manager with alarm_manager.dart
+- intro App.hasError
+- privatized AppView._useMaterial, AppView._useCupertino
+ 
 ## 1.5.0
  February 29, 2020
 - CupertinoApp, showAboutDialog(), foundation.dart' show kIsWeb;
@@ -53,7 +59,7 @@
 
 ## 1.0.4
  July 21, 2019
-- Lenghthen description in pubspec.yaml
+- Lengthen description in pubspec.yaml
 - AppMenu.show(StateMVC state) in appmenu.dart
 - Remove reference to AppConMVC DeviceInfo and Theme in app.dart
  

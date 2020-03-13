@@ -134,13 +134,13 @@ abstract class App extends AppMVC {
 
   // Use Material UI when explicitly specified or even when running in iOS
   static bool get useMaterial =>
-      _vw.useMaterial ||
+      _vw._useMaterial ||
       (Platform.isAndroid && !_vw.switchUI) ||
       (Platform.isIOS && _vw.switchUI);
 
   // Use Cupertino UI when explicitly specified or even when running in Android
   static bool get useCupertino =>
-      _vw.useCupertino ||
+      _vw._useCupertino ||
       (Platform.isIOS && !_vw.switchUI) ||
       (Platform.isAndroid && _vw.switchUI);
 
@@ -515,16 +515,18 @@ class AppView extends AppViewState<_AppWidget> {
           errorScreen: errorScreen,
         ) {
     // if both useMaterial & useCupertino are set then rely on the Platform.
-    useMaterial =
+    _useMaterial =
         useMaterial && (!useCupertino || Platform.isAndroid || kIsWeb);
-    useCupertino = useCupertino && (!useMaterial || Platform.isIOS);
+    _useCupertino = useCupertino && (!_useMaterial || Platform.isIOS);
   }
   final Key key;
   Widget home;
   // Explicitly use the Material theme
   bool useMaterial;
+  bool _useMaterial;
   // Explicitly use the Cupertino theme
   bool useCupertino;
+  bool _useCupertino;
   // Use Cupertino UI in Android and vice versa.
   final bool switchUI;
 
