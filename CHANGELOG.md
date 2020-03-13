@@ -1,3 +1,7 @@
+## 1.5.1
+
+* Prepare for 1.0.0 version of sensors and package_info. ([dart_lsc](http://github.com/amirh/dart_lsc))
+
 ## 1.5.0
  February 29, 2020
 - CupertinoApp, showAboutDialog(), foundation.dart' show kIsWeb;
