@@ -1,3 +1,7 @@
+## 1.6.1
+- Prepare for 1.0.0 version of sensors and package_info. 
+([dart_lsc](http://github.com/amirh/dart_lsc))
+
 ## 1.6.0
  March 13, 2020
 - intro plugin android_alarm_manager with alarm_manager.dart
