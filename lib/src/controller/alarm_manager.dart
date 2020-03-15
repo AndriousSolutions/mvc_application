@@ -48,8 +48,10 @@
 ///
 
 import 'dart:async' show Future;
+import 'dart:isolate' show ReceivePort, SendPort;
+import 'dart:ui' show CallbackHandle, IsolateNameServer, PluginUtilities;
 
-import 'dart:ui' show CallbackHandle, PluginUtilities;
+import 'package:flutter/material.dart';
 
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 
@@ -65,9 +67,9 @@ class AlarmManager {
     // Don't continue if already called.
     if (_init) return _init;
     _init = true;
-    // Record the failure if any.
-    bool init = await AndroidAlarmManager.initialize();
-    if (!init) getError(Exception("AndroidAlarmManager not initialize!"));
+
+    // Initialize the Callback operation.
+    _Callback();
 
     if (alarmClock != null) _alarmClock = alarmClock;
     if (allowWhileIdle != null) _allowWhileIdle = allowWhileIdle;
@@ -92,7 +94,6 @@ class AlarmManager {
   static Object _error;
 
   /// Records the `error` when it occurs.
-  ///
   static Exception getError([Object error]) {
     Exception ex = _error;
     if (error == null) {
@@ -165,14 +166,6 @@ class AlarmManager {
       return oneShot;
     }
 
-    CallbackHandle handle = PluginUtilities.getCallbackHandle(callback);
-    assert(handle != null,
-        "oneShotAt(): `callback` is not a top-level or static function");
-    if (handle == null) {
-      getError("oneShotAt(): `callback` is not a top-level or static function");
-      return oneShot;
-    }
-
     oneShot = await AlarmManager.init(
       alarmClock: alarmClock,
       allowWhileIdle: allowWhileIdle,
@@ -183,11 +176,13 @@ class AlarmManager {
 
     if (!oneShot) return oneShot;
 
+    if (callback != null) _Callback.oneShots[id] = callback;
+
     try {
       oneShot = await AndroidAlarmManager.oneShot(
         delay,
         id,
-        callback,
+        _Callback.oneShot,
         alarmClock: alarmClock ?? _alarmClock,
         allowWhileIdle: allowWhileIdle ?? _allowWhileIdle,
         exact: exact ?? _exact,
@@ -266,14 +261,6 @@ class AlarmManager {
       return oneShotAt;
     }
 
-    CallbackHandle handle = PluginUtilities.getCallbackHandle(callback);
-    assert(handle != null,
-        "oneShotAt(): `callback` is not a top-level or static function");
-    if (handle == null) {
-      getError("oneShotAt(): `callback` is not a top-level or static function");
-      return oneShotAt;
-    }
-
     oneShotAt = await AlarmManager.init(
       alarmClock: alarmClock,
       allowWhileIdle: allowWhileIdle,
@@ -284,11 +271,13 @@ class AlarmManager {
 
     if (!oneShotAt) return oneShotAt;
 
+    if (callback != null) _Callback.oneShotAts[id] = callback;
+
     try {
       oneShotAt = await AndroidAlarmManager.oneShotAt(
         time,
         id,
-        callback,
+        _Callback.oneShotAt,
         alarmClock: alarmClock ?? _alarmClock,
         allowWhileIdle: allowWhileIdle ?? _allowWhileIdle,
         exact: exact ?? _exact,
@@ -359,14 +348,6 @@ class AlarmManager {
       return periodic;
     }
 
-    CallbackHandle handle = PluginUtilities.getCallbackHandle(callback);
-    assert(handle != null,
-        "periodic(): `callback` is not a top-level or static function");
-    if (handle == null) {
-      getError("periodic(): `callback` is not a top-level or static function");
-      return periodic;
-    }
-
     periodic = await AlarmManager.init(
       startAt: startAt,
       alarmClock: alarmClock,
@@ -378,11 +359,13 @@ class AlarmManager {
 
     if (!periodic) return periodic;
 
+    if (callback != null) _Callback.periodics[id] = callback;
+
     try {
       periodic = await AndroidAlarmManager.periodic(
         duration,
         id,
-        callback,
+        _Callback.periodic,
         startAt: startAt ?? _startAt,
         exact: exact ?? _exact,
         wakeup: wakeup ?? _wakeup,
@@ -413,3 +396,94 @@ class AlarmManager {
     return cancel;
   }
 }
+
+class _Callback extends StatefulWidget {
+  _Callback({Key key}) : super(key: key) {
+    // Register the UI isolate's SendPort to allow for communication from the
+    // background isolate.
+    IsolateNameServer.registerPortWithName(
+      port.sendPort,
+      _oneShot,
+    );
+
+    IsolateNameServer.registerPortWithName(
+      port.sendPort,
+      _oneShotAt,
+    );
+
+    IsolateNameServer.registerPortWithName(
+      port.sendPort,
+      _periodic,
+    );
+
+    // Register for events from the background isolate.
+    port.listen((map) {
+      int id = map.keys.first;
+      String type = map.values.first;
+      Function(int id) func;
+      switch (type) {
+        case _oneShot:
+          // Remove the one-shot routine.
+          func = oneShots.remove(id);
+          break;
+        case _oneShotAt:
+          // Remove the one-shot routine.
+          func = oneShotAts.remove(id);
+          break;
+        case _periodic:
+          func = periodics[id];
+      }
+      try {
+        func(id);
+      } catch (ex) {
+        AlarmManager.getError(ex);
+      }
+    });
+  }
+
+  /// A port used to communicate from a background isolate to the UI isolate.
+  static final ReceivePort port = ReceivePort();
+
+  /// Collect the callback functions identified by id.
+  static Map<int, Function> oneShots = Map();
+  static Map<int, Function> oneShotAts = Map();
+  static Map<int, Function> periodics = Map();
+
+  /// Schedules a one-shot timer to run `callback` after time `delay`.
+  static Future<void> oneShot(int id) async {
+    SendPort uiSendPort = IsolateNameServer.lookupPortByName(_oneShot);
+    // Send back to UI Isolate specifying type of function to fire.
+    uiSendPort?.send({id: _oneShot});
+  }
+
+  /// Schedules a one-shot timer to run `callback` at `time`.
+  static Future<void> oneShotAt(int id) async {
+    SendPort uiSendPort = IsolateNameServer.lookupPortByName(_oneShotAt);
+    // Send back to UI Isolate specifying type of function to fire.
+    uiSendPort?.send({id: _oneShotAt});
+  }
+
+  /// Schedules a repeating timer to run `callback` with period `duration`.
+  static Future<void> periodic(int id) async {
+    SendPort uiSendPort = IsolateNameServer.lookupPortByName(_periodic);
+    // Send back to UI Isolate specifying type of function to fire.
+    uiSendPort?.send({id: _periodic});
+  }
+
+  @override
+  State<StatefulWidget> createState() => _CallbackState();
+}
+
+class _CallbackState extends State<_Callback> {
+  static Future<bool> init;
+  @override
+  Widget build(BuildContext context) => FutureBuilder<bool>(
+        future: init ??= AndroidAlarmManager.initialize(),
+        initialData: false,
+        builder: (context, snapshot) => widget,
+      );
+}
+
+const String _oneShot = 'oneShot';
+const String _oneShotAt = 'oneShotAt';
+const String _periodic = 'periodic';
