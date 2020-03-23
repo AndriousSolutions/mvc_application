@@ -16,16 +16,22 @@ And so, in this case, add this to your package's pubspec.yaml file instead:
 dependencies:
    mvc_application:^1.0.0
 ```
-For more information on this topic, read the article, [The importance of semantic versioning](https://medium.com/@xabaras/the-importance-of-semantic-versioning-9b78e8e59bba).
+For more information on version numbers: [The importance of semantic versioning](https://medium.com/@xabaras/the-importance-of-semantic-versioning-9b78e8e59bba).
 
-Please, turn to the article, [MVC in Flutter](https://medium.com/@greg.perry/mvc-in-flutter-part-1-51d5eba081a3), for now for more inforamtion.
+Please begin with the article, [‘Flutter + MVC at Last!’](https://medium.com/follow-flutter/flutter-mvc-at-last-275a0dc1e730)
+[![online article](https://user-images.githubusercontent.com/32497443/47087365-c9524f80-d1e9-11e8-85e5-6c8bbabb18cc.png)](https://medium.com/follow-flutter/flutter-mvc-at-last-275a0dc1e730)
+
+ Follow up with [Bazaar in MVC](https://medium.com/follow-flutter/bazaar-in-mvc-41e1c960b5c5) and  [Shrine in MVC](https://medium.com/flutter-community/shrine-in-mvc-7984e08d8e6b) and [Weather App in "mvc pattern"](https://medium.com/follow-flutter/mvc-weather-app-78feaa616b12)
+[![bizzarMVC](https://user-images.githubusercontent.com/32497443/77361365-232f4100-6d1d-11ea-8fc2-8a15ff82d44f.jpg)](https://medium.com/follow-flutter/bazaar-in-mvc-41e1c960b5c5)
+[![shrineMVC](https://user-images.githubusercontent.com/32497443/77361770-e6177e80-6d1d-11ea-8d3d-eb8797511700.jpg)](https://medium.com/flutter-community/shrine-in-mvc-7984e08d8e6b)
+[![MVCWeatherApp](https://user-images.githubusercontent.com/32497443/77362020-41497100-6d1e-11ea-9dec-b15a531ebb3e.jpg)](https://medium.com/follow-flutter/mvc-weather-app-78feaa616b12)
+
+Optionally, there is the 3-part series beginning with, [MVC in Flutter](https://medium.com/@greg.perry/mvc-in-flutter-part-1-51d5eba081a3)
 [![MVCFlutter](https://user-images.githubusercontent.com/32497443/61597533-758cf080-abd7-11e9-8f76-8d6b45d26b0c.png)](https://medium.com/@greg.perry/mvc-in-flutter-part-1-51d5eba081a3)
 
-A secondary article is, [A Design Pattern for Flutter](https://medium.com/flutter-community/flutter-mvc-at-last-275a0dc1e730), and the article, [Flutter Faster!](https://medium.com/flutter-community/flutter-mvc-at-last-275a0dc1e730)
-[![MVCArticles](https://user-images.githubusercontent.com/32497443/61597695-2e9ffa80-abd9-11e9-94b1-8c6f2254607e.png)](https://medium.com/@greg.perry)
+Further articles include, [A Design Pattern for Flutter](https://medium.com/follow-flutter/a-design-pattern-for-flutter-db6ccaea2413).
+[![designpattern](https://user-images.githubusercontent.com/32497443/77360887-2bd34780-6d1c-11ea-81de-2a48a9e69012.jpg)](https://medium.com/follow-flutter/a-design-pattern-for-flutter-db6ccaea2413)
 
-For more information on the MVC in Flutter read, [‘Flutter + MVC at Last!’](https://medium.com/p/275a0dc1e730/)
-[![online article](https://user-images.githubusercontent.com/32497443/47087365-c9524f80-d1e9-11e8-85e5-6c8bbabb18cc.png)](https://medium.com/flutter-community/flutter-mvc-at-last-275a0dc1e730)
 ##### Other Dart Packages
 [![packages](https://user-images.githubusercontent.com/32497443/64993716-5c818280-d89c-11e9-87b5-f35aee3e22f4.jpg)](https://pub.dev/publishers/andrioussolutions.com/packages)
 Other Dart packages from the author can also be found at [Pub.dev](https://pub.dev/publishers/andrioussolutions.com/packages)

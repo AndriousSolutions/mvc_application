@@ -46,16 +46,16 @@
 /// across reboots. If `rescheduleOnReboot` is false (the default), the alarm
 /// will not be rescheduled after a reboot and will not be executed.
 ///
-
 import 'dart:async' show Future;
 import 'dart:isolate' show ReceivePort, SendPort;
-import 'dart:ui' show CallbackHandle, IsolateNameServer, PluginUtilities;
+import 'dart:ui' show IsolateNameServer;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show WidgetsFlutterBinding;
 
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 
 class AlarmManager {
+
   static Future<bool> init({
     bool alarmClock = false,
     bool allowWhileIdle = false,
@@ -68,8 +68,20 @@ class AlarmManager {
     if (_init) return _init;
     _init = true;
 
-    // Initialize the Callback operation.
-    _Callback();
+    bool init;
+    try {
+      // Ensure WidgetsBinding is available when the Alarm Service is initialized.
+      WidgetsFlutterBinding.ensureInitialized();
+      // Initialize the plugin
+      init = await AndroidAlarmManager.initialize();
+    }catch(ex){
+      getError(Exception(ex));
+      return false;
+    }
+    if (!init) getError(Exception("AndroidAlarmManager not initialize!"));
+
+    // Initialize the callback operation.
+    _Callback.init();
 
     if (alarmClock != null) _alarmClock = alarmClock;
     if (allowWhileIdle != null) _allowWhileIdle = allowWhileIdle;
@@ -78,20 +90,38 @@ class AlarmManager {
     if (rescheduleOnReboot != null) _rescheduleOnReboot = rescheduleOnReboot;
     if (startAt != null) _startAt = startAt;
 
-    return _init;
+    return true;
   }
-
   static bool _init = false;
+
   static bool _alarmClock = false;
   static bool _allowWhileIdle = false;
   static bool _exact = false;
   static bool _wakeup = false;
   static bool _rescheduleOnReboot = false;
   static DateTime _startAt;
+  static Object _error;
 
   static bool get hasError => _error != null;
   static bool get inError => _error != null;
-  static Object _error;
+
+  /// Cancels a timer.
+  ///
+  /// If a timer has been scheduled with `id`, then this function will cancel
+  /// it.
+  ///
+  /// Returns a [Future] that resolves to `true` on success and `false` on
+  /// failure.
+  static Future<bool> cancel(int id) async {
+    bool cancel;
+    try {
+      cancel = await AndroidAlarmManager.cancel(id);
+    } catch (ex) {
+      cancel = false;
+      getError(ex);
+    }
+    return cancel;
+  }
 
   /// Records the `error` when it occurs.
   static Exception getError([Object error]) {
@@ -144,38 +174,35 @@ class AlarmManager {
   /// Returns a [Future] that resolves to `true` on success and `false` on
   /// failure.
   static Future<bool> oneShot(
-    Duration delay,
-    int id,
-    Function callback, {
-    bool alarmClock,
-    bool allowWhileIdle,
-    bool exact,
-    bool wakeup,
-    bool rescheduleOnReboot,
-  }) async {
+      Duration delay,
+      int id,
+      Function(int id) callback, {
+        bool alarmClock,
+        bool allowWhileIdle,
+        bool exact,
+        bool wakeup,
+        bool rescheduleOnReboot,
+      }) async {
+
+    assert(_init,"oneShot(): `AlarmManager.init()` must be first called.");
+    if (!_init) {
+      getError("oneShot(): `AlarmManager.init()` must be first called.");
+      return _init;
+    }
     //
     bool oneShot = false;
 
-    if (delay == null || delay.inSeconds <= 0) {
-      getError("oneShotAt(): `delay` is null or less than or zero.");
+    if (delay == null || delay.inMicroseconds == 0) {
+      getError("oneShot(): `delay` is null or zero.");
       return oneShot;
     }
 
     if (id == null || id <= 0) {
-      getError("oneShotAt(): `id` is null or less than or zero.");
+      getError("oneShot(): `id` is null or less than or zero.");
       return oneShot;
     }
 
-    oneShot = await AlarmManager.init(
-      alarmClock: alarmClock,
-      allowWhileIdle: allowWhileIdle,
-      exact: exact,
-      wakeup: wakeup,
-      rescheduleOnReboot: rescheduleOnReboot,
-    );
-
-    if (!oneShot) return oneShot;
-
+    // Collect the Callback routine to eventually call.
     if (callback != null) _Callback.oneShots[id] = callback;
 
     try {
@@ -234,16 +261,22 @@ class AlarmManager {
   /// Returns a [Future] that resolves to `true` on success and `false` on
   /// failure.
   static Future<bool> oneShotAt(
-    DateTime datetime,
-    int id,
-    Function callback, {
-    bool alarmClock,
-    bool allowWhileIdle,
-    bool exact,
-    bool wakeup,
-    bool rescheduleOnReboot,
-  }) async {
-    //
+      DateTime datetime,
+      int id,
+      Function(int id) callback, {
+        bool alarmClock,
+        bool allowWhileIdle,
+        bool exact,
+        bool wakeup,
+        bool rescheduleOnReboot,
+      }) async {
+
+    assert(_init,"oneShotAt(): `AlarmManager.init()` must be first called.");
+    if (!_init) {
+      getError("oneShotAt(): `AlarmManager.init()` must be first called.");
+      return _init;
+    }
+
     bool oneShotAt = false;
 
     if (datetime == null) return oneShotAt;
@@ -261,16 +294,7 @@ class AlarmManager {
       return oneShotAt;
     }
 
-    oneShotAt = await AlarmManager.init(
-      alarmClock: alarmClock,
-      allowWhileIdle: allowWhileIdle,
-      exact: exact,
-      wakeup: wakeup,
-      rescheduleOnReboot: rescheduleOnReboot,
-    );
-
-    if (!oneShotAt) return oneShotAt;
-
+    // Collect the Callback routine to eventually call.
     if (callback != null) _Callback.oneShotAts[id] = callback;
 
     try {
@@ -325,17 +349,23 @@ class AlarmManager {
   /// Returns a [Future] that resolves to `true` on success and `false` on
   /// failure.
   static Future<bool> periodic(
-    Duration duration,
-    int id,
-    Function callback, {
-    DateTime startAt,
-    bool alarmClock, // Essentially ignored.
-    bool allowWhileIdle, // Essentially ignored.
-    bool exact,
-    bool wakeup,
-    bool rescheduleOnReboot,
-  }) async {
-    //
+      Duration duration,
+      int id,
+      Function(int id) callback, {
+        DateTime startAt,
+        bool alarmClock, // Essentially ignored.
+        bool allowWhileIdle, // Essentially ignored.
+        bool exact,
+        bool wakeup,
+        bool rescheduleOnReboot,
+      }) async {
+
+    assert(_init,"periodic(): `AlarmManager.init()` must be first called.");
+    if (!_init) {
+      getError("periodic(): `AlarmManager.init()` must be first called.");
+      return _init;
+    }
+
     bool periodic = false;
 
     if (duration == null || duration.inSeconds <= 0) {
@@ -348,17 +378,7 @@ class AlarmManager {
       return periodic;
     }
 
-    periodic = await AlarmManager.init(
-      startAt: startAt,
-      alarmClock: alarmClock,
-      allowWhileIdle: allowWhileIdle,
-      exact: exact,
-      wakeup: wakeup,
-      rescheduleOnReboot: rescheduleOnReboot,
-    );
-
-    if (!periodic) return periodic;
-
+    // Collect the Callback routine to eventually call.
     if (callback != null) _Callback.periodics[id] = callback;
 
     try {
@@ -377,63 +397,52 @@ class AlarmManager {
     }
     return periodic;
   }
-
-  /// Cancels a timer.
-  ///
-  /// If a timer has been scheduled with `id`, then this function will cancel
-  /// it.
-  ///
-  /// Returns a [Future] that resolves to `true` on success and `false` on
-  /// failure.
-  static Future<bool> cancel(int id) async {
-    bool cancel;
-    try {
-      cancel = await AndroidAlarmManager.cancel(id);
-    } catch (ex) {
-      cancel = false;
-      getError(ex);
-    }
-    return cancel;
-  }
 }
 
-class _Callback extends StatefulWidget {
-  _Callback({Key key}) : super(key: key) {
-    // Register the UI isolate's SendPort to allow for communication from the
-    // background isolate.
+/// This class is involved in the callback operations.
+class _Callback {
+  //
+  /// A port used to communicate from a background isolate to the UI isolate.
+  static final ReceivePort _port = ReceivePort();
+
+  /// Collect the callback functions identified by id.
+  static final Map<int, Function(int id)> oneShots = Map();
+  static final Map<int, Function(int id)> oneShotAts = Map();
+  static final Map<int, Function(int id)> periodics = Map();
+
+  static void init() {
+    // Register the UI isolate's SendPort to communicate with the background isolate.
     IsolateNameServer.registerPortWithName(
-      port.sendPort,
+      _port.sendPort,
       _oneShot,
     );
 
     IsolateNameServer.registerPortWithName(
-      port.sendPort,
+      _port.sendPort,
       _oneShotAt,
     );
 
     IsolateNameServer.registerPortWithName(
-      port.sendPort,
+      _port.sendPort,
       _periodic,
     );
 
     // Register for events from the background isolate.
-    port.listen((map) {
-      int id = map.keys.first;
-      String type = map.values.first;
-      Function(int id) func;
-      switch (type) {
-        case _oneShot:
-          // Remove the one-shot routine.
-          func = oneShots.remove(id);
-          break;
-        case _oneShotAt:
-          // Remove the one-shot routine.
-          func = oneShotAts.remove(id);
-          break;
-        case _periodic:
-          func = periodics[id];
-      }
+    _port.listen((map) {
       try {
+        int id = map.keys.first;
+        String type = map.values.first;
+        Function(int id) func;
+        switch (type) {
+          case _oneShot:
+            func = oneShots.remove(id);
+            break;
+          case _oneShotAt:
+            func = oneShotAts.remove(id);
+            break;
+          case _periodic:
+            func = periodics[id];
+        }
         func(id);
       } catch (ex) {
         AlarmManager.getError(ex);
@@ -441,47 +450,32 @@ class _Callback extends StatefulWidget {
     });
   }
 
-  /// A port used to communicate from a background isolate to the UI isolate.
-  static final ReceivePort port = ReceivePort();
-
-  /// Collect the callback functions identified by id.
-  static Map<int, Function> oneShots = Map();
-  static Map<int, Function> oneShotAts = Map();
-  static Map<int, Function> periodics = Map();
-
-  /// Schedules a one-shot timer to run `callback` after time `delay`.
+  // The callback for our alarm
   static Future<void> oneShot(int id) async {
+
+    print(oneShots);  // Although it's defined in the foreground it's null here.
+
+    // This will be null if we're running in the background.
     SendPort uiSendPort = IsolateNameServer.lookupPortByName(_oneShot);
-    // Send back to UI Isolate specifying type of function to fire.
+    // Identify which callback function to call
     uiSendPort?.send({id: _oneShot});
   }
 
-  /// Schedules a one-shot timer to run `callback` at `time`.
+  // The callback for our alarm
   static Future<void> oneShotAt(int id) async {
+    // This will be null if we're running in the background.
     SendPort uiSendPort = IsolateNameServer.lookupPortByName(_oneShotAt);
-    // Send back to UI Isolate specifying type of function to fire.
+    // Identify which callback function to call
     uiSendPort?.send({id: _oneShotAt});
   }
 
-  /// Schedules a repeating timer to run `callback` with period `duration`.
+  // The callback for our alarm
   static Future<void> periodic(int id) async {
+    // This will be null if we're running in the background.
     SendPort uiSendPort = IsolateNameServer.lookupPortByName(_periodic);
-    // Send back to UI Isolate specifying type of function to fire.
+    // Identify which callback function to call
     uiSendPort?.send({id: _periodic});
   }
-
-  @override
-  State<StatefulWidget> createState() => _CallbackState();
-}
-
-class _CallbackState extends State<_Callback> {
-  static Future<bool> init;
-  @override
-  Widget build(BuildContext context) => FutureBuilder<bool>(
-        future: init ??= AndroidAlarmManager.initialize(),
-        initialData: false,
-        builder: (context, snapshot) => widget,
-      );
 }
 
 const String _oneShot = 'oneShot';
