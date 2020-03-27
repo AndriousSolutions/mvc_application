@@ -85,7 +85,7 @@ void showCupertinoDatePicker(
 
   // Retrieve the current 'theme'
   final CupertinoThemeData theme = CupertinoTheme.of(context);
-  
+
   // Assign the spinner's background colour.
   backgroundColor ??= theme.scaffoldBackgroundColor;
 
@@ -96,9 +96,9 @@ void showCupertinoDatePicker(
       cancelText = Text(
         'Cancel',
         style: theme.textTheme.actionTextStyle.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Colors.red,
-            ),
+          fontWeight: FontWeight.w600,
+          color: Colors.red,
+        ),
       );
   }
 
@@ -108,9 +108,7 @@ void showCupertinoDatePicker(
     if (doneText == null)
       doneText = Text(
         'Save',
-        style: theme
-            .textTheme
-            .actionTextStyle
+        style: theme.textTheme.actionTextStyle
             .copyWith(fontWeight: FontWeight.w600),
       );
   }

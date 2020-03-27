@@ -1,3 +1,7 @@
+## 1.7.1
+- Format source code
+- Update README.md
+
 ## 1.7.0
 - Include the library file, alarm_manager.dart, to provide the class, AlarmManager
 

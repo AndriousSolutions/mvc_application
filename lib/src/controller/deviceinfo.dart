@@ -36,7 +36,7 @@ class DeviceInfo {
     if (_init) return _deviceParameters;
     _init = true;
     // Running in the Web.
-    if(kIsWeb) return _deviceParameters;
+    if (kIsWeb) return _deviceParameters;
     if (Platform.isAndroid) {
       AndroidDeviceInfo info = await DeviceInfoPlugin().androidInfo;
       _loadAndroidParameters(info);

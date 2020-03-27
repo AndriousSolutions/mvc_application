@@ -40,21 +40,22 @@ import 'package:mvc_application/controller.dart' show Prefs;
 class AppMenu {
   static StateMVC _state;
   static Menu _menu;
-  static Menu _tail;
+//  static Menu _tail;
   static String _applicationName;
   static String _applicationVersion;
   static Widget _applicationIcon;
   static String _applicationLegalese;
   static List<Widget> _children;
 
-    static PopupMenuButton<dynamic> show(StateMVC state, {
+  static PopupMenuButton<dynamic> show(
+    StateMVC state, {
     String applicationName = "Name of you app.",
     Widget applicationIcon,
     String applicationLegalese,
     List<Widget> children,
     bool useRootNavigator = true,
     Menu menu,
-    }) {
+  }) {
     _state = state;
     _menu = menu;
     _applicationName = applicationName;
@@ -75,7 +76,7 @@ class AppMenu {
       temp.addAll(menuItems);
       menuItems = temp;
 
-      if(_menu.tailItems.isNotEmpty){
+      if (_menu.tailItems.isNotEmpty) {
         menuItems.add(PopupMenuDivider());
         menuItems.addAll(_menu.tailItems);
       }
@@ -138,7 +139,11 @@ abstract class Menu {
 
   PopupMenuButton<dynamic> show(StateMVC state, {String applicationName}) {
     this.state = state;
-    return AppMenu.show(state, applicationName: applicationName, menu: this,);
+    return AppMenu.show(
+      state,
+      applicationName: applicationName,
+      menu: this,
+    );
   }
 
   StateMVC state;

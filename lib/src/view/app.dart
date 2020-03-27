@@ -45,7 +45,8 @@ import 'package:mvc_application/mvc.dart' show AppError;
 
 import 'package:mvc_application/app.dart' show AppMVC;
 
-import 'package:mvc_application/controller.dart' show AlarmManager, ControllerMVC;
+import 'package:mvc_application/controller.dart'
+    show AlarmManager, ControllerMVC;
 
 import 'package:mvc_application/view.dart' show AppMenu, SetState;
 
