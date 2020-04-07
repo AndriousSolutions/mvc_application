@@ -39,5 +39,8 @@ export 'package:mvc_application/src/model/fileutils/installfile.dart';
 /// Remote Config
 export 'package:mvc_application/src/model/utils/remote_config.dart';
 
+/// String Encryption
+export 'package:mvc_application/src/model/utils/string_encryption.dart';
+
 // Preferences
 export 'package:prefs/prefs.dart' show Prefs;

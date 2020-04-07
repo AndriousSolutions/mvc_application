@@ -25,7 +25,7 @@ import 'dart:io' show Platform;
 import 'dart:async' show Future, StreamSubscription;
 
 import 'package:flutter/foundation.dart'
-    show Key, kIsWeb, mustCallSuper, protected;
+    show FlutterExceptionHandler, Key, kIsWeb, mustCallSuper, protected;
 
 import 'package:flutter/material.dart';
 
@@ -48,7 +48,8 @@ import 'package:mvc_application/app.dart' show AppMVC;
 import 'package:mvc_application/controller.dart'
     show AlarmManager, ControllerMVC;
 
-import 'package:mvc_application/view.dart' show AppMenu, SetState;
+import 'package:mvc_application/view.dart' as v
+    show AppMenu, ErrorHandler, ReportErrorHandler, SetState;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
@@ -69,8 +70,19 @@ typedef ErrorWidgetBuilder = Widget Function(
 
 abstract class App extends AppMVC {
   // You must supply a 'View.'
-  App({ControllerMVC con, Key key, this.loadingScreen})
-      : super(con: con, key: key);
+  App({
+    mvc.AppConMVC con,
+    Key key,
+    this.loadingScreen,
+    FlutterExceptionHandler errorHandler,
+    ErrorWidgetBuilder errorScreen,
+    v.ReportErrorHandler reportError,
+  })  : _errorHandler = v.ErrorHandler(
+            handler: errorHandler,
+            builder: errorScreen,
+            reportError: reportError),
+        super(con: con, key: key);
+  final v.ErrorHandler _errorHandler;
 
   @protected
   AppView createView();
@@ -90,6 +102,9 @@ abstract class App extends AppMVC {
 
   @override
   void initApp() {
+//    throw "This is a test!";
+    // Assign any 'default' error handling.
+    _errorHandler.init();
     super.initApp();
     AlarmManager.init();
     _vw = createView();
@@ -127,6 +142,8 @@ abstract class App extends AppMVC {
     _scaffold = null;
     _connectivitySubscription?.cancel();
     _connectivitySubscription = null;
+    // Restore the original error handling.
+    _errorHandler.dispose();
     super.dispose();
   }
 
@@ -314,7 +331,7 @@ abstract class App extends AppMVC {
     return _scaffold;
   }
 
-  static ColorSwatch get colorTheme => AppMenu.colorTheme;
+  static ColorSwatch get colorTheme => v.AppMenu.colorTheme;
 
   static getThemeData() async {
     String theme = await Prefs.getStringF('theme');
@@ -447,7 +464,7 @@ class AppView extends AppViewState<_AppWidget> {
   AppView({
     this.key,
     this.home,
-    AppController con,
+    this.con,
     List<ControllerMVC> controllers,
     GlobalKey<NavigatorState> navigatorKey,
     Map<String, WidgetBuilder> routes,
@@ -481,7 +498,9 @@ class AppView extends AppViewState<_AppWidget> {
     bool debugPaintPointersEnabled = false,
     bool debugPaintLayerBordersEnabled = false,
     bool debugRepaintRainbowEnabled = false,
+    FlutterExceptionHandler errorHandler,
     ErrorWidgetBuilder errorScreen,
+    v.ReportErrorHandler reportError,
   }) : super(
           con: con ?? AppController(),
           controllers: controllers,
@@ -514,7 +533,9 @@ class AppView extends AppViewState<_AppWidget> {
           debugPaintPointersEnabled: debugPaintPointersEnabled,
           debugPaintLayerBordersEnabled: debugPaintLayerBordersEnabled,
           debugRepaintRainbowEnabled: debugRepaintRainbowEnabled,
+          errorHandler: errorHandler,
           errorScreen: errorScreen,
+          reportError: reportError,
         ) {
     // if both useMaterial & useCupertino are set then rely on the Platform.
     _useMaterial =
@@ -523,6 +544,7 @@ class AppView extends AppViewState<_AppWidget> {
   }
   final Key key;
   Widget home;
+  final AppController con;
   // Explicitly use the Material theme
   bool useMaterial;
   bool _useMaterial;
@@ -639,10 +661,14 @@ class AppView extends AppViewState<_AppWidget> {
     super.dispose();
   }
 
-  /// Override to supply some error handling when starting up.
+  /// Override if you like to customize error handling.
   @override
   void onError(FlutterErrorDetails details) {
-    super.onError(details);
+    if (con != null) {
+      con.onError(details);
+    } else {
+      super.onError(details);
+    }
   }
 
   /// During development, if a hot reload occurs, the reassemble method is called.
@@ -720,14 +746,21 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
     this.debugPaintPointersEnabled = false,
     this.debugPaintLayerBordersEnabled = false,
     this.debugRepaintRainbowEnabled = false,
+    FlutterExceptionHandler errorHandler,
     ErrorWidgetBuilder errorScreen,
+    v.ReportErrorHandler reportError,
   }) : super(
-            controller: con,
-            controllers: controllers,
-            errorScreen: errorScreen);
+          controller: con,
+          controllers: controllers,
+        ) {
+    // Supply a customized error handling.
+    _errorHandler = v.ErrorHandler(
+        handler: errorHandler, builder: errorScreen, reportError: reportError);
+  }
 
   final AppController con;
   final List<ControllerMVC> controllers;
+  v.ErrorHandler _errorHandler;
 
   GlobalKey<NavigatorState> navigatorKey;
   Map<String, WidgetBuilder> routes;
@@ -766,17 +799,20 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   /// Provide 'the view'
   Widget build(BuildContext context);
 
-//  @mustCallSuper
-//  Future<bool> init() async {
-//    final init = await con?.init() ?? true;
-//    return init;
-//  }
+  @override
+  void initState() {
+    super.initState();
+    // Assign any 'default' error handling.
+    _errorHandler.init();
+  }
 
   @mustCallSuper
   Future<bool> init() => con?.init() ?? Future.value(true);
 
   @override
   void dispose() {
+    // Restore the original error handling.
+    _errorHandler.dispose();
     object = null;
     super.dispose();
   }
@@ -839,7 +875,7 @@ class Consumer<T extends ControllerMVC> extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => SetState(
+  Widget build(BuildContext context) => v.SetState(
       builder: (context, object) => builder(
             context,
             Controllers.of<T>(),

@@ -29,7 +29,7 @@ Like many other design patterns and architectures, MVC separates three common 'a
 Note, computer platforms themselves have come full circle in the last 40 years. From mainframes to desktop computers in the first twenty years, and then website applications to mobile apps in the last twenty years. A computer now fits in the palm of your hand, and because of this, MVC again fits as the software architecture for the apps it runs.
 ![mvcTypes](https://user-images.githubusercontent.com/32497443/77587763-8e604b00-6eb6-11ea-9033-9afdd27ef5b6.png)
 
-Implementing the MVC framework using to common example apps:
+Implementing the MVC framework using two common example apps:
 
 ##### The Counter App
 ```dart

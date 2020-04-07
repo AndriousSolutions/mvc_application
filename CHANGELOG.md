@@ -1,3 +1,14 @@
+## 1.8.0
+- Better Error Handling integration
+- runApp(); 
+- AppController onError(FlutterErrorDetails details); 
+- App _errorHandler = v.ErrorHandler(); 
+- AppView onError(FlutterErrorDetails details);
+- AppViewState _errorHandler = v.ErrorHandler();
+- AppMenu if (App.useMaterial);
+- showBox if (App.useMaterial);
+- class StringCrypt
+
 ## 1.7.1
 - Format source code
 - Update README.md

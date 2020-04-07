@@ -24,7 +24,7 @@
 export "package:mvc_application/app.dart";
 export 'package:mvc_application/model.dart';
 export 'package:mvc_application/controller.dart';
-export 'package:mvc_application/view.dart';
+export 'package:mvc_application/view.dart' hide ErrorHandler;
 
 import 'package:flutter/material.dart'
     show
@@ -54,7 +54,7 @@ import 'app.dart' show App;
 
 import 'view.dart' show AppView;
 
-import 'controller.dart' show AppController, ControllerMVC;
+import 'controller.dart' show AppConMVC, AppController;
 
 typedef CreateView = AppView Function();
 CreateView _createVW;
@@ -72,7 +72,7 @@ class MVC extends StatelessWidget {
     _createVW = createVW;
   }
   final Key key;
-  final ControllerMVC con;
+  final AppConMVC con;
   final Widget loadingScreen;
 
   Widget build(BuildContext context) => _MyApp(
@@ -83,7 +83,7 @@ class MVC extends StatelessWidget {
 }
 
 class _MyApp extends App {
-  _MyApp({Key key, ControllerMVC con, Widget loadingScreen})
+  _MyApp({Key key, AppConMVC con, Widget loadingScreen})
       : super(key: key, con: con, loadingScreen: loadingScreen);
 
   @override

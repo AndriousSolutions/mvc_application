@@ -64,10 +64,14 @@ class AppMenu {
     _applicationLegalese = applicationLegalese;
     _children = children;
 
-    List<PopupMenuEntry<dynamic>> menuItems = [
-      PopupMenuItem<dynamic>(value: 'Color', child: ColorPicker.title),
-      const PopupMenuItem<dynamic>(value: 'About', child: Text('About')),
-    ];
+    List<PopupMenuEntry<dynamic>> menuItems = [];
+
+    if (App.useMaterial)
+      menuItems.add(
+          PopupMenuItem<dynamic>(value: 'Color', child: ColorPicker.title));
+
+    menuItems.add(
+        const PopupMenuItem<dynamic>(value: 'About', child: Text('About')));
 
     if (_menu != null) {
       List<PopupMenuEntry<dynamic>> temp = [];

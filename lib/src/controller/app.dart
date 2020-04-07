@@ -20,11 +20,14 @@
 ///          Created  24 Dec 2018
 ///
 
-import 'dart:async' show Future;
+import 'dart:async' show Future, runZoned;
+import 'dart:isolate' show Isolate, RawReceivePort;
 
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/material.dart' as m
+    show ErrorWidgetBuilder, Widget, runApp;
 
-import 'package:flutter/material.dart' show mustCallSuper;
+import 'package:flutter/foundation.dart'
+    show FlutterExceptionHandler, FlutterErrorDetails, kIsWeb, mustCallSuper;
 
 import 'package:mvc_application/app.dart' show AppConMVC;
 
@@ -32,14 +35,44 @@ import 'package:mvc_application/controller.dart' show DeviceInfo;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
-import 'package:mvc_application/view.dart' show StateMVC, I10n;
+import 'package:mvc_application/view.dart' as v
+    show ErrorHandler, ReportErrorHandler, StateMVC, I10n;
 
 import 'package:mvc_application/controller.dart' show Assets;
 
 import 'package:prefs/prefs.dart' show Prefs;
 
+/// Add an Error Handler right at the start.
+runApp(
+  m.Widget app, {
+  FlutterExceptionHandler handler,
+  m.ErrorWidgetBuilder builder,
+  v.ReportErrorHandler reportError,
+}) {
+  //
+  v.ErrorHandler errorHandler = v.ErrorHandler(
+      handler: handler, builder: builder, reportError: reportError);
+
+  // Supply a report error routine if not specified.
+  reportError ??= errorHandler.reportError;
+
+  runZoned(() async {
+    m.runApp(app);
+  }, onError: reportError);
+
+  Isolate.current.addErrorListener(new RawReceivePort((dynamic pair) async {
+    var isolateError = pair as List<dynamic>;
+    await reportError(
+      isolateError.first.toString(),
+      StackTrace.fromString(isolateError.last.toString()),
+    );
+  }).sendPort);
+}
+
 class AppController extends ControllerMVC implements AppConMVC {
-  AppController([StateMVC state]) : super(state);
+  AppController([this.state]) : super(state);
+
+  final v.StateMVC state;
 
   /// Initialize any immediate 'none time-consuming' operations at the very beginning.
   void initApp() {}
@@ -56,7 +89,7 @@ class AppController extends ControllerMVC implements AppConMVC {
       // Collect Device Information
       await DeviceInfo.init();
       // Load any csv file of translations.
-      await I10n.init();
+      await v.I10n.init();
     }
     return true;
   }
@@ -73,10 +106,20 @@ class AppController extends ControllerMVC implements AppConMVC {
     Assets.dispose();
     super.dispose();
   }
+
+  /// Override if you like to customize your error handling.
+  @override
+  void onError(FlutterErrorDetails details) {
+    if (state != null) {
+      state.currentErrorFunc(details);
+    } else {
+      stateMVC.currentErrorFunc(details);
+    }
+  }
 }
 
 class ControllerMVC extends mvc.ControllerMVC with ErrorHandler {
-  ControllerMVC([StateMVC state]) : super(state);
+  ControllerMVC([v.StateMVC state]) : super(state);
 }
 
 mixin ErrorHandler {

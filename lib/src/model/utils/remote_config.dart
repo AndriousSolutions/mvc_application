@@ -23,32 +23,40 @@
 
 import 'package:flutter/material.dart' show mustCallSuper, VoidCallback;
 
-import 'package:mvc_application/view.dart' show App;
+import 'package:package_info/package_info.dart' show PackageInfo;
+
+import 'string_encryption.dart' show StringCrypt;
 
 import 'package:firebase_remote_config/firebase_remote_config.dart' as r;
 
 export 'package:firebase_remote_config/firebase_remote_config.dart'
     show LastFetchStatus, RemoteConfigSettings, RemoteConfigValue;
 
-import 'package:flutter_string_encryption/flutter_string_encryption.dart';
-
 class RemoteConfig {
   RemoteConfig({
-    this.defaults,
-    this.expiration = const Duration(seconds: 1),
-    this.mark,
+    String key,
+    Map<String, dynamic> defaults,
+    Duration expiration,
   }) {
-    _crypto = PlatformStringCryptor();
-    _mark = mark;
+    if (key != null && key.trim().isNotEmpty) _key = key;
+    if (defaults != null && defaults.isNotEmpty) _defaults = defaults;
+    if (expiration == null) {
+      _expiration = const Duration(hours: 12);
+    } else {
+      _expiration = expiration;
+    }
   }
-  final Map<String, dynamic> defaults;
-  final Duration expiration;
-  PlatformStringCryptor _crypto;
-  String mark;
-  String _mark;
+  String _key;
+  Map<String, dynamic> _defaults;
+  Duration _expiration;
+
+  StringCrypt _crypto;
 
   bool get isInit => _init;
   bool _init = false;
+
+  static const INIT_ERROR =
+      "Class RemoteConfig: Call init() before other functions and getters.";
 
   bool get activated => _activated;
   bool _activated = false;
@@ -64,19 +72,24 @@ class RemoteConfig {
       // Gets the instance of RemoteConfig for the default Firebase app.
       _remoteConfig ??= await r.RemoteConfig.instance;
 
-      if (defaults != null) _remoteConfig.setDefaults(defaults);
+      if (_defaults != null) _remoteConfig.setDefaults(_defaults);
 
-      await _remoteConfig.fetch(expiration: expiration);
+      await _remoteConfig.fetch(expiration: _expiration);
 
       _activated = await _remoteConfig.activateFetched();
 
-      _mark ??= App.packageName.replaceAll(".", "");
+      if (_key == null) {
+        PackageInfo info = await PackageInfo.fromPlatform();
+        _key = _remoteConfig.getString(info.packageName.replaceAll(".", ""));
+      }
 
-      _mark = _remoteConfig?.getString(_mark);
-
-      // You will need an encryption key. Save this.
-      if (_mark == null || _mark.isEmpty)
-        _mark = await _crypto.generateRandomKey();
+      if (_key == null || _key.trim().isEmpty) {
+        _crypto = StringCrypt();
+        // You will need an encryption key. Save this.
+        _key = await StringCrypt.generateRandomKey();
+      } else {
+        _crypto = StringCrypt(key: _key);
+      }
 
       _init = true;
       // Fetch throttled.
@@ -93,83 +106,99 @@ class RemoteConfig {
   @mustCallSuper
   void dispose() => _remoteConfig?.dispose();
 
-  DateTime get lastFetchTime => _remoteConfig?.lastFetchTime;
+  DateTime get lastFetchTime {
+    assert(_remoteConfig != null, INIT_ERROR);
+    return _remoteConfig?.lastFetchTime;
+  }
 
-  r.LastFetchStatus get lastFetchStatus => _remoteConfig?.lastFetchStatus;
+  r.LastFetchStatus get lastFetchStatus {
+    assert(_remoteConfig != null, INIT_ERROR);
+    return _remoteConfig?.lastFetchStatus;
+  }
 
-  r.RemoteConfigSettings get remoteConfigSettings =>
-      _remoteConfig?.remoteConfigSettings;
+  r.RemoteConfigSettings get remoteConfigSettings {
+    assert(_remoteConfig != null, INIT_ERROR);
+    return _remoteConfig?.remoteConfigSettings;
+  }
 
-  Future<void> setConfigSettings(r.RemoteConfigSettings remoteConfigSettings) =>
-      _remoteConfig?.setConfigSettings(remoteConfigSettings);
+  Future<void> setConfigSettings(r.RemoteConfigSettings remoteConfigSettings) {
+    assert(_remoteConfig != null, INIT_ERROR);
+    return _remoteConfig?.setConfigSettings(remoteConfigSettings);
+  }
 
   // Set the default values
   Future<void> setDefaults(Map<String, dynamic> defaults) async {
-    if (defaults != null) await _remoteConfig.setDefaults(defaults);
+    if (defaults != null) {
+      assert(_remoteConfig != null, INIT_ERROR);
+      await _remoteConfig?.setDefaults(defaults);
+    }
   }
 
-  String getString(String key) => _remoteConfig?.getString(key);
+  String getString(String key) {
+    assert(_remoteConfig != null, INIT_ERROR);
+    return _remoteConfig?.getString(key);
+  }
 
-  String getStringed(String key) => _remoteConfig?.getString(key);
+  Future<String> getStringed(String param, [String key]) async {
+    assert(_remoteConfig != null, INIT_ERROR);
+    param = _remoteConfig?.getString(param);
+    String string = await _crypto.de(param, key);
+    if (_crypto.hasError) getError(_crypto.getError());
+    return string;
+  }
 
-  int getInt(String key) => _remoteConfig?.getInt(key);
+  int getInt(String key) {
+    assert(_remoteConfig != null, INIT_ERROR);
+    return _remoteConfig?.getInt(key);
+  }
 
-  double getDouble(String key) => _remoteConfig?.getDouble(key);
+  double getDouble(String key) {
+    assert(_remoteConfig != null, INIT_ERROR);
+    return _remoteConfig?.getDouble(key);
+  }
 
-  bool getBool(String key) => _remoteConfig?.getBool(key);
+  bool getBool(String key) {
+    assert(_remoteConfig != null, INIT_ERROR);
+    return _remoteConfig?.getBool(key);
+  }
 
-  r.RemoteConfigValue getValue(String key) => _remoteConfig?.getValue(key);
+  r.RemoteConfigValue getValue(String key) {
+    assert(_remoteConfig != null, INIT_ERROR);
+    return _remoteConfig?.getValue(key);
+  }
 
-  Map<String, r.RemoteConfigValue> getAll() => _remoteConfig?.getAll();
+  Map<String, r.RemoteConfigValue> getAll() {
+    assert(_remoteConfig != null, INIT_ERROR);
+    return _remoteConfig?.getAll();
+  }
 
-  void addListener(VoidCallback listener) =>
-      _remoteConfig?.addListener(listener);
+  void addListener(VoidCallback listener) {
+    assert(_remoteConfig != null, INIT_ERROR);
+    _remoteConfig?.addListener(listener);
+  }
 
-  void removeListener(VoidCallback listener) =>
-      _remoteConfig?.removeListener(listener);
+  void removeListener(VoidCallback listener) {
+    assert(_remoteConfig != null, INIT_ERROR);
+    _remoteConfig?.removeListener(listener);
+  }
 
   bool get hasError => _error != null;
+
   bool get inError => _error != null;
   Object _error;
 
   Exception getError([Object error]) {
+    // Return the stored exception
     Exception ex = _error;
+    // Empty the stored exception
     if (error == null) {
       _error = null;
     } else {
       if (error is! Exception) error = Exception(error.toString());
       _error = error;
     }
+    // Return the exception just past if any.
     if (ex == null) ex = error;
     return ex;
   }
-
-  Future<String> en(String data, [String mark]) => encrypt(data, mark);
-
-  Future<String> encrypt(String data, [String mark]) async {
-    String cryp;
-    try {
-      cryp = await _crypto.encrypt(data, mark ??= _mark);
-    } catch (ex) {
-      cryp = "";
-      getError(ex);
-    }
-    return cryp;
-  }
-
-  Future<String> de(String data, [String mark]) => decrypt(data, mark);
-
-  Future<String> decrypt(String data, [String mark]) async {
-    String decryp;
-    try {
-      decryp = await _crypto.decrypt(data, mark ??= _mark);
-    } catch (ex) {
-      decryp = "";
-      getError(ex);
-    }
-    return decryp;
-  }
-
-  // You will need a key to decrypt things and so on.
-  Future<String> generateRandomKey() => _crypto.generateRandomKey();
 }
