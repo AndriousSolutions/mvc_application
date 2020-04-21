@@ -972,12 +972,11 @@ class ScheduleNotifications with HandleError {
     int badgeNumber,
     List<IOSNotificationAttachment> attachments,
   }) {
-
     day ??= _day;
 
     notificationTime ??= _notificationTime;
 
-    if(day == null || notificationTime == null) return -1;
+    if (day == null || notificationTime == null) return -1;
 
     //
     var notificationSpecifics = _notificationDetails(
