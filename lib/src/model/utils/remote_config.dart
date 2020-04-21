@@ -64,7 +64,7 @@ class RemoteConfig {
   r.RemoteConfig get instance => _remoteConfig;
   r.RemoteConfig _remoteConfig;
 
-  Future<bool> init() async {
+  Future<bool> initAsync() async {
     // Already called.
     if (_init) return _init;
 

@@ -38,15 +38,14 @@ import 'package:flutter/widgets.dart';
 import 'package:connectivity/connectivity.dart'
     show Connectivity, ConnectivityResult;
 
-import 'package:mvc_application/src/controller/app.dart'
-    show AppController, ErrorHandler;
+import 'package:mvc_application/controller.dart'
+    show AppController, HandleError;
 
 import 'package:mvc_application/mvc.dart' show AppError;
 
 import 'package:mvc_application/app.dart' show AppMVC;
 
-import 'package:mvc_application/controller.dart'
-    show AlarmManager, ControllerMVC;
+import 'package:mvc_application/controller.dart' show ControllerMVC;
 
 import 'package:mvc_application/view.dart' as v
     show AppMenu, ErrorHandler, ReportErrorHandler, SetState;
@@ -102,11 +101,10 @@ abstract class App extends AppMVC {
 
   @override
   void initApp() {
-//    throw "This is a test!";
     // Assign any 'default' error handling.
     _errorHandler.init();
     super.initApp();
-    AlarmManager.init();
+//    AlarmManager.init();
     _vw = createView();
     _vw?.con?.initApp();
   }
@@ -116,14 +114,14 @@ abstract class App extends AppMVC {
     Assets.init(context);
     _context = context;
     return FutureBuilder<bool>(
-      future: init(),
+      future: initAsync(),
       initialData: false,
       builder: (_, snapshot) => _App.show(snapshot, loadingScreen),
     );
   }
 
   @override
-  Future<bool> init() async {
+  Future<bool> initAsync() async {
     if (hotLoad) {
       _vw = createView();
       _vw?.con?.initApp();
@@ -131,8 +129,8 @@ abstract class App extends AppMVC {
       await _initInternal();
       if (!kIsWeb) _packageInfo = await PackageInfo.fromPlatform();
     }
-    _isInit = await super.init();
-    if (_isInit) _isInit = await _vw.init();
+    _isInit = await super.initAsync();
+    if (_isInit) _isInit = await _vw.initAsync();
     return _isInit;
   }
 
@@ -331,6 +329,7 @@ abstract class App extends AppMVC {
     return _scaffold;
   }
 
+  // AppMenu has a colour picker.
   static ColorSwatch get colorTheme => v.AppMenu.colorTheme;
 
   static getThemeData() async {
@@ -448,9 +447,13 @@ class _App {
       }
       return _AppWidget();
     } else {
-      return MaterialApp(
-          color: Colors.white,
-          home: Container(child: Center(child: CircularProgressIndicator())));
+      if (App.useMaterial) {
+        return MaterialApp(
+            color: Colors.white,
+            home: Container(child: Center(child: CircularProgressIndicator())));
+      } else {
+        return Center(child: CupertinoActivityIndicator());
+      }
     }
   }
 }
@@ -664,6 +667,7 @@ class AppView extends AppViewState<_AppWidget> {
   /// Override if you like to customize error handling.
   @override
   void onError(FlutterErrorDetails details) {
+    // Note, the Controller's Error Handler if any takes precedence.
     if (con != null) {
       con.onError(details);
     } else {
@@ -806,9 +810,6 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
     _errorHandler.init();
   }
 
-  @mustCallSuper
-  Future<bool> init() => con?.init() ?? Future.value(true);
-
   @override
   void dispose() {
     // Restore the original error handling.
@@ -885,7 +886,7 @@ class Consumer<T extends ControllerMVC> extends StatelessWidget {
 
 /// Supply an MVC State object that hooks into the App class.
 abstract class StateMVC<T extends StatefulWidget> extends mvc.StateMVC<T>
-    with ErrorHandler {
+    with HandleError {
   //
   StateMVC([ControllerMVC controller]) : super(controller);
 

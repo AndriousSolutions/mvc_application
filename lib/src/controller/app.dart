@@ -31,7 +31,7 @@ import 'package:flutter/foundation.dart'
 
 import 'package:mvc_application/app.dart' show AppConMVC;
 
-import 'package:mvc_application/controller.dart' show DeviceInfo;
+import 'package:mvc_application/controller.dart' show DeviceInfo, HandleError;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
@@ -81,7 +81,7 @@ class AppController extends ControllerMVC implements AppConMVC {
   /// Initialize items essential to the Mobile Applications.
   /// Called by the _App.init() function.
   @mustCallSuper
-  Future<bool> init() async {
+  Future<bool> initAsync() async {
     // Initialize System Preferences
     await Prefs.init();
     // If not running on the Web.
@@ -118,29 +118,6 @@ class AppController extends ControllerMVC implements AppConMVC {
   }
 }
 
-class ControllerMVC extends mvc.ControllerMVC with ErrorHandler {
+class ControllerMVC extends mvc.ControllerMVC with HandleError {
   ControllerMVC([v.StateMVC state]) : super(state);
-}
-
-mixin ErrorHandler {
-  /// Return the 'last' error if any.
-  Exception getError([dynamic error]) {
-    Exception ex = _error;
-    if (error == null) {
-      _error = null;
-    } else {
-      if (error is! Exception) {
-        _error = Exception(error.toString());
-      } else {
-        _error = error;
-      }
-      ex ??= _error;
-    }
-    return ex;
-  }
-
-  /// Determine if app is 'in error.'
-  bool get inError => _error != null;
-  bool get hasError => _error != null;
-  Exception _error;
 }

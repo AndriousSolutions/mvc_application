@@ -44,7 +44,7 @@ class Controller extends ControllerMVC {
 
   @override
   void initState() {
-    init();
+    ContactsService.initState();
     _sortedAlpha = Prefs.getBool(_SORT_KEY, false);
     list.refresh();
   }
@@ -54,8 +54,6 @@ class Controller extends ControllerMVC {
     disposed();
     super.dispose();
   }
-
-  static void init() => ContactsService.initState();
 
   static void disposed() => ContactsService.dispose();
 

@@ -1,6 +1,6 @@
 name: mvc_application
 description: Flutter Framework for Applications using the MVC Design Pattern
-version: 1.8.0
+version: 1.9.0
 author: Greg Perry <support@andrioussolutions.com>
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
@@ -29,16 +29,16 @@ dependencies:
   flutter_material_color_picker: ^1.0.0
 
   # https://pub.dartlang.org/packages/mvc_pattern#-changelog-tab-
-  mvc_pattern: ^4.0.0
+  mvc_pattern: ^5.0.0
   #  path: ../../packages/mvc_pattern
 
   # https://pub.dartlang.org/packages/prefs#-changelog-tab-
   prefs: ^3.0.0
-#      path: ../../libs/prefs
+  #    path: ../../libs/prefs
 
   # https://pub.dev/packages/dbutils#-changelog-tab-
   dbutils: ^2.0.0
-#      path: ../../libs/dbutils
+  #    path: ../../libs/dbutils
 
   # https://pub.dev/packages/i10n_translator
   i10n_translator: ^1.0.0
@@ -53,8 +53,11 @@ dependencies:
   # https://pub.dev/packages/flutter_string_encryption
   flutter_string_encryption: ^0.3.0
 
-  # https://pub.dev/packages/android_alarm_manager
-  android_alarm_manager: ^0.4.0
+#  # https://pub.dev/packages/android_alarm_manager
+#  android_alarm_manager: ^0.4.0
+
+  # https://pub.dev/packages/flutter_local_notifications
+  flutter_local_notifications: ^1.4.0
 
 dev_dependencies:
   flutter_test:

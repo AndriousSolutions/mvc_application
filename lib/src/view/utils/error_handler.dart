@@ -55,7 +55,8 @@ import 'package:flutter/rendering.dart'
         TextAlign,
         TextDirection;
 
-typedef ReportErrorHandler = Future<void> Function(dynamic exception, StackTrace stack);
+typedef ReportErrorHandler = Future<void> Function(
+    dynamic exception, StackTrace stack);
 
 ///
 ///
@@ -102,8 +103,7 @@ class ErrorHandler {
     ErrorWidgetBuilder builder,
   }) {
     // Assign the default ErrorWidget if not assigned yet.
-    if (builder == null && !_initBuilder)
-      builder = _defaultErrorWidget;
+    if (builder == null && !_initBuilder) builder = _defaultErrorWidget;
 
     set(builder: builder, handler: handler);
   }
@@ -187,12 +187,10 @@ class ErrorHandler {
     return inDebugMode;
   }
 
-
   //TODO Complete this routine.
   Future<void> reportError(dynamic error, dynamic stackTrace) async {
-    if(_reportError == null){
-
-    }else{
+    if (_reportError == null) {
+    } else {
       await _reportError(error, stackTrace);
     }
   }
@@ -326,7 +324,7 @@ class _ErrorBox extends RenderBox {
     }());
     return result;
   }
-  
+
   /// The text style to use when painting [RenderBox] objects.
   /// a dark gray sans-serif font.
   static ui.TextStyle textStyle = _initTextStyle();

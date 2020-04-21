@@ -1,3 +1,14 @@
+## 2.0.0
+ April 21, 2020
+ 
+## 1.9.0
+ April 21, 2020
+- Introduced the mixin HandleError
+- Replaced the class AlarmManager with flutter_local_notifications
+- Introduced Future<bool> initAsync() async in class App
+- Introduced CupertinoActivityIndicator() in class _App
+- Introduced new class ScheduleNotifications
+
 ## 1.8.0
 - Better Error Handling integration
 - runApp(); 
