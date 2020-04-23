@@ -44,7 +44,7 @@ class Controller extends ControllerMVC {
 
   @override
   void initState() {
-    ContactsService.initState();
+//    ContactsService.initState();
     _sortedAlpha = Prefs.getBool(_SORT_KEY, false);
     list.refresh();
   }
@@ -55,14 +55,14 @@ class Controller extends ControllerMVC {
     super.dispose();
   }
 
-  static void disposed() => ContactsService.dispose();
+  static void disposed() {} //=> ContactsService.dispose();
 
   @override
   void onError(FlutterErrorDetails details) =>
       FlutterError.dumpErrorToConsole(details);
 
   static Future<List<Contact>> getContacts() async {
-    List<Contact> contacts = await ContactsService.getContacts();
+    List<Contact> contacts = []; //await ContactsService.getContacts();
     if (_sortedAlpha) contacts.sort();
     return contacts;
   }

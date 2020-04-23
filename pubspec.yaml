@@ -1,6 +1,6 @@
 name: mvc_application
 description: Flutter Framework for Applications using the MVC Design Pattern
-version: 1.9.0
+version: 2.0.0
 author: Greg Perry <support@andrioussolutions.com>
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
@@ -12,49 +12,38 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # https://pub.dartlang.org/packages/connectivity#-changelog-tab-
+  # https://pub.dartlang.org/packages/connectivity
   connectivity: ^0.4.0
 
-  # https://pub.dartlang.org/packages/url_launcher#-changelog-tab-
+  # https://pub.dartlang.org/packages/url_launcher
   # used in AppSettings.dart
   url_launcher: ^5.0.0
 
-  # https://pub.dartlang.org/packages/package_info#-changelog-tab-
-  package_info: '>=0.4.0 <2.0.0'
+  # https://pub.dartlang.org/packages/package_info
+  package_info: ^0.4.0
 
-  # https://pub.dartlang.org/packages/device_info#-changelog-tab-
+  # https://pub.dev/packages/path_provider
+  path_provider: ^1.0.0
+
+  # https://pub.dartlang.org/packages/device_info
   device_info: ^0.4.0
 
-  # https://pub.dev/packages/flutter_material_color_picker#-changelog-tab-
+  # https://pub.dev/packages/flutter_material_color_picker
   flutter_material_color_picker: ^1.0.0
 
-  # https://pub.dartlang.org/packages/mvc_pattern#-changelog-tab-
+  # https://pub.dartlang.org/packages/mvc_pattern
   mvc_pattern: ^5.0.0
   #  path: ../../packages/mvc_pattern
 
-  # https://pub.dartlang.org/packages/prefs#-changelog-tab-
+  # https://pub.dartlang.org/packages/prefs
   prefs: ^3.0.0
   #    path: ../../libs/prefs
 
-  # https://pub.dev/packages/dbutils#-changelog-tab-
-  dbutils: ^2.0.0
-  #    path: ../../libs/dbutils
-
-  # https://pub.dev/packages/i10n_translator
-  i10n_translator: ^1.0.0
-  #    path: ../../packages/i10n_translator
-
-  # https://pub.dartlang.org/packages/uuid#-changelog-tab-
+  # https://pub.dartlang.org/packages/uuid
   uuid: ^2.0.0
-
-  # https://pub.dev/packages/firebase_remote_config
-  firebase_remote_config: ^0.3.0
 
   # https://pub.dev/packages/flutter_string_encryption
   flutter_string_encryption: ^0.3.0
-
-#  # https://pub.dev/packages/android_alarm_manager
-#  android_alarm_manager: ^0.4.0
 
   # https://pub.dev/packages/flutter_local_notifications
   flutter_local_notifications: ^1.4.0

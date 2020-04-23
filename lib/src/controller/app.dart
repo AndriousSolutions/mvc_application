@@ -88,8 +88,6 @@ class AppController extends ControllerMVC implements AppConMVC {
     if (!kIsWeb) {
       // Collect Device Information
       await DeviceInfo.init();
-      // Load any csv file of translations.
-      await v.I10n.init();
     }
     return true;
   }

@@ -84,14 +84,15 @@ class ContactEdit extends ContactList {
     if (contact == null) {
       contact = _contact;
     }
-    return ContactsService.addContact(contact.toMap);
+//    return ContactsService.addContact(contact.toMap);
   }
 
   Future<bool> delete([Contact contact]) async {
     if (contact == null) {
       contact = _contact;
     }
-    bool delete = await ContactsService.deleteContact(contact.toMap);
+    bool delete = false;
+//    bool delete = await ContactsService.deleteContact(contact.toMap);
     return delete;
   }
 
@@ -99,7 +100,8 @@ class ContactEdit extends ContactList {
     if (contact == null) {
       contact = _contact;
     }
-    return ContactsService.undeleteContact(contact.toMap);
+    return Future.value(-1);
+//    return ContactsService.undeleteContact(contact.toMap);
   }
 }
 

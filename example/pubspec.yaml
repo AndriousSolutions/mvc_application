@@ -10,8 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # https://pub.dartlang.org/packages/sqflite#-changelog-tab-
-  sqflite: ^1.1.6+2
+#  # https://pub.dev/packages/dbutils
+#  dbutils: ^2.0.0
 
   mvc_application:
     path: ../../mvc_application

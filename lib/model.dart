@@ -21,26 +21,14 @@
 ///
 ///
 
-/// dbutils library
-export 'package:dbutils/db_interface.dart';
-
-export 'package:dbutils/firestore_db.dart';
-
-export 'package:dbutils/sqlite_db.dart' hide Func;
-
-export 'package:dbutils/firebase_db.dart';
-
 /// file utils
 export 'package:mvc_application/src/model/fileutils/files.dart';
 
 /// Install file
 export 'package:mvc_application/src/model/fileutils/installfile.dart';
 
-/// Remote Config
-export 'package:mvc_application/src/model/utils/remote_config.dart';
-
 /// String Encryption
 export 'package:mvc_application/src/model/utils/string_encryption.dart';
 
-// Preferences
+/// Preferences
 export 'package:prefs/prefs.dart' show Prefs;
