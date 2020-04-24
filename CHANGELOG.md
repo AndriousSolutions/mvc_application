@@ -1,3 +1,7 @@
+## 2.0.2
+ April 23, 2020
+- Removed DialogBox.dart and showCupertinoDatePicker.dart to fix pub.dev bug.
+
 ## 2.0.1
  April 23, 2020
 - DialogBox.dart return 'Future<bool>'

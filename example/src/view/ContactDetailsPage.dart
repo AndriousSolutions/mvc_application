@@ -66,9 +66,9 @@ class ContactDetailsPage extends StatelessWidget {
   }
   final Object contact;
 
-  final double _appBarHeight = 256.0;
-
-  final AppBarBehavior _appBarBehavior = AppBarBehavior.pinned;
+//  final double _appBarHeight = 256.0;
+//
+//  final AppBarBehavior _appBarBehavior = AppBarBehavior.pinned;
 
   @override
   Widget build(BuildContext context) {
@@ -83,14 +83,14 @@ class ContactDetailsPage extends StatelessWidget {
               FlatButton(
                   child: Icon(Icons.delete, color: Colors.white),
                   onPressed: () {
-                    showBox(text: 'Delete this contact?', context: context)
-                        .then((bool delete) {
-                      if (delete)
-                        Controller.delete(contact).then((bool delete) {
-                          if (delete) Controller.list.refresh();
-                          Navigator.of(context).pop();
-                        });
-                    });
+//                    showBox(text: 'Delete this contact?', context: context)
+//                        .then((bool delete) {
+//                      if (delete)
+//                        Controller.delete(contact).then((bool delete) {
+//                          if (delete) Controller.list.refresh();
+//                          Navigator.of(context).pop();
+//                        });
+//                    });
                   }),
             ]),
             bottomNavigationBar: SimpleBottomAppBar(
