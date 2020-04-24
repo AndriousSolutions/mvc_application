@@ -1,3 +1,8 @@
+## 2.0.1
+ April 23, 2020
+- DialogBox.dart return 'Future<bool>'
+- app.dart removed 'I10n' and 'ErrorHandler'
+ 
 ## 2.0.0
  April 21, 2020
 - Removed the packages, dbutils, i10n_translator, firebase_remote_config, android_alarm_manager

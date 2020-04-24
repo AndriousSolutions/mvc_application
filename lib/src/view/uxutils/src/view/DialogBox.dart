@@ -44,7 +44,7 @@ Future<bool> showBox({
   final ThemeData theme = Theme.of(context);
   final TextStyle dialogTextStyle =
       theme.textTheme.subtitle1.copyWith(color: theme.textTheme.caption.color);
-  if (App.useMaterial)
+  if (App.useMaterial) {
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -66,7 +66,7 @@ Future<bool> showBox({
                 }),
           ]),
     );
-  if (App.useCupertino)
+  } else {
     return showCupertinoDialog<bool>(
       context: context,
       builder: (BuildContext context) => CupertinoAlertDialog(
@@ -88,6 +88,7 @@ Future<bool> showBox({
                 }),
           ]),
     );
+  }
 }
 
 void dialogBox({

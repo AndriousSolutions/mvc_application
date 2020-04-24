@@ -36,7 +36,7 @@ import 'package:mvc_application/controller.dart' show DeviceInfo, HandleError;
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
 import 'package:mvc_application/view.dart' as v
-    show ErrorHandler, ReportErrorHandler, StateMVC, I10n;
+    show ErrorHandler, ReportErrorHandler, StateMVC;
 
 import 'package:mvc_application/controller.dart' show Assets;
 
