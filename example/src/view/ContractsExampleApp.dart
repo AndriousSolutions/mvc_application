@@ -23,11 +23,11 @@
 
 import 'package:flutter/material.dart' show BuildContext;
 
-import 'package:mvc_application/mvc.dart' show ViewMVC;
+import 'package:mvc_application/view.dart' show AppView;
 
 import '../../view.dart' show AddContactPage, ContactListPage;
 
-class ContactsExampleApp extends ViewMVC {
+class ContactsExampleApp extends AppView {
   ContactsExampleApp()
       : super(
             title: 'Contacts Plugin Example',

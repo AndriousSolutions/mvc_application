@@ -41,14 +41,10 @@ import 'package:connectivity/connectivity.dart'
 import 'package:mvc_application/controller.dart'
     show AppController, HandleError;
 
-import 'package:mvc_application/mvc.dart' show AppError;
-
-import 'package:mvc_application/app.dart' show AppMVC;
-
 import 'package:mvc_application/controller.dart' show ControllerMVC;
 
 import 'package:mvc_application/view.dart' as v
-    show AppMenu, ErrorHandler, ReportErrorHandler, SetState;
+    show AppMenu, AppMVC, ErrorHandler, ReportErrorHandler, SetState;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
@@ -67,7 +63,7 @@ import 'package:flutter/rendering.dart' as debugPaint;
 typedef ErrorWidgetBuilder = Widget Function(
     FlutterErrorDetails flutterErrorDetails);
 
-abstract class App extends AppMVC {
+abstract class App extends v.AppMVC {
   // You must supply a 'View.'
   App({
     mvc.AppConMVC con,
@@ -86,8 +82,7 @@ abstract class App extends AppMVC {
   @protected
   AppView createView();
 
-  // Not a good idea I don't think, Greg. gp
-//  static AppView get appView => _vw;
+  static AppView get vw => _vw;
   static AppView _vw;
 
   static AsyncSnapshot get snapshot => _snapshot;
@@ -104,7 +99,6 @@ abstract class App extends AppMVC {
     // Assign any 'default' error handling.
     _errorHandler.init();
     super.initApp();
-//    AlarmManager.init();
     _vw = createView();
     _vw?.con?.initApp();
   }
@@ -151,13 +145,13 @@ abstract class App extends AppMVC {
 
   // Use Material UI when explicitly specified or even when running in iOS
   static bool get useMaterial =>
-      _vw._useMaterial ||
+      _vw.useMaterial ||
       (Platform.isAndroid && !_vw.switchUI) ||
       (Platform.isIOS && _vw.switchUI);
 
   // Use Cupertino UI when explicitly specified or even when running in Android
   static bool get useCupertino =>
-      _vw._useCupertino ||
+      _vw.useCupertino ||
       (Platform.isIOS && !_vw.switchUI) ||
       (Platform.isAndroid && _vw.switchUI);
 
@@ -314,7 +308,7 @@ abstract class App extends AppMVC {
   static String get buildNumber => _packageInfo?.buildNumber;
 
   /// Determines if running in an IDE or in production.
-  static bool get inDebugger => AppMVC.inDebugger;
+  static bool get inDebugger => v.AppMVC.inDebugger;
 
   /// Refresh the root State object, AppView.
   static void refresh() => _vw.refresh();
@@ -434,7 +428,6 @@ abstract class App extends AppMVC {
 
 class _App {
   static Widget home;
-
   static Widget show(AsyncSnapshot snapshot, Widget loading) {
     if (snapshot.hasError) {
       App._vw.home = AppError(snapshot.error).home;
@@ -469,6 +462,7 @@ class AppView extends AppViewState<_AppWidget> {
     this.home,
     this.con,
     List<ControllerMVC> controllers,
+    Object object,
     GlobalKey<NavigatorState> navigatorKey,
     Map<String, WidgetBuilder> routes,
     String initialRoute,
@@ -486,27 +480,28 @@ class AppView extends AppViewState<_AppWidget> {
     Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates,
     LocaleResolutionCallback localeResolutionCallback,
     Iterable<Locale> supportedLocales,
-    this.useMaterial = false,
-    this.useCupertino = false,
-    this.switchUI = false,
-    bool debugShowMaterialGrid = false,
-    bool showPerformanceOverlay = false,
-    bool checkerboardRasterCacheImages = false,
-    bool checkerboardOffscreenLayers = false,
-    bool showSemanticsDebugger = false,
-    bool debugShowCheckedModeBanner = true,
-    bool debugShowWidgetInspector = false,
-    bool debugPaintSizeEnabled = false,
-    bool debugPaintBaselinesEnabled = false,
-    bool debugPaintPointersEnabled = false,
-    bool debugPaintLayerBordersEnabled = false,
-    bool debugRepaintRainbowEnabled = false,
+    this.useMaterial,
+    this.useCupertino,
+    this.switchUI,
+    bool debugShowMaterialGrid,
+    bool showPerformanceOverlay,
+    bool checkerboardRasterCacheImages,
+    bool checkerboardOffscreenLayers,
+    bool showSemanticsDebugger,
+    bool debugShowCheckedModeBanner,
+    bool debugShowWidgetInspector,
+    bool debugPaintSizeEnabled,
+    bool debugPaintBaselinesEnabled,
+    bool debugPaintPointersEnabled,
+    bool debugPaintLayerBordersEnabled,
+    bool debugRepaintRainbowEnabled,
     FlutterExceptionHandler errorHandler,
     ErrorWidgetBuilder errorScreen,
     v.ReportErrorHandler reportError,
   }) : super(
           con: con ?? AppController(),
           controllers: controllers,
+          object: object,
           navigatorKey: navigatorKey,
           routes: routes,
           initialRoute: initialRoute,
@@ -519,7 +514,7 @@ class AppView extends AppViewState<_AppWidget> {
           theme: theme,
           darkTheme: darkTheme,
           themeMode: themeMode,
-          color: color ?? Colors.white,
+          color: color,
           locale: locale,
           localizationsDelegates: localizationsDelegates,
           localeResolutionCallback: localeResolutionCallback,
@@ -540,22 +535,26 @@ class AppView extends AppViewState<_AppWidget> {
           errorScreen: errorScreen,
           reportError: reportError,
         ) {
+    // In case null was explicilty passed in.
+    if (useMaterial == null) useMaterial = false;
+    if (useCupertino == null) useCupertino = false;
+    if (switchUI == null) switchUI = false;
+
     // if both useMaterial & useCupertino are set then rely on the Platform.
-    _useMaterial =
-        useMaterial && (!useCupertino || Platform.isAndroid || kIsWeb);
-    _useCupertino = useCupertino && (!_useMaterial || Platform.isIOS);
+    useMaterial =
+        !useCupertino && (useMaterial || Platform.isAndroid || kIsWeb);
+    useCupertino = !useMaterial && (useCupertino || Platform.isIOS);
+    switchUI = switchUI || (Platform.isAndroid && !useMaterial) || (Platform.isIOS && !useCupertino);
   }
   final Key key;
   Widget home;
   final AppController con;
   // Explicitly use the Material theme
   bool useMaterial;
-  bool _useMaterial;
   // Explicitly use the Cupertino theme
   bool useCupertino;
-  bool _useCupertino;
   // Use Cupertino UI in Android and vice versa.
-  final bool switchUI;
+  bool switchUI;
 
   @override
   Widget buildView(BuildContext context) {
@@ -578,16 +577,16 @@ class AppView extends AppViewState<_AppWidget> {
         key: key ?? App.materialKey,
         navigatorKey: navigatorKey ?? onNavigatorKey(),
         home: home,
-        routes: routes ?? onRoutes(),
+        routes: routes ?? onRoutes() ?? const <String, WidgetBuilder>{},
         initialRoute: initialRoute ?? onInitialRoute(),
         onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
         onUnknownRoute: onUnknownRoute ?? onOnUnknownRoute(),
-        navigatorObservers: navigatorObservers ?? onNavigatorObservers(),
+        navigatorObservers: navigatorObservers ?? onNavigatorObservers() ?? const <NavigatorObserver>[],
         builder: builder ?? onBuilder(),
-        title: title ?? onTitle(),
+        title: title ?? onTitle() ?? '',
         onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
-        color: color ?? onColor(),
-        theme: iOSTheme ?? oniOSTheme(),
+        color: color ?? onColor() ?? Colors.white,
+        theme: iOSTheme ?? oniOSTheme() ?? App.iOSTheme,
         locale: locale ?? onLocale(),
         localizationsDelegates:
             localizationsDelegates ?? onLocalizationsDelegates(),
@@ -617,18 +616,18 @@ class AppView extends AppViewState<_AppWidget> {
         key: key ?? App.materialKey,
         navigatorKey: navigatorKey ?? onNavigatorKey(),
         home: home,
-        routes: routes ?? onRoutes(),
+        routes: routes ?? onRoutes() ?? const <String, WidgetBuilder>{},
         initialRoute: initialRoute ?? onInitialRoute(),
         onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
         onUnknownRoute: onUnknownRoute ?? onOnUnknownRoute(),
-        navigatorObservers: navigatorObservers ?? onNavigatorObservers(),
+        navigatorObservers: navigatorObservers ?? onNavigatorObservers() ?? const <NavigatorObserver>[],
         builder: builder ?? onBuilder(),
-        title: title ?? onTitle(),
+        title: title ?? onTitle() ?? '',
         onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
-        color: color ?? onColor(),
-        theme: theme ?? onTheme(),
+        color: color ?? onColor() ?? Colors.white,
+        theme: theme ?? onTheme() ?? App.theme,
         darkTheme: darkTheme ?? onDarkTheme(),
-        themeMode: themeMode ?? onThemeMode(),
+        themeMode: themeMode ?? onThemeMode() ?? ThemeMode.system,
         locale: locale ?? onLocale(),
         localizationsDelegates:
             localizationsDelegates ?? onLocalizationsDelegates(),
@@ -676,7 +675,6 @@ class AppView extends AppViewState<_AppWidget> {
   }
 
   /// During development, if a hot reload occurs, the reassemble method is called.
-  @mustCallSuper
   @override
   void reassemble() {
     App.hotLoad = true;
@@ -718,16 +716,18 @@ class AppView extends AppViewState<_AppWidget> {
 
 abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   AppViewState({
+    Key key,
     this.con,
     this.controllers,
+    Object object,
     this.navigatorKey,
-    this.routes = const <String, WidgetBuilder>{},
+    this.routes,
     this.initialRoute,
     this.onGenerateRoute,
     this.onUnknownRoute,
-    this.navigatorObservers: const <NavigatorObserver>[],
+    this.navigatorObservers,
     this.builder,
-    this.title = '',
+    this.title,
     this.onGenerateTitle,
     this.color,
     this.theme,
@@ -738,25 +738,49 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
     this.localeListResolutionCallback,
     this.localeResolutionCallback,
     this.supportedLocales,
-    this.debugShowMaterialGrid = false,
-    this.showPerformanceOverlay = false,
-    this.checkerboardRasterCacheImages = false,
-    this.checkerboardOffscreenLayers = false,
-    this.showSemanticsDebugger = false,
-    this.debugShowWidgetInspector = false,
-    this.debugShowCheckedModeBanner = true,
-    this.debugPaintSizeEnabled = false,
-    this.debugPaintBaselinesEnabled = false,
-    this.debugPaintPointersEnabled = false,
-    this.debugPaintLayerBordersEnabled = false,
-    this.debugRepaintRainbowEnabled = false,
+    this.debugShowMaterialGrid,
+    this.showPerformanceOverlay,
+    this.checkerboardRasterCacheImages,
+    this.checkerboardOffscreenLayers,
+    this.showSemanticsDebugger,
+    this.debugShowWidgetInspector,
+    this.debugShowCheckedModeBanner,
+    this.debugPaintSizeEnabled,
+    this.debugPaintBaselinesEnabled,
+    this.debugPaintPointersEnabled,
+    this.debugPaintLayerBordersEnabled,
+    this.debugRepaintRainbowEnabled,
     FlutterExceptionHandler errorHandler,
     ErrorWidgetBuilder errorScreen,
     v.ReportErrorHandler reportError,
   }) : super(
+          key: key,
           controller: con,
           controllers: controllers,
+          object: object,
         ) {
+    // In case null was explicitly passed in.
+    if (routes == null) routes = const <String, WidgetBuilder>{};
+    if (navigatorObservers == null)
+      navigatorObservers = const <NavigatorObserver>[];
+    if (title == null) title = '';
+    if (color == null) color = Colors.white;
+    if (debugShowMaterialGrid == null) debugShowMaterialGrid = false;
+    if (showPerformanceOverlay == null) showPerformanceOverlay = false;
+    if (checkerboardRasterCacheImages == null)
+      checkerboardRasterCacheImages = false;
+    if (checkerboardOffscreenLayers == null)
+      checkerboardOffscreenLayers = false;
+    if (showSemanticsDebugger == null) showSemanticsDebugger = false;
+    if (debugShowWidgetInspector == null) debugShowWidgetInspector = false;
+    if (debugShowCheckedModeBanner == null) debugShowCheckedModeBanner = true;
+    if (debugPaintSizeEnabled == null) debugPaintSizeEnabled = false;
+    if (debugPaintBaselinesEnabled == null) debugPaintBaselinesEnabled = false;
+    if (debugPaintPointersEnabled == null) debugPaintPointersEnabled = false;
+    if (debugPaintLayerBordersEnabled == null)
+      debugPaintLayerBordersEnabled = false;
+    if (debugRepaintRainbowEnabled == null) debugRepaintRainbowEnabled = false;
+
     // Supply a customized error handling.
     _errorHandler = v.ErrorHandler(
         handler: errorHandler, builder: errorScreen, reportError: reportError);
@@ -819,6 +843,26 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   }
 }
 
+class AppError extends AppView {
+  AppError(Object exception, {Key key})
+      : super(home: _AppError(exception, key: key));
+}
+
+class _AppError extends StatefulWidget {
+  _AppError(this.exception, {Key key}) : super(key: key);
+  final Object exception;
+  @override
+  State<StatefulWidget> createState() => _AppErrorState();
+}
+
+class _AppErrorState extends State<_AppError> {
+  Widget build(BuildContext context) => Scaffold(
+        body: Center(
+          child: Text("${widget.exception.toString()}"),
+        ),
+      );
+}
+
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -854,7 +898,7 @@ class Controllers {
     T con;
     if (context != null && listen)
       con = App._vw?.controllerByType<T>(context, listen);
-    return con ??= AppMVC.controllers[_type<T>()];
+    return con ??= v.AppMVC.controllers[_type<T>()];
   }
 
   static Type _type<T>() => T;

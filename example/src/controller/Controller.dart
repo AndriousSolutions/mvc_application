@@ -23,7 +23,7 @@
 
 import 'package:flutter/material.dart' show FlutterError, FlutterErrorDetails;
 
-import 'package:mvc_application/app.dart' show Prefs;
+import 'package:mvc_application/view.dart' show Prefs;
 
 /// The Controller talks to the Model
 import '../../model.dart'

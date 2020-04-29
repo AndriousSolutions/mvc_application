@@ -21,6 +21,12 @@
 ///
 ///
 
+/// Material
+export 'package:flutter/material.dart' hide runApp;
+
+/// Cupertino
+export 'package:flutter/cupertino.dart' hide RefreshCallback, runApp;
+
 /// file utils
 export 'package:mvc_application/src/model/fileutils/files.dart';
 

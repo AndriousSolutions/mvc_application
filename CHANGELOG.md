@@ -1,3 +1,13 @@
+## 3.0.0
+ April 24, 2020
+- Removed export files app.dart & mvc.dart
+- Test extensively for null parameters
+- Supply Object parameter to AppView
+- Export Material.dart and Cupertino.dat in model.dart, view.dart and controller.dart.
+- Uncomment DialogBox.dart due to Pub.dev bug.
+- New getter vw in class App
+- New properties in AppView: useMaterial, useCupertino and switchUI
+
 ## 2.0.2
  April 23, 2020
 - Removed DialogBox.dart and showCupertinoDatePicker.dart to fix pub.dev bug.

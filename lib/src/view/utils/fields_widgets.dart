@@ -86,7 +86,7 @@ import 'package:flutter/services.dart'
         TextInputFormatter,
         TextInputType;
 
-import 'package:mvc_application/app.dart' show App;
+import 'package:mvc_application/view.dart' show App;
 
 typedef OnSavedFunc = Function<E>(E v);
 

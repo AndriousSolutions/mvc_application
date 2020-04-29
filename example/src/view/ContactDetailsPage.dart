@@ -42,10 +42,9 @@ import 'package:flutter/material.dart'
         ThemeData,
         Widget;
 
-import 'package:mvc_application/app.dart' show App;
-
 import 'package:mvc_application/view.dart'
     show
+        App,
         EditBarButton,
         HomeBarButton,
         SearchBarButton,
@@ -83,14 +82,14 @@ class ContactDetailsPage extends StatelessWidget {
               FlatButton(
                   child: Icon(Icons.delete, color: Colors.white),
                   onPressed: () {
-//                    showBox(text: 'Delete this contact?', context: context)
-//                        .then((bool delete) {
-//                      if (delete)
-//                        Controller.delete(contact).then((bool delete) {
-//                          if (delete) Controller.list.refresh();
-//                          Navigator.of(context).pop();
-//                        });
-//                    });
+                    showBox(text: 'Delete this contact?', context: context)
+                        .then((bool delete) {
+                      if (delete)
+                        Controller.delete(contact).then((bool delete) {
+                          if (delete) Controller.list.refresh();
+                          Navigator.of(context).pop();
+                        });
+                    });
                   }),
             ]),
             bottomNavigationBar: SimpleBottomAppBar(

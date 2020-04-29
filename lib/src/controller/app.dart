@@ -29,8 +29,6 @@ import 'package:flutter/material.dart' as m
 import 'package:flutter/foundation.dart'
     show FlutterExceptionHandler, FlutterErrorDetails, kIsWeb, mustCallSuper;
 
-import 'package:mvc_application/app.dart' show AppConMVC;
-
 import 'package:mvc_application/controller.dart' show DeviceInfo, HandleError;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
@@ -43,7 +41,7 @@ import 'package:mvc_application/controller.dart' show Assets;
 import 'package:prefs/prefs.dart' show Prefs;
 
 /// Add an Error Handler right at the start.
-runApp(
+void runApp(
   m.Widget app, {
   FlutterExceptionHandler handler,
   m.ErrorWidgetBuilder builder,
@@ -69,7 +67,7 @@ runApp(
   }).sendPort);
 }
 
-class AppController extends ControllerMVC implements AppConMVC {
+class AppController extends ControllerMVC implements mvc.AppConMVC {
   AppController([this.state]) : super(state);
 
   final v.StateMVC state;
@@ -98,8 +96,6 @@ class AppController extends ControllerMVC implements AppConMVC {
   @mustCallSuper
   void dispose() {
     Prefs.dispose();
-    // Attempts to write a file. Not working right now. -gp
-    //   I10n.dispose();
     // Assets.init(context); called in App.build() -gp
     Assets.dispose();
     super.dispose();
@@ -111,7 +107,7 @@ class AppController extends ControllerMVC implements AppConMVC {
     if (state != null) {
       state.currentErrorFunc(details);
     } else {
-      stateMVC.currentErrorFunc(details);
+      stateMVC?.currentErrorFunc(details);
     }
   }
 }

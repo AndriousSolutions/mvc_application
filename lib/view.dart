@@ -21,12 +21,23 @@
 ///
 ///
 
+/// Material
+export 'package:flutter/material.dart' hide runApp;
+
+/// Cupertino
+export 'package:flutter/cupertino.dart' hide RefreshCallback, runApp;
+
+/// MVC
+export 'package:mvc_pattern/mvc_pattern.dart'
+    show AppMVC, AppConMVC, ViewMVC, SetState;
+
 /// App
 export 'package:mvc_application/src/view/app.dart'
     show App, AppView, Consumer, Controllers, StateMVC;
 
-/// MVC
-export 'package:mvc_pattern/mvc_pattern.dart' show AppMVC, ViewMVC, SetState;
+/// Supply the custom runApp function
+export 'package:mvc_application/src/controller/app.dart'
+    show runApp;
 
 /// Settings
 export 'package:mvc_application/src/view/utils/appsettings.dart';

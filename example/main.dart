@@ -3,7 +3,7 @@
 
 import 'package:flutter/material.dart' show runApp;
 
-import 'package:mvc_application/mvc.dart' show App;
+import 'package:mvc_application/view.dart' show App;
 
 import 'view.dart' show ContactsExampleApp;
 

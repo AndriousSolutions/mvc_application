@@ -54,9 +54,7 @@ import 'package:flutter/material.dart'
         ThemeData,
         Widget;
 
-import 'package:mvc_application/app.dart' show App;
-
-import 'package:mvc_application/view.dart' show AppMenu, StateMVC;
+import 'package:mvc_application/view.dart' show App, AppMenu, StateMVC;
 
 import '../../view.dart' show AppMenu, ContactDetailsPage, StateMVC;
 

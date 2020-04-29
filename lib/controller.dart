@@ -21,30 +21,36 @@
 ///
 ///
 
+// Material
+export 'package:flutter/material.dart' hide runApp;
+
+// Cupertino
+export 'package:flutter/cupertino.dart' hide RefreshCallback, runApp;
+
 // App
-export 'package:mvc_pattern/mvc_pattern.dart' show AppMVC, AppConMVC;
+export 'package:mvc_pattern/mvc_pattern.dart'
+    show AppMVC, AppConMVC, StateListener;
 
-//Controller
+// App's View
+export 'package:mvc_application/src/view/app.dart'
+    show App, AppDrawer, Controllers;
+
+//App's Controller
 export 'package:mvc_application/src/controller/app.dart'
-    show AppController, ControllerMVC;
+    show AppController, ControllerMVC, runApp;
 
+// Error Handler
 export 'package:mvc_application/src/controller/util/handle_error.dart'
     show HandleError;
 
 // Notifications
-//export 'package:mvc_application/src/controller/alarm_manager.dart'
-//    show AlarmManager;
 export 'package:mvc_application/src/controller/schedule_notificaitons.dart';
 
+// Device Info
 export 'package:mvc_application/src/controller/deviceinfo.dart' show DeviceInfo;
 
+// Assets
 export 'package:mvc_application/src/controller/assets/assets.dart';
 
-// App's view
-export 'package:mvc_application/src/view/app.dart' show Controllers;
-
-// MVC
-export 'package:mvc_pattern/mvc_pattern.dart' show StateListener;
-
 // Preferences
-export 'package:prefs/prefs.dart' show Prefs;
+export 'package:prefs/prefs.dart' show Prefs, SharedPreferences;
