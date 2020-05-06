@@ -14,7 +14,7 @@ Instead, always go up to the '**major**' semantic version number when installing
 And so, in this case, add this to your package's pubspec.yaml file instead:
 ```javascript
 dependencies:
-   mvc_application:^2.0.0
+   mvc_application:^3.0.0
 ```
 For more information on version numbers: [The importance of semantic versioning](https://medium.com/@xabaras/the-importance-of-semantic-versioning-9b78e8e59bba).
 

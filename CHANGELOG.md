@@ -1,3 +1,8 @@
+## 3.0.1
+ May 06, 2020
+- Changed onSaved: (String v) in fields_widgets
+- App._hotReload made private
+ 
 ## 3.0.0
  April 24, 2020
 - Removed export files app.dart & mvc.dart

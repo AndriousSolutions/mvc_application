@@ -89,7 +89,7 @@ abstract class App extends v.AppMVC {
   static AsyncSnapshot _snapshot;
 
   final Widget loadingScreen;
-  static bool hotLoad = false;
+  static bool _hotReload = false;
 
   /// More efficient widget tree rebuilds
   static final materialKey = GlobalKey();
@@ -116,7 +116,7 @@ abstract class App extends v.AppMVC {
 
   @override
   Future<bool> initAsync() async {
-    if (hotLoad) {
+    if (_hotReload) {
       _vw = createView();
       _vw?.con?.initApp();
     } else {
@@ -544,7 +544,9 @@ class AppView extends AppViewState<_AppWidget> {
     useMaterial =
         !useCupertino && (useMaterial || Platform.isAndroid || kIsWeb);
     useCupertino = !useMaterial && (useCupertino || Platform.isIOS);
-    switchUI = switchUI || (Platform.isAndroid && !useMaterial) || (Platform.isIOS && !useCupertino);
+    switchUI = switchUI ||
+        (Platform.isAndroid && !useMaterial) ||
+        (Platform.isIOS && !useCupertino);
   }
   final Key key;
   Widget home;
@@ -581,7 +583,9 @@ class AppView extends AppViewState<_AppWidget> {
         initialRoute: initialRoute ?? onInitialRoute(),
         onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
         onUnknownRoute: onUnknownRoute ?? onOnUnknownRoute(),
-        navigatorObservers: navigatorObservers ?? onNavigatorObservers() ?? const <NavigatorObserver>[],
+        navigatorObservers: navigatorObservers ??
+            onNavigatorObservers() ??
+            const <NavigatorObserver>[],
         builder: builder ?? onBuilder(),
         title: title ?? onTitle() ?? '',
         onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
@@ -620,7 +624,9 @@ class AppView extends AppViewState<_AppWidget> {
         initialRoute: initialRoute ?? onInitialRoute(),
         onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
         onUnknownRoute: onUnknownRoute ?? onOnUnknownRoute(),
-        navigatorObservers: navigatorObservers ?? onNavigatorObservers() ?? const <NavigatorObserver>[],
+        navigatorObservers: navigatorObservers ??
+            onNavigatorObservers() ??
+            const <NavigatorObserver>[],
         builder: builder ?? onBuilder(),
         title: title ?? onTitle() ?? '',
         onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
@@ -677,7 +683,7 @@ class AppView extends AppViewState<_AppWidget> {
   /// During development, if a hot reload occurs, the reassemble method is called.
   @override
   void reassemble() {
-    App.hotLoad = true;
+    App._hotReload = true;
     super.reassemble();
   }
 

@@ -36,8 +36,7 @@ export 'package:mvc_application/src/view/app.dart'
     show App, AppView, Consumer, Controllers, StateMVC;
 
 /// Supply the custom runApp function
-export 'package:mvc_application/src/controller/app.dart'
-    show runApp;
+export 'package:mvc_application/src/controller/app.dart' show runApp;
 
 /// Settings
 export 'package:mvc_application/src/view/utils/appsettings.dart';

@@ -304,7 +304,13 @@ class FieldWidgets<T> extends Item {
         onEditingComplete: editingComplete ?? onEditingComplete,
         onFieldSubmitted: (String v) =>
             fieldSubmitted == null ? onFieldSubmitted(v) : fieldSubmitted(v),
-        onSaved: (String v) => saved == null ? onSaved(v) : saved(v),
+        onSaved: (String v) {
+          if (saved == null) {
+            onSaved(v);
+          } else {
+            saved(v);
+          }
+        },
         validator: (String v) =>
             validator == null ? onValidator(v) : validator(v),
         inputFormatters: inputFormatters,
@@ -379,7 +385,7 @@ class FieldWidgets<T> extends Item {
   void onFieldSubmitted(String v) {}
 
   // What happens when the field is saved?
-  void onSaved(String v) {
+  void onSaved(dynamic v) {
     value = v; // As an example  => object?.jobTitle = value = v;
   }
 

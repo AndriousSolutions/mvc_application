@@ -91,7 +91,7 @@ class AppController extends ControllerMVC implements mvc.AppConMVC {
   }
 
   /// Ensure certain objects are 'disposed.'
-  /// Callec by the AppState.dispose() function.
+  /// Called by the AppState.dispose() function.
   @override
   @mustCallSuper
   void dispose() {
