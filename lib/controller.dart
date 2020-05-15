@@ -28,8 +28,7 @@ export 'package:flutter/material.dart' hide runApp;
 export 'package:flutter/cupertino.dart' hide RefreshCallback, runApp;
 
 // App
-export 'package:mvc_pattern/mvc_pattern.dart'
-    show AppMVC, StateListener;
+export 'package:mvc_pattern/mvc_pattern.dart' show AppMVC, StateListener;
 
 // App's View
 export 'package:mvc_application/src/view/app.dart'
@@ -47,7 +46,8 @@ export 'package:mvc_application/src/controller/util/handle_error.dart'
 export 'package:mvc_application/src/controller/schedule_notificaitons.dart';
 
 // Device Info
-export 'package:mvc_application/src/controller/device_info.dart' show DeviceInfo;
+export 'package:mvc_application/src/controller/device_info.dart'
+    show DeviceInfo;
 
 // Assets
 export 'package:mvc_application/src/controller/assets/assets.dart';

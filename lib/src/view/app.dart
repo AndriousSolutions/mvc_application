@@ -336,13 +336,12 @@ abstract class App extends v.AppMVC {
 
   /// The running platform
   static TargetPlatform get platform {
-    if(_platform == null && _context != null) {
-      _platform = Theme
-          .of(_context)
-          .platform;
+    if (_platform == null && _context != null) {
+      _platform = Theme.of(_context).platform;
     }
     return _platform;
   }
+
   static TargetPlatform _platform;
 
   // Application information

@@ -34,7 +34,7 @@ dependencies:
   flutter_material_color_picker: ^1.0.0
 
   # https://pub.dartlang.org/packages/mvc_pattern
-  mvc_pattern: #^5.0.0
+  mvc_pattern: ^5.0.0
   #  path: ../../packages/mvc_pattern
 
   # https://pub.dartlang.org/packages/prefs
