@@ -21,6 +21,6 @@
 ///
 ///
 
-export 'package:mvc_application/src/view/utils/appsettings.dart';
+export 'package:mvc_application/src/view/utils/app_settings.dart';
 
 export 'package:prefs/prefs.dart';

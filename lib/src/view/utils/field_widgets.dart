@@ -90,7 +90,7 @@ import 'package:mvc_application/view.dart' show App;
 
 typedef OnSavedFunc = Function<E>(E v);
 
-class FieldWidgets<T> extends Item {
+class FieldWidgets<T> extends DataFieldItem {
   FieldWidgets({
     Object key,
     this.object,
@@ -181,7 +181,7 @@ class FieldWidgets<T> extends Item {
                     : false);
   }
   final T object;
-  Iterable<Item> items;
+  Iterable<DataFieldItem> items;
 
   final ThemeData _theme = App.theme;
 
@@ -807,7 +807,7 @@ class FieldWidgets<T> extends Item {
 
   ListItems onListItems({
     String title,
-    List<Item> items,
+    List<DataFieldItem> items,
     MapItemFunction mapItem,
   }) {
     return ListItems(
@@ -819,7 +819,7 @@ class FieldWidgets<T> extends Item {
 
   ListItems get editItems => onListItems(mapItem: mapIt);
 
-  Widget mapIt(Item i) => ListTile(
+  Widget mapIt(DataFieldItem i) => ListTile(
         subtitle: Text(i.label ?? ""),
         title: textFormField,
         trailing: phoneTypes,
@@ -836,15 +836,15 @@ class FieldWidgets<T> extends Item {
   );
 }
 
-/// Item class used for contact fields which only have a [label] and a [value]
-class Item {
-  Item({this.label, this.value});
+/// Item class used for fields which only have a [label] and a [value]
+class DataFieldItem {
+  DataFieldItem({this.label, this.value});
   String label;
   dynamic value;
   String _label = 'label';
   String _value = 'value';
 
-  Item.fromMap(Map m, [String label, String value]) {
+  DataFieldItem.fromMap(Map m, [String label, String value]) {
     keys(label, value);
     this.label = m[_label];
     this.value = m[_value];
@@ -861,7 +861,7 @@ class Item {
 class ListItems extends StatelessWidget {
   ListItems({this.title, this.items, this.mapItem});
   final String title;
-  final List<Item> items;
+  final List<DataFieldItem> items;
   final MapItemFunction mapItem;
 
   @override
@@ -885,8 +885,8 @@ class ListItems extends StatelessWidget {
         ]);
   }
 
-  Widget mapIt(Item i) =>
+  Widget mapIt(DataFieldItem i) =>
       ListTile(subtitle: Text(i.label ?? ""), title: Text(i.value ?? ""));
 }
 
-typedef Widget MapItemFunction(Item i);
+typedef Widget MapItemFunction(DataFieldItem i);

@@ -1,3 +1,10 @@
+## 4.0.0
+ May 09, 2020
+- Renamed class Consumer to ConConsumer not be interfere with library package, Provider.
+- Replace deprecated subhead to subtitle1 in DialogBox.dart
+- Renamed Item to DataFieldItem in fields_widgets.dart.
+- Renamed ten library files to conform to naming conventions.
+
 ## 3.0.1
  May 06, 2020
 - Changed onSaved: (String v) in fields_widgets

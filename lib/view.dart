@@ -33,13 +33,20 @@ export 'package:mvc_pattern/mvc_pattern.dart'
 
 /// App
 export 'package:mvc_application/src/view/app.dart'
-    show App, AppView, Consumer, Controllers, StateMVC;
+    show
+        App,
+        AppView,
+        ConConsumer,
+        ConnectivityListener,
+        ConnectivityResult,
+        Controllers,
+        StateMVC;
 
 /// Supply the custom runApp function
 export 'package:mvc_application/src/controller/app.dart' show runApp;
 
 /// Settings
-export 'package:mvc_application/src/view/utils/appsettings.dart';
+export 'package:mvc_application/src/view/utils/app_settings.dart';
 
 /// Error Handling
 export 'package:mvc_application/src/view/utils/error_handler.dart'
@@ -49,7 +56,7 @@ export 'package:mvc_application/src/view/utils/error_handler.dart'
 export 'package:mvc_application/src/view/utils/loading_screen.dart';
 
 /// Fields
-export 'package:mvc_application/src/view/utils/fields_widgets.dart';
+export 'package:mvc_application/src/view/utils/field_widgets.dart';
 
 /// Menus
 export 'package:mvc_application/src/view/appmenu.dart' show AppMenu, Menu;

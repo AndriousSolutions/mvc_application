@@ -21,18 +21,18 @@
 ///
 ///
 
-export 'package:mvc_application/src/view/uxutils/src/view/SimpleBottomAppBar.dart';
+export 'package:mvc_application/src/view/uxutils/src/view/simple_bottom_appbar.dart';
 
-export 'package:mvc_application/src/view/uxutils/src/view/DialogBox.dart';
+export 'package:mvc_application/src/view/uxutils/src/view/dialog_box.dart';
 
-export 'package:mvc_application/src/view/uxutils/src/view/ColorPicker.dart';
+export 'package:mvc_application/src/view/uxutils/src/view/color_picker.dart';
 
-export 'package:mvc_application/src/view/uxutils/src/view/CustomScrollPhysics.dart';
+export 'package:mvc_application/src/view/uxutils/src/view/custom_scroll_physics.dart';
 
-export 'package:mvc_application/src/view/uxutils/src/view/VariableString.dart';
+export 'package:mvc_application/src/view/uxutils/src/view/variable_string.dart';
 
 export 'package:mvc_application/src/view/uxutils/src/view/common_widgets/custom_raised_button.dart';
 
-export 'package:mvc_application/src/view/uxutils/src/view/NavBottomBar.dart';
+export 'package:mvc_application/src/view/uxutils/src/view/nav_bottom_bar.dart';
 
-export 'package:mvc_application/src/view/uxutils/src/view/showCupertinoDatePicker.dart';
+export 'package:mvc_application/src/view/uxutils/src/view/show_cupertino_date_picker.dart';

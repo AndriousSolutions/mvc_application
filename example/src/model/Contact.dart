@@ -25,7 +25,7 @@ import 'package:flutter/material.dart';
 
 import '../../model.dart' show PostalAddress;
 
-import '../../view.dart' show FieldWidgets, Item;
+import '../../view.dart' show FieldWidgets, DataFieldItem;
 
 class Contact<E> implements Comparable<Contact> {
   Contact();
@@ -63,7 +63,7 @@ class Contact<E> implements Comparable<Contact> {
       _postcode,
       _country;
 
-  List<Item> emails, phones;
+  List<DataFieldItem> emails, phones;
   //  set email(String email) => [Item(label: "work", value: email)];
   List<PostalAddress> _postalAddresses;
 
@@ -74,24 +74,24 @@ class Contact<E> implements Comparable<Contact> {
     if (emails == null) {
       emails = [];
       if (_email != null && _email.isNotEmpty) {
-        Item item = Item(label: "home", value: _email);
+        DataFieldItem item = DataFieldItem(label: "home", value: _email);
         item.keys('label', 'email');
         emails.add(item);
       }
     }
-    for (Item email in emails ?? []) {
+    for (DataFieldItem email in emails ?? []) {
       email.keys('label', 'email');
       emailList.add(email.toMap);
     }
     if (phones == null || phones.length == 0) {
       if (_phone != null && _phone.isNotEmpty) {
         phones = [];
-        Item item = Item(label: "home", value: _phone);
+        DataFieldItem item = DataFieldItem(label: "home", value: _phone);
         item.keys('label', 'phone');
         phones.add(item);
       }
     }
-    for (Item phone in phones ?? []) {
+    for (DataFieldItem phone in phones ?? []) {
       phone.keys('label', 'phone');
       phoneList.add(phone.toMap);
     }
@@ -316,8 +316,8 @@ class Phone extends FieldWidgets<Contact> {
   }
   void onSaved(v) {
     if (v == null) return;
-    if (v is List<Item>) {
-      object?.phones = (v as List<Item>);
+    if (v is List<DataFieldItem>) {
+      object?.phones = (v as List<DataFieldItem>);
       return;
     }
     if (v is String) {
@@ -342,8 +342,8 @@ class Email extends FieldWidgets<Contact> {
 
   void onSaved(v) {
     if (v == null) return;
-    if (v is List<Item>) {
-      object?.emails = (v as List<Item>);
+    if (v is List<DataFieldItem>) {
+      object?.emails = (v as List<DataFieldItem>);
       return;
     }
     if (v is String) {

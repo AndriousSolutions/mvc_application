@@ -34,7 +34,12 @@ import 'package:mvc_application/controller.dart' show DeviceInfo, HandleError;
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
 import 'package:mvc_application/view.dart' as v
-    show ErrorHandler, ReportErrorHandler, StateMVC;
+    show
+        ConnectivityListener,
+        ConnectivityResult,
+        ErrorHandler,
+        ReportErrorHandler,
+        StateMVC;
 
 import 'package:mvc_application/controller.dart' show Assets;
 
@@ -112,6 +117,15 @@ class AppController extends ControllerMVC implements mvc.AppConMVC {
   }
 }
 
+class AppConMVC extends mvc.AppConMVC with v.ConnectivityListener, HandleError {
+  //
+  AppConMVC([v.StateMVC state]) : super(state);
+
+  /// If the device's connectivity changes.
+  void onConnectivityChanged(v.ConnectivityResult result) {}
+}
+
 class ControllerMVC extends mvc.ControllerMVC with HandleError {
+  //
   ControllerMVC([v.StateMVC state]) : super(state);
 }

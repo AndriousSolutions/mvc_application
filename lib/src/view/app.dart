@@ -37,11 +37,12 @@ import 'package:flutter/widgets.dart';
 
 import 'package:connectivity/connectivity.dart'
     show Connectivity, ConnectivityResult;
+// Export the classes needed to use this file.
+export 'package:connectivity/connectivity.dart'
+    show Connectivity, ConnectivityResult;
 
 import 'package:mvc_application/controller.dart'
-    show AppController, HandleError;
-
-import 'package:mvc_application/controller.dart' show ControllerMVC;
+    show AppConMVC, AppController, ControllerMVC, HandleError;
 
 import 'package:mvc_application/view.dart' as v
     show AppMenu, AppMVC, ErrorHandler, ReportErrorHandler, SetState;
@@ -66,7 +67,7 @@ typedef ErrorWidgetBuilder = Widget Function(
 abstract class App extends v.AppMVC {
   // You must supply a 'View.'
   App({
-    mvc.AppConMVC con,
+    AppConMVC con,
     Key key,
     this.loadingScreen,
     FlutterExceptionHandler errorHandler,
@@ -76,15 +77,20 @@ abstract class App extends v.AppMVC {
             handler: errorHandler,
             builder: errorScreen,
             reportError: reportError),
-        super(con: con, key: key);
+        super(con: con, key: key) {
+    // Listen to the device's connectivity.
+    addConnectivityListener(con);
+  }
   final v.ErrorHandler _errorHandler;
 
   @protected
   AppView createView();
 
+  /// Gives access to the App's View. The 'MyView' you first work with.
   static AppView get vw => _vw;
   static AppView _vw;
 
+  /// The snapshot used by the App's View.
   static AsyncSnapshot get snapshot => _snapshot;
   static AsyncSnapshot _snapshot;
 
@@ -110,7 +116,10 @@ abstract class App extends v.AppMVC {
     return FutureBuilder<bool>(
       future: initAsync(),
       initialData: false,
-      builder: (_, snapshot) => _App.show(snapshot, loadingScreen),
+      builder: (_, snapshot) {
+        _snapshot = snapshot;
+        return _App.show(snapshot, loadingScreen);
+      },
     );
   }
 
@@ -144,77 +153,94 @@ abstract class App extends v.AppMVC {
   static bool _isInit = false;
 
   // Use Material UI when explicitly specified or even when running in iOS
+  /// Indicates if the App is running the Material interface theme.
   static bool get useMaterial =>
       _vw.useMaterial ||
       (Platform.isAndroid && !_vw.switchUI) ||
       (Platform.isIOS && _vw.switchUI);
 
   // Use Cupertino UI when explicitly specified or even when running in Android
+  /// Indicates if the App is running the Cupertino interface theme.
   static bool get useCupertino =>
       _vw.useCupertino ||
       (Platform.isIOS && !_vw.switchUI) ||
       (Platform.isAndroid && _vw.switchUI);
 
+  /// Return the navigator key used by the App's View.
   static GlobalKey<NavigatorState> get navigatorKey => _vw.navigatorKey;
   static set navigatorKey(GlobalKey<NavigatorState> v) {
     if (v != null) _vw.navigatorKey = v;
   }
 
+  /// Returns the routes used by the App's View.
   static Map<String, WidgetBuilder> get routes => _vw.routes;
   static set routes(Map<String, WidgetBuilder> v) {
     if (v != null) _vw.routes = v;
   }
 
+  /// Returns to the initial route used by the App's View.
   static String get initialRoute => _vw.initialRoute;
   static set initialRoute(String v) {
     if (v != null) _vw.initialRoute = v;
   }
 
+  /// The route generator used when the app is navigated to a named route.
   static RouteFactory get onGenerateRoute => _vw.onGenerateRoute;
   static set onGenerateRoute(RouteFactory v) {
     if (v != null) _vw.onGenerateRoute = v;
   }
 
+  /// Called when [onGenerateRoute] fails except for the [initialRoute].
   static RouteFactory get onUnknownRoute => _vw.onUnknownRoute;
   static set onUnknownRoute(RouteFactory v) {
     if (v != null) _vw.onUnknownRoute = v;
   }
 
+  /// The list of observers for the [Navigator] for this app.
   static List<NavigatorObserver> get navigatorObservers =>
       _vw.navigatorObservers;
   static set navigatorObservers(List<NavigatorObserver> v) {
     if (v != null) _vw.navigatorObservers = v;
   }
 
+  /// if neither [home], [routes], or [onGenerateRoute] was passed.
   static TransitionBuilder get builder => _vw.builder;
   static set builder(TransitionBuilder v) {
     if (v != null) _vw.builder = v;
   }
 
+  /// Returns the title for the App's View.
   static String get title => _vw.title;
   static set title(String v) {
     if (v != null) _vw.title = v;
   }
 
+  /// Routine used to generate the App's title.
   static GenerateAppTitle get onGenerateTitle => _vw.onGenerateTitle;
   static set onGenerateTitle(GenerateAppTitle v) {
     if (v != null) _vw.onGenerateTitle = v;
   }
 
   // Allow it to be assigned null.
+  /// The App's current Material theme.
   static ThemeData theme;
+
+  /// The Apps's current Cupertino theme.
   static CupertinoThemeData iOSTheme;
 
+  /// Returns the Color passed to the App's View.
   static Color get color => _vw.color;
   static set color(Color v) {
     if (v != null) _vw.color = v;
   }
 
+  /// Returns the App's current locale.
   static Locale get locale => _vw.locale;
   static set locale(Locale v) {
     if (v != null) _vw.locale = v;
   }
 
+  /// Returns the App's current localizations delegates.
   static Iterable<LocalizationsDelegate<dynamic>> get localizationsDelegates =>
       _vw.localizationsDelegates;
   static set localizationsDelegates(
@@ -222,89 +248,116 @@ abstract class App extends v.AppMVC {
     if (v != null) _vw.localizationsDelegates = v;
   }
 
+  /// Resolves the App's locale.
   static LocaleResolutionCallback get localeResolutionCallback =>
       _vw.localeResolutionCallback;
   static set localeResolutionCallback(LocaleResolutionCallback v) {
     if (v != null) _vw.localeResolutionCallback = v;
   }
 
+  /// Returns an iteration of the App's locales.
   static Iterable<Locale> get supportedLocales => _vw.supportedLocales;
   static set supportedLocales(Iterable<Locale> v) {
     if (v != null) _vw.supportedLocales = v;
   }
 
+  /// If true, it paints a grid overlay on Material apps.
   static bool get debugShowMaterialGrid => _vw.debugShowMaterialGrid;
   static set debugShowMaterialGrid(bool v) {
     if (v != null) _vw.debugShowMaterialGrid = v;
   }
 
+  /// If true, it turns on a performance overlay.
   static bool get showPerformanceOverlay => _vw.showPerformanceOverlay;
   static set showPerformanceOverlay(bool v) {
     if (v != null) _vw.showPerformanceOverlay = v;
   }
 
+  /// Checkerboard raster cache to speed up overall rendering.
   static bool get checkerboardRasterCacheImages =>
       _vw.checkerboardRasterCacheImages;
   static set checkerboardRasterCacheImages(bool v) {
     if (v != null) _vw.checkerboardRasterCacheImages = v;
   }
 
+  /// Checkerboard layers rendered offscreen bitmaps.
   static bool get checkerboardOffscreenLayers =>
       _vw.checkerboardOffscreenLayers;
   static set checkerboardOffscreenLayers(bool v) {
     if (v != null) _vw.checkerboardOffscreenLayers = v;
   }
 
+  /// Shows an overlay of accessibility information
   static bool get showSemanticsDebugger => _vw.showSemanticsDebugger;
   static set showSemanticsDebugger(bool v) {
     if (v != null) _vw.showSemanticsDebugger = v;
   }
 
+  /// Shows a little "DEBUG" banner in checked mode.
   static bool get debugShowCheckedModeBanner => _vw.debugShowCheckedModeBanner;
   static set debugShowCheckedModeBanner(bool v) {
     if (v != null) _vw.debugShowCheckedModeBanner = v;
   }
 
+  /// Each RenderBox to paint a box around its bounds.
   static bool get debugPaintSizeEnabled => _vw.debugPaintSizeEnabled;
   static set debugPaintSizeEnabled(bool v) {
     if (v != null) _vw.debugPaintSizeEnabled = v;
   }
 
+  /// RenderBox paints a line at its baselines.
   static bool get debugPaintBaselinesEnabled => _vw.debugPaintBaselinesEnabled;
   static set debugPaintBaselinesEnabled(bool v) {
     if (v != null) _vw.debugPaintBaselinesEnabled = v;
   }
 
+  /// Objects flash while they are being tapped.
   static bool get debugPaintPointersEnabled => _vw.debugPaintPointersEnabled;
   static set debugPaintPointersEnabled(bool v) {
     if (v != null) _vw.debugPaintPointersEnabled = v;
   }
 
+  /// Layer paints a box around its bound.
   static bool get debugPaintLayerBordersEnabled =>
       _vw.debugPaintLayerBordersEnabled;
   static set debugPaintLayerBordersEnabled(bool v) {
     if (v != null) _vw.debugPaintLayerBordersEnabled = v;
   }
 
+  /// Overlay a rotating set of colors when repainting layers in checked mode.
   static bool get debugRepaintRainbowEnabled => _vw.debugRepaintRainbowEnabled;
   static set debugRepaintRainbowEnabled(bool v) {
     if (v != null) _vw.debugRepaintRainbowEnabled = v;
   }
 
+  /// The BuildContext for the App's View.
   static BuildContext get context => _context;
   static BuildContext _context;
 
-  static ScaffoldState _scaffold;
+  /// The running platform
+  static TargetPlatform get platform {
+    if(_platform == null && _context != null) {
+      _platform = Theme
+          .of(_context)
+          .platform;
+    }
+    return _platform;
+  }
+  static TargetPlatform _platform;
 
   // Application information
   static PackageInfo _packageInfo;
 
+  /// The Name of the App.
   static String get appName => _packageInfo?.appName;
 
+  /// The 'Package Name' of the App.
   static String get packageName => _packageInfo?.packageName;
 
+  /// The current version of the App.
   static String get version => _packageInfo?.version;
 
+  /// The build number of the App.
   static String get buildNumber => _packageInfo?.buildNumber;
 
   /// Determines if running in an IDE or in production.
@@ -316,7 +369,9 @@ abstract class App extends v.AppMVC {
   /// Catch and explicitly handle the error.
   static void catchError(Exception ex) => _vw.catchError(ex);
 
+  /// The Scaffold object for this App's View.
   static ScaffoldState get scaffold => App._getScaffold();
+  static ScaffoldState _scaffold;
 
   static ScaffoldState _getScaffold() {
     if (_scaffold == null) _scaffold = Scaffold.of(_context, nullOk: true);
@@ -324,6 +379,7 @@ abstract class App extends v.AppMVC {
   }
 
   // AppMenu has a colour picker.
+  /// The ColorSwatch for this App's menu.
   static ColorSwatch get colorTheme => v.AppMenu.colorTheme;
 
   static getThemeData() async {
@@ -358,26 +414,34 @@ abstract class App extends v.AppMVC {
 
   static StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
+  /// The local directory for this App.
   static get filesDir => _path;
   static String _path;
 
+  /// Returns the connection status of the device.
   static String get connectivity => _connectivityStatus;
   static String _connectivityStatus;
 
+  /// Indicates if the app has access to the Internet.
   static bool get isOnline => _connectivityStatus != 'none';
 
   static Set<ConnectivityListener> _listeners = new Set();
 
+  /// Add a Connectivity listener.
   static addConnectivityListener(ConnectivityListener listener) =>
       _listeners.add(listener);
 
+  /// Remove a Connectivity listener.
   static removeConnectivityListener(ConnectivityListener listener) =>
       _listeners.remove(listener);
 
+  /// Clear Connectivity listeners.
   static clearConnectivityListener() => _listeners.clear();
 
+  /// The id for this App's particular installation.
   static Future<String> getInstallNum() => InstallFile.id();
 
+  /// The id for this App's particular installation.
   static String get installNum => _installNum;
   static String _installNum;
 
@@ -408,10 +472,6 @@ abstract class App extends v.AppMVC {
 
     // Determine the location to the files directory.
     _path = await Files.localPath;
-  }
-
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-//TODO   FireBase.didChangeAppLifecycleState(state);
   }
 
   static Future<String> _initConnectivity() async {
@@ -456,6 +516,7 @@ class _AppWidget extends StatefulWidget {
   State createState() => App._vw;
 }
 
+/// The View for the app. The 'look and feel' for the whole app.
 class AppView extends AppViewState<_AppWidget> {
   AppView({
     this.key,
@@ -569,6 +630,8 @@ class AppView extends AppViewState<_AppWidget> {
       debugPaint.debugPaintLayerBordersEnabled =
           debugPaintLayerBordersEnabled ?? false;
       debugPaint.debugRepaintRainbowEnabled =
+          debugRepaintRainbowEnabled ?? false;
+      debugPaint.debugRepaintTextRainbowEnabled =
           debugRepaintRainbowEnabled ?? false;
       return true;
     }());
@@ -896,12 +959,14 @@ class AppDrawer extends StatelessWidget {
 }
 
 abstract class ConnectivityListener {
-  onConnectivityChanged(ConnectivityResult result);
+  void onConnectivityChanged(ConnectivityResult result);
 }
 
+/// Return a particular 'type' of Controller.
 class Controllers {
-  static T of<T extends ControllerMVC>([BuildContext context, listen = true]) {
+  static T of<T extends ControllerMVC>([BuildContext context, bool listen]) {
     T con;
+    if (listen == null) listen = true;
     if (context != null && listen)
       con = App._vw?.controllerByType<T>(context, listen);
     return con ??= v.AppMVC.controllers[_type<T>()];
@@ -910,8 +975,12 @@ class Controllers {
   static Type _type<T>() => T;
 }
 
-class Consumer<T extends ControllerMVC> extends StatelessWidget {
-  Consumer({
+/// Obtains [Controllers<T>] from its ancestors and passes its value to [builder].
+///
+/// The [ConConsumer] widget doesn't do any fancy work. It just calls [Controllers.of]
+/// in a new widget, and delegates its `build` implementation to [builder].
+class ConConsumer<T extends ControllerMVC> extends StatelessWidget {
+  ConConsumer({
     Key key,
     @required this.builder,
     this.child,

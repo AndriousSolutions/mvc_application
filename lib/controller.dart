@@ -29,7 +29,7 @@ export 'package:flutter/cupertino.dart' hide RefreshCallback, runApp;
 
 // App
 export 'package:mvc_pattern/mvc_pattern.dart'
-    show AppMVC, AppConMVC, StateListener;
+    show AppMVC, StateListener;
 
 // App's View
 export 'package:mvc_application/src/view/app.dart'
@@ -37,7 +37,7 @@ export 'package:mvc_application/src/view/app.dart'
 
 //App's Controller
 export 'package:mvc_application/src/controller/app.dart'
-    show AppController, ControllerMVC, runApp;
+    show AppConMVC, AppController, ControllerMVC, runApp;
 
 // Error Handler
 export 'package:mvc_application/src/controller/util/handle_error.dart'
@@ -47,7 +47,7 @@ export 'package:mvc_application/src/controller/util/handle_error.dart'
 export 'package:mvc_application/src/controller/schedule_notificaitons.dart';
 
 // Device Info
-export 'package:mvc_application/src/controller/deviceinfo.dart' show DeviceInfo;
+export 'package:mvc_application/src/controller/device_info.dart' show DeviceInfo;
 
 // Assets
 export 'package:mvc_application/src/controller/assets/assets.dart';

@@ -147,7 +147,7 @@ class _FlatButton extends StatelessWidget {
       padding: EdgeInsets.zero,
       onPressed: onPressed,
       child: DefaultTextStyle(
-        style: style ?? Theme.of(context).primaryTextTheme.subhead,
+        style: style ?? Theme.of(context).primaryTextTheme.subtitle1,
         child: child,
       ),
     );
