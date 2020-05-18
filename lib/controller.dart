@@ -31,8 +31,7 @@ export 'package:flutter/cupertino.dart' hide RefreshCallback, runApp;
 export 'package:mvc_pattern/mvc_pattern.dart' show AppMVC, StateListener;
 
 // App's View
-export 'package:mvc_application/src/view/app.dart'
-    show App, AppDrawer, Controllers;
+export 'package:mvc_application/src/view/app.dart' show App, AppDrawer;
 
 //App's Controller
 export 'package:mvc_application/src/controller/app.dart'

@@ -29,7 +29,8 @@ export 'package:flutter/cupertino.dart' hide RefreshCallback, runApp;
 
 /// MVC
 export 'package:mvc_pattern/mvc_pattern.dart'
-    show AppMVC, AppConMVC, ViewMVC, SetState;
+    show AppMVC, ViewMVC, SetState
+    hide AppConMVC;
 
 /// App
 export 'package:mvc_application/src/view/app.dart'
@@ -39,7 +40,6 @@ export 'package:mvc_application/src/view/app.dart'
         ConConsumer,
         ConnectivityListener,
         ConnectivityResult,
-        Controllers,
         StateMVC;
 
 /// Supply the custom runApp function

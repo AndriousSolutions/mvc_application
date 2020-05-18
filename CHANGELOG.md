@@ -1,3 +1,13 @@
+## 5.0.0 
+ May 18, 2020
+- Removed Controllers.of() from app.dart
+- mvc_pattern:  ^6.0.0
+- Hide AppConMVC from mvc_pattern.dart
+
+## 4.0.1
+ May 16, 2020
+- Uncomment show_cupertino_date_picker.dart
+
 ## 4.0.0
  May 09, 2020
 - Renamed class Consumer to ConConsumer not be interfere with library package, Provider.

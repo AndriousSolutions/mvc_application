@@ -957,27 +957,13 @@ class AppDrawer extends StatelessWidget {
   }
 }
 
+/// A Listener for the device's own connectivity status at any point in time.
 abstract class ConnectivityListener {
   void onConnectivityChanged(ConnectivityResult result);
 }
 
-/// Return a particular 'type' of Controller.
-class Controllers {
-  static T of<T extends ControllerMVC>([BuildContext context, bool listen]) {
-    T con;
-    if (listen == null) listen = true;
-    if (context != null && listen)
-      con = App._vw?.controllerByType<T>(context, listen);
-    return con ??= v.AppMVC.controllers[_type<T>()];
-  }
-
-  static Type _type<T>() => T;
-}
-
 /// Obtains [Controllers<T>] from its ancestors and passes its value to [builder].
 ///
-/// The [ConConsumer] widget doesn't do any fancy work. It just calls [Controllers.of]
-/// in a new widget, and delegates its `build` implementation to [builder].
 class ConConsumer<T extends ControllerMVC> extends StatelessWidget {
   ConConsumer({
     Key key,
@@ -997,7 +983,7 @@ class ConConsumer<T extends ControllerMVC> extends StatelessWidget {
   Widget build(BuildContext context) => v.SetState(
       builder: (context, object) => builder(
             context,
-            Controllers.of<T>(),
+            App._vw?.controllerByType<T>(),
             child,
           ));
 }
