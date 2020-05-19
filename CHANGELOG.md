@@ -1,7 +1,11 @@
+## 5.0.1
+ May 18, 2020
+- ConnectivityListener test for null
+
 ## 5.0.0 
  May 18, 2020
 - Removed Controllers.of() from app.dart
-- mvc_pattern:  ^6.0.0
+- mvc_pattern: ^6.0.0
 - Hide AppConMVC from mvc_pattern.dart
 
 ## 4.0.1

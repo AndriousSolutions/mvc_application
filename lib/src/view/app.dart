@@ -427,12 +427,14 @@ abstract class App extends v.AppMVC {
   static Set<ConnectivityListener> _listeners = new Set();
 
   /// Add a Connectivity listener.
-  static addConnectivityListener(ConnectivityListener listener) =>
-      _listeners.add(listener);
+  static addConnectivityListener(ConnectivityListener listener) {
+    if (listener != null) _listeners.add(listener);
+  }
 
   /// Remove a Connectivity listener.
-  static removeConnectivityListener(ConnectivityListener listener) =>
-      _listeners.remove(listener);
+  static removeConnectivityListener(ConnectivityListener listener) {
+    if (listener != null) _listeners.remove(listener);
+  }
 
   /// Clear Connectivity listeners.
   static clearConnectivityListener() => _listeners.clear();
