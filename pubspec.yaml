@@ -1,7 +1,6 @@
 name: mvc_application
 description: Flutter Framework for Applications using the MVC Design Pattern
 version: 5.1.0
-author: Greg Perry <support@andrioussolutions.com>
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
 
