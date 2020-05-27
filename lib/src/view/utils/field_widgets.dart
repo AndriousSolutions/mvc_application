@@ -90,6 +90,97 @@ import 'package:mvc_application/view.dart' show App;
 
 typedef OnSavedFunc = Function<E>(E v);
 
+class DataFields extends _AddFields {
+  @override
+  Future<List<Map<String, dynamic>>> retrieve() async => [{}];
+
+  @override
+  Future<bool> add(Map<String, dynamic> rec) async => false;
+
+  @override
+  Future<bool> save(Map<String, dynamic> rec) async => false;
+
+  @override
+  Future<bool> delete(Map<String, dynamic> rec) async => false;
+
+  @override
+  Future<bool> undo(Map<String, dynamic> rec) async => false;
+}
+
+abstract class _AddFields extends _EditFields {
+  Future<bool> add(Map<String, dynamic> rec);
+}
+
+abstract class _EditFields extends _ListFields {
+  /// The save record routine.
+  Future<bool> save(Map<String, dynamic> rec);
+
+  Future<bool> delete(Map<String, dynamic> rec);
+
+  Future<bool> undo(Map<String, dynamic> rec);
+}
+
+abstract class _ListFields {
+  /// Retrieve the data fields from the data source into a List of Maps.
+  Future<List<Map<String, dynamic>>> retrieve();
+
+  /// List of the actual data fields.
+  List<Map<String, dynamic>> get items => _items;
+  List<Map<String, dynamic>> _items = [{}];
+
+  /// Retrieve the to-do items from the database
+  Future<List<Map<String, dynamic>>> query() async {
+    _items = await retrieve();
+    _fillRecords(_items);
+    return _items;
+  }
+
+  void _fillRecords(List<Map<String, dynamic>> fieldData) {
+    if (fieldData.isNotEmpty) {
+      this.field.clear();
+    }
+    for (Map<String, dynamic> field in fieldData) {
+      _fillFields(field);
+    }
+  }
+
+  /// A map of 'field' objects
+  Map<dynamic, Map<String, FieldWidgets>> field = Map();
+
+  void _fillFields(Map<String, dynamic> dataFields) {
+    //
+    dynamic id = dataFields.values.first;
+
+    if (this.field[id] == null) {
+      this.field[id] = {};
+    }
+
+    dataFields.forEach((String key, dynamic value) {
+      _fillField(id, {key: value});
+    });
+  }
+
+  void _fillField(dynamic id, Map<String, dynamic> dataField) {
+    //
+    String name = dataField.keys.first;
+
+    dynamic value = dataField.values.first;
+
+    //
+    Map<String, dynamic> map = this.field[id];
+
+    if (map[name] == null) {
+      map[name] = FieldWidgets();
+    }
+
+    map[name].label = name;
+
+    map[name].value = value;
+
+    this.field[id] = map;
+  }
+}
+
 class FieldWidgets<T> extends DataFieldItem {
   FieldWidgets({
     Object key,

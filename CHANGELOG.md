@@ -1,3 +1,8 @@
+## 5.1.0
+ May 18, 2020
+- Replaced runZoned() with runZonedGuarded()
+- class DataFields in field_widgets.dart
+
 ## 5.0.1
  May 18, 2020
 - ConnectivityListener test for null

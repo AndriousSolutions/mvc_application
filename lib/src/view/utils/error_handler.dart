@@ -190,6 +190,7 @@ class ErrorHandler {
   //TODO Complete this routine.
   Future<void> reportError(dynamic error, dynamic stackTrace) async {
     if (_reportError == null) {
+      // Quietly send the error info. somewhere.
     } else {
       await _reportError(error, stackTrace);
     }

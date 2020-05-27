@@ -20,7 +20,7 @@
 ///          Created  24 Dec 2018
 ///
 
-import 'dart:async' show Future, runZoned;
+import 'dart:async' show Future, runZonedGuarded;
 import 'dart:isolate' show Isolate, RawReceivePort;
 
 import 'package:flutter/material.dart' as m
@@ -59,9 +59,10 @@ void runApp(
   // Supply a report error routine if not specified.
   reportError ??= errorHandler.reportError;
 
-  runZoned(() async {
+  // Catch any errors attempting to execute runApp();
+  runZonedGuarded(() {
     m.runApp(app);
-  }, onError: reportError);
+  }, reportError);
 
   Isolate.current.addErrorListener(new RawReceivePort((dynamic pair) async {
     var isolateError = pair as List<dynamic>;
