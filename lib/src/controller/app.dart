@@ -56,21 +56,18 @@ void runApp(
   v.ErrorHandler errorHandler = v.ErrorHandler(
       handler: handler, builder: builder, reportError: reportError);
 
-  // Supply a report error routine if not specified.
-  reportError ??= errorHandler.reportError;
-
-  // Catch any errors attempting to execute runApp();
-  runZonedGuarded(() {
-    m.runApp(app);
-  }, reportError);
-
-  Isolate.current.addErrorListener(new RawReceivePort((dynamic pair) async {
+  Isolate.current.addErrorListener(new RawReceivePort((dynamic pair) {
     var isolateError = pair as List<dynamic>;
-    await reportError(
+    errorHandler.isolateError(
       isolateError.first.toString(),
       StackTrace.fromString(isolateError.last.toString()),
     );
   }).sendPort);
+
+  // Catch any errors attempting to execute runApp();
+  runZonedGuarded(() {
+    m.runApp(app);
+  }, errorHandler.runZonedError);
 }
 
 class AppController extends ControllerMVC implements mvc.AppConMVC {

@@ -28,7 +28,6 @@ import 'dart:ui' as ui
         ParagraphStyle,
         TextStyle;
 
-import 'package:flutter/foundation.dart' show FlutterExceptionHandler;
 import 'package:flutter/material.dart';
 
 import 'package:flutter/foundation.dart'
@@ -38,6 +37,7 @@ import 'package:flutter/foundation.dart'
         FlutterError,
         FlutterErrorDetails,
         FlutterExceptionHandler,
+        InformationCollector,
         StringProperty;
 
 import 'package:flutter/rendering.dart'
@@ -187,13 +187,64 @@ class ErrorHandler {
     return inDebugMode;
   }
 
-  //TODO Complete this routine.
-  Future<void> reportError(dynamic error, dynamic stackTrace) async {
+  Future<void> reportError(
+    dynamic ex,
+    StackTrace stack, {
+    String message,
+    String library,
+    InformationCollector informationCollector,
+  }) async {
     if (_reportError == null) {
-      // Quietly send the error info. somewhere.
+      message ??= 'while attempting to execute your app';
+      library ??= 'Your app';
+      _debugReportException(
+        ErrorSummary(message),
+        ex,
+        stack,
+        library: library,
+        informationCollector: informationCollector,
+      );
     } else {
-      await _reportError(error, stackTrace);
+      await _reportError(ex, stack);
     }
+  }
+
+  void isolateError(dynamic ex, StackTrace stack) {
+    _debugReportException(
+      ErrorSummary('while attempting to execute main()'),
+      ex,
+      stack,
+      library: "likely main.dart",
+    );
+  }
+
+  void runZonedError(dynamic ex, StackTrace stack) {
+    _debugReportException(
+      ErrorSummary('while attempting to execute runApp()'),
+      ex,
+      stack,
+      library: "controller/app.dart",
+    );
+  }
+
+  /// Display the error details.
+  // This is a copy used in the Flutter Framework.
+  FlutterErrorDetails _debugReportException(
+    DiagnosticsNode context,
+    dynamic exception,
+    StackTrace stack, {
+    String library = 'Flutter framework',
+    InformationCollector informationCollector,
+  }) {
+    FlutterErrorDetails details = FlutterErrorDetails(
+      exception: exception,
+      stack: stack,
+      library: library,
+      context: context,
+      informationCollector: informationCollector,
+    );
+    FlutterError.reportError(details);
+    return details;
   }
 }
 

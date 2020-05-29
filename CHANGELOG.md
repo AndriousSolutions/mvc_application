@@ -1,3 +1,7 @@
+## 5.1.1
+ May 29, 2020
+- errorHandler.reportError, errorHandler.runZonedError, errorHandler.isolateError
+
 ## 5.1.0
  May 18, 2020
 - Replaced runZoned() with runZonedGuarded()
