@@ -1,3 +1,7 @@
+## 5.1.2
+ June 03, 2020
+- Corrected Apache Licence
+
 ## 5.1.1
  May 29, 2020
 - errorHandler.reportError, errorHandler.runZonedError, errorHandler.isolateError
