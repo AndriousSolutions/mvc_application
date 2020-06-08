@@ -139,10 +139,12 @@ class _FlatButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = style == null ? this.child : DefaultTextStyle(
-      style: style,
-      child: this.child,
-    );
+    Widget child = style == null
+        ? this.child
+        : DefaultTextStyle(
+            style: style,
+            child: this.child,
+          );
     return FlatButton(
       padding: EdgeInsets.zero,
       onPressed: onPressed,

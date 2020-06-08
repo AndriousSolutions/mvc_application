@@ -843,10 +843,12 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
       debugPaintLayerBordersEnabled = false;
     if (debugRepaintRainbowEnabled == null) debugRepaintRainbowEnabled = false;
 
-    if(errorHandler != null || errorScreen != null || reportError != null)
-    // Supply a customized error handling.
-    _errorHandler = v.ErrorHandler(
-        handler: errorHandler, builder: errorScreen, reportError: reportError);
+    if (errorHandler != null || errorScreen != null || reportError != null)
+      // Supply a customized error handling.
+      _errorHandler = v.ErrorHandler(
+          handler: errorHandler,
+          builder: errorScreen,
+          reportError: reportError);
   }
 
   final AppController con;
@@ -891,7 +893,7 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   Widget build(BuildContext context);
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     // Init if passed error handling.
     _errorHandler?.init();

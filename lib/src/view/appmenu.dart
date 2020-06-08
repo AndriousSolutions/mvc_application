@@ -48,7 +48,7 @@ class AppMenu {
   static List<Widget> _children;
 
   @mustCallSuper
-  static void init(){
+  static void init() {
     /// Set the App's theme
     onChange(colorSwatch);
   }
@@ -73,8 +73,8 @@ class AppMenu {
     List<PopupMenuEntry<dynamic>> menuItems = [];
 
 //    if (App.useMaterial)
-      menuItems.add(
-          PopupMenuItem<dynamic>(value: 'Color', child: ColorPicker.title));
+    menuItems
+        .add(PopupMenuItem<dynamic>(value: 'Color', child: ColorPicker.title));
 
     menuItems.add(
         const PopupMenuItem<dynamic>(value: 'About', child: Text('About')));
