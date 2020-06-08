@@ -20,7 +20,6 @@
 import 'package:flutter/material.dart'
     show
         AppBar,
-        Brightness,
         BuildContext,
         Colors,
         CustomScrollView,
@@ -35,7 +34,6 @@ import 'package:flutter/material.dart'
         SliverList,
         StatelessWidget,
         Theme,
-        ThemeData,
         Widget;
 
 import 'package:mvc_application/view.dart'
@@ -68,11 +66,7 @@ class ContactDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Theme(
-        data: ThemeData(
-          brightness: Brightness.light,
-          primarySwatch: App.colorTheme, //Colors.indigo,
-          platform: Theme.of(context).platform,
-        ),
+        data: App.themeData,
         child: Scaffold(
             appBar: AppBar(title: Controller.edit.displayName.text, actions: [
               FlatButton(

@@ -23,7 +23,6 @@ import 'package:flutter/material.dart'
         Border,
         BorderSide,
         BoxDecoration,
-        Brightness,
         BuildContext,
         Center,
         CircularProgressIndicator,
@@ -70,13 +69,9 @@ class _ContactListState extends StateMVC<ContactListPage> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData _theme = App.theme;
+    ThemeData _theme = App.themeData;
     return Theme(
-      data: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: App.colorTheme, //Colors.indigo,
-        platform: Theme.of(context).platform,
-      ),
+      data: App.themeData,
       child: Scaffold(
         key: Controller.list.scaffoldKey,
         appBar: AppBar(title: Text('Contacts Example'), actions: <Widget>[

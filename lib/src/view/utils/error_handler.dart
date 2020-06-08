@@ -99,7 +99,9 @@ class ErrorHandler {
     ErrorWidgetBuilder builder,
   }) {
     // Assign the default ErrorWidget if not assigned yet.
-    if (builder == null && !_initBuilder) builder = _defaultErrorWidget;
+    if (builder == null && !_initBuilder) {
+      builder = _defaultErrorWidget;
+    }
 
     set(builder: builder, handler: handler);
   }

@@ -1,3 +1,7 @@
+## 5.2.0
+ June 07, 2020
+- Renamed App.theme to App.themeData; _errorHandler.init(); removed App.colorTheme; AppMenu.init();
+
 ## 5.1.2
  June 03, 2020
 - Corrected Apache Licence

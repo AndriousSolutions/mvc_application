@@ -28,10 +28,9 @@ import 'dart:ui' show Color;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-//
+
 import 'package:mvc_application/view.dart' show App;
 import 'package:mvc_application/controller.dart' show HandleError;
-//
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 

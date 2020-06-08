@@ -21,13 +21,17 @@ import 'package:flutter/material.dart'
         BuildContext,
         Color,
         ColorSwatch,
+        mustCallSuper,
         PopupMenuButton,
         PopupMenuDivider,
         PopupMenuEntry,
         PopupMenuItem,
         showAboutDialog,
         Text,
+        ThemeData,
         Widget;
+
+import 'package:flutter/cupertino.dart' show CupertinoThemeData;
 
 import 'package:mvc_application/view.dart' show App, ColorPicker, StateMVC;
 
@@ -42,6 +46,12 @@ class AppMenu {
   static Widget _applicationIcon;
   static String _applicationLegalese;
   static List<Widget> _children;
+
+  @mustCallSuper
+  static void init(){
+    /// Set the App's theme
+    onChange(colorSwatch);
+  }
 
   static PopupMenuButton<dynamic> show(
     StateMVC state, {
@@ -62,7 +72,7 @@ class AppMenu {
 
     List<PopupMenuEntry<dynamic>> menuItems = [];
 
-    if (App.useMaterial)
+//    if (App.useMaterial)
       menuItems.add(
           PopupMenuItem<dynamic>(value: 'Color', child: ColorPicker.title));
 
@@ -120,12 +130,20 @@ class AppMenu {
 
   static void onChange(ColorSwatch value) {
     Prefs.setInt('colorTheme', ColorPicker.colors.indexOf(value));
+    // Set the app's theme.
+    App.themeData = ThemeData(
+      primarySwatch: value,
+    );
+
+    App.iOSTheme = CupertinoThemeData(
+      primaryColor: value,
+    );
 
     /// Rebuild the state.
-    _state.refresh();
+    _state?.refresh();
   }
 
-  static ColorSwatch get colorTheme {
+  static ColorSwatch get colorSwatch {
     final theme = Prefs.getInt('colorTheme');
     ColorPicker.colorSwatch = ColorPicker.colors[theme];
     return ColorPicker.colorSwatch;

@@ -139,13 +139,14 @@ class _FlatButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget child = style == null ? this.child : DefaultTextStyle(
+      style: style,
+      child: this.child,
+    );
     return FlatButton(
       padding: EdgeInsets.zero,
       onPressed: onPressed,
-      child: DefaultTextStyle(
-        style: style ?? Theme.of(context).primaryTextTheme.subtitle1,
-        child: child,
-      ),
+      child: child,
     );
   }
 }

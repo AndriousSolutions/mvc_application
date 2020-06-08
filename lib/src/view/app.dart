@@ -98,8 +98,8 @@ abstract class App extends v.AppMVC {
 
   @override
   void initApp() {
-    // Assign any 'default' error handling.
-    _errorHandler.init();
+    // No need. Called in constructor.
+//    _errorHandler.init();
     super.initApp();
     _vw = createView();
     _vw?.con?.initApp();
@@ -219,7 +219,7 @@ abstract class App extends v.AppMVC {
 
   // Allow it to be assigned null.
   /// The App's current Material theme.
-  static ThemeData theme;
+  static ThemeData themeData;
 
   /// The Apps's current Cupertino theme.
   static CupertinoThemeData iOSTheme;
@@ -373,10 +373,6 @@ abstract class App extends v.AppMVC {
     return _scaffold;
   }
 
-  // AppMenu has a colour picker.
-  /// The ColorSwatch for this App's menu.
-  static ColorSwatch get colorTheme => v.AppMenu.colorTheme;
-
   static getThemeData() async {
     String theme = await Prefs.getStringF('theme');
     ThemeData themeData;
@@ -445,8 +441,8 @@ abstract class App extends v.AppMVC {
   // Internal Initialization routines.
   static Future<void> _initInternal() async {
     // Determine the theme.
-    theme ??= _vw?.theme;
-    theme ??= await App.getThemeData();
+    themeData ??= _vw?.theme;
+    themeData ??= await App.getThemeData();
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
@@ -691,7 +687,7 @@ class AppView extends AppViewState<_AppWidget> {
         title: title ?? onTitle() ?? '',
         onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
         color: color ?? onColor() ?? Colors.white,
-        theme: theme ?? onTheme() ?? App.theme,
+        theme: theme ?? onTheme() ?? App.themeData,
         darkTheme: darkTheme ?? onDarkTheme(),
         themeMode: themeMode ?? onThemeMode() ?? ThemeMode.system,
         locale: locale ?? onLocale(),
@@ -763,7 +759,7 @@ class AppView extends AppViewState<_AppWidget> {
   String onTitle() => '';
   GenerateAppTitle onOnGenerateTitle(BuildContext context) => null;
   Color onColor() => null;
-  ThemeData onTheme() => App.theme;
+  ThemeData onTheme() => App.themeData;
   CupertinoThemeData oniOSTheme() => App.iOSTheme;
   ThemeData onDarkTheme() => null;
   ThemeMode onThemeMode() => ThemeMode.system;
@@ -847,6 +843,7 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
       debugPaintLayerBordersEnabled = false;
     if (debugRepaintRainbowEnabled == null) debugRepaintRainbowEnabled = false;
 
+    if(errorHandler != null || errorScreen != null || reportError != null)
     // Supply a customized error handling.
     _errorHandler = v.ErrorHandler(
         handler: errorHandler, builder: errorScreen, reportError: reportError);
@@ -894,17 +891,18 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   Widget build(BuildContext context);
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    // Assign any 'default' error handling.
-    _errorHandler.init();
+    // Init if passed error handling.
+    _errorHandler?.init();
+    // Init the App's menu.
+    v.AppMenu.init();
   }
 
   @override
   void dispose() {
-    // Restore the original error handling.
-    _errorHandler.dispose();
     object = null;
+    _errorHandler?.dispose();
     super.dispose();
   }
 }

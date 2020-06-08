@@ -270,7 +270,7 @@ class FieldWidgets<T> extends DataFieldItem {
   final T object;
   Iterable<DataFieldItem> items;
 
-  final ThemeData _theme = App.theme;
+  final ThemeData _theme = App.themeData;
 
   String get key => _key;
   String _key;

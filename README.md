@@ -5,7 +5,8 @@
 
 **Installing**
 I don't always like the version number suggested in the '[Installing](https://pub.dev/packages/mvc_application#-installing-tab-)' page.
-Instead, always go up to the '**major**' semantic version number when installing my library packages. This means always entering a version number trailing with two zero, '**.0.0**'. This allows you to take in any '**minor**' versions introducing new features as well as any '**patch**' versions that involves bugfixes. Semantic version numbers are always in this format: **major.minor.patch**. 
+Instead, always go up to the '**minor**' semantic version number when installing this library package. This means always trailing with one zero, '**.0**'. This allows you to take in any '**minor**' versions introducing new features as well as any '**patch**' versions that involves bugfixes. Semantic version numbers are always in this format: **major.minor.patch**. 
+I know I should be changing the '**major**' instead, but since I chose to release this to production with a lot of changes to come, I don't want to be up to version '**27.0.0**' before I know it!
 
 1. **patch** - I've made bugfixes
 2. **minor** - I've introduced new features
@@ -14,7 +15,7 @@ Instead, always go up to the '**major**' semantic version number when installing
 And so, in this case, add this to your package's pubspec.yaml file instead:
 ```javascript
 dependencies:
-   mvc_application:^5.0.0
+   mvc_application:^5.2.0
 ```
 For more information on version numbers: [The importance of semantic versioning](https://medium.com/@xabaras/the-importance-of-semantic-versioning-9b78e8e59bba).
 
