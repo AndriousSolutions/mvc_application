@@ -1,13 +1,13 @@
 name: mvc_application
 description: Flutter Framework for Applications using the MVC Design Pattern
-version: 5.2.0
+
+version: 5.3.0
+
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
 
-
 environment:
   sdk: ">=2.7.0 <3.0.0"
-
 
 dependencies:
   flutter:

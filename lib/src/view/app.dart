@@ -373,7 +373,8 @@ abstract class App extends v.AppMVC {
     return _scaffold;
   }
 
-  static getThemeData() async {
+  @deprecated
+  static Future<ThemeData> getThemeData() async {
     String theme = await Prefs.getStringF('theme');
     ThemeData themeData;
     switch (theme) {
@@ -389,6 +390,23 @@ abstract class App extends v.AppMVC {
     return themeData;
   }
 
+  static ThemeData _getThemeData() {
+    String theme = Prefs.getString('theme');
+    ThemeData themeData;
+    switch (theme) {
+      case 'light':
+        themeData = ThemeData.light();
+        break;
+      case 'dark':
+        themeData = ThemeData.dark();
+        break;
+      default:
+        themeData = ThemeData.fallback();
+    }
+    return themeData;
+  }
+
+  @deprecated
   static setThemeData(String theme) {
     switch (theme) {
       case 'light':
@@ -440,9 +458,9 @@ abstract class App extends v.AppMVC {
 
   // Internal Initialization routines.
   static Future<void> _initInternal() async {
-    // Determine the theme.
-    themeData ??= _vw?.theme;
-    themeData ??= await App.getThemeData();
+//    // Determine the theme.
+//    themeData ??= _vw?.theme;
+//    themeData ??= await App.getThemeData();
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
@@ -646,7 +664,7 @@ class AppView extends AppViewState<_AppWidget> {
         title: title ?? onTitle() ?? '',
         onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
         color: color ?? onColor() ?? Colors.white,
-        theme: iOSTheme ?? oniOSTheme() ?? App.iOSTheme,
+        theme: _oniOSTheme(),
         locale: locale ?? onLocale(),
         localizationsDelegates:
             localizationsDelegates ?? onLocalizationsDelegates(),
@@ -687,7 +705,7 @@ class AppView extends AppViewState<_AppWidget> {
         title: title ?? onTitle() ?? '',
         onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
         color: color ?? onColor() ?? Colors.white,
-        theme: theme ?? onTheme() ?? App.themeData,
+        theme: _onTheme(),
         darkTheme: darkTheme ?? onDarkTheme(),
         themeMode: themeMode ?? onThemeMode() ?? ThemeMode.system,
         locale: locale ?? onLocale(),
@@ -759,8 +777,8 @@ class AppView extends AppViewState<_AppWidget> {
   String onTitle() => '';
   GenerateAppTitle onOnGenerateTitle(BuildContext context) => null;
   Color onColor() => null;
-  ThemeData onTheme() => App.themeData;
-  CupertinoThemeData oniOSTheme() => App.iOSTheme;
+  ThemeData onTheme() => null;
+  CupertinoThemeData oniOSTheme() => null;
   ThemeData onDarkTheme() => null;
   ThemeMode onThemeMode() => ThemeMode.system;
   Locale onLocale() => null;
@@ -774,6 +792,21 @@ class AppView extends AppViewState<_AppWidget> {
   bool onCheckerboardOffscreenLayers() => false;
   bool onShowSemanticsDebugger() => false;
   bool onDebugShowCheckedModeBanner() => true;
+
+  ThemeData _onTheme() {
+    App.themeData ??= theme;
+    App.themeData ??= onTheme();
+    App.themeData ??= App._getThemeData();
+    return App.themeData;
+  }
+
+  CupertinoThemeData _oniOSTheme() {
+    App.iOSTheme ??= iOSTheme;
+    App.iOSTheme ??= oniOSTheme();
+    App.iOSTheme ??=
+        MaterialBasedCupertinoThemeData(materialTheme: App._getThemeData());
+    return App.iOSTheme;
+  }
 }
 
 abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
@@ -793,6 +826,7 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
     this.onGenerateTitle,
     this.color,
     this.theme,
+    this.iOSTheme,
     this.darkTheme,
     this.themeMode,
     this.locale,
@@ -864,10 +898,10 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   TransitionBuilder builder;
   String title;
   GenerateAppTitle onGenerateTitle;
-  ThemeData theme;
-  CupertinoThemeData iOSTheme;
-  ThemeData darkTheme;
-  ThemeMode themeMode;
+  final ThemeData theme;
+  final CupertinoThemeData iOSTheme;
+  final ThemeData darkTheme;
+  final ThemeMode themeMode;
   Color color;
   Locale locale;
   Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates;

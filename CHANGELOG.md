@@ -1,3 +1,7 @@
+## 5.3.0
+ June 11, 2020
+- final ThemeData theme; final CupertinoThemeData iOSTheme; deprecate getThemeData();
+
 ## 5.2.0
  June 07, 2020
 - Renamed App.theme to App.themeData; _errorHandler.init(); removed App.colorTheme; AppMenu.init();
