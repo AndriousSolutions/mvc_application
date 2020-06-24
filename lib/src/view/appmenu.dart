@@ -140,7 +140,8 @@ class AppMenu {
       primaryColor: value,
     );
 
-    App.iOSTheme = App?.iOSTheme?.copyWith(  //CupertinoThemeData(
+    App.iOSTheme = App?.iOSTheme?.copyWith(
+      //CupertinoThemeData(
       primaryColor: value,
     );
     // Rebuild the state.
@@ -167,5 +168,6 @@ abstract class Menu {
       menu: this,
     );
   }
+
   StateMVC state;
 }

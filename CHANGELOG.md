@@ -1,3 +1,8 @@
+## 5.3.1
+ June 24, 2020
+- // Replace 'dart:io' to allow for Web apps.
+  import 'package:universal_platform/universal_platform.dart';
+
 ## 5.3.0
  June 11, 2020
 - final ThemeData theme; final CupertinoThemeData iOSTheme; deprecate getThemeData();

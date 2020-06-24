@@ -16,9 +16,12 @@
 ///          Created  24 Dec 2018
 ///
 
-import 'dart:io' show Platform;
+//import 'dart:io' show Platform;
 
 import 'dart:async' show Future, StreamSubscription;
+
+// Replace 'dart:io' for Web applications
+import 'package:universal_platform/universal_platform.dart';
 
 import 'package:flutter/foundation.dart'
     show FlutterExceptionHandler, Key, kIsWeb, mustCallSuper, protected;
@@ -60,7 +63,7 @@ import 'package:flutter/rendering.dart' as debugPaint;
 typedef ErrorWidgetBuilder = Widget Function(
     FlutterErrorDetails flutterErrorDetails);
 
-abstract class App extends v.AppMVC {
+abstract class App extends v.AppMVC { // extends StatefulWidget
   // You must supply a 'View.'
   App({
     AppConMVC con,
@@ -98,8 +101,6 @@ abstract class App extends v.AppMVC {
 
   @override
   void initApp() {
-    // No need. Called in constructor.
-//    _errorHandler.init();
     super.initApp();
     _vw = createView();
     _vw?.con?.initApp();
@@ -152,15 +153,15 @@ abstract class App extends v.AppMVC {
   /// Indicates if the App is running the Material interface theme.
   static bool get useMaterial =>
       _vw.useMaterial ||
-      (Platform.isAndroid && !_vw.switchUI) ||
-      (Platform.isIOS && _vw.switchUI);
+      (UniversalPlatform.isAndroid && !_vw.switchUI) ||
+      (UniversalPlatform.isIOS && _vw.switchUI);
 
   // Use Cupertino UI when explicitly specified or even when running in Android
   /// Indicates if the App is running the Cupertino interface theme.
   static bool get useCupertino =>
       _vw.useCupertino ||
-      (Platform.isIOS && !_vw.switchUI) ||
-      (Platform.isAndroid && _vw.switchUI);
+      (UniversalPlatform.isIOS && !_vw.switchUI) ||
+      (UniversalPlatform.isAndroid && _vw.switchUI);
 
   /// Return the navigator key used by the App's View.
   static GlobalKey<NavigatorState> get navigatorKey => _vw.navigatorKey;
@@ -614,11 +615,11 @@ class AppView extends AppViewState<_AppWidget> {
 
     // if both useMaterial & useCupertino are set then rely on the Platform.
     useMaterial =
-        !useCupertino && (useMaterial || Platform.isAndroid || kIsWeb);
-    useCupertino = !useMaterial && (useCupertino || Platform.isIOS);
+        !useCupertino && (useMaterial || UniversalPlatform.isAndroid || kIsWeb);
+    useCupertino = !useMaterial && (useCupertino || UniversalPlatform.isIOS);
     switchUI = switchUI ||
-        (Platform.isAndroid && !useMaterial) ||
-        (Platform.isIOS && !useCupertino);
+        (UniversalPlatform.isAndroid && !useMaterial) ||
+        (UniversalPlatform.isIOS && !useCupertino);
   }
   final Key key;
   Widget home;
@@ -647,8 +648,8 @@ class AppView extends AppViewState<_AppWidget> {
       return true;
     }());
     if (useCupertino ||
-        (Platform.isIOS && !switchUI) ||
-        (Platform.isAndroid && switchUI)) {
+        (UniversalPlatform.isIOS && !switchUI) ||
+        (UniversalPlatform.isAndroid && switchUI)) {
       return CupertinoApp(
         key: key ?? App.materialKey,
         navigatorKey: navigatorKey ?? onNavigatorKey(),

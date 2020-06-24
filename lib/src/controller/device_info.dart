@@ -18,7 +18,9 @@
 ///          Created  11 Feb 2019
 ///
 ///
-import 'dart:io' show Platform;
+//import 'dart:io' show Platform;
+// Replace 'dart:io' for Web applications
+import 'package:universal_platform/universal_platform.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:device_info/device_info.dart'
     show AndroidDeviceInfo, DeviceInfoPlugin, IosDeviceInfo;
@@ -33,16 +35,16 @@ class DeviceInfo {
     _init = true;
     // Running in the Web.
     if (kIsWeb) return _deviceParameters;
-    if (Platform.isAndroid) {
+    if (UniversalPlatform.isAndroid) {
       AndroidDeviceInfo info = await DeviceInfoPlugin().androidInfo;
       _loadAndroidParameters(info);
-    } else if (Platform.isIOS) {
+    } else if (UniversalPlatform.isIOS) {
       IosDeviceInfo info = await DeviceInfoPlugin().iosInfo;
       _loadiOSParameters(info);
-    } else if (Platform.isWindows) {
-    } else if (Platform.isFuchsia) {
-    } else if (Platform.isLinux) {
-    } else if (Platform.isMacOS) {}
+    } else if (UniversalPlatform.isWindows) {
+    } else if (UniversalPlatform.isFuchsia) {
+    } else if (UniversalPlatform.isLinux) {
+    } else if (UniversalPlatform.isMacOS) {}
     return _deviceParameters;
   }
 
