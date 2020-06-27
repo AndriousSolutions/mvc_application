@@ -1,7 +1,11 @@
+## 5.3.2
+ June 27, 2020
+- ColorPicker.color = App.themeData.primaryColor;
+
 ## 5.3.1
  June 24, 2020
-- // Replace 'dart:io' to allow for Web apps.
-  import 'package:universal_platform/universal_platform.dart';
+- Replace 'dart:io' to allow for Web apps.
+- import 'package:universal_platform/universal_platform.dart';
 
 ## 5.3.0
  June 11, 2020

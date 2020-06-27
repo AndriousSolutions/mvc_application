@@ -63,7 +63,8 @@ import 'package:flutter/rendering.dart' as debugPaint;
 typedef ErrorWidgetBuilder = Widget Function(
     FlutterErrorDetails flutterErrorDetails);
 
-abstract class App extends v.AppMVC { // extends StatefulWidget
+abstract class App extends v.AppMVC {
+  // extends StatefulWidget
   // You must supply a 'View.'
   App({
     AppConMVC con,

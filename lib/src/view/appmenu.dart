@@ -106,7 +106,7 @@ class AppMenu {
     }
     if (value is! String) return;
     // Set the current colour.
-    ColorPicker.colorSwatch = App.themeData.primaryColor;
+    ColorPicker.color = App.themeData.primaryColor;
     switch (value) {
       case 'Color':
         ColorPicker.showColorPicker(
