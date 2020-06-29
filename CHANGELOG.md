@@ -1,3 +1,7 @@
+## 5.3.3
+ June 29, 2020
+- App.init() if (App?.themeData == null) {
+
 ## 5.3.2
  June 27, 2020
 - ColorPicker.color = App.themeData.primaryColor;

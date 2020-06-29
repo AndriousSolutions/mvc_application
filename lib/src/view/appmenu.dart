@@ -28,9 +28,10 @@ import 'package:flutter/material.dart'
         PopupMenuItem,
         showAboutDialog,
         Text,
+        ThemeData,
         Widget;
 
-//import 'package:flutter/cupertino.dart' show CupertinoThemeData;
+import 'package:flutter/cupertino.dart' show CupertinoThemeData;
 
 import 'package:mvc_application/view.dart' show App, ColorPicker, StateMVC;
 
@@ -49,8 +50,7 @@ class AppMenu {
   @mustCallSuper
   static void init() {
     /// Set the App's theme
-    var appView = App.vw;
-    if (appView.theme == null && appView.onTheme == null) {
+    if (App?.themeData == null) {
       onChange(colorSwatch);
     }
   }
@@ -134,16 +134,31 @@ class AppMenu {
 
   static void onChange(ColorSwatch value) {
     //
+    if (value == null) return;
+
     Prefs.setInt('colorTheme', ColorPicker.colors.indexOf(value));
     // Set the app's theme.
-    App.themeData = App?.themeData?.copyWith(
-      primaryColor: value,
-    );
+    if (App?.themeData == null) {
+      App.themeData = ThemeData(
+        primaryColor: value,
+      );
+    } else {
+      App.themeData = App?.themeData?.copyWith(
+        primaryColor: value,
+      );
+    }
 
-    App.iOSTheme = App?.iOSTheme?.copyWith(
-      //CupertinoThemeData(
-      primaryColor: value,
-    );
+    if (App?.iOSTheme == null) {
+      App.iOSTheme = CupertinoThemeData(
+        //CupertinoThemeData(
+        primaryColor: value,
+      );
+    } else {
+      App.iOSTheme = App?.iOSTheme?.copyWith(
+        //CupertinoThemeData(
+        primaryColor: value,
+      );
+    }
     // Rebuild the state.
     _state?.refresh();
   }
