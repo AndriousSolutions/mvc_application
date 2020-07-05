@@ -1,3 +1,7 @@
+## 5.4.0
+ July 04, 2020
+- updated .gitignore
+
 ## 5.3.4
  July 04, 2020
 - useMaterial = !switchUI &&
