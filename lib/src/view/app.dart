@@ -615,11 +615,10 @@ class AppView extends AppViewState<_AppWidget> {
     if (switchUI == null) switchUI = false;
 
     // if both useMaterial & useCupertino are set then rely on the Platform.
-    useMaterial = !switchUI &&
-        !useCupertino &&
-        (useMaterial || UniversalPlatform.isAndroid || kIsWeb);
-    useCupertino =
-        !switchUI && !useMaterial && (useCupertino || UniversalPlatform.isIOS);
+    useMaterial = !useCupertino &&
+        (useMaterial || (UniversalPlatform.isAndroid && !switchUI) || kIsWeb);
+    useCupertino = !useMaterial &&
+        (useCupertino || (UniversalPlatform.isIOS && !switchUI));
     switchUI = switchUI ||
         (UniversalPlatform.isAndroid && !useMaterial) ||
         (UniversalPlatform.isIOS && !useCupertino);
@@ -650,9 +649,7 @@ class AppView extends AppViewState<_AppWidget> {
           debugRepaintRainbowEnabled ?? false;
       return true;
     }());
-    if (useCupertino ||
-        (UniversalPlatform.isIOS && !switchUI) ||
-        (UniversalPlatform.isAndroid && switchUI)) {
+    if (useCupertino) {
       return CupertinoApp(
         key: key ?? App.materialKey,
         navigatorKey: navigatorKey ?? onNavigatorKey(),
