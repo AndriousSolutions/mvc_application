@@ -1,3 +1,7 @@
+## 5.3.4
+ July 04, 2020
+- useMaterial = !switchUI &&
+
 ## 5.3.3
  June 29, 2020
 - App.init() if (App?.themeData == null) {
