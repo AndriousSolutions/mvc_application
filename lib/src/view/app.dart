@@ -615,13 +615,12 @@ class AppView extends AppViewState<_AppWidget> {
     if (switchUI == null) switchUI = false;
 
     // if both useMaterial & useCupertino are set then rely on the Platform.
-    useMaterial = !useCupertino &&
-        (useMaterial || (UniversalPlatform.isAndroid && !switchUI) || kIsWeb);
-    useCupertino = !useMaterial &&
-        (useCupertino || (UniversalPlatform.isIOS && !switchUI));
-    switchUI = switchUI ||
-        (UniversalPlatform.isAndroid && !useMaterial) ||
-        (UniversalPlatform.isIOS && !useCupertino);
+    switchUI = (switchUI && !useCupertino && !useMaterial);
+    useMaterial = kIsWeb ||
+        (useMaterial && !useCupertino) ||
+        (UniversalPlatform.isAndroid && !switchUI);
+    useCupertino = (useCupertino && !useMaterial) ||
+        (UniversalPlatform.isIOS && !switchUI);
   }
   final Key key;
   Widget home;

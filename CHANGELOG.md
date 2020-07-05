@@ -1,3 +1,7 @@
+## 5.4.2
+ July 05, 2020
+- (switchUI && !useCupertino && !useMaterial);
+
 ## 5.4.1
  July 04, 2020
 - (UniversalPlatform.isAndroid && !switchUI)
