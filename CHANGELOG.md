@@ -1,3 +1,7 @@
+## 5.5.0
+ July 06, 2020
+- Provide a Form's Stat object: Widget linkForm(child) => _ChildForm(parent: this, child: child);
+
 ## 5.4.2
  July 05, 2020
 - (switchUI && !useCupertino && !useMaterial);

@@ -17,63 +17,6 @@
 ///
 ///
 
-import 'package:flutter/material.dart'
-    show
-        Border,
-        BorderSide,
-        BoxDecoration,
-        Brightness,
-        BuildContext,
-        Checkbox,
-        CheckboxListTile,
-        CircleAvatar,
-        Color,
-        Colors,
-        Column,
-        Container,
-        CrossAxisAlignment,
-        DefaultTextStyle,
-        DismissDirection,
-        DismissDirectionCallback,
-        Dismissible,
-        DropdownButton,
-        DropdownMenuItem,
-        EdgeInsets,
-        EdgeInsetsGeometry,
-        FocusNode,
-        FormFieldSetter,
-        FormFieldValidator,
-        GestureLongPressCallback,
-        GestureTapCallback,
-        Icon,
-        Icons,
-        ImageProvider,
-        InputDecoration,
-        Key,
-        ListTile,
-        ListTileControlAffinity,
-        Locale,
-        MaterialTapTargetSize,
-        ObjectKey,
-        Padding,
-        StatelessWidget,
-        Text,
-        TextAlign,
-        TextCapitalization,
-        TextDirection,
-        TextEditingController,
-        TextFormField,
-        TextInputAction,
-        TextInputType,
-        TextOverflow,
-        TextSpan,
-        TextStyle,
-        ThemeData,
-        ValueChanged,
-        VoidCallback,
-        Widget,
-        required;
-
 import 'package:flutter/services.dart'
     show
         Brightness,
@@ -82,7 +25,7 @@ import 'package:flutter/services.dart'
         TextInputFormatter,
         TextInputType;
 
-import 'package:mvc_application/view.dart' show App;
+import 'package:mvc_application/view.dart';
 
 typedef OnSavedFunc = Function<E>(E v);
 
@@ -101,6 +44,16 @@ class DataFields extends _AddFields {
 
   @override
   Future<bool> undo(Map<String, dynamic> rec) async => false;
+
+  FormState _formState;
+
+  Widget linkForm(child) => _ChildForm(parent: this, child: child);
+
+  bool saveForm() {
+    bool save = _formState?.validate() ?? true;
+    if (save) _formState?.save();
+    return save;
+  }
 }
 
 abstract class _AddFields extends _EditFields {
@@ -977,3 +930,15 @@ class ListItems extends StatelessWidget {
 }
 
 typedef Widget MapItemFunction(DataFieldItem i);
+
+class _ChildForm extends StatelessWidget {
+  _ChildForm({this.parent, this.child, Key key}) : super(key: key);
+  final DataFields parent;
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    // Retrieve the Form's State object.
+    parent._formState = Form.of(context);
+    return child;
+  }
+}
