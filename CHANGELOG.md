@@ -1,6 +1,12 @@
+## 5.7.0
+ July 09, 2020
+- @deprecated materialKey; 
+- (UniversalPlatform.isIOS && switchUI); 
+- @deprecated Widget buildView(BuildContext context)
+
 ## 5.6.0
  July 08, 2020
-- void addField( String get errorText
+- void addField(); String get errorText
 
 ## 5.5.0
  July 06, 2020

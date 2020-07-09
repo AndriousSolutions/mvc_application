@@ -98,7 +98,9 @@ abstract class App extends v.AppMVC {
   static bool _hotReload = false;
 
   /// More efficient widget tree rebuilds
+  @deprecated
   static final materialKey = GlobalKey();
+  static final widgetsAppKey = materialKey;
 
   @override
   void initApp() {
@@ -616,11 +618,15 @@ class AppView extends AppViewState<_AppWidget> {
 
     // if both useMaterial & useCupertino are set then rely on the Platform.
     switchUI = (switchUI && !useCupertino && !useMaterial);
+
     useMaterial = kIsWeb ||
         (useMaterial && !useCupertino) ||
-        (UniversalPlatform.isAndroid && !switchUI);
+        (UniversalPlatform.isAndroid && !switchUI) ||
+        (UniversalPlatform.isIOS && switchUI);
+
     useCupertino = (useCupertino && !useMaterial) ||
-        (UniversalPlatform.isIOS && !switchUI);
+        (UniversalPlatform.isIOS && !switchUI) ||
+        (UniversalPlatform.isAndroid && switchUI);
   }
   final Key key;
   Widget home;
@@ -632,25 +638,18 @@ class AppView extends AppViewState<_AppWidget> {
   // Use Cupertino UI in Android and vice versa.
   bool switchUI;
 
+  /// Override to impose your own WidgetsApp (like CupertinoApp or MaterialApp)
+  @override
+  Widget buildApp(BuildContext context) => buildView(context);
+
+  /// Deprecated. Now use buildApp(BuildContext context);
+  @deprecated
   @override
   Widget buildView(BuildContext context) {
-    assert(() {
-      /// Highlights UI while debugging.
-      debugPaint.debugPaintSizeEnabled = debugPaintSizeEnabled ?? false;
-      debugPaint.debugPaintBaselinesEnabled =
-          debugPaintBaselinesEnabled ?? false;
-      debugPaint.debugPaintPointersEnabled = debugPaintPointersEnabled ?? false;
-      debugPaint.debugPaintLayerBordersEnabled =
-          debugPaintLayerBordersEnabled ?? false;
-      debugPaint.debugRepaintRainbowEnabled =
-          debugRepaintRainbowEnabled ?? false;
-      debugPaint.debugRepaintTextRainbowEnabled =
-          debugRepaintRainbowEnabled ?? false;
-      return true;
-    }());
+    //
     if (useCupertino) {
       return CupertinoApp(
-        key: key ?? App.materialKey,
+        key: key ?? App.widgetsAppKey,
         navigatorKey: navigatorKey ?? onNavigatorKey(),
         home: home,
         routes: routes ?? onRoutes() ?? const <String, WidgetBuilder>{},
@@ -691,7 +690,7 @@ class AppView extends AppViewState<_AppWidget> {
       );
     } else {
       return MaterialApp(
-        key: key ?? App.materialKey,
+        key: key ?? App.widgetsAppKey,
         navigatorKey: navigatorKey ?? onNavigatorKey(),
         home: home,
         routes: routes ?? onRoutes() ?? const <String, WidgetBuilder>{},
@@ -876,6 +875,21 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
     if (debugPaintLayerBordersEnabled == null)
       debugPaintLayerBordersEnabled = false;
     if (debugRepaintRainbowEnabled == null) debugRepaintRainbowEnabled = false;
+
+    assert(() {
+      /// Highlights UI while debugging.
+      debugPaint.debugPaintSizeEnabled = debugPaintSizeEnabled ?? false;
+      debugPaint.debugPaintBaselinesEnabled =
+          debugPaintBaselinesEnabled ?? false;
+      debugPaint.debugPaintPointersEnabled = debugPaintPointersEnabled ?? false;
+      debugPaint.debugPaintLayerBordersEnabled =
+          debugPaintLayerBordersEnabled ?? false;
+      debugPaint.debugRepaintRainbowEnabled =
+          debugRepaintRainbowEnabled ?? false;
+      debugPaint.debugRepaintTextRainbowEnabled =
+          debugRepaintRainbowEnabled ?? false;
+      return true;
+    }());
 
     if (errorHandler != null || errorScreen != null || reportError != null)
       // Supply a customized error handling.
