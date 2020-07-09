@@ -1,6 +1,11 @@
+## 5.6.0
+ July 08, 2020
+- void addField( String get errorText
+
 ## 5.5.0
  July 06, 2020
 - Provide a Form's Stat object: Widget linkForm(child) => _ChildForm(parent: this, child: child);
+- git rm --cached -r .pubspec.lock
 
 ## 5.4.2
  July 05, 2020

@@ -51,8 +51,40 @@ class DataFields extends _AddFields {
 
   bool saveForm() {
     bool save = _formState?.validate() ?? true;
-    if (save) _formState?.save();
+    if (save) {
+      _formState?.save();
+    } else {
+      _errorText = fieldErrors();
+    }
     return save;
+  }
+
+  /// Retain an internal list of FormFieldState objects.
+  final Set<FormFieldState<dynamic>> _fields = <FormFieldState<dynamic>>{};
+
+  /// Add a FormFieldState object.
+  void addField(FormFieldState<dynamic> field) {
+    _fields.add(field);
+  }
+
+  /// Remove a FormFieldState object.
+  void removeField(FormFieldState<dynamic> field) {
+    _fields.remove(field);
+  }
+
+  /// A collection of errors returned by the [FormField.validator]
+  String get errorText => _errorText;
+  String _errorText = " ";
+
+  /// True if this field has any validation errors.
+  bool get hasError => _errorText != null;
+
+  /// Any errors from every [FormField] that is a descendant of this [Form].
+  String fieldErrors() {
+    String errors = "";
+    for (final FormFieldState<dynamic> field in _fields)
+      if (field.hasError) errors = errors + field.errorText;
+    return errors;
   }
 }
 
