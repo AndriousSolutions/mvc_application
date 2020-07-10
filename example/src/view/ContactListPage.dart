@@ -80,7 +80,7 @@ class _ContactListState extends StateMVC<ContactListPage> {
               onPressed: () {
                 Controller.list.sort();
               }),
-          AppMenu.show(this),
+          AppMenu().show(this),
         ]),
         floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),

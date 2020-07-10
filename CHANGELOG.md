@@ -1,3 +1,8 @@
+## 5.8.0
+ July 10, 2020
+- static set themeData(dynamic value) 
+- v.AppMenu.onChange();
+
 ## 5.7.0
  July 09, 2020
 - @deprecated materialKey; 

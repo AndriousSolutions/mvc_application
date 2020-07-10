@@ -21,41 +21,33 @@ import 'package:flutter/material.dart'
         BuildContext,
         Color,
         ColorSwatch,
-        mustCallSuper,
         PopupMenuButton,
         PopupMenuDivider,
         PopupMenuEntry,
         PopupMenuItem,
         showAboutDialog,
         Text,
-        ThemeData,
         Widget;
-
-import 'package:flutter/cupertino.dart' show CupertinoThemeData;
 
 import 'package:mvc_application/view.dart' show App, ColorPicker, StateMVC;
 
 import 'package:mvc_application/controller.dart' show Prefs;
 
 class AppMenu {
+  factory AppMenu() => _this ??= AppMenu._();
+  static AppMenu _this;
+  AppMenu._();
+
   static StateMVC _state;
-  static Menu _menu;
-//  static Menu _tail;
-  static String _applicationName;
-  static String _applicationVersion;
-  static Widget _applicationIcon;
-  static String _applicationLegalese;
-  static List<Widget> _children;
 
-  @mustCallSuper
-  static void init() {
-    /// Set the App's theme
-    if (App?.themeData == null) {
-      onChange(colorSwatch);
-    }
-  }
+  Menu _menu;
+  String _applicationName;
+  String _applicationVersion;
+  Widget _applicationIcon;
+  String _applicationLegalese;
+  List<Widget> _children;
 
-  static PopupMenuButton<dynamic> show(
+  PopupMenuButton<dynamic> show(
     StateMVC state, {
     String applicationName = "Name of you app.",
     Widget applicationIcon,
@@ -74,7 +66,6 @@ class AppMenu {
 
     List<PopupMenuEntry<dynamic>> menuItems = [];
 
-//    if (App.useMaterial)
     menuItems
         .add(PopupMenuItem<dynamic>(value: 'Color', child: ColorPicker.title));
 
@@ -100,7 +91,7 @@ class AppMenu {
     );
   }
 
-  static _showMenuSelection(dynamic value) {
+  _showMenuSelection(dynamic value) {
     if (_menu != null) {
       _menu.onSelected(value);
     }
@@ -132,52 +123,42 @@ class AppMenu {
     /// Implement to take in a color change.
   }
 
-  static void onChange(ColorSwatch value) {
+  static void onChange([ColorSwatch value]) {
     //
-    if (value == null) return;
-
-    Prefs.setInt('colorTheme', ColorPicker.colors.indexOf(value));
-    // Set the app's theme.
-    if (App?.themeData == null) {
-      App.themeData = ThemeData(
-        primaryColor: value,
-      );
+    if (value == null) {
+      var swatch = Prefs.getInt('colorTheme', -1);
+      // If never set in the first place, ignore
+      if (swatch > -1) {
+        value = ColorPicker.colors[swatch];
+        ColorPicker.colorSwatch = value;
+      }
     } else {
-      App.themeData = App?.themeData?.copyWith(
-        primaryColor: value,
-      );
+      Prefs.setInt('colorTheme', ColorPicker.colors.indexOf(value));
     }
 
-    if (App?.iOSTheme == null) {
-      App.iOSTheme = CupertinoThemeData(
-        //CupertinoThemeData(
-        primaryColor: value,
-      );
-    } else {
-      App.iOSTheme = App?.iOSTheme?.copyWith(
-        //CupertinoThemeData(
-        primaryColor: value,
-      );
-    }
+    App.themeData = value;
+
+    App.iOSTheme = value;
+
     // Rebuild the state.
     _state?.refresh();
-  }
-
-  static ColorSwatch get colorSwatch {
-    final theme = Prefs.getInt('colorTheme');
-    ColorPicker.colorSwatch = ColorPicker.colors[theme];
-    return ColorPicker.colorSwatch;
   }
 }
 
 abstract class Menu {
-  List<PopupMenuItem<dynamic>> menuItems();
+  Menu() : _appMenu = AppMenu();
+  final AppMenu _appMenu;
+
+  //
   List<PopupMenuItem<dynamic>> tailItems = [];
+  // abstract
+  List<PopupMenuItem<dynamic>> menuItems();
+  // abstract
   void onSelected(dynamic menuItem);
 
   PopupMenuButton<dynamic> show(StateMVC state, {String applicationName}) {
     this.state = state;
-    return AppMenu.show(
+    return _appMenu.show(
       state,
       applicationName: applicationName,
       menu: this,

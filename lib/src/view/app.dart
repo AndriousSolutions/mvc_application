@@ -223,10 +223,48 @@ abstract class App extends v.AppMVC {
 
   // Allow it to be assigned null.
   /// The App's current Material theme.
-  static ThemeData themeData;
+  static ThemeData get themeData => _themeData;
+  static ThemeData _themeData;
+  static set themeData(dynamic value) {
+    if (value == null) return;
+    if (value is ThemeData) {
+      App._themeData = value;
+    } else if (value is CupertinoThemeData) {
+      // Ignore the value
+    } else if (value is! ColorSwatch) {
+      // Ignore the value
+    } else if (App?._themeData == null) {
+      App._themeData = ThemeData(
+        primaryColor: value,
+      );
+    } else {
+      App._themeData = App?._themeData?.copyWith(
+        primaryColor: value,
+      );
+    }
+  }
 
   /// The Apps's current Cupertino theme.
-  static CupertinoThemeData iOSTheme;
+  static CupertinoThemeData get iOSTheme => _iOSTheme;
+  static CupertinoThemeData _iOSTheme;
+  static set iOSTheme(dynamic value) {
+    if (value == null) return;
+    if (value is CupertinoThemeData) {
+      App._iOSTheme = value;
+    } else if (value is ThemeData) {
+      _iOSTheme = MaterialBasedCupertinoThemeData(materialTheme: value);
+    } else if (value is! ColorSwatch) {
+      // Ignore the value
+    } else if (App?._iOSTheme == null) {
+      App._iOSTheme = CupertinoThemeData(
+        primaryColor: value,
+      );
+    } else {
+      App._iOSTheme = App?._iOSTheme?.copyWith(
+        primaryColor: value,
+      );
+    }
+  }
 
   /// Returns the Color passed to the App's View.
   static Color get color => _vw.color;
@@ -462,10 +500,7 @@ abstract class App extends v.AppMVC {
 
   // Internal Initialization routines.
   static Future<void> _initInternal() async {
-//    // Determine the theme.
-//    themeData ??= _vw?.theme;
-//    themeData ??= await App.getThemeData();
-
+//
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
       _listeners.forEach((listener) {
@@ -549,6 +584,7 @@ class AppView extends AppViewState<_AppWidget> {
     String title,
     GenerateAppTitle onGenerateTitle,
     ThemeData theme,
+    CupertinoThemeData iOSTheme,
     ThemeData darkTheme,
     ThemeMode themeMode,
     Color color,
@@ -588,6 +624,7 @@ class AppView extends AppViewState<_AppWidget> {
           title: title,
           onGenerateTitle: onGenerateTitle,
           theme: theme,
+          iOSTheme: iOSTheme,
           darkTheme: darkTheme,
           themeMode: themeMode,
           color: color,
@@ -638,6 +675,20 @@ class AppView extends AppViewState<_AppWidget> {
   // Use Cupertino UI in Android and vice versa.
   bool switchUI;
 
+  @override
+  void initState() {
+    super.initState();
+    // Supply a theme
+    v.AppMenu.onChange();
+    App.themeData ??= theme;
+    App.themeData ??= onTheme();
+    App.themeData ??= App._getThemeData();
+    App.iOSTheme ??= iOSTheme;
+    App.iOSTheme ??= oniOSTheme();
+    App.iOSTheme ??=
+        MaterialBasedCupertinoThemeData(materialTheme: App._getThemeData());
+  }
+
   /// Override to impose your own WidgetsApp (like CupertinoApp or MaterialApp)
   @override
   Widget buildApp(BuildContext context) => buildView(context);
@@ -663,7 +714,7 @@ class AppView extends AppViewState<_AppWidget> {
         title: title ?? onTitle() ?? '',
         onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
         color: color ?? onColor() ?? Colors.white,
-        theme: _oniOSTheme(),
+        theme: App.iOSTheme,
         locale: locale ?? onLocale(),
         localizationsDelegates:
             localizationsDelegates ?? onLocalizationsDelegates(),
@@ -704,7 +755,7 @@ class AppView extends AppViewState<_AppWidget> {
         title: title ?? onTitle() ?? '',
         onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
         color: color ?? onColor() ?? Colors.white,
-        theme: _onTheme(),
+        theme: App.themeData,
         darkTheme: darkTheme ?? onDarkTheme(),
         themeMode: themeMode ?? onThemeMode() ?? ThemeMode.system,
         locale: locale ?? onLocale(),
@@ -791,21 +842,6 @@ class AppView extends AppViewState<_AppWidget> {
   bool onCheckerboardOffscreenLayers() => false;
   bool onShowSemanticsDebugger() => false;
   bool onDebugShowCheckedModeBanner() => true;
-
-  ThemeData _onTheme() {
-    App.themeData ??= theme;
-    App.themeData ??= onTheme();
-    App.themeData ??= App._getThemeData();
-    return App.themeData;
-  }
-
-  CupertinoThemeData _oniOSTheme() {
-    App.iOSTheme ??= iOSTheme;
-    App.iOSTheme ??= oniOSTheme();
-    App.iOSTheme ??=
-        MaterialBasedCupertinoThemeData(materialTheme: App._getThemeData());
-    return App.iOSTheme;
-  }
 }
 
 abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
@@ -943,10 +979,7 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   @override
   void initState() {
     super.initState();
-    // Init if passed error handling.
     _errorHandler?.init();
-    // Init the App's menu.
-    v.AppMenu.init();
   }
 
   @override
