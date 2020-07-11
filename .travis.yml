@@ -1,0 +1,30 @@
+notifications:
+  email: support@andrioussolutions.com
+
+language: dart
+
+dart:
+  - stable
+
+jobs:
+  include:
+    - name: Flutter Test Stable Channel
+      language: dart
+      os: linux
+      script:
+        - ./flutter/bin/flutter test
+      env: FLUTTER_VERSION=stable
+
+    - name: Flutter Test Stable Channel
+      language: dart
+      os: linux
+      script:
+        - ./flutter/bin/flutter test
+      env: FLUTTER_VERSION=beta
+
+    allow_failures:
+    - env: FLUTTER_VERSION=beta
+
+before_script:
+  - git clone https://github.com/flutter/flutter.git -b $FLUTTER_VERSION
+  - "./flutter/bin/flutter doctor"
