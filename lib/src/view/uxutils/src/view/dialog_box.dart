@@ -61,12 +61,8 @@ Future<bool> showBox({
   VoidCallback press01,
   VoidCallback press02,
 }) {
-  if (button01 == null) {
-    button01 = OKOption();
-  }
-  if (button02 == null) {
-    button02 = CancelOption();
-  }
+  button01 ??= OKOption();
+  button02 ??= CancelOption();
   final ThemeData theme = Theme.of(context);
   final TextStyle dialogTextStyle =
       theme.textTheme.subtitle1.copyWith(color: theme.textTheme.caption.color);
@@ -77,19 +73,29 @@ Future<bool> showBox({
           content: Text(text ?? ' ', style: dialogTextStyle),
           actions: <Widget>[
             FlatButton(
-                child: Text(button02.text ?? 'Cancel'),
-                onPressed: () {
-                  if (press02 != null) press02();
-                  if (button02.onPressed != null) button02.onPressed();
-                  Navigator.pop(context, button02.result);
-                }),
+              onPressed: () {
+                if (press02 != null) {
+                  press02();
+                }
+                if (button02.onPressed != null) {
+                  button02.onPressed();
+                }
+                Navigator.pop(context, button02.result);
+              },
+              child: Text(button02.text ?? 'Cancel'),
+            ),
             FlatButton(
-                child: Text(button01.text ?? 'OK'),
-                onPressed: () {
-                  if (press01 != null) press01();
-                  if (button01.onPressed != null) button01.onPressed();
-                  Navigator.pop(context, button01.result);
-                }),
+              onPressed: () {
+                if (press01 != null) {
+                  press01();
+                }
+                if (button01.onPressed != null) {
+                  button01.onPressed();
+                }
+                Navigator.pop(context, button01.result);
+              },
+              child: Text(button01.text ?? 'OK'),
+            ),
           ]),
     );
   } else {
@@ -99,19 +105,29 @@ Future<bool> showBox({
           content: Text(text ?? ' ', style: dialogTextStyle),
           actions: <Widget>[
             CupertinoDialogAction(
-                child: Text(button02.text ?? 'Cancel'),
-                onPressed: () {
-                  if (press02 != null) press02();
-                  if (button02.onPressed != null) button02.onPressed();
-                  Navigator.pop(context, button02.result);
-                }),
+              onPressed: () {
+                if (press02 != null) {
+                  press02();
+                }
+                if (button02.onPressed != null) {
+                  button02.onPressed();
+                }
+                Navigator.pop(context, button02.result);
+              },
+              child: Text(button02.text ?? 'Cancel'),
+            ),
             CupertinoDialogAction(
-                child: Text(button01.text ?? 'OK'),
-                onPressed: () {
-                  if (press01 != null) press01();
-                  if (button01.onPressed != null) button01.onPressed();
-                  Navigator.pop(context, button01.result);
-                }),
+              onPressed: () {
+                if (press01 != null) {
+                  press01();
+                }
+                if (button01.onPressed != null) {
+                  button01.onPressed();
+                }
+                Navigator.pop(context, button01.result);
+              },
+              child: Text(button01.text ?? 'OK'),
+            ),
           ]),
     );
   }
@@ -165,7 +181,7 @@ class _DialogWindow {
   }
 
   List<Widget> _listOptions() {
-    List<Widget> opList = [];
+    final List<Widget> opList = [];
     Option option;
     if (button01 != null || press01 != null) {
       option = Option<bool>(
@@ -192,19 +208,18 @@ class _DialogWindow {
 
   Widget _simpleOption(Option option) {
     return SimpleDialogOption(
-      child: Text(option.text),
       onPressed: () {
         if (option.onPressed != null) option.onPressed();
         Navigator.pop(context, option.result);
       },
+      child: Text(option.text),
     );
   }
 }
 
 class Option<T> {
-  Option({this.text, this.onPressed, this.result}) {
-    assert(result != null, 'Must provide a option result!');
-  }
+  Option({this.text, this.onPressed, this.result})
+      : assert(result != null, 'Must provide a option result!');
   final String text;
   final VoidCallback onPressed;
   final T result;
@@ -215,7 +230,9 @@ class OKOption extends Option<bool> {
       : super(
           text: 'OK',
           onPressed: () {
-            if (onPressed != null) onPressed();
+            if (onPressed != null) {
+              onPressed();
+            }
           },
           result: true,
         );
@@ -226,7 +243,9 @@ class CancelOption extends Option<bool> {
       : super(
           text: 'Cancel',
           onPressed: () {
-            if (onPressed != null) onPressed();
+            if (onPressed != null) {
+              onPressed();
+            }
           },
           result: false,
         );
@@ -254,7 +273,7 @@ class MsgBox {
       _body = body;
     } else {
       if (msg == null || msg.isEmpty) {
-        _body = [Text('Shall we oontinue?')];
+        _body = [const Text('Shall we continue?')];
       } else {
         _body = [Text(msg)];
       }
@@ -271,10 +290,10 @@ class MsgBox {
               ),
               actions: <Widget>[
                 FlatButton(
-                  child: Text('OK'),
                   onPressed: () {
                     Navigator.pop(context);
                   },
+                  child: const Text('OK'),
                 ),
               ],
             ));

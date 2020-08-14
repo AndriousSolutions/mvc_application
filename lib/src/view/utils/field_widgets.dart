@@ -27,7 +27,7 @@ import 'package:flutter/services.dart'
 
 import 'package:mvc_application/view.dart';
 
-typedef OnSavedFunc = Function<E>(E v);
+typedef OnSavedFunc = void Function<E>(E v);
 
 class DataFields extends _AddFields {
   @override
@@ -47,10 +47,10 @@ class DataFields extends _AddFields {
 
   FormState _formState;
 
-  Widget linkForm(child) => _ChildForm(parent: this, child: child);
+  Widget linkForm(Widget child) => _ChildForm(parent: this, child: child);
 
   bool saveForm() {
-    bool save = _formState?.validate() ?? true;
+    final bool save = _formState?.validate() ?? true;
     if (save) {
       _formState?.save();
     } else {
@@ -74,16 +74,19 @@ class DataFields extends _AddFields {
 
   /// A collection of errors returned by the [FormField.validator]
   String get errorText => _errorText;
-  String _errorText = " ";
+  String _errorText = ' ';
 
   /// True if this field has any validation errors.
   bool get hasError => _errorText != null;
 
   /// Any errors from every [FormField] that is a descendant of this [Form].
   String fieldErrors() {
-    String errors = "";
-    for (final FormFieldState<dynamic> field in _fields)
-      if (field.hasError) errors = errors + field.errorText;
+    String errors = '';
+    for (final FormFieldState<dynamic> field in _fields) {
+      if (field.hasError) {
+        errors = errors + field.errorText;
+      }
+    }
     return errors;
   }
 }
@@ -118,22 +121,20 @@ abstract class _ListFields {
 
   void _fillRecords(List<Map<String, dynamic>> fieldData) {
     if (fieldData.isNotEmpty) {
-      this.field.clear();
+      field.clear();
     }
-    for (Map<String, dynamic> field in fieldData) {
-      _fillFields(field);
-    }
+    fieldData.forEach(_fillFields);
   }
 
   /// A map of 'field' objects
-  Map<dynamic, Map<String, FieldWidgets>> field = Map();
+  Map<dynamic, Map<String, FieldWidgets>> field = {};
 
   void _fillFields(Map<String, dynamic> dataFields) {
     //
-    dynamic id = dataFields.values.first;
+    final dynamic id = dataFields.values.first;
 
-    if (this.field[id] == null) {
-      this.field[id] = {};
+    if (field[id] == null) {
+      field[id] = {};
     }
 
     dataFields.forEach((String key, dynamic value) {
@@ -143,12 +144,12 @@ abstract class _ListFields {
 
   void _fillField(dynamic id, Map<String, dynamic> dataField) {
     //
-    String name = dataField.keys.first;
+    final name = dataField.keys.first;
 
-    dynamic value = dataField.values.first;
+    final dynamic value = dataField.values.first;
 
     //
-    Map<String, dynamic> map = this.field[id];
+    final Map<String, dynamic> map = field[id];
 
     if (map[name] == null) {
       map[name] = FieldWidgets();
@@ -158,7 +159,7 @@ abstract class _ListFields {
 
     map[name].value = value;
 
-    this.field[id] = map;
+    field[id] = map;
   }
 }
 
@@ -240,17 +241,21 @@ class FieldWidgets<T> extends DataFieldItem {
     this.materialTapTargetSize,
   }) : super(label: label, value: value) {
     _key = ObjectKey(key ?? this).toString();
-    _checkValue = (value == null
+    // ignore: avoid_bool_literals_in_conditional_expressions
+    _checkValue = value == null
         ? false
         : value is String
             ? value.isNotEmpty
             : value is bool
                 ? value
+                // ignore: avoid_bool_literals_in_conditional_expressions
                 : value is int
+                    // ignore: avoid_bool_literals_in_conditional_expressions
                     ? value > 0
                         ? true
+                        // ignore: avoid_bool_literals_in_conditional_expressions
                         : value is double ? value > 0 ? true : false : false
-                    : false);
+                    : false;
   }
   final T object;
   Iterable<DataFieldItem> items;
@@ -353,10 +358,8 @@ class FieldWidgets<T> extends DataFieldItem {
   Dismissible _dismissible;
   Checkbox _checkbox;
 
-  TextFormField get textFormField {
-    if (_textFormField == null)
-      _textFormField = TextFormField(
-        key: Key('TextFormField' + _key),
+  TextFormField get textFormField => _textFormField ??= TextFormField(
+        key: Key('TextFormField$_key'),
         controller: controller,
         initialValue: initialValue ?? value,
         focusNode: focusNode,
@@ -388,10 +391,8 @@ class FieldWidgets<T> extends DataFieldItem {
         inputFormatters: inputFormatters,
         enabled: enabled,
         keyboardAppearance: keyboardAppearance,
-        scrollPadding: scrollPadding ?? const EdgeInsets.all(20.0),
+        scrollPadding: scrollPadding ?? const EdgeInsets.all(20),
       );
-    return _textFormField;
-  }
 
   TextFormField onTextFormField({
     TextEditingController controller,
@@ -443,9 +444,9 @@ class FieldWidgets<T> extends DataFieldItem {
     this.enabled = enabled ?? this.enabled;
     this.keyboardAppearance = keyboardAppearance ?? this.keyboardAppearance;
     this.scrollPadding = scrollPadding ?? this.scrollPadding;
-    TextFormField oldWidget = _textFormField;
+    final TextFormField oldWidget = _textFormField;
     _textFormField = null;
-    TextFormField newWidget = textFormField;
+    final TextFormField newWidget = textFormField;
     _textFormField = oldWidget;
     return newWidget;
   }
@@ -465,11 +466,9 @@ class FieldWidgets<T> extends DataFieldItem {
   // Return null if validated. Error message if not.
   String onValidator(String v) => null;
 
-  Text get text {
-    if (_text == null)
-      _text = Text(
-        value ?? "",
-        key: Key('Text' + _key),
+  Text get text => _text ??= Text(
+        value ?? '',
+        key: Key('Text$_key'),
         style: style,
         textAlign: textAlign,
         textDirection: textDirection,
@@ -480,8 +479,6 @@ class FieldWidgets<T> extends DataFieldItem {
         maxLines: maxLines,
         semanticsLabel: semanticsLabel,
       );
-    return _text;
-  }
 
   Text onText(
     TextSpan textSpan,
@@ -504,7 +501,7 @@ class FieldWidgets<T> extends DataFieldItem {
     this.textScaleFactor = textScaleFactor ?? this.textScaleFactor;
     this.maxLines = maxLines ?? this.maxLines;
     this.semanticsLabel = semanticsLabel ?? this.semanticsLabel;
-    Text oldWidget = _text;
+    final Text oldWidget = _text;
     _text = null;
     Text newWidget;
     // text getter
@@ -523,21 +520,19 @@ class FieldWidgets<T> extends DataFieldItem {
     if (textSpan == null) {
       return text;
     } else {
-      if (_richText == null)
-        _richText = Text.rich(
-          textSpan,
-          key: Key('Text.rich' + _key),
-          style: style,
-          textAlign: textAlign,
-          textDirection: textDirection,
-          locale: locale,
-          softWrap: softWrap,
-          overflow: overflow,
-          textScaleFactor: textScaleFactor,
-          maxLines: maxLines,
-          semanticsLabel: semanticsLabel,
-        );
-      return _richText;
+      return _richText ??= Text.rich(
+        textSpan,
+        key: Key('Text.rich$_key'),
+        style: style,
+        textAlign: textAlign,
+        textDirection: textDirection,
+        locale: locale,
+        softWrap: softWrap,
+        overflow: overflow,
+        textScaleFactor: textScaleFactor,
+        maxLines: maxLines,
+        semanticsLabel: semanticsLabel,
+      );
     }
   }
 
@@ -562,7 +557,7 @@ class FieldWidgets<T> extends DataFieldItem {
     this.textScaleFactor = textScaleFactor ?? this.textScaleFactor;
     this.maxLines = maxLines ?? this.maxLines;
     this.semanticsLabel = semanticsLabel ?? this.semanticsLabel;
-    Text oldWidget = _richText;
+    final Text oldWidget = _richText;
     _richText = null;
     Text newWidget;
     // text getter
@@ -577,10 +572,9 @@ class FieldWidgets<T> extends DataFieldItem {
     return newWidget;
   }
 
-  DefaultTextStyle get defaultTextStyle {
-    if (_defaultTextStyle == null)
-      _defaultTextStyle = DefaultTextStyle(
-        key: Key('DefaultTextStyle' + _key),
+  DefaultTextStyle get defaultTextStyle =>
+      _defaultTextStyle ??= DefaultTextStyle(
+        key: Key('DefaultTextStyle$_key'),
         style: style,
         textAlign: textAlign,
         softWrap: softWrap,
@@ -588,8 +582,6 @@ class FieldWidgets<T> extends DataFieldItem {
         maxLines: maxLines,
         child: text,
       );
-    return _defaultTextStyle;
-  }
 
   DefaultTextStyle onDefaultTextStyle(
     TextStyle style,
@@ -605,17 +597,15 @@ class FieldWidgets<T> extends DataFieldItem {
     this.overflow = overflow ?? this.overflow;
     this.maxLines = maxLines ?? this.maxLines;
     this.child = child ?? this.child;
-    DefaultTextStyle oldWidget = _defaultTextStyle;
+    final DefaultTextStyle oldWidget = _defaultTextStyle;
     _defaultTextStyle = null;
-    DefaultTextStyle newWidget = defaultTextStyle;
+    final DefaultTextStyle newWidget = defaultTextStyle;
     _defaultTextStyle = oldWidget;
     return newWidget;
   }
 
-  ListTile get listTile {
-    if (_listTile == null)
-      _listTile = ListTile(
-        key: Key('ListTile' + _key),
+  ListTile get listTile => _listTile ??= ListTile(
+        key: Key('ListTile$_key'),
         leading: leading ?? onLeading(),
         title: title ?? onTitle(),
         subtitle: subtitle ?? onSubtitle(),
@@ -628,8 +618,6 @@ class FieldWidgets<T> extends DataFieldItem {
         onLongPress: longPress ?? onLongPress,
         selected: selected ?? false,
       );
-    return _listTile;
-  }
 
   ListTile onListTile({
     Widget leading,
@@ -655,9 +643,9 @@ class FieldWidgets<T> extends DataFieldItem {
     this.tap = tap ?? this.tap;
     this.longPress = longPress ?? this.longPress;
     this.selected = selected ?? this.selected;
-    ListTile oldWidget = _listTile;
+    final ListTile oldWidget = _listTile;
     _listTile = null;
-    ListTile newWidget = listTile;
+    final ListTile newWidget = listTile;
     _listTile = oldWidget;
     return newWidget;
   }
@@ -678,10 +666,9 @@ class FieldWidgets<T> extends DataFieldItem {
   // Override to place what happens when the field is 'long' pressed.
   void onLongPress() {}
 
-  CheckboxListTile get checkboxListTile {
-    if (_checkboxListTile == null)
-      _checkboxListTile = CheckboxListTile(
-        key: Key('CheckboxListTile' + _key),
+  CheckboxListTile get checkboxListTile =>
+      _checkboxListTile ??= CheckboxListTile(
+        key: Key('CheckboxListTile$_key'),
         value: _checkValue,
         onChanged: (bool v) => changed == null ? onChanged(v) : changed(v),
         activeColor: activeColor,
@@ -693,8 +680,6 @@ class FieldWidgets<T> extends DataFieldItem {
         selected: selected ?? false,
         controlAffinity: controlAffinity,
       );
-    return _checkboxListTile;
-  }
 
   CheckboxListTile onCheckboxListTile({
     @required bool value,
@@ -709,7 +694,7 @@ class FieldWidgets<T> extends DataFieldItem {
     ListTileControlAffinity controlAffinity,
   }) {
     _checkValue = value ?? _checkValue;
-    this.changed = onChanged ?? this.changed;
+    changed = onChanged ?? changed;
     this.activeColor = activeColor ?? this.activeColor;
     this.title = title ?? this.title;
     this.subtitle = subtitle ?? this.subtitle;
@@ -718,9 +703,9 @@ class FieldWidgets<T> extends DataFieldItem {
     this.secondary = secondary ?? this.secondary;
     this.selected = selected ?? this.selected;
     this.controlAffinity = controlAffinity ?? this.controlAffinity;
-    CheckboxListTile oldWidget = _checkboxListTile;
+    final CheckboxListTile oldWidget = _checkboxListTile;
     _checkboxListTile = null;
-    CheckboxListTile newWidget = checkboxListTile;
+    final CheckboxListTile newWidget = checkboxListTile;
     _checkboxListTile = oldWidget;
     return newWidget;
   }
@@ -728,20 +713,16 @@ class FieldWidgets<T> extends DataFieldItem {
   // A widget to display on the opposite side of the tile from the checkbox.
   Widget onSecondary() => null;
 
-  CircleAvatar get circleAvatar {
-    if (_circleAvatar == null)
-      _circleAvatar = CircleAvatar(
-        key: Key('CircleAvatar' + _key),
-        child: text,
+  CircleAvatar get circleAvatar => _circleAvatar ??= CircleAvatar(
+        key: Key('CircleAvatar$_key'),
         backgroundColor: backgroundColor,
         backgroundImage: backgroundImage,
         foregroundColor: foregroundColor,
         radius: radius,
         minRadius: minRadius,
         maxRadius: maxRadius,
+        child: text,
       );
-    return _circleAvatar;
-  }
 
   CircleAvatar onCircleAvatar(
     Color backgroundColor,
@@ -757,18 +738,15 @@ class FieldWidgets<T> extends DataFieldItem {
     this.radius = radius ?? this.radius;
     this.minRadius = minRadius ?? this.minRadius;
     this.maxRadius = maxRadius ?? this.maxRadius;
-    CircleAvatar oldWidget = _circleAvatar;
+    final CircleAvatar oldWidget = _circleAvatar;
     _circleAvatar = null;
-    CircleAvatar newWidget = circleAvatar;
+    final CircleAvatar newWidget = circleAvatar;
     _circleAvatar = oldWidget;
     return newWidget;
   }
 
-  Dismissible get dismissible {
-    if (_dismissible == null)
-      _dismissible = Dismissible(
-        key: Key('Dismissible' + _key),
-        child: child ?? onChild(),
+  Dismissible get dismissible => _dismissible ??= Dismissible(
+        key: Key('Dismissible$_key'),
         background: background ?? onBackground(),
         secondaryBackground: secondaryBackground ?? onSecondaryBackground(),
         onResize: resize ?? onResize,
@@ -780,9 +758,8 @@ class FieldWidgets<T> extends DataFieldItem {
             dismissThresholds ?? const <DismissDirection, double>{},
         movementDuration: movementDuration ?? const Duration(milliseconds: 200),
         crossAxisEndOffset: crossAxisEndOffset ?? 0.0,
+        child: child ?? onChild(),
       );
-    return _dismissible;
-  }
 
   Dismissible onDismissible({
     Widget child,
@@ -806,9 +783,9 @@ class FieldWidgets<T> extends DataFieldItem {
     this.dismissThresholds = dismissThresholds ?? this.dismissThresholds;
     this.movementDuration = movementDuration ?? this.movementDuration;
     this.crossAxisEndOffset = crossAxisEndOffset ?? this.crossAxisEndOffset;
-    Dismissible oldWidget = _dismissible;
+    final Dismissible oldWidget = _dismissible;
     _dismissible = null;
-    Dismissible newWidget = dismissible;
+    final Dismissible newWidget = dismissible;
     _dismissible = oldWidget;
     return newWidget;
   }
@@ -827,8 +804,7 @@ class FieldWidgets<T> extends DataFieldItem {
     return Container(
         color: Colors.red,
         child: const ListTile(
-            trailing:
-                const Icon(Icons.delete, color: Colors.white, size: 36.0)));
+            trailing: Icon(Icons.delete, color: Colors.white, size: 36)));
   }
 
   // Override to provide a secondary background.
@@ -840,18 +816,14 @@ class FieldWidgets<T> extends DataFieldItem {
   // Override to place here what happens when the field is dismissed.
   void onDismissed(DismissDirection direction) {}
 
-  Checkbox get checkbox {
-    if (_checkbox == null)
-      _checkbox = Checkbox(
-        key: Key('Checkbox' + _key),
+  Checkbox get checkbox => _checkbox ??= Checkbox(
+        key: Key('Checkbox$_key'),
         value: _checkValue,
         tristate: tristate,
         onChanged: (bool v) => changed == null ? onChanged(v) : changed(v),
         activeColor: activeColor,
         materialTapTargetSize: materialTapTargetSize,
       );
-    return _checkbox;
-  }
 
   Checkbox onCheckBox({
     @required bool value,
@@ -861,21 +833,21 @@ class FieldWidgets<T> extends DataFieldItem {
     MaterialTapTargetSize materialTapTargetSize,
   }) {
     _checkValue = value ?? _checkValue;
-    this.changed = onChanged ?? this.changed;
+    changed = onChanged ?? changed;
     this.activeColor = activeColor ?? this.activeColor;
     this.tristate = tristate ?? this.tristate;
     this.materialTapTargetSize =
         materialTapTargetSize ?? this.materialTapTargetSize;
-    Checkbox oldWidget = _checkbox;
+    final Checkbox oldWidget = _checkbox;
     _checkbox = null;
-    Checkbox newWidget = checkbox;
+    final Checkbox newWidget = checkbox;
     _checkbox = oldWidget;
     return newWidget;
   }
 
   void onChanged(bool value) {}
 
-  ListItems get listItems => ListItems(title: label, items: (value ?? [this]));
+  ListItems get listItems => ListItems(title: label, items: value ?? [this]);
 
   ListItems onListItems({
     String title,
@@ -892,7 +864,7 @@ class FieldWidgets<T> extends DataFieldItem {
   ListItems get editItems => onListItems(mapItem: mapIt);
 
   Widget mapIt(DataFieldItem i) => ListTile(
-        subtitle: Text(i.label ?? ""),
+        subtitle: Text(i.label ?? ''),
         title: textFormField,
         trailing: phoneTypes,
       );
@@ -911,27 +883,32 @@ class FieldWidgets<T> extends DataFieldItem {
 /// Item class used for fields which only have a [label] and a [value]
 class DataFieldItem {
   DataFieldItem({this.label, this.value});
+
+  DataFieldItem.fromMap(Map<dynamic, dynamic> m, [String label, String value]) {
+    keys(label, value);
+    this.label = m[_label];
+    this.value = m[_value];
+  }
   String label;
   dynamic value;
   String _label = 'label';
   String _value = 'value';
 
-  DataFieldItem.fromMap(Map m, [String label, String value]) {
-    keys(label, value);
-    this.label = m[_label];
-    this.value = m[_value];
+  void keys(String label, String value) {
+    if (label != null && label.isNotEmpty) {
+      _label = label;
+    }
+    if (value != null && value.isNotEmpty) {
+      _value = value;
+    }
   }
 
-  keys(String label, String value) {
-    if (label != null && label.isNotEmpty) _label = label;
-    if (value != null && value.isNotEmpty) _value = value;
-  }
-
-  Map get toMap => {_label: label, _value: value};
+  Map<dynamic, dynamic> get toMap => {_label: label, _value: value};
 }
 
 class ListItems extends StatelessWidget {
-  ListItems({this.title, this.items, this.mapItem});
+  const ListItems({Key key, this.title, this.items, this.mapItem})
+      : super(key: key);
   final String title;
   final List<DataFieldItem> items;
   final MapItemFunction mapItem;
@@ -951,20 +928,21 @@ class ListItems extends StatelessWidget {
           Column(
               children: items
                   .map((i) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: _map(i)))
                   .toList())
         ]);
   }
 
   Widget mapIt(DataFieldItem i) =>
-      ListTile(subtitle: Text(i.label ?? ""), title: Text(i.value ?? ""));
+      ListTile(subtitle: Text(i.label ?? ''), title: Text(i.value ?? ''));
 }
 
-typedef Widget MapItemFunction(DataFieldItem i);
+typedef MapItemFunction = Widget Function(DataFieldItem i);
 
+/// This class intercepts and retrieves the FormState
 class _ChildForm extends StatelessWidget {
-  _ChildForm({this.parent, this.child, Key key}) : super(key: key);
+  const _ChildForm({this.parent, this.child, Key key}) : super(key: key);
   final DataFields parent;
   final Widget child;
   @override

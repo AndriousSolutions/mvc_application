@@ -1,3 +1,4 @@
+// ignore: avoid_classes_with_only_static_members
 ///
 /// Copyright (C) 2019 Andrious Solutions
 ///
@@ -18,12 +19,9 @@
 ///
 
 class VarStr {
-  static VariableString _varStr = VariableString();
+  static final VariableString _varStr = VariableString();
 
-  static String set(String str) {
-    _varStr.value = str;
-    return _varStr.value;
-  }
+  static String set(String str) => _varStr.value = str;
 
   static String get get => _varStr.value;
 }
@@ -35,13 +33,15 @@ class VariableString {
 
   RegExp regExp;
 
-  String _value = "";
+  String _value = '';
 
   set value(String str) {
-    _value = "";
+    _value = '';
     if (str != null && str.isNotEmpty) {
-      RegExpMatch match = regExp.firstMatch(str);
-      if (match != null) _value = match.group(0).replaceAll("'", "");
+      final RegExpMatch match = regExp.firstMatch(str);
+      if (match != null) {
+        _value = match.group(0).replaceAll("'", '');
+      }
     }
   }
 

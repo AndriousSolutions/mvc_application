@@ -49,11 +49,11 @@ void runApp(
   v.ReportErrorHandler reportError,
 }) {
   //
-  v.ErrorHandler errorHandler = v.ErrorHandler(
+  final errorHandler = v.ErrorHandler(
       handler: handler, builder: builder, reportError: reportError);
 
-  Isolate.current.addErrorListener(new RawReceivePort((dynamic pair) {
-    var isolateError = pair as List<dynamic>;
+  Isolate.current.addErrorListener(RawReceivePort((dynamic pair) {
+    final isolateError = pair as List<dynamic>;
     errorHandler.isolateError(
       isolateError.first.toString(),
       StackTrace.fromString(isolateError.last.toString()),
@@ -72,12 +72,14 @@ class AppController extends ControllerMVC implements mvc.AppConMVC {
   final v.StateMVC state;
 
   /// Initialize any immediate 'none time-consuming' operations at the very beginning.
+  @override
   void initApp() {}
 
   /// Initialize any 'time-consuming' operations at the beginning.
   /// Initialize items essential to the Mobile Applications.
   /// Called by the _App.init() function.
   @mustCallSuper
+  @override
   Future<bool> initAsync() async {
     // Initialize System Preferences
     await Prefs.init();
@@ -116,6 +118,7 @@ class AppConMVC extends mvc.AppConMVC with v.ConnectivityListener, HandleError {
   AppConMVC([v.StateMVC state]) : super(state);
 
   /// If the device's connectivity changes.
+  @override
   void onConnectivityChanged(v.ConnectivityResult result) {}
 }
 

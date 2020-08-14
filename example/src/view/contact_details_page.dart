@@ -35,7 +35,6 @@ import 'package:flutter/material.dart'
         StatelessWidget,
         Theme,
         Widget;
-
 import 'package:mvc_application/view.dart'
     show
         App,
@@ -45,11 +44,9 @@ import 'package:mvc_application/view.dart'
         SimpleBottomAppBar,
         showBox;
 
-import '../../model.dart' show Contact;
-
-import '../../view.dart' show AddContactPage;
-
 import '../../controller.dart' show Controller;
+import '../../model.dart' show Contact;
+import '../../view.dart' show AddContactPage;
 
 enum AppBarBehavior { normal, pinned, floating, snapping }
 
@@ -70,17 +67,21 @@ class ContactDetailsPage extends StatelessWidget {
         child: Scaffold(
             appBar: AppBar(title: Controller.edit.displayName.text, actions: [
               FlatButton(
-                  child: Icon(Icons.delete, color: Colors.white),
-                  onPressed: () {
-                    showBox(text: 'Delete this contact?', context: context)
-                        .then((bool delete) {
-                      if (delete)
-                        Controller.delete(contact).then((bool delete) {
-                          if (delete) Controller.list.refresh();
-                          Navigator.of(context).pop();
-                        });
-                    });
-                  }),
+                onPressed: () {
+                  showBox(text: 'Delete this contact?', context: context)
+                      .then((bool delete) {
+                    if (delete) {
+                      Controller.delete(contact).then((bool delete) {
+                        if (delete) {
+                          Controller.list.refresh();
+                        }
+                        Navigator.of(context).pop();
+                      });
+                    }
+                  });
+                },
+                child: const Icon(Icons.delete, color: Colors.white),
+              ),
             ]),
             bottomNavigationBar: SimpleBottomAppBar(
               button01: HomeBarButton(onPressed: () {
@@ -88,9 +89,10 @@ class ContactDetailsPage extends StatelessWidget {
               }),
               button02: SearchBarButton(),
               button03: EditBarButton(onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => AddContactPage(
-                        contact: contact, title: 'Edit a contact')));
+                Navigator.of(context).push(MaterialPageRoute<void>(
+                  builder: (BuildContext context) =>
+                      AddContactPage(contact: contact, title: 'Edit a contact'),
+                ));
               }),
             ),
             body: CustomScrollView(slivers: <Widget>[
@@ -124,8 +126,8 @@ class ContactDetailsPage extends StatelessWidget {
             ])));
   }
 
-  editContact(Contact contact, BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
+  void editContact(Contact contact, BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute<void>(
         builder: (BuildContext context) =>
             AddContactPage(contact: contact, title: 'Edit a contact')));
   }

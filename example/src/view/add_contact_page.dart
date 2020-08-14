@@ -37,11 +37,9 @@ import 'package:flutter/material.dart'
         Text,
         Widget;
 
-import '../../model.dart' show Contact, PostalAddress;
-
-import '../../view.dart' show StateMVC;
-
 import '../../controller.dart' show Controller;
+import '../../model.dart' show Contact, PostalAddress;
+import '../../view.dart' show StateMVC;
 
 class AddContactPage extends StatefulWidget {
   AddContactPage({this.contact, this.title, Key key}) : super(key: key);

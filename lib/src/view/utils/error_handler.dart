@@ -90,11 +90,12 @@ class ErrorHandler {
     _initBuilder = builder != null;
 
     // Don't set anything if there nothing passed.
-    if (handler != null || builder != null)
+    if (handler != null || builder != null) {
       init(builder: builder, handler: handler);
+    }
   }
 
-  init({
+  void init({
     FlutterExceptionHandler handler,
     ErrorWidgetBuilder builder,
   }) {
@@ -121,6 +122,7 @@ class ErrorHandler {
   static bool ranApp = false;
 
   /// Set to null to use the 'old' handler.
+  // ignore: avoid_setters_without_getters
   set onError(FlutterExceptionHandler handler) {
     // So you can assign null and use the original error routine.
     _onError = handler;
@@ -129,8 +131,9 @@ class ErrorHandler {
 
   /// Set the ErrorWidget.builder
   /// If assigned null, use the 'old' builder.
+  // ignore: avoid_setters_without_getters
   set builder(ErrorWidgetBuilder builder) {
-    if (builder == null) builder = _oldBuilder;
+    builder ??= _oldBuilder;
     set(builder: builder);
   }
 
@@ -138,9 +141,13 @@ class ErrorHandler {
     Widget Function(FlutterErrorDetails details) builder,
     void Function(FlutterErrorDetails details) handler,
   }) {
-    if (builder != null) ErrorWidget.builder = builder;
+    if (builder != null) {
+      ErrorWidget.builder = builder;
+    }
 
-    if (handler != null) _onError = handler;
+    if (handler != null) {
+      _onError = handler;
+    }
 
     FlutterError.onError = (FlutterErrorDetails details) {
       // Prevent an infinite loop and fall back to the original handler.
@@ -160,8 +167,7 @@ class ErrorHandler {
       // If there's an error in the error handler, we want to know about it.
       _inHandler = true;
 
-      final FlutterExceptionHandler handler =
-          _onError == null ? _oldOnError : _onError;
+      final FlutterExceptionHandler handler = _onError ?? _oldOnError;
 
       if (handler != null) {
         handler(details);
@@ -172,9 +178,13 @@ class ErrorHandler {
 
   void dispose() {
     // Restore the error widget routine.
-    if (_oldBuilder != null) ErrorWidget.builder = _oldBuilder;
+    if (_oldBuilder != null) {
+      ErrorWidget.builder = _oldBuilder;
+    }
     // Return the original error routine.
-    if (_oldOnError != null) FlutterError.onError = _oldOnError;
+    if (_oldOnError != null) {
+      FlutterError.onError = _oldOnError;
+    }
   }
 
   /// Determines if running in an IDE or in production.
@@ -212,7 +222,7 @@ class ErrorHandler {
       ex,
       stack,
       message: 'while attempting to execute main()',
-      library: "likely main.dart",
+      library: 'likely main.dart',
     );
   }
 
@@ -221,7 +231,7 @@ class ErrorHandler {
       ex,
       stack,
       message: 'while attempting to execute runApp()',
-      library: "controller/app.dart",
+      library: 'controller/app.dart',
     );
   }
 
@@ -234,7 +244,7 @@ class ErrorHandler {
     String library = 'Flutter framework',
     InformationCollector informationCollector,
   }) {
-    FlutterErrorDetails details = FlutterErrorDetails(
+    final details = FlutterErrorDetails(
       exception: exception,
       stack: stack,
       library: library,
@@ -253,15 +263,18 @@ class ErrorHandler {
 Widget _defaultErrorWidget(FlutterErrorDetails details) {
   String message;
   try {
-    message = "ERROR\n\n" + details.exception.toString() + "\n\n";
+    message = 'ERROR\n\n${details.exception}\n\n';
 
-    List<String> stackTrace = details.stack.toString().split("\n");
+    final List<String> stackTrace = details.stack.toString().split('\n');
 
-    int length = stackTrace.length > 5 ? 5 : stackTrace.length;
+    final int length = stackTrace.length > 5 ? 5 : stackTrace.length;
 
+    final buffer = StringBuffer()
+    ..write(message);
     for (var i = 0; i < length; i++) {
-      message += stackTrace[i] + "\n";
+      buffer.write('${stackTrace[i]}\n');
     }
+    message = buffer.toString();
   } catch (e) {
     message = 'Error';
   }
@@ -286,11 +299,12 @@ class _WidgetError extends LeafRenderObjectWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    if (_flutterError == null)
+    if (_flutterError == null) {
       properties.add(StringProperty('message', message, quoted: false));
-    else
+    }else {
       properties.add(_flutterError.toDiagnosticsNode(
           style: DiagnosticsTreeStyle.whitespace));
+    }
   }
 }
 
@@ -305,9 +319,9 @@ class _ErrorBox extends RenderBox {
         /// Generally, the much better way to draw text in a RenderObject is to
         /// use the TextPainter class. If you're looking for code to crib from,
         /// see the paragraph.dart file and the RenderParagraph class.
-        final ui.ParagraphBuilder builder = ui.ParagraphBuilder(paragraphStyle);
-        builder.pushStyle(textStyle);
-        builder.addText(message);
+        final ui.ParagraphBuilder builder = ui.ParagraphBuilder(paragraphStyle)
+        ..pushStyle(textStyle)
+        ..addText(message);
         _paragraph = builder.build();
       }
     } catch (error) {
@@ -322,12 +336,12 @@ class _ErrorBox extends RenderBox {
 
   @override
   double computeMaxIntrinsicWidth(double height) {
-    return 100000.0;
+    return 100000;
   }
 
   @override
   double computeMaxIntrinsicHeight(double width) {
-    return 100000.0;
+    return 100000;
   }
 
   @override
@@ -338,7 +352,7 @@ class _ErrorBox extends RenderBox {
 
   @override
   void performResize() {
-    size = constraints.constrain(const Size(100000.0, 100000.0));
+    size = constraints.constrain(const Size(100000, 100000));
   }
 
   /// The distance to place around the text.
@@ -353,13 +367,13 @@ class _ErrorBox extends RenderBox {
   ///
   ///  * [minimumWidth], which controls how wide the box must be before the
   //     horizontal padding is applied.
-  static EdgeInsets padding = const EdgeInsets.fromLTRB(34.0, 96.0, 34.0, 12.0);
+  static EdgeInsets padding = const EdgeInsets.fromLTRB(34, 96, 34, 12);
 
   /// The width below which the horizontal padding is not applied.
   ///
   /// If the left and right padding would reduce the available width to less than
   /// this value, then the text is rendered flush with the left edge.
-  static double minimumWidth = 200.0;
+  static double minimumWidth = 200;
 
   /// The color to use when painting the background of [RenderBox] objects.
   /// a red from a light gray.
@@ -384,13 +398,13 @@ class _ErrorBox extends RenderBox {
     ui.TextStyle result = ui.TextStyle(
       color: const Color(0xFF303030),
       fontFamily: 'sans-serif',
-      fontSize: 18.0,
+      fontSize: 18,
     );
     assert(() {
       result = ui.TextStyle(
         color: const Color(0xFFFFFF66),
         fontFamily: 'monospace',
-        fontSize: 14.0,
+        fontSize: 14,
         fontWeight: FontWeight.bold,
       );
       return true;
@@ -410,8 +424,8 @@ class _ErrorBox extends RenderBox {
       context.canvas.drawRect(offset & size, Paint()..color = backgroundColor);
       if (_paragraph != null) {
         double width = size.width;
-        double left = 0.0;
-        double top = 0.0;
+        double left = 0;
+        double top = 0;
         if (width > padding.left + minimumWidth + padding.right) {
           width -= padding.left + padding.right;
           left += padding.left;

@@ -19,7 +19,6 @@
 ///
 
 import 'dart:ui' show ImageFilter;
-export 'dart:ui' show ImageFilter;
 
 import 'package:flutter/cupertino.dart'
     show
@@ -51,15 +50,17 @@ import 'package:flutter/cupertino.dart'
         Text,
         Widget,
         showCupertinoModalPopup;
-
 import 'package:flutter/material.dart' show Color, Colors;
+
+export 'dart:ui' show ImageFilter;
+
 export 'package:flutter/material.dart' show Color, Colors;
 
 void showCupertinoDatePicker(
   BuildContext context, {
   Key key,
   CupertinoDatePickerMode mode = CupertinoDatePickerMode.dateAndTime,
-  @required Function(DateTime value) onDateTimeChanged,
+  @required void Function(DateTime value) onDateTimeChanged,
   DateTime initialDateTime,
   DateTime minimumDate,
   DateTime maximumDate,
@@ -86,65 +87,63 @@ void showCupertinoDatePicker(
   backgroundColor ??= theme.scaffoldBackgroundColor;
 
   if (!useText) {
-    cancelText = Icon(CupertinoIcons.clear_circled);
+    cancelText = const Icon(CupertinoIcons.clear_circled);
   } else {
-    if (cancelText == null)
-      cancelText = Text(
-        'Cancel',
-        style: theme.textTheme.actionTextStyle.copyWith(
-          fontWeight: FontWeight.w600,
-          color: Colors.red,
-        ),
-      );
+    cancelText ??= Text(
+      'Cancel',
+      style: theme.textTheme.actionTextStyle.copyWith(
+        fontWeight: FontWeight.w600,
+        color: Colors.red,
+      ),
+    );
   }
 
   if (!useText) {
-    doneText = Icon(CupertinoIcons.check_mark_circled);
+    doneText = const Icon(CupertinoIcons.check_mark_circled);
   } else {
-    if (doneText == null)
-      doneText = Text(
-        'Save',
-        style: theme.textTheme.actionTextStyle
-            .copyWith(fontWeight: FontWeight.w600),
-      );
+    doneText ??= Text(
+      'Save',
+      style:
+          theme.textTheme.actionTextStyle.copyWith(fontWeight: FontWeight.w600),
+    );
   }
 
-  var cancelButton = CupertinoButton(
-    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-    child: cancelText,
+  final cancelButton = CupertinoButton(
+    padding: const EdgeInsets.symmetric(horizontal: 15),
     onPressed: () {
       onDateTimeChanged(DateTime(0000, 01, 01, 0, 0, 0, 0, 0));
       Navigator.of(context).pop();
     },
+    child: cancelText,
   );
 
-  var doneButton = CupertinoButton(
-    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-    child: doneText,
+  final doneButton = CupertinoButton(
+    padding: const EdgeInsets.symmetric(horizontal: 15),
     onPressed: () => Navigator.of(context).pop(),
+    child: doneText,
   );
 
   //
   showCupertinoModalPopup(
     context: context,
     builder: (context) => SizedBox(
-      height: 240.0,
+      height: 240,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Container(
             alignment: Alignment.centerRight,
-            decoration: BoxDecoration(
-              color: const Color.fromRGBO(249, 249, 247, 1.0),
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(249, 249, 247, 1),
               border: Border(
-                bottom: const BorderSide(width: 0.5, color: Colors.black38),
+                bottom: BorderSide(width: 0.5, color: Colors.black38),
               ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                leftHanded ? doneButton : cancelButton,
-                leftHanded ? cancelButton : doneButton,
+                if (leftHanded) doneButton else cancelButton,
+                if (leftHanded) cancelButton else doneButton,
               ],
             ),
           ),
@@ -153,7 +152,9 @@ void showCupertinoDatePicker(
             key: key,
             mode: mode,
             onDateTimeChanged: (DateTime value) {
-              if (onDateTimeChanged == null) return;
+              if (onDateTimeChanged == null) {
+                return;
+              }
               if (mode == CupertinoDatePickerMode.time) {
                 onDateTimeChanged(
                     DateTime(0000, 01, 01, value.hour, value.minute));

@@ -146,7 +146,7 @@ class ScheduleNotifications with HandleError {
     _importance = importance ?? Importance.Default;
     _priority = priority ?? Priority.Default;
     _styleInformation = styleInformation;
-    _playSound = playSound ?? false;
+    _playSound = playSound;// ?? false;
     _sound = sound;
     _enableVibration = enableVibration ?? false;
     _vibrationPattern = vibrationPattern;
@@ -383,8 +383,6 @@ class ScheduleNotifications with HandleError {
 
     //
     try {
-      // Note: permissions aren't requested here just to demonstrate that can be done later using the `requestPermissions()` method
-      // of the `IOSFlutterLocalNotificationsPlugin` class
       var initializationSettingsIOS = IOSInitializationSettings(
         requestAlertPermission: requestAlertPermission,
         requestBadgePermission: requestSoundPermission,
@@ -396,6 +394,8 @@ class ScheduleNotifications with HandleError {
             (int id, String title, String body, String payload) =>
                 onSelectNotification(payload),
       );
+
+      WidgetsFlutterBinding.ensureInitialized();
 
       var initializationSettings = InitializationSettings(
           AndroidInitializationSettings(_appIcon), initializationSettingsIOS);
@@ -1142,7 +1142,13 @@ class ScheduleNotifications with HandleError {
     attachments ??= _attachments;
 
     // Play the sound if supplied a sound.
-    if (playSound == null && sound != null) playSound = true;
+    if (playSound == null) {
+      if (sound == null){
+        playSound = false;
+      }else{
+        playSound = true;
+      }
+    }
 
     // If to vibrate then do so.
     if (enableVibration &&

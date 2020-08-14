@@ -27,15 +27,15 @@ class Contact<E> implements Comparable<Contact> {
   Contact();
 
   Contact.fromMap(Map<String, dynamic> m) {
-    id = m["id"];
-    displayName = m["displayName"];
-    givenName = m["givenName"];
-    middleName = m["middleName"];
-    familyName = m["familyName"];
-    prefix = m["prefix"];
-    suffix = m["suffix"];
-    company = m["company"];
-    jobTitle = m["jobTitle"];
+    id = m['id'];
+    displayName = m['displayName'];
+    givenName = m['givenName'];
+    middleName = m['middleName'];
+    familyName = m['familyName'];
+    prefix = m['prefix'];
+    suffix = m['suffix'];
+    company = m['company'];
+    jobTitle = m['jobTitle'];
 //    emails = (m["emails"] as Iterable)?.map((m) => Item.fromMap(m));
 //    phones = (m["phones"] as Iterable)?.map((m) => Item.fromMap(m));
 //    postalAddresses = (m["postalAddresses"] as Iterable)
@@ -64,161 +64,164 @@ class Contact<E> implements Comparable<Contact> {
   List<PostalAddress> _postalAddresses;
 
   Map<String, dynamic> get toMap {
-    var emailList = [];
-    var phoneList = [];
+    final List<Map<String, String>> emailList = [];
+    final List<Map<String, String>> phoneList = [];
 
     if (emails == null) {
       emails = [];
       if (_email != null && _email.isNotEmpty) {
-        DataFieldItem item = DataFieldItem(label: "home", value: _email);
+        final DataFieldItem item = DataFieldItem(label: 'home', value: _email);
         item.keys('label', 'email');
         emails.add(item);
       }
     }
-    for (DataFieldItem email in emails ?? []) {
+    for (final DataFieldItem email in emails ?? []) {
       email.keys('label', 'email');
       emailList.add(email.toMap);
     }
     if (phones == null || phones.length == 0) {
       if (_phone != null && _phone.isNotEmpty) {
         phones = [];
-        DataFieldItem item = DataFieldItem(label: "home", value: _phone);
+        final DataFieldItem item = DataFieldItem(label: 'home', value: _phone);
         item.keys('label', 'phone');
         phones.add(item);
       }
     }
-    for (DataFieldItem phone in phones ?? []) {
+    for (final DataFieldItem phone in phones ?? []) {
       phone.keys('label', 'phone');
       phoneList.add(phone.toMap);
     }
-    var addressList = [];
-    for (PostalAddress address in _postalAddresses ?? []) {
+    final List<Map<String, String>> addressList = [];
+    for (final address in _postalAddresses ?? []) {
       addressList.add(address.toMap);
     }
     return {
-      "id": _id,
-      "displayName": _displayName,
-      "givenName": _givenName,
-      "middleName": _middleName,
-      "familyName": _familyName,
-      "prefix": _prefix,
-      "suffix": _suffix,
-      "company": _company,
-      "jobTitle": _jobTitle,
-      "emails": emailList,
-      "phones": phoneList,
-      "postalAddresses": addressList,
+      'id': _id,
+      'displayName': _displayName,
+      'givenName': _givenName,
+      'middleName': _middleName,
+      'familyName': _familyName,
+      'prefix': _prefix,
+      'suffix': _suffix,
+      'company': _company,
+      'jobTitle': _jobTitle,
+      'emails': emailList,
+      'phones': phoneList,
+      'postalAddresses': addressList,
     };
   }
 
   String get id => _id;
   set id(String v) {
-    if (v == null) v = "";
+    v ??= "";
     _id = v;
   }
 
   String get displayName => _displayName;
   set displayName(String v) {
-    if (v == null) v = "";
+    v ??= '';
     _displayName = v;
   }
 
   String get givenName => _givenName;
   set givenName(String v) {
-    if (v == null) v = "";
+    v ??= '';
     _givenName = v;
     _nameDisplayed();
   }
 
   String get middleName => _middleName;
   set middleName(String v) {
-    if (v == null) v = "";
+    v ??= '';
     _middleName = v;
   }
 
   String get familyName => _familyName;
   set familyName(String v) {
-    if (v == null) v = "";
+    v ??= '';
     _familyName = v;
     _nameDisplayed();
   }
 
   void _nameDisplayed() {
-    _displayName = givenName ?? " " + ' ' + familyName ?? " ";
+    _displayName = givenName ?? '  $familyName' ?? ' ';
   }
 
   String get prefix => _prefix;
   set prefix(String v) {
-    if (v == null) v = "";
+    v ??= '';
     _prefix = v;
   }
 
   String get suffix => _suffix;
   set suffix(String v) {
-    if (v == null) v = "";
+    v ??= '';
     _suffix = v;
   }
 
   String get company => _company;
   set company(String v) {
-    if (v == null) v = "";
+    v ??= '';
     _company = v;
   }
 
   String get jobTitle => _jobTitle;
   set jobTitle(String v) {
-    if (v == null) v = "";
+    v ??= '';
     _jobTitle = v;
   }
 
   String get phone => _phone;
   set phone(String v) {
-    if (v == null) v = "";
+    v ??= '';
     _phone = v;
   }
 
   String get email => _email;
   set email(String v) {
-    if (v == null) v = "";
+    v ??= '';
     _email = v;
   }
 
   List<PostalAddress> get postalAddresses => _postalAddresses;
   set postalAddresses(List<PostalAddress> address) {
-    if (address == null) return;
+    if (address == null) {
+      return;
+    }
     _postalAddresses = address;
   }
 
   String get street => _street;
   set street(String v) {
-    if (v == null) v = "";
+    v ??= '';
     _street = v;
   }
 
   String get city => _city;
   set city(String v) {
-    if (v == null) v = "";
+    v ??= '';
     _city = v;
   }
 
   String get region => _region;
   set region(String v) {
-    if (v == null) v = "";
+    v ??= '';
     _region = v;
   }
 
   String get postcode => _postcode;
   set postcode(String v) {
-    if (v == null) v = "";
+    v ??= '';
     _postcode = v;
   }
 
   String get country => _country;
   set country(String v) {
-    if (v == null) v = "";
+    v ??= '';
     _country = v;
   }
 
+  @override
   int compareTo(Contact other) => _givenName.compareTo(other._givenName);
 }
 
@@ -226,6 +229,7 @@ class Id extends FieldWidgets<Contact> {
   Id([Contact contact])
       : super(object: contact, label: 'Identifier', value: contact?.id);
 
+  @override
   void onSaved(v) => object?.id = value = v;
 }
 
@@ -237,7 +241,8 @@ class DisplayName extends FieldWidgets<Contact> {
           value: contact?.displayName,
         );
 
-  void onSaved(v) => object?.displayName = value = v;
+  @override
+  void onSaved(dynamic v) => object?.displayName = value = v;
 
   @override
   CircleAvatar get circleAvatar =>
@@ -248,7 +253,8 @@ class GivenName extends FieldWidgets<Contact> {
   GivenName([Contact contact])
       : super(object: contact, label: 'First Name', value: contact?.givenName);
 
-  void onSaved(v) => object?.givenName = value = v;
+  @override
+  void onSaved(dynamic v) => object?.givenName = value = v;
 }
 
 class MiddleName extends FieldWidgets<Contact> {
@@ -256,7 +262,8 @@ class MiddleName extends FieldWidgets<Contact> {
       : super(
             object: contact, label: 'Middle Name', value: contact?.middleName);
 
-  void onSaved(v) => object?.middleName = value = v;
+  @override
+  void onSaved(dynamic v) => object?.middleName = value = v;
 }
 
 class FamilyName extends FieldWidgets<Contact> {
@@ -267,35 +274,40 @@ class FamilyName extends FieldWidgets<Contact> {
           value: contact?.familyName,
         );
 
-  void onSaved(v) => object?.familyName = value = v;
+  @override
+  void onSaved(dynamic v) => object?.familyName = value = v;
 }
 
 class Prefix extends FieldWidgets<Contact> {
   Prefix([Contact contact])
       : super(object: contact, label: 'Prefix', value: contact?.prefix);
 
-  void onSaved(v) => object?.prefix = value = v;
+  @override
+  void onSaved(dynamic v) => object?.prefix = value = v;
 }
 
 class Suffix extends FieldWidgets<Contact> {
   Suffix([Contact contact])
       : super(object: contact, label: 'Suffix', value: contact?.suffix);
 
-  void onSaved(v) => object?.suffix = value = v;
+  @override
+  void onSaved(dynamic v) => object?.suffix = value = v;
 }
 
 class Company extends FieldWidgets<Contact> {
   Company([Contact contact])
       : super(object: contact, label: 'Company', value: contact?.company);
 
-  void onSaved(v) => object?.company = value = v;
+  @override
+  void onSaved(dynamic v) => object?.company = value = v;
 }
 
 class JobTitle extends FieldWidgets<Contact> {
   JobTitle([Contact contact])
       : super(object: contact, label: 'Job', value: contact?.jobTitle);
 
-  void onSaved(v) => object?.jobTitle = value = v;
+  @override
+  void onSaved(dynamic v) => object?.jobTitle = value = v;
 }
 
 class Phone extends FieldWidgets<Contact> {
@@ -310,10 +322,13 @@ class Phone extends FieldWidgets<Contact> {
     // Change the name of the map's key fields.
     keys('label', 'phone');
   }
-  void onSaved(v) {
-    if (v == null) return;
+  @override
+  void onSaved(dynamic v) {
+    if (v == null) {
+      return;
+    }
     if (v is List<DataFieldItem>) {
-      object?.phones = (v as List<DataFieldItem>);
+      object?.phones = v;
       return;
     }
     if (v is String) {
@@ -325,7 +340,7 @@ class Phone extends FieldWidgets<Contact> {
   @override
   TextFormField get textFormField => TextFormField(
       decoration: InputDecoration(labelText: label),
-      onSaved: (v) => onSaved(v),
+      onSaved: onSaved,
       keyboardType: TextInputType.phone);
 }
 
@@ -336,10 +351,13 @@ class Email extends FieldWidgets<Contact> {
   Email.single([Contact contact])
       : super(object: contact, label: 'E-mail', value: contact?.email);
 
-  void onSaved(v) {
-    if (v == null) return;
+  @override
+  void onSaved(dynamic v) {
+    if (v == null) {
+      return;
+    }
     if (v is List<DataFieldItem>) {
-      object?.emails = (v as List<DataFieldItem>);
+      object?.emails = v;
       return;
     }
     if (v is String) {
@@ -351,7 +369,7 @@ class Email extends FieldWidgets<Contact> {
   @override
   TextFormField get textFormField => TextFormField(
       decoration: InputDecoration(labelText: label),
-      onSaved: (v) => onSaved(v),
+      onSaved: onSaved,
       keyboardType: TextInputType.emailAddress);
 }
 
@@ -359,33 +377,38 @@ class Street extends FieldWidgets<Contact> {
   Street([Contact contact])
       : super(object: contact, label: 'Street', value: contact?.company);
 
-  void onSaved(v) => object?.street = value = v;
+  @override
+  void onSaved(dynamic v) => object?.street = value = v;
 }
 
 class City extends FieldWidgets<Contact> {
   City([Contact contact])
       : super(object: contact, label: 'City', value: contact?.company);
 
-  void onSaved(v) => object?.city = value = v;
+  @override
+  void onSaved(dynamic v) => object?.city = value = v;
 }
 
 class Region extends FieldWidgets<Contact> {
   Region([Contact contact])
       : super(object: contact, label: 'Region', value: contact?.company);
 
-  void onSaved(v) => object?.region = value = v;
+  @override
+  void onSaved(dynamic v) => object?.region = value = v;
 }
 
 class Postcode extends FieldWidgets<Contact> {
   Postcode([Contact contact])
       : super(object: contact, label: 'Postal code', value: contact?.company);
 
-  void onSaved(v) => object?.postcode = value = v;
+  @override
+  void onSaved(dynamic v) => object?.postcode = value = v;
 }
 
 class Country extends FieldWidgets<Contact> {
   Country([Contact contact])
       : super(object: contact, label: 'Country', value: contact?.company);
 
-  void onSaved(v) => object?.country = value = v;
+  @override
+  void onSaved(dynamic v) => object?.country = value = v;
 }

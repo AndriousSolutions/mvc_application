@@ -25,21 +25,26 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:device_info/device_info.dart'
     show AndroidDeviceInfo, DeviceInfoPlugin, IosDeviceInfo;
 
+// ignore: avoid_classes_with_only_static_members
 class DeviceInfo {
   static bool _init = false;
-  static Map<String, dynamic> _deviceParameters = Map();
+  static final Map<String, dynamic> _deviceParameters = {};
 //  static Map<String, dynamic> _applicationParameters = Map();
 
   static Future<Map<String, dynamic>> init() async {
-    if (_init) return _deviceParameters;
+    if (_init) {
+      return _deviceParameters;
+    }
     _init = true;
     // Running in the Web.
-    if (kIsWeb) return _deviceParameters;
+    if (kIsWeb) {
+      return _deviceParameters;
+    }
     if (UniversalPlatform.isAndroid) {
-      AndroidDeviceInfo info = await DeviceInfoPlugin().androidInfo;
+      final AndroidDeviceInfo info = await DeviceInfoPlugin().androidInfo;
       _loadAndroidParameters(info);
     } else if (UniversalPlatform.isIOS) {
-      IosDeviceInfo info = await DeviceInfoPlugin().iosInfo;
+      final IosDeviceInfo info = await DeviceInfoPlugin().iosInfo;
       _loadiOSParameters(info);
     } else if (UniversalPlatform.isWindows) {
     } else if (UniversalPlatform.isFuchsia) {
@@ -49,87 +54,87 @@ class DeviceInfo {
   }
 
   // Android
-  static String get id => _deviceParameters["id"] ?? '';
-  static String get androidId => _deviceParameters["androidId"] ?? '';
-  static String get board => _deviceParameters["board"] ?? '';
-  static String get bootloader => _deviceParameters["bootloader"] ?? '';
-  static String get brand => _deviceParameters["brand"] ?? '';
-  static String get device => _deviceParameters["device"] ?? '';
-  static String get display => _deviceParameters["display"] ?? '';
-  static String get fingerprint => _deviceParameters["fingerprint"] ?? '';
-  static String get hardware => _deviceParameters["hardware"] ?? '';
-  static String get host => _deviceParameters["host"] ?? '';
+  static String get id => _deviceParameters['id'] ?? '';
+  static String get androidId => _deviceParameters['androidId'] ?? '';
+  static String get board => _deviceParameters['board'] ?? '';
+  static String get bootloader => _deviceParameters['bootloader'] ?? '';
+  static String get brand => _deviceParameters['brand'] ?? '';
+  static String get device => _deviceParameters['device'] ?? '';
+  static String get display => _deviceParameters['display'] ?? '';
+  static String get fingerprint => _deviceParameters['fingerprint'] ?? '';
+  static String get hardware => _deviceParameters['hardware'] ?? '';
+  static String get host => _deviceParameters['host'] ?? '';
   static String get isPhysicalDevice =>
-      _deviceParameters["isPhysicalDevice"] ?? '';
-  static String get manufacturer => _deviceParameters["manufacturer"] ?? '';
-  static String get model => _deviceParameters["model"] ?? '';
-  static String get product => _deviceParameters["product"] ?? '';
-  static String get tags => _deviceParameters["tags"] ?? '';
-  static String get type => _deviceParameters["type"] ?? '';
-  static String get versionBaseOs => _deviceParameters["versionBaseOs"] ?? '';
+      _deviceParameters['isPhysicalDevice'] ?? '';
+  static String get manufacturer => _deviceParameters['manufacturer'] ?? '';
+  static String get model => _deviceParameters['model'] ?? '';
+  static String get product => _deviceParameters['product'] ?? '';
+  static String get tags => _deviceParameters['tags'] ?? '';
+  static String get type => _deviceParameters['type'] ?? '';
+  static String get versionBaseOs => _deviceParameters['versionBaseOs'] ?? '';
   static String get versionCodename =>
-      _deviceParameters["versionCodename"] ?? '';
+      _deviceParameters['versionCodename'] ?? '';
   static String get versionIncremental =>
-      _deviceParameters["versionIncremental"] ?? '';
+      _deviceParameters['versionIncremental'] ?? '';
   static String get versionPreviewSdk =>
-      _deviceParameters["versionPreviewSdk"] ?? '';
-  static String get versionRelease => _deviceParameters["versionRelease"] ?? '';
-  static String get versionSdk => _deviceParameters["versionSdk"] ?? '';
+      _deviceParameters['versionPreviewSdk'] ?? '';
+  static String get versionRelease => _deviceParameters['versionRelease'] ?? '';
+  static String get versionSdk => _deviceParameters['versionSdk'] ?? '';
   static String get versionSecurityPatch =>
-      _deviceParameters["versionSecurityPatch"] ?? '';
+      _deviceParameters['versionSecurityPatch'] ?? '';
   // iOS
-  static String get name => _deviceParameters["name"] ?? '';
+  static String get name => _deviceParameters['name'] ?? '';
   static String get identifierForVendor =>
-      _deviceParameters["identifierForVendor"] ?? '';
-  static String get localizedModel => _deviceParameters["localizedModel"] ?? '';
-  static String get systemName => _deviceParameters["systemName"] ?? '';
-  static String get utsnameVersion => _deviceParameters["utsnameVersion"] ?? '';
-  static String get utsnameRelease => _deviceParameters["utsnameRelease"] ?? '';
-  static String get utsnameMachine => _deviceParameters["utsnameMachine"] ?? '';
+      _deviceParameters['identifierForVendor'] ?? '';
+  static String get localizedModel => _deviceParameters['localizedModel'] ?? '';
+  static String get systemName => _deviceParameters['systemName'] ?? '';
+  static String get utsnameVersion => _deviceParameters['utsnameVersion'] ?? '';
+  static String get utsnameRelease => _deviceParameters['utsnameRelease'] ?? '';
+  static String get utsnameMachine => _deviceParameters['utsnameMachine'] ?? '';
   static String get utsnameNodename =>
-      _deviceParameters["utsnameNodename"] ?? '';
-  static String get utsnameSysname => _deviceParameters["utsnameSysname"] ?? '';
+      _deviceParameters['utsnameNodename'] ?? '';
+  static String get utsnameSysname => _deviceParameters['utsnameSysname'] ?? '';
 
   static void _loadAndroidParameters(AndroidDeviceInfo androidDeviceInfo) {
-    _deviceParameters["id"] = androidDeviceInfo.id;
-    _deviceParameters["androidId"] = androidDeviceInfo.androidId;
-    _deviceParameters["board"] = androidDeviceInfo.board;
-    _deviceParameters["bootloader"] = androidDeviceInfo.bootloader;
-    _deviceParameters["brand"] = androidDeviceInfo.brand;
-    _deviceParameters["device"] = androidDeviceInfo.device;
-    _deviceParameters["display"] = androidDeviceInfo.display;
-    _deviceParameters["fingerprint"] = androidDeviceInfo.fingerprint;
-    _deviceParameters["hardware"] = androidDeviceInfo.hardware;
-    _deviceParameters["host"] = androidDeviceInfo.host;
-    _deviceParameters["isPsychicalDevice"] = androidDeviceInfo.isPhysicalDevice;
-    _deviceParameters["manufacturer"] = androidDeviceInfo.manufacturer;
-    _deviceParameters["model"] = androidDeviceInfo.model;
-    _deviceParameters["product"] = androidDeviceInfo.product;
-    _deviceParameters["tags"] = androidDeviceInfo.tags;
-    _deviceParameters["type"] = androidDeviceInfo.type;
-    _deviceParameters["versionBaseOs"] = androidDeviceInfo.version.baseOS;
-    _deviceParameters["versionCodename"] = androidDeviceInfo.version.codename;
-    _deviceParameters["versionIncremental"] =
+    _deviceParameters['id'] = androidDeviceInfo.id;
+    _deviceParameters['androidId'] = androidDeviceInfo.androidId;
+    _deviceParameters['board'] = androidDeviceInfo.board;
+    _deviceParameters['bootloader'] = androidDeviceInfo.bootloader;
+    _deviceParameters['brand'] = androidDeviceInfo.brand;
+    _deviceParameters['device'] = androidDeviceInfo.device;
+    _deviceParameters['display'] = androidDeviceInfo.display;
+    _deviceParameters['fingerprint'] = androidDeviceInfo.fingerprint;
+    _deviceParameters['hardware'] = androidDeviceInfo.hardware;
+    _deviceParameters['host'] = androidDeviceInfo.host;
+    _deviceParameters['isPsychicalDevice'] = androidDeviceInfo.isPhysicalDevice;
+    _deviceParameters['manufacturer'] = androidDeviceInfo.manufacturer;
+    _deviceParameters['model'] = androidDeviceInfo.model;
+    _deviceParameters['product'] = androidDeviceInfo.product;
+    _deviceParameters['tags'] = androidDeviceInfo.tags;
+    _deviceParameters['type'] = androidDeviceInfo.type;
+    _deviceParameters['versionBaseOs'] = androidDeviceInfo.version.baseOS;
+    _deviceParameters['versionCodename'] = androidDeviceInfo.version.codename;
+    _deviceParameters['versionIncremental'] =
         androidDeviceInfo.version.incremental;
-    _deviceParameters["versionPreviewSdk"] =
+    _deviceParameters['versionPreviewSdk'] =
         androidDeviceInfo.version.previewSdkInt;
-    _deviceParameters["versionRelease"] = androidDeviceInfo.version.release;
-    _deviceParameters["versionSdk"] = androidDeviceInfo.version.sdkInt;
-    _deviceParameters["versionSecurityPatch"] =
+    _deviceParameters['versionRelease'] = androidDeviceInfo.version.release;
+    _deviceParameters['versionSdk'] = androidDeviceInfo.version.sdkInt;
+    _deviceParameters['versionSecurityPatch'] =
         androidDeviceInfo.version.securityPatch;
   }
 
   static void _loadiOSParameters(IosDeviceInfo iosInfo) {
-    _deviceParameters["model"] = iosInfo.model;
-    _deviceParameters["isPsychicalDevice"] = iosInfo.isPhysicalDevice;
-    _deviceParameters["name"] = iosInfo.name;
-    _deviceParameters["identifierForVendor"] = iosInfo.identifierForVendor;
-    _deviceParameters["localizedModel"] = iosInfo.localizedModel;
-    _deviceParameters["systemName"] = iosInfo.systemName;
-    _deviceParameters["utsnameVersion"] = iosInfo.utsname.version;
-    _deviceParameters["utsnameRelease"] = iosInfo.utsname.release;
-    _deviceParameters["utsnameMachine"] = iosInfo.utsname.machine;
-    _deviceParameters["utsnameNodename"] = iosInfo.utsname.nodename;
-    _deviceParameters["utsnameSysname"] = iosInfo.utsname.sysname;
+    _deviceParameters['model'] = iosInfo.model;
+    _deviceParameters['isPsychicalDevice'] = iosInfo.isPhysicalDevice;
+    _deviceParameters['name'] = iosInfo.name;
+    _deviceParameters['identifierForVendor'] = iosInfo.identifierForVendor;
+    _deviceParameters['localizedModel'] = iosInfo.localizedModel;
+    _deviceParameters['systemName'] = iosInfo.systemName;
+    _deviceParameters['utsnameVersion'] = iosInfo.utsname.version;
+    _deviceParameters['utsnameRelease'] = iosInfo.utsname.release;
+    _deviceParameters['utsnameMachine'] = iosInfo.utsname.machine;
+    _deviceParameters['utsnameNodename'] = iosInfo.utsname.nodename;
+    _deviceParameters['utsnameSysname'] = iosInfo.utsname.sysname;
   }
 }

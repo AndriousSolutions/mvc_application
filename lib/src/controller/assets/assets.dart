@@ -17,7 +17,7 @@
 ///
 ///
 
-import "dart:async" show Future;
+import 'dart:async' show Future;
 
 import 'package:flutter/material.dart'
     show AssetImage, BuildContext, DefaultAssetBundle;
@@ -36,7 +36,7 @@ class Assets {
   static AssetBundle _assets;
   static String _dir;
 
-  static dispose() {
+  static void dispose() {
     _assets = null;
   }
 
@@ -44,7 +44,7 @@ class Assets {
     assert(Assets._assets != null, 'Assets.init() must be called first.');
     ByteData data;
     try {
-      data = await Assets._assets.load("$setPath(key)$key");
+      data = await Assets._assets.load('$setPath(key)$key');
     } catch (ex) {
       data = ByteData(0);
     }
@@ -56,18 +56,18 @@ class Assets {
     String asset;
     try {
       asset =
-          await Assets._assets.loadString("$setPath(key)$key", cache: cache);
+          await Assets._assets.loadString('$setPath(key)$key', cache: cache);
     } catch (ex) {
       asset = '';
     }
     return asset;
   }
 
-  Future<T> getData<T>(String key, Future<T> parser(String value)) async {
+  Future<T> getData<T>(String key, Future<T> Function(String value) parser) async {
     assert(Assets._assets != null, 'Assets.init() must be called first.');
     Future<T> data;
     try {
-      data = Assets._assets.loadStructuredData("$setPath(key)$key", parser);
+      data = Assets._assets.loadStructuredData('$setPath(key)$key', parser);
     } catch (ex) {
       data = null;
     }
@@ -75,12 +75,12 @@ class Assets {
   }
 
   Future<String> getStringData(
-      String key, Future<String> parser(String value)) async {
+      String key, Future<String> Function(String value) parser) async {
     assert(Assets._assets != null, 'Assets.init() must be called first.');
     String data;
     try {
       data =
-          await Assets._assets.loadStructuredData("$setPath(key)$key", parser);
+          await Assets._assets.loadStructuredData('$setPath(key)$key', parser);
     } catch (ex) {
       data = null;
     }
@@ -88,12 +88,12 @@ class Assets {
   }
 
   Future<bool> getBoolData(
-      String key, Future<bool> parser(String value)) async {
+      String key, Future<bool> Function(String value) parser) async {
     assert(Assets._assets != null, 'Assets.init() must be called first.');
     bool data;
     try {
       data =
-          await Assets._assets.loadStructuredData("$setPath(key)$key", parser);
+          await Assets._assets.loadStructuredData('$setPath(key)$key', parser);
     } catch (ex) {
       data = false;
     }
@@ -107,9 +107,9 @@ class Assets {
   /// Determine the appropriate path for the asset.
   static String setPath(String key) {
     /// In case 'assets' begins the key or if '/' begins the key.
-    var path = key.indexOf(_dir) == 0
+    final path = key.indexOf(_dir) == 0
         ? ''
-        : key.substring(0, 0) == '/' ? _dir : "$_dir/";
+        : key.substring(0, 0) == '/' ? _dir : '$_dir/';
     return path;
   }
 }

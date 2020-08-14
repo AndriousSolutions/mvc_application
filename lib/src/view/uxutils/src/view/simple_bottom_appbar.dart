@@ -63,7 +63,7 @@ import 'package:flutter/material.dart'
         required;
 
 class SimpleBottomAppBar extends StatefulWidget {
-  SimpleBottomAppBar(
+  const SimpleBottomAppBar(
       {this.button01, this.button02, this.button03, this.button04, Key key})
       : super(key: key);
   final BarButton button01;
@@ -96,33 +96,33 @@ class SimpleBottomAppBarState extends State<SimpleBottomAppBar>
   @override
   void initState() {
     super.initState();
-    _controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 250));
-    animation = Tween<double>(begin: 0.0, end: 1.0)
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 250));
+    animation = Tween<double>(begin: 0, end: 1)
         .animate(CurvedAnimation(curve: Curves.easeInOut, parent: _controller));
-    translationFirstHalfAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    translationFirstHalfAnimation = Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(
-            curve: Interval(0.0, 0.85, curve: Curves.easeIn),
+            curve: const Interval(0, 0.85, curve: Curves.easeIn),
             parent: _controller));
-    translationSecondHalfAnimation = Tween<double>(begin: 0.0, end: 1.0)
-        .animate(CurvedAnimation(
-            curve: Interval(0.15, 1.0, curve: Curves.easeOut),
-            parent: _controller));
-    opacityFirstHalfAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    translationSecondHalfAnimation = Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(
-            curve: Interval(0.0, 0.50, curve: Curves.easeIn),
+            curve: const Interval(0.15, 1, curve: Curves.easeOut),
             parent: _controller));
-    opacitySecondHalfAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    opacityFirstHalfAnimation = Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(
-            curve: Interval(0.50, 1.0, curve: Curves.easeOut),
+            curve: const Interval(0, 0.50, curve: Curves.easeIn),
             parent: _controller));
-    skewFirstHalfAnimation = Tween<double>(begin: 0.0, end: 0.1).animate(
+    opacitySecondHalfAnimation = Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(
-            curve: Interval(0.0, 0.3, curve: Curves.easeIn),
+            curve: const Interval(0.50, 1, curve: Curves.easeOut),
             parent: _controller));
-    skewSecondHalfAnimation = Tween<double>(begin: 0.0, end: 0.1).animate(
+    skewFirstHalfAnimation = Tween<double>(begin: 0, end: 0.1).animate(
         CurvedAnimation(
-            curve: Interval(0.7, 1.0, curve: Curves.easeOut),
+            curve: const Interval(0, 0.3, curve: Curves.easeIn),
+            parent: _controller));
+    skewSecondHalfAnimation = Tween<double>(begin: 0, end: 0.1).animate(
+        CurvedAnimation(
+            curve: const Interval(0.7, 1, curve: Curves.easeOut),
             parent: _controller));
 
     animation.addListener(() {
@@ -161,10 +161,8 @@ class SimpleBottomAppBarState extends State<SimpleBottomAppBar>
     return BottomAppBar(
       child: Container(
         width: double.infinity,
-        height: 56.0,
+        height: 56,
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
           children: _listButtons(widget.button01, widget.button02,
               widget.button03, widget.button04),
         ),
@@ -172,7 +170,7 @@ class SimpleBottomAppBarState extends State<SimpleBottomAppBar>
     );
   }
 
-  _onOptionClicked({@required int pressedIndex}) {
+  void _onOptionClicked({@required int pressedIndex}) {
     if (pressedIndex != currentIndex) {
       previousIndex = currentIndex;
       currentIndex = pressedIndex;
@@ -187,7 +185,7 @@ class SimpleBottomAppBarState extends State<SimpleBottomAppBar>
     BarButton button03,
     BarButton button04,
   ) {
-    List<Widget> btnList = [];
+    final List<Widget> btnList = [];
     int btnCount = 0;
     if (button01 != null) {
       btnList.add(_barButton(button01, btnCount));
@@ -215,36 +213,33 @@ class SimpleBottomAppBarState extends State<SimpleBottomAppBar>
       child: FlatButton(
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
-        clipBehavior: Clip.none,
-        padding: EdgeInsets.all(0.0),
+        padding: const EdgeInsets.all(0),
         onPressed: () {
           _onOptionClicked(pressedIndex: count);
           btn.onPressed();
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Transform.translate(
-              offset: Offset(0.0, verticalShiftValues[count]),
+              offset: Offset(0, verticalShiftValues[count]),
               child: Transform(
                 transform: Matrix4.skewY(skewValues[count]),
                 child: Icon(
                   btn.icon,
-                  size: 22.0,
+                  size: 22,
                 ),
               ),
             ),
             ClipRect(
               child: FractionalTranslation(
-                translation: Offset(fractionalOffsetValues[count], 0.0),
+                translation: Offset(fractionalOffsetValues[count], 0),
                 child: Opacity(
                   opacity: opacityValues[count],
                   child: Center(
                     child: Text(
                       btn.text,
-                      style: TextStyle(fontWeight: FontWeight.w400),
+                      style: const TextStyle(fontWeight: FontWeight.w400),
                     ),
                   ),
                 ),
@@ -270,7 +265,9 @@ class HomeBarButton extends BarButton {
           text: 'Home',
           icon: Icons.home,
           onPressed: () {
-            if (onPressed != null) onPressed();
+            if (onPressed != null) {
+              onPressed();
+            }
           },
         );
 }
@@ -281,7 +278,9 @@ class DeleteBarButton extends BarButton {
           text: 'Delete',
           icon: Icons.delete,
           onPressed: () {
-            if (onPressed != null) onPressed();
+            if (onPressed != null) {
+              onPressed();
+            }
           },
         );
 }
@@ -292,7 +291,9 @@ class EditBarButton extends BarButton {
           text: 'Edit',
           icon: Icons.edit,
           onPressed: () {
-            if (onPressed != null) onPressed();
+            if (onPressed != null) {
+              onPressed();
+            }
           },
         );
 }
@@ -303,7 +304,9 @@ class SearchBarButton extends BarButton {
           text: 'Search',
           icon: Icons.search,
           onPressed: () {
-            if (onPressed != null) onPressed();
+            if (onPressed != null) {
+              onPressed();
+            }
           },
         );
 }
@@ -314,7 +317,9 @@ class StatsBarButton extends BarButton {
           text: 'Stats',
           icon: Icons.timeline,
           onPressed: () {
-            if (onPressed != null) onPressed();
+            if (onPressed != null) {
+              onPressed();
+            }
           },
         );
 }
@@ -325,7 +330,9 @@ class EventsBarButton extends BarButton {
           text: 'Events',
           icon: Icons.event,
           onPressed: () {
-            if (onPressed != null) onPressed();
+            if (onPressed != null) {
+              onPressed();
+            }
           },
         );
 }
@@ -336,7 +343,9 @@ class HistoryBarButton extends BarButton {
           text: 'History',
           icon: Icons.history,
           onPressed: () {
-            if (onPressed != null) onPressed();
+            if (onPressed != null) {
+              onPressed();
+            }
           },
         );
 }

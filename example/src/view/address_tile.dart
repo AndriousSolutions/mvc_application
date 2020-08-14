@@ -33,33 +33,34 @@ import 'package:flutter/material.dart'
 import '../../model.dart' show PostalAddress;
 
 class AddressesTile extends StatelessWidget {
-  AddressesTile(this._addresses, {Key key}) : super(key: key);
+  const AddressesTile(this._addresses, {Key key}) : super(key: key);
   final List<PostalAddress> _addresses;
 
+  @override
   Widget build(BuildContext context) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          ListTile(title: Text("Addresses")),
+          const ListTile(title: Text('Addresses')),
           Column(
               children: _addresses
                   .map((a) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Column(
                           children: <Widget>[
                             ListTile(
-                                title: Text("Street"),
+                                title: const Text('Street'),
                                 trailing: Text(a.street)),
                             ListTile(
-                                title: Text("Postcode"),
+                                title: const Text('Postcode'),
                                 trailing: Text(a.postcode)),
                             ListTile(
-                                title: Text("City"), trailing: Text(a.city)),
+                                title: const Text('City'), trailing: Text(a.city)),
                             ListTile(
-                                title: Text("Region"),
+                                title: const Text('Region'),
                                 trailing: Text(a.region)),
                             ListTile(
-                                title: Text("Country"),
+                                title: const Text('Country'),
                                 trailing: Text(a.country)),
                           ],
                         ),

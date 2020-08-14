@@ -1,3 +1,8 @@
+## 5.9.0
+ July 14, 2020
+- Strict Flutter Lint Rules following Dart Style Guide.
+- Introduced analysis_options.yaml
+
 ## 5.8.0
  July 10, 2020
 - static set themeData(dynamic value) 
@@ -146,7 +151,6 @@
 
 ## 1.6.1
 - Prepare for 1.0.0 version of sensors and package_info. 
-([dart_lsc](http://github.com/amirh/dart_lsc))
 
 ## 1.6.0
  March 13, 2020

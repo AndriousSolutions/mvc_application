@@ -75,7 +75,7 @@ class NavBottomBar {
 
   int _lastIndex = 0;
 
-  @deprecated
+  @Deprecated('Use show() instead.')
   BottomNavigationBar get bar => show();
 
   /// Supply the defined BottomNavigationBar
@@ -102,7 +102,9 @@ class NavBottomBar {
     // In case null was directly assigned.
     this.hide ??= false;
     hide ??= this.hide;
-    if (hide) return null;
+    if (hide) {
+      return null;
+    }
 
     // If directly assigned an invalid index
     currentIndex ??= this.currentIndex;
@@ -123,7 +125,9 @@ class NavBottomBar {
       onTap: (int index) {
         this.currentIndex = index;
         _lastIndex = index;
-        if (onTap != null) onTap(index);
+        if (onTap != null) {
+          onTap(index);
+        }
       },
       currentIndex: currentIndex,
       elevation: elevation ?? this.elevation ?? 8.0,

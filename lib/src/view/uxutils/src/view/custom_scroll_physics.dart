@@ -30,12 +30,12 @@ import 'package:flutter/material.dart'
         required;
 
 class SnappingListScrollPhysics extends ScrollPhysics {
-  final double itemWidth;
-
   const SnappingListScrollPhysics({
     @required this.itemWidth,
     ScrollPhysics parent,
   }) : super(parent: parent);
+
+  final double itemWidth;
 
   @override
   SnappingListScrollPhysics applyTo(ScrollPhysics ancestor) =>

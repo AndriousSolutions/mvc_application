@@ -35,8 +35,8 @@ import 'package:mvc_application/controller.dart' show Prefs;
 
 class AppMenu {
   factory AppMenu() => _this ??= AppMenu._();
-  static AppMenu _this;
   AppMenu._();
+  static AppMenu _this;
 
   static StateMVC _state;
 
@@ -49,7 +49,7 @@ class AppMenu {
 
   PopupMenuButton<dynamic> show(
     StateMVC state, {
-    String applicationName = "Name of you app.",
+    String applicationName = 'Name of you app.',
     Widget applicationIcon,
     String applicationLegalese,
     List<Widget> children,
@@ -59,28 +59,26 @@ class AppMenu {
     _state = state;
     _menu = menu;
     _applicationName = applicationName;
-    _applicationVersion = "version: ${App.version} build: ${App.buildNumber}";
+    _applicationVersion = 'version: ${App.version} build: ${App.buildNumber}';
     _applicationIcon = applicationIcon;
     _applicationLegalese = applicationLegalese;
     _children = children;
 
-    List<PopupMenuEntry<dynamic>> menuItems = [];
-
-    menuItems
-        .add(PopupMenuItem<dynamic>(value: 'Color', child: ColorPicker.title));
-
-    menuItems.add(
-        const PopupMenuItem<dynamic>(value: 'About', child: Text('About')));
+    List<PopupMenuEntry<dynamic>> menuItems = [
+      PopupMenuItem<dynamic>(value: 'Color', child: ColorPicker.title),
+      const PopupMenuItem<dynamic>(value: 'About', child: Text('About'))
+    ];
 
     if (_menu != null) {
-      List<PopupMenuEntry<dynamic>> temp = [];
-      temp.addAll(_menu.menuItems());
-      temp.add(PopupMenuDivider());
-      temp.addAll(menuItems);
+      final List<PopupMenuEntry<dynamic>> temp = [
+        ..._menu.menuItems(),
+        const PopupMenuDivider(),
+        ...menuItems
+      ];
       menuItems = temp;
 
       if (_menu.tailItems.isNotEmpty) {
-        menuItems.add(PopupMenuDivider());
+        menuItems.add(const PopupMenuDivider());
         menuItems.addAll(_menu.tailItems);
       }
     }
@@ -91,11 +89,13 @@ class AppMenu {
     );
   }
 
-  _showMenuSelection(dynamic value) {
+  void _showMenuSelection(dynamic value) {
     if (_menu != null) {
       _menu.onSelected(value);
     }
-    if (value is! String) return;
+    if (value is! String) {
+      return;
+    }
     // Set the current colour.
     ColorPicker.color = App.themeData.primaryColor;
     switch (value) {
@@ -126,7 +126,7 @@ class AppMenu {
   static void onChange([ColorSwatch value]) {
     //
     if (value == null) {
-      var swatch = Prefs.getInt('colorTheme', -1);
+      final swatch = Prefs.getInt('colorTheme', -1);
       // If never set in the first place, ignore
       if (swatch > -1) {
         value = ColorPicker.colors[swatch];

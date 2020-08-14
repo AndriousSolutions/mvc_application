@@ -20,7 +20,7 @@
 /// The Model for a simple app.
 class ModelMVC {
   ModelMVC() {
-    if (_firstMod == null) _firstMod = this;
+    _firstMod ??= this;
   }
   static ModelMVC _firstMod;
 

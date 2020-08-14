@@ -22,8 +22,6 @@ import 'package:flutter/material.dart'
 
 import '../../controller.dart' show Controller;
 
-import '../../view.dart' show FieldWidgets;
-
 import '../../model.dart'
     show
         City,
@@ -46,6 +44,8 @@ import '../../model.dart'
         Street,
         Suffix;
 
+import '../../view.dart' show FieldWidgets;
+
 class ContactAdd extends ContactEdit {
   @override
   void init([Object contact]) {
@@ -55,7 +55,9 @@ class ContactAdd extends ContactEdit {
   }
 
   void onPressed([BuildContext context]) {
-    if (!_formKey.currentState.validate()) return;
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
     _formKey.currentState.save();
     _inForm = false;
     _contact.postalAddresses = [_address];
@@ -67,7 +69,7 @@ class ContactAdd extends ContactEdit {
 class ContactEdit extends ContactList {
   bool _inForm = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  PostalAddress _address = PostalAddress(label: "");
+  final PostalAddress _address = PostalAddress(label: '');
 
   GlobalKey<FormState> get formKey {
     if (!_inForm) {
@@ -76,26 +78,21 @@ class ContactEdit extends ContactList {
     return _formKey;
   }
 
-  Future add([Contact contact]) {
-    if (contact == null) {
-      contact = _contact;
-    }
+  Future<bool> add([Contact contact]) {
+    contact ??= _contact;
+    return Future.value(true);
 //    return ContactsService.addContact(contact.toMap);
   }
 
   Future<bool> delete([Contact contact]) async {
-    if (contact == null) {
-      contact = _contact;
-    }
-    bool delete = false;
+    contact ??= _contact;
+    final delete = false;
 //    bool delete = await ContactsService.deleteContact(contact.toMap);
     return delete;
   }
 
   Future<int> undelete([Contact contact]) {
-    if (contact == null) {
-      contact = _contact;
-    }
+    contact ??= _contact;
     return Future.value(-1);
 //    return ContactsService.undeleteContact(contact.toMap);
   }
@@ -123,8 +120,10 @@ class ContactList extends ContactFields {
     if (contact == null) {
       _contact = Contact();
     } else {
-      if (contact is! Contact) return;
-      _contact = (contact as Contact);
+      if (contact is! Contact) {
+        return;
+      }
+      _contact = contact as Contact;
     }
     _id = Id(_contact);
     _displayName = DisplayName(_contact);

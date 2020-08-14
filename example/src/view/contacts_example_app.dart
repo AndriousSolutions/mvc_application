@@ -17,16 +17,17 @@
 ///
 ///
 
-import 'package:flutter/material.dart' show BuildContext;
+import 'package:flutter/material.dart' show BuildContext, Key;
 
 import 'package:mvc_application/view.dart' show AppView;
 
 import '../../view.dart' show AddContactPage, ContactListPage;
 
 class ContactsExampleApp extends AppView {
-  ContactsExampleApp()
+  ContactsExampleApp({Key key})
       : super(
+            key: key,
             title: 'Contacts Plugin Example',
             routes: {'/add': (BuildContext context) => AddContactPage()},
-            home: ContactListPage());
+            home: const ContactListPage());
 }

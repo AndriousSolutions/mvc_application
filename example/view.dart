@@ -23,12 +23,8 @@
 
 export 'package:mvc_application/view.dart';
 
-export 'src/view/ContractsExampleApp.dart';
-
-export 'src/view/ContactListPage.dart';
-
-export 'src/view/ContactDetailsPage.dart';
-
-export 'src/view/AddContactPage.dart';
-
-export 'src/view/AddressesTile.dart';
+export 'src/view/add_contact_page.dart';
+export 'src/view/address_tile.dart';
+export 'src/view/contact_details_page.dart';
+export 'src/view/contact_list_page.dart';
+export 'src/view/contacts_example_app.dart';

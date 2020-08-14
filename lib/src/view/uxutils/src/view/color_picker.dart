@@ -24,7 +24,9 @@ import 'package:flutter_material_color_picker/flutter_material_color_picker.dart
 class ColorPicker {
   static Color get color => _color;
   static set color(Color color) {
-    if (color != null) _color = color;
+    if (color != null) {
+      _color = color;
+    }
   }
 
   static Color _color = Colors.red;
@@ -40,22 +42,26 @@ class ColorPicker {
   static bool allowShades = false;
   static double get circleSize => _circleSize;
   static set circleSize(double size) {
-    if (size > 1.0) _circleSize = size;
+    if (size > 1.0) {
+      _circleSize = size;
+    }
   }
 
-  static double _circleSize = 60.0;
+  static double _circleSize = 60;
 
   static IconData iconSelected = Icons.check;
 
+  // ignore: avoid_setters_without_getters
   static set onColorChange(ValueChanged<Color> func) => _onColorChange = func;
   static ValueChanged<Color> _onColorChange;
 
+  // ignore: avoid_setters_without_getters
   static set onChange(ValueChanged<ColorSwatch> func) => _onChange = func;
   static ValueChanged<ColorSwatch> _onChange;
 
   static List<ColorSwatch> get colors => Colors.primaries;
 
-  static Text title = Text('Color Theme');
+  static Text title = const Text('Color Theme');
 
   static Future<ColorSwatch> showColorPicker({
     @required BuildContext context,
@@ -71,15 +77,23 @@ class ColorPicker {
                 selectedColor: _color,
                 onColorChange: (Color color) {
                   _color = color;
-                  if (onColorChange != null) onColorChange(color);
-                  if (_onColorChange != null) _onColorChange(color);
+                  if (onColorChange != null) {
+                    onColorChange(color);
+                  }
+                  if (_onColorChange != null) {
+                    _onColorChange(color);
+                  }
                   Navigator.pop(context, color);
                 },
                 onMainColorChange: (ColorSwatch color) {
                   _color = color;
                   _colorSwatch = color;
-                  if (onChange != null) onChange(color);
-                  if (_onChange != null) _onChange(color);
+                  if (onChange != null) {
+                    onChange(color);
+                  }
+                  if (_onChange != null) {
+                    _onChange(color);
+                  }
                   Navigator.pop(context, color);
                 },
                 colors: colors,
@@ -92,11 +106,13 @@ class ColorPicker {
   }
 
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ColorPicker && runtimeType == other.runtimeType;
 
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode => 0;
 }
 

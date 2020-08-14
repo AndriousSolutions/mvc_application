@@ -46,7 +46,7 @@ import 'package:flutter/material.dart'
 /// It's copied from the `flutter_gallery` example project in flutter/flutter
 ///
 class LoadingScreen extends StatefulWidget {
-  LoadingScreen({Key key}) : super(key: key);
+  const LoadingScreen({Key key}) : super(key: key);
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
 }
@@ -64,7 +64,7 @@ class _LoadingScreenState extends State<LoadingScreen>
       ..forward();
     _animation = CurvedAnimation(
         parent: _controller,
-        curve: Interval(0.0, 0.9, curve: Curves.fastOutSlowIn),
+        curve: const Interval(0, 0.9, curve: Curves.fastOutSlowIn),
         reverseCurve: Curves.fastOutSlowIn)
       ..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.dismissed) {
@@ -85,12 +85,11 @@ class _LoadingScreenState extends State<LoadingScreen>
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-            appBar: AppBar(title: Text('Loading...')),
-            body: Container(
-                child: AnimatedBuilder(
+            appBar: AppBar(title: const Text('Loading...')),
+            body: AnimatedBuilder(
                     animation: _animation,
                     builder: (BuildContext context, Widget child) {
-                      return Center(child: CircularProgressIndicator());
-                    }))));
+                      return const Center(child: CircularProgressIndicator());
+                    })));
   }
 }

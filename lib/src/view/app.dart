@@ -36,9 +36,6 @@ import 'package:flutter/widgets.dart';
 
 import 'package:connectivity/connectivity.dart'
     show Connectivity, ConnectivityResult;
-// Export the classes needed to use this file.
-export 'package:connectivity/connectivity.dart'
-    show Connectivity, ConnectivityResult;
 
 import 'package:mvc_application/controller.dart'
     show AppConMVC, AppController, ControllerMVC, HandleError;
@@ -57,7 +54,11 @@ import 'package:mvc_application/model.dart' show InstallFile;
 import 'package:prefs/prefs.dart' show Prefs;
 
 /// Highlights UI while debugging.
-import 'package:flutter/rendering.dart' as debugPaint;
+import 'package:flutter/rendering.dart' as debug;
+
+// Export the classes needed to use this file.
+export 'package:connectivity/connectivity.dart'
+    show Connectivity, ConnectivityResult;
 
 /// Error Screen Builder if an error occurs.
 typedef ErrorWidgetBuilder = Widget Function(
@@ -98,7 +99,7 @@ abstract class App extends v.AppMVC {
   static bool _hotReload = false;
 
   /// More efficient widget tree rebuilds
-  @deprecated
+  @Deprecated('Use widgetsAppKey instead.')
   static final materialKey = GlobalKey();
   static final widgetsAppKey = materialKey;
 
@@ -130,14 +131,19 @@ abstract class App extends v.AppMVC {
       _vw?.con?.initApp();
     } else {
       await _initInternal();
-      if (!kIsWeb) _packageInfo = await PackageInfo.fromPlatform();
+      if (!kIsWeb) {
+        _packageInfo = await PackageInfo.fromPlatform();
+      }
     }
     _isInit = await super.initAsync();
-    if (_isInit) _isInit = await _vw.initAsync();
+    if (_isInit) {
+      _isInit = await _vw.initAsync();
+    }
     return _isInit;
   }
 
   @mustCallSuper
+  @override
   void dispose() {
     _context = null;
     _scaffold = null;
@@ -169,56 +175,74 @@ abstract class App extends v.AppMVC {
   /// Return the navigator key used by the App's View.
   static GlobalKey<NavigatorState> get navigatorKey => _vw.navigatorKey;
   static set navigatorKey(GlobalKey<NavigatorState> v) {
-    if (v != null) _vw.navigatorKey = v;
+    if (v != null) {
+      _vw.navigatorKey = v;
+    }
   }
 
   /// Returns the routes used by the App's View.
   static Map<String, WidgetBuilder> get routes => _vw.routes;
   static set routes(Map<String, WidgetBuilder> v) {
-    if (v != null) _vw.routes = v;
+    if (v != null) {
+      _vw.routes = v;
+    }
   }
 
   /// Returns to the initial route used by the App's View.
   static String get initialRoute => _vw.initialRoute;
   static set initialRoute(String v) {
-    if (v != null) _vw.initialRoute = v;
+    if (v != null) {
+      _vw.initialRoute = v;
+    }
   }
 
   /// The route generator used when the app is navigated to a named route.
   static RouteFactory get onGenerateRoute => _vw.onGenerateRoute;
   static set onGenerateRoute(RouteFactory v) {
-    if (v != null) _vw.onGenerateRoute = v;
+    if (v != null) {
+      _vw.onGenerateRoute = v;
+    }
   }
 
   /// Called when [onGenerateRoute] fails except for the [initialRoute].
   static RouteFactory get onUnknownRoute => _vw.onUnknownRoute;
   static set onUnknownRoute(RouteFactory v) {
-    if (v != null) _vw.onUnknownRoute = v;
+    if (v != null) {
+      _vw.onUnknownRoute = v;
+    }
   }
 
   /// The list of observers for the [Navigator] for this app.
   static List<NavigatorObserver> get navigatorObservers =>
       _vw.navigatorObservers;
   static set navigatorObservers(List<NavigatorObserver> v) {
-    if (v != null) _vw.navigatorObservers = v;
+    if (v != null) {
+      _vw.navigatorObservers = v;
+    }
   }
 
   /// if neither [home], [routes], or [onGenerateRoute] was passed.
   static TransitionBuilder get builder => _vw.builder;
   static set builder(TransitionBuilder v) {
-    if (v != null) _vw.builder = v;
+    if (v != null) {
+      _vw.builder = v;
+    }
   }
 
   /// Returns the title for the App's View.
   static String get title => _vw.title;
   static set title(String v) {
-    if (v != null) _vw.title = v;
+    if (v != null) {
+      _vw.title = v;
+    }
   }
 
   /// Routine used to generate the App's title.
   static GenerateAppTitle get onGenerateTitle => _vw.onGenerateTitle;
   static set onGenerateTitle(GenerateAppTitle v) {
-    if (v != null) _vw.onGenerateTitle = v;
+    if (v != null) {
+      _vw.onGenerateTitle = v;
+    }
   }
 
   // Allow it to be assigned null.
@@ -226,7 +250,9 @@ abstract class App extends v.AppMVC {
   static ThemeData get themeData => _themeData;
   static ThemeData _themeData;
   static set themeData(dynamic value) {
-    if (value == null) return;
+    if (value == null) {
+      return;
+    }
     if (value is ThemeData) {
       App._themeData = value;
     } else if (value is CupertinoThemeData) {
@@ -248,7 +274,9 @@ abstract class App extends v.AppMVC {
   static CupertinoThemeData get iOSTheme => _iOSTheme;
   static CupertinoThemeData _iOSTheme;
   static set iOSTheme(dynamic value) {
-    if (value == null) return;
+    if (value == null) {
+      return;
+    }
     if (value is CupertinoThemeData) {
       App._iOSTheme = value;
     } else if (value is ThemeData) {
@@ -269,13 +297,17 @@ abstract class App extends v.AppMVC {
   /// Returns the Color passed to the App's View.
   static Color get color => _vw.color;
   static set color(Color v) {
-    if (v != null) _vw.color = v;
+    if (v != null) {
+      _vw.color = v;
+    }
   }
 
   /// Returns the App's current locale.
   static Locale get locale => _vw.locale;
   static set locale(Locale v) {
-    if (v != null) _vw.locale = v;
+    if (v != null) {
+      _vw.locale = v;
+    }
   }
 
   /// Returns the App's current localizations delegates.
@@ -283,89 +315,117 @@ abstract class App extends v.AppMVC {
       _vw.localizationsDelegates;
   static set localizationsDelegates(
       Iterable<LocalizationsDelegate<dynamic>> v) {
-    if (v != null) _vw.localizationsDelegates = v;
+    if (v != null) {
+      _vw.localizationsDelegates = v;
+    }
   }
 
   /// Resolves the App's locale.
   static LocaleResolutionCallback get localeResolutionCallback =>
       _vw.localeResolutionCallback;
   static set localeResolutionCallback(LocaleResolutionCallback v) {
-    if (v != null) _vw.localeResolutionCallback = v;
+    if (v != null) {
+      _vw.localeResolutionCallback = v;
+    }
   }
 
   /// Returns an iteration of the App's locales.
   static Iterable<Locale> get supportedLocales => _vw.supportedLocales;
   static set supportedLocales(Iterable<Locale> v) {
-    if (v != null) _vw.supportedLocales = v;
+    if (v != null) {
+      _vw.supportedLocales = v;
+    }
   }
 
   /// If true, it paints a grid overlay on Material apps.
   static bool get debugShowMaterialGrid => _vw.debugShowMaterialGrid;
   static set debugShowMaterialGrid(bool v) {
-    if (v != null) _vw.debugShowMaterialGrid = v;
+    if (v != null) {
+      _vw.debugShowMaterialGrid = v;
+    }
   }
 
   /// If true, it turns on a performance overlay.
   static bool get showPerformanceOverlay => _vw.showPerformanceOverlay;
   static set showPerformanceOverlay(bool v) {
-    if (v != null) _vw.showPerformanceOverlay = v;
+    if (v != null) {
+      _vw.showPerformanceOverlay = v;
+    }
   }
 
   /// Checkerboard raster cache to speed up overall rendering.
   static bool get checkerboardRasterCacheImages =>
       _vw.checkerboardRasterCacheImages;
   static set checkerboardRasterCacheImages(bool v) {
-    if (v != null) _vw.checkerboardRasterCacheImages = v;
+    if (v != null) {
+      _vw.checkerboardRasterCacheImages = v;
+    }
   }
 
   /// Checkerboard layers rendered offscreen bitmaps.
   static bool get checkerboardOffscreenLayers =>
       _vw.checkerboardOffscreenLayers;
   static set checkerboardOffscreenLayers(bool v) {
-    if (v != null) _vw.checkerboardOffscreenLayers = v;
+    if (v != null) {
+      _vw.checkerboardOffscreenLayers = v;
+    }
   }
 
   /// Shows an overlay of accessibility information
   static bool get showSemanticsDebugger => _vw.showSemanticsDebugger;
   static set showSemanticsDebugger(bool v) {
-    if (v != null) _vw.showSemanticsDebugger = v;
+    if (v != null) {
+      _vw.showSemanticsDebugger = v;
+    }
   }
 
   /// Shows a little "DEBUG" banner in checked mode.
   static bool get debugShowCheckedModeBanner => _vw.debugShowCheckedModeBanner;
   static set debugShowCheckedModeBanner(bool v) {
-    if (v != null) _vw.debugShowCheckedModeBanner = v;
+    if (v != null) {
+      _vw.debugShowCheckedModeBanner = v;
+    }
   }
 
   /// Each RenderBox to paint a box around its bounds.
   static bool get debugPaintSizeEnabled => _vw.debugPaintSizeEnabled;
   static set debugPaintSizeEnabled(bool v) {
-    if (v != null) _vw.debugPaintSizeEnabled = v;
+    if (v != null) {
+      _vw.debugPaintSizeEnabled = v;
+    }
   }
 
   /// RenderBox paints a line at its baselines.
   static bool get debugPaintBaselinesEnabled => _vw.debugPaintBaselinesEnabled;
   static set debugPaintBaselinesEnabled(bool v) {
-    if (v != null) _vw.debugPaintBaselinesEnabled = v;
+    if (v != null) {
+      _vw.debugPaintBaselinesEnabled = v;
+    }
   }
 
   /// Objects flash while they are being tapped.
   static bool get debugPaintPointersEnabled => _vw.debugPaintPointersEnabled;
   static set debugPaintPointersEnabled(bool v) {
-    if (v != null) _vw.debugPaintPointersEnabled = v;
+    if (v != null) {
+      _vw.debugPaintPointersEnabled = v;
+    }
   }
 
   /// Layer paints a box around its bound.
   static bool get debugPaintLayerBordersEnabled =>
       _vw.debugPaintLayerBordersEnabled;
   static set debugPaintLayerBordersEnabled(bool v) {
-    if (v != null) _vw.debugPaintLayerBordersEnabled = v;
+    if (v != null) {
+      _vw.debugPaintLayerBordersEnabled = v;
+    }
   }
 
   /// Overlay a rotating set of colors when repainting layers in checked mode.
   static bool get debugRepaintRainbowEnabled => _vw.debugRepaintRainbowEnabled;
   static set debugRepaintRainbowEnabled(bool v) {
-    if (v != null) _vw.debugRepaintRainbowEnabled = v;
+    if (v != null) {
+      _vw.debugRepaintRainbowEnabled = v;
+    }
   }
 
   /// The BuildContext for the App's View.
@@ -410,14 +470,12 @@ abstract class App extends v.AppMVC {
   static ScaffoldState get scaffold => App._getScaffold();
   static ScaffoldState _scaffold;
 
-  static ScaffoldState _getScaffold() {
-    if (_scaffold == null) _scaffold = Scaffold.of(_context, nullOk: true);
-    return _scaffold;
-  }
+  static ScaffoldState _getScaffold() =>
+      _scaffold ??= Scaffold.of(_context, nullOk: true);
 
-  @deprecated
+  @Deprecated('Use theme: parameter instead.')
   static Future<ThemeData> getThemeData() async {
-    String theme = await Prefs.getStringF('theme');
+    final theme = await Prefs.getStringF('theme');
     ThemeData themeData;
     switch (theme) {
       case 'light':
@@ -433,7 +491,7 @@ abstract class App extends v.AppMVC {
   }
 
   static ThemeData _getThemeData() {
-    String theme = Prefs.getString('theme');
+    final theme = Prefs.getString('theme');
     ThemeData themeData;
     switch (theme) {
       case 'light':
@@ -448,8 +506,8 @@ abstract class App extends v.AppMVC {
     return themeData;
   }
 
-  @deprecated
-  static setThemeData(String theme) {
+  @Deprecated('Use theme: parameter instead.')
+  static void setThemeData(String theme) {
     switch (theme) {
       case 'light':
         break;
@@ -466,7 +524,7 @@ abstract class App extends v.AppMVC {
   static StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
   /// The local directory for this App.
-  static get filesDir => _path;
+  static String get filesDir => _path;
   static String _path;
 
   /// Returns the connection status of the device.
@@ -476,20 +534,28 @@ abstract class App extends v.AppMVC {
   /// Indicates if the app has access to the Internet.
   static bool get isOnline => _connectivityStatus != 'none';
 
-  static Set<ConnectivityListener> _listeners = new Set();
+  static final Set<ConnectivityListener> _listeners = {};
 
   /// Add a Connectivity listener.
-  static addConnectivityListener(ConnectivityListener listener) {
-    if (listener != null) _listeners.add(listener);
+  static bool addConnectivityListener(ConnectivityListener listener) {
+    bool add = false;
+    if (listener != null) {
+      add = _listeners.add(listener);
+    }
+    return add;
   }
 
   /// Remove a Connectivity listener.
-  static removeConnectivityListener(ConnectivityListener listener) {
-    if (listener != null) _listeners.remove(listener);
+  static bool removeConnectivityListener(ConnectivityListener listener) {
+    bool remove = false;
+    if (listener != null) {
+      remove = _listeners.remove(listener);
+    }
+    return remove;
   }
 
   /// Clear Connectivity listeners.
-  static clearConnectivityListener() => _listeners.clear();
+  static void clearConnectivityListener() => _listeners.clear();
 
   /// The id for this App's particular installation.
   static Future<String> getInstallNum() => InstallFile.id();
@@ -503,19 +569,21 @@ abstract class App extends v.AppMVC {
 //
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
-      _listeners.forEach((listener) {
+      for (final listener in _listeners) {
         listener.onConnectivityChanged(result);
-      });
+      }
     });
 
-    _initConnectivity().then((status) {
+    await _initConnectivity().then((status) {
       _connectivityStatus = status;
     }).catchError((e) {
       _connectivityStatus = 'none';
     });
 
     // If running on the web the rest of the code in incompatible.
-    if (kIsWeb) return;
+    if (kIsWeb) {
+      return;
+    }
 
     // Get the installation number
     _installNum = await InstallFile.id();
@@ -536,42 +604,45 @@ abstract class App extends v.AppMVC {
   }
 }
 
+// ignore: avoid_classes_with_only_static_members
 class _App {
   static Widget home;
   static Widget show(AsyncSnapshot snapshot, Widget loading) {
     if (snapshot.hasError) {
       App._vw.home = AppError(snapshot.error).home;
-      return _AppWidget();
+      return const _AppWidget();
     } else if (snapshot.connectionState == ConnectionState.done &&
         snapshot.hasData &&
         snapshot.data) {
       if (home != null) {
         App._vw.home = home;
       }
-      return _AppWidget();
+      return const _AppWidget();
     } else {
       if (App.useMaterial) {
-        return MaterialApp(
+        return const MaterialApp(
             color: Colors.white,
-            home: Container(child: Center(child: CircularProgressIndicator())));
+            home: Center(child: CircularProgressIndicator()));
       } else {
-        return Center(child: CupertinoActivityIndicator());
+        return const Center(child: CupertinoActivityIndicator());
       }
     }
   }
 }
 
 class _AppWidget extends StatefulWidget {
-  _AppWidget({Key key}) : super(key: key);
+  const _AppWidget({Key key}) : super(key: key);
+  @override
+  // ignore: no_logic_in_create_state
   State createState() => App._vw;
 }
 
 /// The View for the app. The 'look and feel' for the whole app.
 class AppView extends AppViewState<_AppWidget> {
   AppView({
-    this.key,
+    Key key,
     this.home,
-    this.con,
+    AppController con,
     List<ControllerMVC> controllers,
     Object object,
     GlobalKey<NavigatorState> navigatorKey,
@@ -611,6 +682,7 @@ class AppView extends AppViewState<_AppWidget> {
     ErrorWidgetBuilder errorScreen,
     v.ReportErrorHandler reportError,
   }) : super(
+          key: key,
           con: con ?? AppController(),
           controllers: controllers,
           object: object,
@@ -648,32 +720,45 @@ class AppView extends AppViewState<_AppWidget> {
           errorScreen: errorScreen,
           reportError: reportError,
         ) {
-    // In case null was explicilty passed in.
-    if (useMaterial == null) useMaterial = false;
-    if (useCupertino == null) useCupertino = false;
-    if (switchUI == null) switchUI = false;
+    // In case null was explicitly passed in.
+    useMaterial ??= false;
+    useCupertino ??= false;
+    switchUI ??= false;
 
     // if both useMaterial & useCupertino are set then rely on the Platform.
-    switchUI = (switchUI && !useCupertino && !useMaterial);
+    switchUI = switchUI && !useCupertino && !useMaterial;
 
     useMaterial = kIsWeb ||
         (useMaterial && !useCupertino) ||
         (UniversalPlatform.isAndroid && !switchUI) ||
         (UniversalPlatform.isIOS && switchUI);
 
+    _isMaterial = useMaterial;
+
     useCupertino = (useCupertino && !useMaterial) ||
         (UniversalPlatform.isIOS && !switchUI) ||
         (UniversalPlatform.isAndroid && switchUI);
+
+    _isCupertino = useCupertino;
   }
-  final Key key;
+  // Don't override fields
+//  @override
+//  final Key key;
+//  @override
+//  final AppController con;
   Widget home;
-  final AppController con;
   // Explicitly use the Material theme
   bool useMaterial;
   // Explicitly use the Cupertino theme
   bool useCupertino;
   // Use Cupertino UI in Android and vice versa.
   bool switchUI;
+
+  // The platform paradigm determined at startup. Can't be changed.
+  bool get isMaterial => _isMaterial;
+  bool _isMaterial;
+  bool get isCupertino => _isCupertino;
+  bool _isCupertino;
 
   @override
   void initState() {
@@ -694,7 +779,7 @@ class AppView extends AppViewState<_AppWidget> {
   Widget buildApp(BuildContext context) => buildView(context);
 
   /// Deprecated. Now use buildApp(BuildContext context);
-  @deprecated
+  @Deprecated('Use buildApp(context) instead.')
   @override
   Widget buildView(BuildContext context) {
     //
@@ -811,10 +896,8 @@ class AppView extends AppViewState<_AppWidget> {
     super.reassemble();
   }
 
-  GlobalKey<NavigatorState> onNavigatorKey() {
-    _navigatorKey ??= GlobalKey<NavigatorState>();
-    return _navigatorKey;
-  }
+  GlobalKey<NavigatorState> onNavigatorKey() =>
+      _navigatorKey ??= GlobalKey<NavigatorState>();
 
   GlobalKey<NavigatorState> _navigatorKey;
 
@@ -848,7 +931,7 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   AppViewState({
     Key key,
     this.con,
-    this.controllers,
+    List<ControllerMVC> controllers,
     Object object,
     this.navigatorKey,
     this.routes,
@@ -891,52 +974,47 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
           object: object,
         ) {
     // In case null was explicitly passed in.
-    if (routes == null) routes = const <String, WidgetBuilder>{};
-    if (navigatorObservers == null)
-      navigatorObservers = const <NavigatorObserver>[];
-    if (title == null) title = '';
-    if (color == null) color = Colors.white;
-    if (debugShowMaterialGrid == null) debugShowMaterialGrid = false;
-    if (showPerformanceOverlay == null) showPerformanceOverlay = false;
-    if (checkerboardRasterCacheImages == null)
-      checkerboardRasterCacheImages = false;
-    if (checkerboardOffscreenLayers == null)
-      checkerboardOffscreenLayers = false;
-    if (showSemanticsDebugger == null) showSemanticsDebugger = false;
-    if (debugShowWidgetInspector == null) debugShowWidgetInspector = false;
-    if (debugShowCheckedModeBanner == null) debugShowCheckedModeBanner = true;
-    if (debugPaintSizeEnabled == null) debugPaintSizeEnabled = false;
-    if (debugPaintBaselinesEnabled == null) debugPaintBaselinesEnabled = false;
-    if (debugPaintPointersEnabled == null) debugPaintPointersEnabled = false;
-    if (debugPaintLayerBordersEnabled == null)
-      debugPaintLayerBordersEnabled = false;
-    if (debugRepaintRainbowEnabled == null) debugRepaintRainbowEnabled = false;
+    routes ??= const <String, WidgetBuilder>{};
+    navigatorObservers ??= const <NavigatorObserver>[];
+    title ??= '';
+    color ??= Colors.white;
+    debugShowMaterialGrid ??= false;
+    showPerformanceOverlay ??= false;
+    checkerboardRasterCacheImages ??= false;
+    checkerboardOffscreenLayers ??= false;
+    showSemanticsDebugger ??= false;
+    debugShowWidgetInspector ??= false;
+    debugShowCheckedModeBanner ??= true;
+    debugPaintSizeEnabled ??= false;
+    debugPaintBaselinesEnabled ??= false;
+    debugPaintPointersEnabled ??= false;
+    debugPaintLayerBordersEnabled ??= false;
+    debugRepaintRainbowEnabled ??= false;
 
     assert(() {
       /// Highlights UI while debugging.
-      debugPaint.debugPaintSizeEnabled = debugPaintSizeEnabled ?? false;
-      debugPaint.debugPaintBaselinesEnabled =
-          debugPaintBaselinesEnabled ?? false;
-      debugPaint.debugPaintPointersEnabled = debugPaintPointersEnabled ?? false;
-      debugPaint.debugPaintLayerBordersEnabled =
+      debug.debugPaintSizeEnabled = debugPaintSizeEnabled ?? false;
+      debug.debugPaintBaselinesEnabled = debugPaintBaselinesEnabled ?? false;
+      debug.debugPaintPointersEnabled = debugPaintPointersEnabled ?? false;
+      debug.debugPaintLayerBordersEnabled =
           debugPaintLayerBordersEnabled ?? false;
-      debugPaint.debugRepaintRainbowEnabled =
-          debugRepaintRainbowEnabled ?? false;
-      debugPaint.debugRepaintTextRainbowEnabled =
+      debug.debugRepaintRainbowEnabled = debugRepaintRainbowEnabled ?? false;
+      debug.debugRepaintTextRainbowEnabled =
           debugRepaintRainbowEnabled ?? false;
       return true;
     }());
 
-    if (errorHandler != null || errorScreen != null || reportError != null)
+    if (errorHandler != null || errorScreen != null || reportError != null) {
       // Supply a customized error handling.
       _errorHandler = v.ErrorHandler(
           handler: errorHandler,
           builder: errorScreen,
           reportError: reportError);
+    }
   }
 
   final AppController con;
-  final List<ControllerMVC> controllers;
+//  final List<ControllerMVC> controllers;
   v.ErrorHandler _errorHandler;
 
   GlobalKey<NavigatorState> navigatorKey;
@@ -974,6 +1052,7 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   bool debugRepaintRainbowEnabled;
 
   /// Provide 'the view'
+  @override
   Widget build(BuildContext context);
 
   @override
@@ -996,37 +1075,40 @@ class AppError extends AppView {
 }
 
 class _AppError extends StatefulWidget {
-  _AppError(this.exception, {Key key}) : super(key: key);
+  const _AppError(this.exception, {Key key}) : super(key: key);
   final Object exception;
   @override
   State<StatefulWidget> createState() => _AppErrorState();
 }
 
 class _AppErrorState extends State<_AppError> {
+  @override
   Widget build(BuildContext context) => Scaffold(
         body: Center(
-          child: Text("${widget.exception.toString()}"),
+          child: Text(widget.exception.toString()),
         ),
       );
 }
 
 class AppDrawer extends StatelessWidget {
+  const AppDrawer({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
         child: ListView(
       children: <Widget>[
-        DrawerHeader(
-          child: Text("DRAWER HEADER.."),
+        const DrawerHeader(
+          child: Text('DRAWER HEADER..'),
         ),
         ListTile(
-          title: new Text("Item => 1"),
+          title: const Text('Item => 1'),
           onTap: () {
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: new Text("Item => 2"),
+          title: const Text('Item => 2'),
           onTap: () {
             Navigator.pop(context);
           },
@@ -1037,14 +1119,14 @@ class AppDrawer extends StatelessWidget {
 }
 
 /// A Listener for the device's own connectivity status at any point in time.
-abstract class ConnectivityListener {
+mixin ConnectivityListener {
   void onConnectivityChanged(ConnectivityResult result);
 }
 
 /// Obtains [Controllers<T>] from its ancestors and passes its value to [builder].
 ///
 class ConConsumer<T extends ControllerMVC> extends StatelessWidget {
-  ConConsumer({
+  const ConConsumer({
     Key key,
     @required this.builder,
     this.child,

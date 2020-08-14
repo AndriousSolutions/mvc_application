@@ -45,10 +45,10 @@ import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 
 import 'package:url_launcher/url_launcher.dart' show launch;
 
-import 'package:flutter/foundation.dart' as Plat show defaultTargetPlatform;
+import 'package:flutter/foundation.dart' as p show defaultTargetPlatform, TargetPlatform;
 
 class AppSettings {
-  static get defaultTargetPlatform => Plat.defaultTargetPlatform;
+  static p.TargetPlatform get defaultTargetPlatform => p.defaultTargetPlatform;
 
   static StatelessWidget tapText(String text, VoidCallback onTap,
       {TextStyle style}) {
@@ -91,8 +91,8 @@ class _TapText extends StatelessWidget {
     return _OptionsItem(
       child: _FlatButton(
         onPressed: onTap,
-        child: Text(text),
         style: style,
+        child: Text(text),
       ),
     );
   }
@@ -109,7 +109,7 @@ class _OptionsItem extends StatelessWidget {
       child: Container(
         constraints: BoxConstraints(
             minHeight: 48.0 * MediaQuery.textScaleFactorOf(context)),
-        padding: EdgeInsetsDirectional.only(start: 56.0),
+        padding: const EdgeInsetsDirectional.only(start: 56),
         alignment: AlignmentDirectional.centerStart,
         child: DefaultTextStyle(
           style: DefaultTextStyle.of(context).style,
@@ -139,7 +139,7 @@ class _FlatButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = style == null
+    final child = style == null
         ? this.child
         : DefaultTextStyle(
             style: style,

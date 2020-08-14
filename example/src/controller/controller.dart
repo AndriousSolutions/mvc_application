@@ -23,15 +23,12 @@ import 'package:mvc_application/view.dart' show Prefs;
 
 /// The Controller talks to the Model
 import '../../model.dart'
-    show Contact, ContactsService, ContactAdd, ContactEdit, ContactList;
+    show Contact, ContactAdd, ContactEdit, ContactList;
 
 import '../../controller.dart' show ControllerMVC;
 
 class Controller extends ControllerMVC {
-  factory Controller() {
-    _this ??= Controller._();
-    return _this;
-  }
+  factory Controller() =>  _this ??= Controller._();
   static Controller _this;
   static bool _sortedAlpha;
   static const String _SORT_KEY = 'sort_by_alpha';
@@ -53,20 +50,19 @@ class Controller extends ControllerMVC {
 
   static void disposed() {} //=> ContactsService.dispose();
 
-  @override
   void onError(FlutterErrorDetails details) =>
       FlutterError.dumpErrorToConsole(details);
 
   static Future<List<Contact>> getContacts() async {
-    List<Contact> contacts = []; //await ContactsService.getContacts();
-    if (_sortedAlpha) contacts.sort();
+    final contacts = []; //await ContactsService.getContacts();
+    if (_sortedAlpha){ contacts.sort();}
     return contacts;
   }
 
   static Future<List<Contact>> sort() async {
     _sortedAlpha = !_sortedAlpha;
-    Prefs.setBool(_SORT_KEY, _sortedAlpha);
-    List<Contact> contacts = await getContacts();
+    await Prefs.setBool(_SORT_KEY, _sortedAlpha);
+    final contacts = await getContacts();
     return contacts;
   }
 
@@ -80,13 +76,13 @@ class Controller extends ControllerMVC {
   static ContactList _listContacts = ContactList();
 
   Contact child(int index) {
-    Contact contact = list.items?.elementAt(index);
+    final contact = list.items?.elementAt(index);
     list.init(contact);
     return contact;
   }
 
   static Future<bool> delete(Object contact) async {
-    if (contact is! Contact) return Future.value(false);
+    if (contact is! Contact){ return Future.value(false);}
     bool delete = await edit.delete(contact as Contact);
     return delete;
   }

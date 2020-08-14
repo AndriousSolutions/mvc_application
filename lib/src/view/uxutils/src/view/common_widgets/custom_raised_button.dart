@@ -41,11 +41,11 @@ class CustomRaisedButton extends StatelessWidget {
     final ThemeData data = Theme.of(context);
     return Theme(
       data: data.copyWith(accentColor: Colors.white70),
-      child: SizedBox(
+      child: const SizedBox(
         width: 28,
         height: 28,
         child: CircularProgressIndicator(
-          strokeWidth: 3.0,
+          strokeWidth: 3,
         ),
       ),
     );
@@ -56,7 +56,6 @@ class CustomRaisedButton extends StatelessWidget {
     return SizedBox(
       height: height,
       child: RaisedButton(
-        child: loading ? buildSpinner(context) : child,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(borderRadius),
@@ -66,6 +65,7 @@ class CustomRaisedButton extends StatelessWidget {
         disabledColor: color,
         textColor: textColor,
         onPressed: onPressed,
+        child: loading ? buildSpinner(context) : child,
       ),
     );
   }
