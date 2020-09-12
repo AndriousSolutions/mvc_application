@@ -33,6 +33,7 @@ import 'package:flutter/material.dart'
         FloatingActionButton,
         Icon,
         Icons,
+        InheritedTheme,
         Key,
         ListTile,
         ListView,
@@ -47,18 +48,22 @@ import 'package:flutter/material.dart'
         Text,
         Theme,
         Widget;
+
 import 'package:mvc_application/view.dart' show App, AppMenu, StateMVC;
 
 import '../../controller.dart' show Controller;
-import '../../view.dart' show AppMenu, ContactDetailsPage, StateMVC;
 
-class ContactListPage extends StatefulWidget {
-  const ContactListPage({Key key}) : super(key: key);
+import '../../model.dart' show Contact;
+
+import '../../view.dart' show AppMenu, ContactDetails, StateMVC;
+
+class ContactsList extends StatefulWidget {
+  const ContactsList({Key key}) : super(key: key);
   @override
   State createState() => _ContactListState();
 }
 
-class _ContactListState extends StateMVC<ContactListPage> {
+class _ContactListState extends StateMVC<ContactsList> {
   _ContactListState() : super(Controller()) {
     con = controller;
   }
@@ -68,34 +73,38 @@ class _ContactListState extends StateMVC<ContactListPage> {
   Widget build(BuildContext context) {
     final _theme = App.themeData;
     return Theme(
-      data: App.themeData,
+      data: _theme,
       child: Scaffold(
-        key: Controller.list.scaffoldKey,
-        appBar: AppBar(title: const Text('Contacts Example'), actions: <Widget>[
-          FlatButton(
-            onPressed: () {
-              Controller.list.sort();
-            },
-            child: const Icon(Icons.sort_by_alpha, color: Colors.white),
-          ),
-          AppMenu().show(this),
-        ]),
+        key: con.scaffoldKey,
+        appBar: AppBar(
+          title: Text(App.vw.title),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                con.sort();
+              },
+              child: const Icon(Icons.sort_by_alpha, color: Colors.white),
+            ),
+            AppMenu().show(this),
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: _theme.primaryColor,
           onPressed: () {
             Navigator.of(context).pushNamed('/add').then((_) {
-              Controller.list.refresh();
+              con.refresh();
             });
           },
           child: const Icon(Icons.add),
         ),
         body: SafeArea(
-          child: Controller.list.items == null
+          child: con.items == null
               ? const Center(child: CircularProgressIndicator())
               : ListView.builder(
-                  itemCount: Controller.list.items?.length ?? 0,
+                  itemCount: con.items?.length ?? 0,
                   itemBuilder: (BuildContext context, int index) {
-                    final Object c = con.child(index);
-                    return Controller.list.displayName.onDismissible(
+                    final Contact contact = con.itemAt(index);
+                    return contact.displayName.onDismissible(
                       child: Container(
                         decoration: BoxDecoration(
                             color: _theme.canvasColor,
@@ -104,31 +113,36 @@ class _ContactListState extends StateMVC<ContactListPage> {
                                     BorderSide(color: _theme.dividerColor))),
                         child: ListTile(
                           onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute<void>(
-                                builder: (BuildContext context) =>
-                                    ContactDetailsPage(contact: c)));
+                            Navigator.of(context)
+                                .push(MaterialPageRoute<void>(
+                              builder: (BuildContext _) =>
+                                  InheritedTheme.captureAll(
+                                      context, ContactDetails(contact: contact)),
+                            ))
+                                .then((_) {
+                              con.refresh();
+                            });
                           },
-                          leading: Controller.list.displayName.circleAvatar,
-                          title: Controller.list.displayName.text,
+                          leading: contact.displayName.circleAvatar,
+                          title: contact.displayName.text,
                         ),
                       ),
                       dismissed: (DismissDirection direction) {
-                        Controller.delete(c).then((_) {
-                          Controller.list.refresh();
-                        });
+                        con.deleteItem(index);
                         final String action =
                             (direction == DismissDirection.endToStart)
                                 ? 'deleted'
                                 : 'archived';
-                        Controller.list.scaffoldKey.currentState?.showSnackBar(
+                        con.scaffoldKey.currentState?.showSnackBar(
                           SnackBar(
                             duration: const Duration(milliseconds: 8000),
                             content: Text('You $action an item.'),
                             action: SnackBarAction(
                                 label: 'UNDO',
                                 onPressed: () {
-                                  Controller.edit.undelete(c);
-                                  Controller.list.refresh();
+                                  contact.undelete();
+                                  // ignore: cascade_invocations
+                                  con.refresh();
                                 }),
                           ),
                         );

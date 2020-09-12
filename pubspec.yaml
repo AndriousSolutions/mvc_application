@@ -1,7 +1,7 @@
 name: mvc_application
 description: Flutter Framework for Applications using the MVC Design Pattern
 
-version: 5.9.0
+version: 5.10.0
 
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
@@ -14,8 +14,8 @@ dependencies:
     sdk: flutter
 
   # https://pub.dartlang.org/packages/mvc_pattern
-  mvc_pattern:  #^6.0.0
-    path: ../../packages/mvc_pattern
+  mvc_pattern: ^6.0.0
+  #  path: ../../packages/mvc_pattern
 
   # https://pub.dartlang.org/packages/connectivity
   connectivity: ^0.4.0
@@ -52,16 +52,22 @@ dependencies:
   # https://pub.dev/packages/universal_platform
   universal_platform: ^0.1.0
 
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
   # Setting up Lint Rules
   # Most of the recommended lints directly implement the guidelines set out in Effective Dart:
   # https://dart.dev/guides/language/effective-dart
   # https://pub.dev/packages/pedantic
   pedantic: ^1.0.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+#  # Setting up Lint Rules
+#  # Most of the recommended lints directly implement the guidelines set out in Effective Dart:
+#  # https://dart.dev/guides/language/effective-dart
+#  # https://pub.dev/packages/pedantic
+#  pedantic: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

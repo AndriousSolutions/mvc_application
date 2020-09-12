@@ -23,6 +23,9 @@ export 'package:flutter/material.dart' hide runApp;
 /// Cupertino
 export 'package:flutter/cupertino.dart' hide RefreshCallback, runApp;
 
+/// Futures are intentionally not awaited
+export 'package:pedantic/pedantic.dart' show unawaited;
+
 /// MVC
 export 'package:mvc_pattern/mvc_pattern.dart'
     show AppMVC, ViewMVC, SetState

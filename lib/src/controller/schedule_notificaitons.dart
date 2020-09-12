@@ -614,7 +614,9 @@ class ScheduleNotifications with HandleError {
     schedule ??= _schedule;
 
     // Too late!
-    if (schedule == null || DateTime.now().isAfter(schedule)) return -1;
+    if (schedule == null || DateTime.now().isAfter(schedule)){
+      return -1;
+    }
 
     var notificationSpecifics = _notificationDetails(
       title,

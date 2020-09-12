@@ -1,3 +1,13 @@
+## 5.10.0
+ September 07, 2020
+- New embedded Android version
+- New example app
+- Replaced _App.show with _asyncBuilder()
+- initAsync() calls Prefs.init(), _getThemeData() and createView()
+- _AppWidget changed to _AppStatefulWidget
+- export 'package:pedantic/pedantic.dart' show unawaited;
+- Default colour Colors.blue instead of Colors.white
+
 ## 5.9.0
  July 14, 2020
 - Strict Flutter Lint Rules following Dart Style Guide.

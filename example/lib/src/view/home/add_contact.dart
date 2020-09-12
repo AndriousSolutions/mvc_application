@@ -37,64 +37,78 @@ import 'package:flutter/material.dart'
         Text,
         Widget;
 
-import '../../controller.dart' show Controller;
 import '../../model.dart' show Contact, PostalAddress;
+
 import '../../view.dart' show StateMVC;
 
-class AddContactPage extends StatefulWidget {
-  AddContactPage({this.contact, this.title, Key key}) : super(key: key);
-  final Object contact;
+class AddContact extends StatefulWidget {
+  const AddContact({this.contact, this.title, Key key}) : super(key: key);
+  final Contact contact;
   final String title;
-
   @override
   State createState() => _AddContactState();
 }
 
-class _AddContactState extends StateMVC<AddContactPage> {
-  final PostalAddress address = PostalAddress(label: "Home");
+class _AddContactState extends StateMVC<AddContact> {
+  //
+  _AddContactState() : super();
+
+  final PostalAddress address = PostalAddress(label: 'Home');
 
   @override
   void initState() {
     super.initState();
-    Controller.add.init(widget.contact);
-    //   _address = PostalAddress(label: "Home");
+    contact = widget.contact;
+    contact ??= Contact();
+    // ignore: cascade_invocations
+    contact?.initState(this);
+    //   _address = PostalAddress(label: 'Home');
+  }
+
+  Contact contact;
+
+  @override
+  void dispose() {
+    contact.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title ?? "Add a contact"),
+        title: Text(widget.title ?? 'Add a contact'),
         actions: [
           FlatButton(
-            child: Icon(Icons.save, color: Colors.white),
             onPressed: () {
-              Controller.add.onPressed();
-              Navigator.of(context).pop();
+              if (contact.onPressed()) {
+                Navigator.of(context).pop();
+              }
             },
+            child: const Icon(Icons.save, color: Colors.white),
           )
         ],
       ),
       body: Container(
-        padding: EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(12),
         child: Form(
-            key: Controller.add.formKey,
+            key: contact.formKey,
             child: ListView(
               children: [
-                Controller.add.givenName.textFormField,
-                Controller.add.middleName.textFormField,
-                Controller.add.familyName.textFormField,
-                Controller.add.prefix.textFormField,
-                Controller.add.suffix.textFormField,
-                Controller.add.phone.textFormField,
-                Controller.add.email.textFormField,
-                Controller.add.company.textFormField,
-                Controller.add.jobTitle.textFormField,
-                Controller.add.street.textFormField,
-                Controller.add.city.textFormField,
-                Controller.add.region.textFormField,
-                Controller.add.postcode.textFormField,
-                Controller.add.country.textFormField,
+                contact.givenName.textFormField,
+                contact.middleName.textFormField,
+                contact.familyName.textFormField,
+                contact.prefix.textFormField,
+                contact.suffix.textFormField,
+                contact.phone.onListItems(),
+                contact.email.onListItems(),
+                contact.company.textFormField,
+                contact.jobTitle.textFormField,
+                contact.street.textFormField,
+                contact.city.textFormField,
+                contact.region.textFormField,
+                contact.postcode.textFormField,
+                contact.country.textFormField,
               ],
             )),
       ),

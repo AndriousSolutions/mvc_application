@@ -16,16 +16,16 @@
 ///          Created  24 Dec 2018
 ///
 
-import 'dart:async' show Future, runZonedGuarded;
+import 'dart:async' show runZonedGuarded;
 import 'dart:isolate' show Isolate, RawReceivePort;
 
 import 'package:flutter/material.dart' as m
-    show ErrorWidgetBuilder, Widget, runApp;
+    show ErrorWidgetBuilder, FlutterError, Widget, runApp;
 
 import 'package:flutter/foundation.dart'
-    show FlutterExceptionHandler, FlutterErrorDetails, kIsWeb, mustCallSuper;
+    show FlutterExceptionHandler, FlutterErrorDetails;
 
-import 'package:mvc_application/controller.dart' show DeviceInfo, HandleError;
+import 'package:mvc_application/controller.dart' show HandleError;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
@@ -36,10 +36,6 @@ import 'package:mvc_application/view.dart' as v
         ErrorHandler,
         ReportErrorHandler,
         StateMVC;
-
-import 'package:mvc_application/controller.dart' show Assets;
-
-import 'package:prefs/prefs.dart' show Prefs;
 
 /// Add an Error Handler right at the start.
 void runApp(
@@ -53,11 +49,14 @@ void runApp(
       handler: handler, builder: builder, reportError: reportError);
 
   Isolate.current.addErrorListener(RawReceivePort((dynamic pair) {
-    final isolateError = pair as List<dynamic>;
-    errorHandler.isolateError(
-      isolateError.first.toString(),
-      StackTrace.fromString(isolateError.last.toString()),
-    );
+    //
+    if (pair is List<dynamic>) {
+      final List<dynamic> isolateError = pair;
+      errorHandler.isolateError(
+        isolateError.first.toString(),
+        StackTrace.fromString(isolateError.last.toString()),
+      );
+    }
   }).sendPort);
 
   // Catch any errors attempting to execute runApp();
@@ -69,38 +68,12 @@ void runApp(
 class AppController extends ControllerMVC implements mvc.AppConMVC {
   AppController([this.state]) : super(state);
 
+  @override
   final v.StateMVC state;
 
   /// Initialize any immediate 'none time-consuming' operations at the very beginning.
   @override
   void initApp() {}
-
-  /// Initialize any 'time-consuming' operations at the beginning.
-  /// Initialize items essential to the Mobile Applications.
-  /// Called by the _App.init() function.
-  @mustCallSuper
-  @override
-  Future<bool> initAsync() async {
-    // Initialize System Preferences
-    await Prefs.init();
-    // If not running on the Web.
-    if (!kIsWeb) {
-      // Collect Device Information
-      await DeviceInfo.init();
-    }
-    return true;
-  }
-
-  /// Ensure certain objects are 'disposed.'
-  /// Called by the AppState.dispose() function.
-  @override
-  @mustCallSuper
-  void dispose() {
-    Prefs.dispose();
-    // Assets.init(context); called in App.build() -gp
-    Assets.dispose();
-    super.dispose();
-  }
 
   /// Override if you like to customize your error handling.
   @override
@@ -108,7 +81,9 @@ class AppController extends ControllerMVC implements mvc.AppConMVC {
     if (state != null) {
       state.currentErrorFunc(details);
     } else {
-      stateMVC?.currentErrorFunc(details);
+      // Will cause an infinite loop.
+      //stateMVC?.currentErrorFunc(details);
+      m.FlutterError.dumpErrorToConsole(details);
     }
   }
 }

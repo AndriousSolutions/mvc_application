@@ -45,7 +45,7 @@ import 'package:mvc_application/view.dart' as v
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
-import 'package:mvc_application/controller.dart' show Assets;
+import 'package:mvc_application/controller.dart' show Assets, DeviceInfo;
 
 import 'package:mvc_application/model.dart' show Files;
 
@@ -64,6 +64,7 @@ export 'package:connectivity/connectivity.dart'
 typedef ErrorWidgetBuilder = Widget Function(
     FlutterErrorDetails flutterErrorDetails);
 
+/// The widget passed to runApp(). It is a StatefulWidget.
 abstract class App extends v.AppMVC {
   // extends StatefulWidget
   // You must supply a 'View.'
@@ -92,8 +93,8 @@ abstract class App extends v.AppMVC {
   static AppView _vw;
 
   /// The snapshot used by the App's View.
-  static AsyncSnapshot get snapshot => _snapshot;
-  static AsyncSnapshot _snapshot;
+  static AsyncSnapshot<bool> get snapshot => _snapshot;
+  static AsyncSnapshot<bool> _snapshot;
 
   final Widget loadingScreen;
   static bool _hotReload = false;
@@ -104,13 +105,6 @@ abstract class App extends v.AppMVC {
   static final widgetsAppKey = materialKey;
 
   @override
-  void initApp() {
-    super.initApp();
-    _vw = createView();
-    _vw?.con?.initApp();
-  }
-
-  @override
   Widget build(BuildContext context) {
     Assets.init(context);
     _context = context;
@@ -119,7 +113,7 @@ abstract class App extends v.AppMVC {
       initialData: false,
       builder: (_, snapshot) {
         _snapshot = snapshot;
-        return _App.show(snapshot, loadingScreen);
+        return _asyncBuilder(snapshot, loadingScreen);
       },
     );
   }
@@ -130,14 +124,29 @@ abstract class App extends v.AppMVC {
       _vw = createView();
       _vw?.con?.initApp();
     } else {
+      // Initialize System Preferences
+      await Prefs.init();
       await _initInternal();
+      // If not running on the Web.
       if (!kIsWeb) {
         _packageInfo = await PackageInfo.fromPlatform();
+        // Collect Device Information
+        await DeviceInfo.init();
       }
-    }
-    _isInit = await super.initAsync();
-    if (_isInit) {
-      _isInit = await _vw.initAsync();
+
+      // Supply a theme
+      themeData = _getThemeData();
+      iOSTheme = MaterialBasedCupertinoThemeData(materialTheme: themeData);
+      v.AppMenu.onChange();
+
+      _isInit = await super.initAsync();
+      if (_isInit) {
+        _vw = createView();
+        _isInit = await _vw?.initAsync();
+        if (_isInit) {
+          _vw?.con?.initApp();
+        }
+      }
     }
     return _isInit;
   }
@@ -151,7 +160,29 @@ abstract class App extends v.AppMVC {
     _connectivitySubscription = null;
     // Restore the original error handling.
     _errorHandler.dispose();
+    Prefs.dispose();
+    // Assets.init(context); called in App.build() -gp
+    Assets.dispose();
     super.dispose();
+  }
+
+  Widget _asyncBuilder(AsyncSnapshot<bool> snapshot, Widget loading) {
+    if (snapshot.hasError) {
+      App._vw.home = AppError(snapshot.error).home;
+      return const _AppStatefulWidget();
+    } else if (snapshot.connectionState == ConnectionState.done &&
+        snapshot.hasData &&
+        snapshot.data) {
+      return const _AppStatefulWidget();
+    } else {
+      if (UniversalPlatform.isAndroid) {
+        return const MaterialApp(
+            color: Colors.blue,
+            home: Center(child: CircularProgressIndicator()));
+      } else {
+        return const Center(child: CupertinoActivityIndicator());
+      }
+    }
   }
 
   /// Determine if the App initialized successfully.
@@ -161,16 +192,16 @@ abstract class App extends v.AppMVC {
   // Use Material UI when explicitly specified or even when running in iOS
   /// Indicates if the App is running the Material interface theme.
   static bool get useMaterial =>
-      _vw.useMaterial ||
-      (UniversalPlatform.isAndroid && !_vw.switchUI) ||
-      (UniversalPlatform.isIOS && _vw.switchUI);
+      (_vw != null && _vw.useMaterial) ||
+      (UniversalPlatform.isAndroid && (_vw == null || !_vw.switchUI)) ||
+      (UniversalPlatform.isIOS && (_vw == null || _vw.switchUI));
 
   // Use Cupertino UI when explicitly specified or even when running in Android
   /// Indicates if the App is running the Cupertino interface theme.
   static bool get useCupertino =>
-      _vw.useCupertino ||
-      (UniversalPlatform.isIOS && !_vw.switchUI) ||
-      (UniversalPlatform.isAndroid && _vw.switchUI);
+      (_vw != null && _vw.useCupertino) ||
+      (UniversalPlatform.isIOS && (_vw == null || !_vw.switchUI)) ||
+      (UniversalPlatform.isAndroid && (_vw == null || _vw.switchUI));
 
   /// Return the navigator key used by the App's View.
   static GlobalKey<NavigatorState> get navigatorKey => _vw.navigatorKey;
@@ -221,7 +252,7 @@ abstract class App extends v.AppMVC {
     }
   }
 
-  /// if neither [home], [routes], or [onGenerateRoute] was passed.
+  /// if neither [routes], or [onGenerateRoute] was passed.
   static TransitionBuilder get builder => _vw.builder;
   static set builder(TransitionBuilder v) {
     if (v != null) {
@@ -604,43 +635,18 @@ abstract class App extends v.AppMVC {
   }
 }
 
-// ignore: avoid_classes_with_only_static_members
-class _App {
-  static Widget home;
-  static Widget show(AsyncSnapshot snapshot, Widget loading) {
-    if (snapshot.hasError) {
-      App._vw.home = AppError(snapshot.error).home;
-      return const _AppWidget();
-    } else if (snapshot.connectionState == ConnectionState.done &&
-        snapshot.hasData &&
-        snapshot.data) {
-      if (home != null) {
-        App._vw.home = home;
-      }
-      return const _AppWidget();
-    } else {
-      if (App.useMaterial) {
-        return const MaterialApp(
-            color: Colors.white,
-            home: Center(child: CircularProgressIndicator()));
-      } else {
-        return const Center(child: CupertinoActivityIndicator());
-      }
-    }
-  }
-}
-
-class _AppWidget extends StatefulWidget {
-  const _AppWidget({Key key}) : super(key: key);
+class _AppStatefulWidget extends StatefulWidget {
+  const _AppStatefulWidget({Key key}) : super(key: key);
   @override
   // ignore: no_logic_in_create_state
   State createState() => App._vw;
 }
 
 /// The View for the app. The 'look and feel' for the whole app.
-class AppView extends AppViewState<_AppWidget> {
+/// This is a State object.
+class AppView extends AppViewState<_AppStatefulWidget> {
   AppView({
-    Key key,
+    this.key,
     this.home,
     AppController con,
     List<ControllerMVC> controllers,
@@ -682,7 +688,6 @@ class AppView extends AppViewState<_AppWidget> {
     ErrorWidgetBuilder errorScreen,
     v.ReportErrorHandler reportError,
   }) : super(
-          key: key,
           con: con ?? AppController(),
           controllers: controllers,
           object: object,
@@ -743,9 +748,9 @@ class AppView extends AppViewState<_AppWidget> {
   }
   // Don't override fields
 //  @override
-//  final Key key;
-//  @override
 //  final AppController con;
+  final Key key;
+
   Widget home;
   // Explicitly use the Material theme
   bool useMaterial;
@@ -762,16 +767,26 @@ class AppView extends AppViewState<_AppWidget> {
 
   @override
   void initState() {
+    //
     super.initState();
-    // Supply a theme
-    v.AppMenu.onChange();
-    App.themeData ??= theme;
-    App.themeData ??= onTheme();
-    App.themeData ??= App._getThemeData();
-    App.iOSTheme ??= iOSTheme;
-    App.iOSTheme ??= oniOSTheme();
-    App.iOSTheme ??=
-        MaterialBasedCupertinoThemeData(materialTheme: App._getThemeData());
+
+    if (theme != null) {
+      App.themeData = theme;
+    } else {
+      final theme = onTheme();
+      if (theme != null) {
+        App.themeData = theme;
+      }
+    }
+
+    if (iOSTheme != null) {
+      App.iOSTheme = iOSTheme;
+    } else {
+      final iosTheme = oniOSTheme();
+      if (iosTheme != null) {
+        App.iOSTheme = iosTheme;
+      }
+    }
   }
 
   /// Override to impose your own WidgetsApp (like CupertinoApp or MaterialApp)
@@ -929,7 +944,6 @@ class AppView extends AppViewState<_AppWidget> {
 
 abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   AppViewState({
-    Key key,
     this.con,
     List<ControllerMVC> controllers,
     Object object,
@@ -968,7 +982,6 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
     ErrorWidgetBuilder errorScreen,
     v.ReportErrorHandler reportError,
   }) : super(
-          key: key,
           controller: con,
           controllers: controllers,
           object: object,
@@ -977,7 +990,7 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
     routes ??= const <String, WidgetBuilder>{};
     navigatorObservers ??= const <NavigatorObserver>[];
     title ??= '';
-    color ??= Colors.white;
+    color ??= Colors.blue;
     debugShowMaterialGrid ??= false;
     showPerformanceOverlay ??= false;
     checkerboardRasterCacheImages ??= false;

@@ -49,7 +49,7 @@ class AppMenu {
 
   PopupMenuButton<dynamic> show(
     StateMVC state, {
-    String applicationName = 'Name of you app.',
+    String applicationName,
     Widget applicationIcon,
     String applicationLegalese,
     List<Widget> children,
@@ -109,7 +109,7 @@ class AppMenu {
       case 'About':
         showAboutDialog(
             context: _state.context,
-            applicationName: _applicationName,
+            applicationName: _applicationName ?? App?.vw?.title ?? '',
             applicationVersion: _applicationVersion,
             applicationIcon: _applicationIcon,
             applicationLegalese: _applicationLegalese,

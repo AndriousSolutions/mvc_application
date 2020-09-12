@@ -21,56 +21,56 @@ class PostalAddress {
   PostalAddress({
     this.label,
   }) {
-    label ??= "";
+    label ??= '';
   }
 
-  PostalAddress.fromMap(Map m) {
-    label = m["label"];
-    _street = m["street"];
-    _city = m["city"];
-    _postcode = m["postcode"];
-    _region = m["region"];
-    _country = m["country"];
+  PostalAddress.fromMap(Map<String, String> m) {
+    label = m['label'];
+    _street = m['street'];
+    _city = m['city'];
+    _postcode = m['postcode'];
+    _region = m['region'];
+    _country = m['country'];
   }
 
   String label, _street, _city, _postcode, _region, _country;
 
   String get street => _street;
   set street(String street) {
-    if (street == null) street = "";
+    street ??= '';
     _street = street;
   }
 
   String get city => _city;
   set city(String city) {
-    if (city == null) city = "";
+    city ??= '';
     _city = city;
   }
 
   String get postcode => _postcode;
   set postcode(String code) {
-    if (code == null) code = "";
+    code ??= '';
     _postcode = code;
   }
 
   String get region => _region;
   set region(String region) {
-    if (region == null) region = "";
+    region ??= '';
     _region = region;
   }
 
   String get country => _country;
   set country(String country) {
-    if (country == null) country = "";
+    country ??= '';
     _country = country;
   }
 
-  Map<String, dynamic> get toMap => {
-        "label": label,
-        "street": _street,
-        "city": _city,
-        "postcode": _postcode,
-        "region": _region,
-        "country": _country
+  Map<String, String> get toMap => {
+        'label': label,
+        'street': _street,
+        'city': _city,
+        'postcode': _postcode,
+        'region': _region,
+        'country': _country
       };
 }
