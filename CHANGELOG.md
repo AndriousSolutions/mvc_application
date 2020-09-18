@@ -1,3 +1,10 @@
+## 5.11.0
+ September 16, 2020
+- New field, type, in class, DataFieldItem
+- Removed from example app fields, prefix, suffix, street, city, region, postcode & country
+- one2Many(), mapItems() in field_widgets.dart
+- Corrected version number in README.md
+
 ## 5.10.0
  September 07, 2020
 - New embedded Android version

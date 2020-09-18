@@ -146,7 +146,7 @@ class ScheduleNotifications with HandleError {
     _importance = importance ?? Importance.Default;
     _priority = priority ?? Priority.Default;
     _styleInformation = styleInformation;
-    _playSound = playSound;// ?? false;
+    _playSound = playSound; // ?? false;
     _sound = sound;
     _enableVibration = enableVibration ?? false;
     _vibrationPattern = vibrationPattern;
@@ -614,7 +614,7 @@ class ScheduleNotifications with HandleError {
     schedule ??= _schedule;
 
     // Too late!
-    if (schedule == null || DateTime.now().isAfter(schedule)){
+    if (schedule == null || DateTime.now().isAfter(schedule)) {
       return -1;
     }
 
@@ -1145,9 +1145,9 @@ class ScheduleNotifications with HandleError {
 
     // Play the sound if supplied a sound.
     if (playSound == null) {
-      if (sound == null){
+      if (sound == null) {
         playSound = false;
-      }else{
+      } else {
         playSound = true;
       }
     }

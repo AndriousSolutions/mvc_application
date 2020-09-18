@@ -269,8 +269,7 @@ Widget _defaultErrorWidget(FlutterErrorDetails details) {
 
     final int length = stackTrace.length > 5 ? 5 : stackTrace.length;
 
-    final buffer = StringBuffer()
-    ..write(message);
+    final buffer = StringBuffer()..write(message);
     for (var i = 0; i < length; i++) {
       buffer.write('${stackTrace[i]}\n');
     }
@@ -301,7 +300,7 @@ class _WidgetError extends LeafRenderObjectWidget {
     super.debugFillProperties(properties);
     if (_flutterError == null) {
       properties.add(StringProperty('message', message, quoted: false));
-    }else {
+    } else {
       properties.add(_flutterError.toDiagnosticsNode(
           style: DiagnosticsTreeStyle.whitespace));
     }
@@ -320,8 +319,8 @@ class _ErrorBox extends RenderBox {
         /// use the TextPainter class. If you're looking for code to crib from,
         /// see the paragraph.dart file and the RenderParagraph class.
         final ui.ParagraphBuilder builder = ui.ParagraphBuilder(paragraphStyle)
-        ..pushStyle(textStyle)
-        ..addText(message);
+          ..pushStyle(textStyle)
+          ..addText(message);
         _paragraph = builder.build();
       }
     } catch (error) {

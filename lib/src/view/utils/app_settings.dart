@@ -45,8 +45,10 @@ import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 
 import 'package:url_launcher/url_launcher.dart' show launch;
 
-import 'package:flutter/foundation.dart' as p show defaultTargetPlatform, TargetPlatform;
+import 'package:flutter/foundation.dart' as p
+    show defaultTargetPlatform, TargetPlatform;
 
+// ignore: avoid_classes_with_only_static_members
 class AppSettings {
   static p.TargetPlatform get defaultTargetPlatform => p.defaultTargetPlatform;
 

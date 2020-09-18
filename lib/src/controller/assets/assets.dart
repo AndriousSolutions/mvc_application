@@ -63,7 +63,8 @@ class Assets {
     return asset;
   }
 
-  Future<T> getData<T>(String key, Future<T> Function(String value) parser) async {
+  Future<T> getData<T>(
+      String key, Future<T> Function(String value) parser) async {
     assert(Assets._assets != null, 'Assets.init() must be called first.');
     Future<T> data;
     try {

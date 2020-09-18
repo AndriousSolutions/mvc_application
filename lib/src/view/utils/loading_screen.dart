@@ -87,9 +87,9 @@ class _LoadingScreenState extends State<LoadingScreen>
         home: Scaffold(
             appBar: AppBar(title: const Text('Loading...')),
             body: AnimatedBuilder(
-                    animation: _animation,
-                    builder: (BuildContext context, Widget child) {
-                      return const Center(child: CircularProgressIndicator());
-                    })));
+                animation: _animation,
+                builder: (BuildContext context, Widget child) {
+                  return const Center(child: CircularProgressIndicator());
+                })));
   }
 }

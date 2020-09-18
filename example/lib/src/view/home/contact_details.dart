@@ -61,15 +61,12 @@ class ContactDetails extends StatefulWidget {
 }
 
 class _DetailsState extends State<ContactDetails> {
-  //  final double _appBarHeight = 256.0;
-//
-//  final AppBarBehavior _appBarBehavior = AppBarBehavior.pinned;
-
   @override
   void initState() {
     super.initState();
     contact = widget.contact;
   }
+
   VoidCallback onTap;
   Contact contact;
 
@@ -109,12 +106,10 @@ class _DetailsState extends State<ContactDetails> {
                   contact.givenName.onListTile(tap: onTap),
                   contact.middleName.onListTile(tap: onTap),
                   contact.familyName.onListTile(tap: onTap),
-                  contact.prefix.onListTile(tap: onTap),
-                  contact.suffix.onListTile(tap: onTap),
-                  contact.company.onListTile(tap: onTap),
-                  contact.jobTitle.onListTile(tap: onTap),
                   contact.phone.onListItems(onTap: onTap),
                   contact.email.onListItems(onTap: onTap),
+                  contact.company.onListTile(tap: onTap),
+                  contact.jobTitle.onListTile(tap: onTap),
                 ]),
               )
             ])));

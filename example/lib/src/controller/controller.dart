@@ -22,8 +22,7 @@ import 'package:mvc_application/view.dart';
 import '../controller.dart' show AppController;
 
 /// The Controller talks to the Model
-import '../model.dart'
-    show Contact, ContactsDB;
+import '../model.dart' show Contact, ContactsDB;
 
 class Controller extends AppController {
   //
@@ -62,13 +61,18 @@ class Controller extends AppController {
     return _contacts;
   }
 
+  @override
+  Future<void> refresh() async {
+    await getContacts();
+    super.refresh();
+  }
+
   /// Called by menu option
   Future<List<Contact>> sort() async {
     _sortedAlpha = !_sortedAlpha;
     await Prefs.setBool(_SORT_KEY, _sortedAlpha);
-    final contacts = await getContacts();
-    rebuild();
-    return contacts;
+    unawaited(refresh());
+    return _contacts;
   }
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -79,17 +83,9 @@ class Controller extends AppController {
   Contact itemAt(int index) => items?.elementAt(index);
 
   Future<bool> deleteItem(int index) async {
-    final contact = items?.elementAt(index);
-    final delete = await this.delete(contact);
-    refresh();
+    final Contact contact = items?.elementAt(index);
+    final delete = await contact.delete();
+    await refresh();
     return delete;
-  }
-
-  Future<bool> delete(Object object) async {
-    if (object is! Contact) {
-      return Future.value(false);
-    }
-    final Contact contact = object;
-    return contact.delete();
   }
 }

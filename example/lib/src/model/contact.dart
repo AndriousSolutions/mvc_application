@@ -21,27 +21,18 @@ import 'package:flutter/material.dart' show BuildContext, GlobalKey, FormState;
 
 import '../model.dart'
     show
-        City,
-        Company,
-        Contact,
-        Country,
         ContactsDB,
         DisplayName,
-        Email,
-        FamilyName,
         GivenName,
-        Id,
-        JobTitle,
         MiddleName,
+        FamilyName,
         Phone,
-        PostalAddress,
-        Postcode,
-        Prefix,
-        Region,
-        Street,
-        Suffix;
+        Email,
+        Company,
+        JobTitle,
+        Id;
 
-import '../view.dart' show App, DataFieldItem, MapClass, StateGetter;
+import '../view.dart' show DataFieldItem, MapClass, StateGetter;
 
 import 'contact_fields.dart';
 
@@ -69,8 +60,6 @@ class ContactEdit extends ContactList {
   }
   ContactsDB model;
 
-  final PostalAddress _address = PostalAddress(label: '');
-
   GlobalKey<FormState> get formKey {
     if (!_inForm) {
       _inForm = true;
@@ -82,18 +71,13 @@ class ContactEdit extends ContactList {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool onPressed([BuildContext context]) {
+  Future<bool> onPressed([BuildContext context]) async {
     if (!_formKey.currentState.validate()) {
       return false;
     }
     _formKey.currentState.save();
     _inForm = false;
-//    _contact.postalAddresses = [_address];
-    // ignore: cascade_invocations
-
-    add();
-
-    return true;
+    return add();
   }
 
   Future<bool> add() => model.addContact(this);
@@ -113,16 +97,10 @@ class ContactEdit extends ContactList {
 
 class ContactList extends ContactFields {
   //
-  ContactList() : super();
-
-//  Contact _contact;
-
   List<DataFieldItem> _emails, _phones;
 
-  //  set email(String email) => [Item(label: "work", value: email)];
-  List<PostalAddress> postalAddresses;
-
   void populate([Map<String, dynamic> map]) {
+    //
     final ma = MapClass(map);
 
     _id = Id(ma.p('id'));
@@ -130,43 +108,26 @@ class ContactList extends ContactFields {
     _middleName = MiddleName(ma.p('middleName'));
     _familyName = FamilyName(ma.p('familyName'));
 
-    _displayName = DisplayName('${_givenName.value} ${_familyName.value}');
-
-    _prefix = Prefix(ma.p('prefix'));
-    _suffix = Suffix(ma.p('suffix'));
+    _displayName = DisplayName(this);
     _company = Company(ma.p('company'));
     _jobTitle = JobTitle(ma.p('jobTitle'));
-    _phone = Phone(ma.p('phones'));
-    _email = Email(ma.p('emails'));
-    _street = Street(ma.p('street'));
-    _city = City(ma.p('city'));
-    _region = Region(ma.p('region'));
-    _postcode = Postcode(ma.p('postcode'));
-    _country = Country(ma.p('country'));
-    // items = m['postalAddresses'];
-    // postalAddresses = items?.map((m) => PostalAddress.fromMap(m));
-    //postalAddresses = m['postalAddresses'];
+    _phone = Phone(ma.p('phones'), this);
+    _email = Email(ma.p('emails'), this);
   }
 
   Map<String, dynamic> get toMap {
     //
     final List<Map<String, dynamic>> emailList = email.mapItems<Email>(
-      'Email',
       'email',
       _emails,
+      (data) => Email.init(data),
     );
 
     final List<Map<String, dynamic>> phoneList = phone.mapItems<Phone>(
-      'Phone',
       'phone',
       _phones,
+      (data) => Phone.init(data),
     );
-
-    final List<Map<String, dynamic>> addressList = [];
-
-    for (final address in postalAddresses ?? []) {
-      addressList.add(address.toMap);
-    }
 
     return {
       'id': _id.value,
@@ -174,13 +135,10 @@ class ContactList extends ContactFields {
       'givenName': _givenName.value,
       'middleName': _middleName.value,
       'familyName': _familyName.value,
-      'prefix': _prefix.value,
-      'suffix': _suffix.value,
-      'company': _company.value,
-      'jobTitle': _jobTitle.value,
       'emails': emailList,
       'phones': phoneList,
-      'postalAddresses': addressList,
+      'company': _company.value,
+      'jobTitle': _jobTitle.value,
     };
   }
 }
@@ -192,17 +150,10 @@ class ContactFields {
       _givenName,
       _middleName,
       _familyName,
-      _prefix,
-      _suffix,
-      _company,
-      _jobTitle,
       _phone,
       _email,
-      _street,
-      _city,
-      _region,
-      _postcode,
-      _country;
+      _company,
+      _jobTitle;
 
   Id get id => _id;
   set id(Id id) => _id = id;
@@ -219,12 +170,6 @@ class ContactFields {
   FamilyName get familyName => _familyName;
   set familyName(FamilyName name) => _familyName = name;
 
-  Prefix get prefix => _prefix;
-  set prefix(Prefix prefix) => _prefix = prefix;
-
-  Suffix get suffix => _suffix;
-  set suffix(Suffix suffix) => _suffix = suffix;
-
   Company get company => _company;
   set company(Company company) => _company = company;
 
@@ -236,19 +181,4 @@ class ContactFields {
 
   Email get email => _email;
   set email(Email email) => _email = email;
-
-  Street get street => _street;
-  set street(Street street) => _street = email;
-
-  City get city => _city;
-  set city(City city) => _city = city;
-
-  Region get region => _region;
-  set region(Region region) => _region = region;
-
-  Postcode get postcode => _postcode;
-  set postcode(Postcode postcode) => _postcode = postcode;
-
-  Country get country => _country;
-  set country(Country country) => _country = country;
 }

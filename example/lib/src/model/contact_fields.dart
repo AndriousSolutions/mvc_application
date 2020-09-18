@@ -17,11 +17,19 @@
 ///
 ///
 
-//import 'package:flutter/material.dart';
+import '../model.dart' show Contact;
 
-import '../model.dart' show Contact, PostalAddress;
-
-import '../view.dart';
+import '../view.dart'
+    show
+        DataFieldItem,
+        FieldWidgets,
+        GestureTapCallback,
+        InputDecoration,
+        ListItems,
+        MapItemFunction,
+        Text,
+        TextInputType,
+        ValueChanged;
 
 /// Add to the class this:
 /// `extends FieldWidgets<T> with FieldChange`
@@ -30,10 +38,11 @@ mixin FormFields on FieldWidgets<Contact> {
   Set<FieldWidgets<Contact>> get changedFields => _changedFields;
   static final Set<FieldWidgets<Contact>> _changedFields = {};
 
+  /// If the field's value changed, that field is added to a Set.
   @override
   void onSaved(dynamic v) {
     super.onSaved(v);
-    if(isChanged()){
+    if (isChanged()) {
       _changedFields.add(this);
     }
   }
@@ -48,12 +57,24 @@ class Id extends FieldWidgets<Contact> with FormFields {
 String notEmpty(String v) => v.isEmpty ? 'Cannot be empty' : null;
 
 class DisplayName extends FieldWidgets<Contact> with FormFields {
-  DisplayName(dynamic value)
+  DisplayName(Contact contact)
       : super(
           label: 'Display Name',
-          value: value,
-          child: Text(value ?? ''),
+          value: _displayName(contact),
+          child: Text(_displayName(contact) ?? ''),
         );
+  static String displayName;
+
+  static String _displayName(Contact contact) {
+    if (displayName == null || displayName.isEmpty) {
+      if (contact.givenName.value != null) {
+        displayName = contact.givenName.value ?? '';
+        displayName = '$displayName ${contact.familyName.value}';
+      }
+      displayName ??= '';
+    }
+    return displayName;
+  }
 }
 
 class GivenName extends FieldWidgets<Contact> with FormFields {
@@ -62,11 +83,17 @@ class GivenName extends FieldWidgets<Contact> with FormFields {
           label: 'First Name',
           value: value,
           validator: notEmpty,
+          keyboardType: TextInputType.name,
         );
 }
 
 class MiddleName extends FieldWidgets<Contact> with FormFields {
-  MiddleName([dynamic value]) : super(label: 'Middle Name', value: value);
+  MiddleName([dynamic value])
+      : super(
+          label: 'Middle Name',
+          value: value,
+          keyboardType: TextInputType.name,
+        );
 }
 
 class FamilyName extends FieldWidgets<Contact> with FormFields {
@@ -75,69 +102,56 @@ class FamilyName extends FieldWidgets<Contact> with FormFields {
           label: 'Last Name',
           value: value,
           validator: notEmpty,
+          keyboardType: TextInputType.name,
         );
 }
 
-class Prefix extends FieldWidgets<Contact> with FormFields {
-  Prefix([dynamic value]) : super(label: 'Prefix', value: value);
-}
-
-class Suffix extends FieldWidgets<Contact> with FormFields {
-  Suffix([dynamic value]) : super(label: 'Suffix', value: value);
-}
-
 class Company extends FieldWidgets<Contact> with FormFields {
-  Company([dynamic value]) : super(label: 'Company', value: value);
+  Company([dynamic value])
+      : super(
+          label: 'Company',
+          value: value,
+          keyboardType: TextInputType.name,
+        );
 }
 
 class JobTitle extends FieldWidgets<Contact> with FormFields {
-  JobTitle([dynamic value]) : super(label: 'Job', value: value);
+  JobTitle([dynamic value])
+      : super(
+          label: 'Job',
+          value: value,
+          keyboardType: TextInputType.name,
+        );
 }
 
 class Phone extends FieldWidgets<Contact> with FormFields {
   //
-  Phone([dynamic value])
+  Phone([dynamic value, Contact contact])
       : super(
           label: 'Phone',
           value: value,
           inputDecoration: const InputDecoration(labelText: 'Phone'),
           keyboardType: TextInputType.phone,
         ) {
+    // Get a reference to the Contact object.
+    if(_contact == null || _contact.state == null) {
+      _contact ??= contact;
+    }
+
     // Change the name of the map's key fields.
     keys(value: 'phone');
-    phone2Phones();
+    // There may be more than one phone number
+    one2Many<Phone>(() => Phone());
   }
 
-  void phone2Phones() {
-    if (value is! List<DataFieldItem>) {
-      return;
-    }
-    final List<DataFieldItem> items = value;
-    value = null;
-    final List<Phone> phones = [];
+  Phone.init(DataFieldItem dataItem)
+      : super(
+          label: dataItem.label,
+          value: dataItem.value,
+          type: dataItem.type,
+        );
 
-    for (final DataFieldItem item in items) {
-      final phone = Phone(item.value)
-        ..label = item.label
-        ..id = item.id
-        ..initialValue = item.value;
-      phones.add(phone);
-    }
-    this.items = phones;
-  }
-
-  State get state {
-    final Contact con = object;
-    // Call its getter
-    return con?.state;
-  }
-
-  @override
-  void onChanged(String value) {
-    super.onChanged(value);
-    // ignore: invalid_use_of_protected_member
-    state?.setState(() {});
-  }
+  static Contact _contact;
 
   @override
   ListItems<Contact> onListItems({
@@ -145,6 +159,7 @@ class Phone extends FieldWidgets<Contact> with FormFields {
     List<FieldWidgets<Contact>> items,
     MapItemFunction mapItem,
     GestureTapCallback onTap,
+    ValueChanged<String> onChanged,
     List<String> dropItems,
   }) =>
       super.onListItems(
@@ -152,40 +167,41 @@ class Phone extends FieldWidgets<Contact> with FormFields {
         items: items,
         mapItem: mapItem,
         onTap: onTap,
+        onChanged: onChanged ??
+            (String value) {
+              // ignore: invalid_use_of_protected_member
+              _contact?.state?.setState(() {});
+            },
         dropItems:
             dropItems ?? const ['home', 'work', 'landline', 'modile', 'other'],
       );
 }
 
 class Email extends FieldWidgets<Contact> with FormFields {
-  Email([dynamic value])
+  Email([dynamic value, Contact contact])
       : super(
           label: 'Email',
           value: value,
           inputDecoration: const InputDecoration(labelText: 'Email'),
           keyboardType: TextInputType.emailAddress,
         ) {
-    email2Emails();
+    // Get a reference to the Contact object.
+    if(_contact == null || _contact.state == null) {
+      _contact = contact;
+    }
+
+    // There may be more than one email address.
+    one2Many<Email>(() => Email());
   }
 
-  /// Convert a list item into separate Email objects.
-  void email2Emails() {
-    if (value is! List<DataFieldItem>) {
-      return;
-    }
-    final List<DataFieldItem> items = value;
-    value = null;
-    final List<Email> emails = [];
+  Email.init(DataFieldItem dataItem)
+      : super(
+          label: dataItem.label,
+          value: dataItem.value,
+          type: dataItem.type,
+        );
 
-    for (final DataFieldItem item in items) {
-      final email = Email(item.value)
-        ..label = item.label
-        ..id = item.id
-        ..initialValue = item.value;
-      emails.add(email);
-    }
-    this.items = emails;
-  }
+  static Contact _contact;
 
   @override
   ListItems<Contact> onListItems({
@@ -193,6 +209,7 @@ class Email extends FieldWidgets<Contact> with FormFields {
     List<FieldWidgets<Contact>> items,
     MapItemFunction mapItem,
     GestureTapCallback onTap,
+    ValueChanged<String> onChanged,
     List<String> dropItems,
   }) =>
       super.onListItems(
@@ -201,32 +218,10 @@ class Email extends FieldWidgets<Contact> with FormFields {
         mapItem: mapItem,
         onTap: onTap,
         dropItems: dropItems ?? ['home', 'work', 'other'],
+        onChanged: onChanged ??
+            (String value) {
+              // ignore: invalid_use_of_protected_member
+              _contact?.state?.setState(() {});
+            },
       );
-}
-
-// @override
-// TextFormField get textFormField => TextFormField(
-//     decoration: InputDecoration(labelText: label),
-//     onSaved: onSaved,
-//     keyboardType: TextInputType.emailAddress);
-// }
-
-class Street extends FieldWidgets<Contact> with FormFields {
-  Street([dynamic value]) : super(label: 'Street', value: value);
-}
-
-class City extends FieldWidgets<Contact> with FormFields {
-  City([dynamic value]) : super(label: 'City', value: value);
-}
-
-class Region extends FieldWidgets<Contact> with FormFields {
-  Region([dynamic value]) : super(label: 'Region', value: value);
-}
-
-class Postcode extends FieldWidgets<Contact> with FormFields {
-  Postcode([dynamic value]) : super(label: 'Postal code', value: value);
-}
-
-class Country extends FieldWidgets<Contact> with FormFields {
-  Country([dynamic value]) : super(label: 'Country', value: value);
 }

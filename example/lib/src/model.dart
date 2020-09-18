@@ -1,3 +1,5 @@
+export 'model/contact.dart';
+
 ///
 /// Copyright (C) 2018 Andrious Solutions
 ///
@@ -22,9 +24,4 @@
 ///
 
 export 'model/contact_fields.dart';
-
-export 'model/contact.dart';
-
 export 'model/contacts_db.dart';
-
-export 'model/postal_address.dart';

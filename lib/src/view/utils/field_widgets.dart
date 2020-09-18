@@ -184,6 +184,7 @@ class FieldWidgets<T> extends DataFieldItem {
     this.object,
     String label,
     dynamic value,
+    dynamic type,
 // TextFormField
     this.controller,
     this.initialValue,
@@ -255,7 +256,7 @@ class FieldWidgets<T> extends DataFieldItem {
     this.activeColor,
     this.tristate,
     this.materialTapTargetSize,
-  }) : super(label: label, value: value) {
+  }) : super(label: label, value: value, type: type) {
     _key = ObjectKey(key ?? this).toString();
     // ignore: avoid_bool_literals_in_conditional_expressions
     _checkValue = value == null
@@ -304,7 +305,7 @@ class FieldWidgets<T> extends DataFieldItem {
 
   bool _valueChanged = false;
 
-  Iterable<dynamic> items;
+  Iterable<DataFieldItem> items;
 
   final ThemeData _theme = App.themeData;
 
@@ -965,7 +966,11 @@ class FieldWidgets<T> extends DataFieldItem {
   @mustCallSuper
   @protected
   void onChanged(String value) {
-    _valueChanged = initialValue != value;
+    if (initialValue == null) {
+      _valueChanged = value != null;
+    } else {
+      _valueChanged = initialValue != value;
+    }
   }
 
   @protected
@@ -987,6 +992,7 @@ class FieldWidgets<T> extends DataFieldItem {
     List<FieldWidgets<T>> items,
     MapItemFunction mapItem,
     GestureTapCallback onTap,
+    ValueChanged<String> onChanged,
     List<String> dropItems,
   }) {
     return ListItems<T>(
@@ -995,17 +1001,38 @@ class FieldWidgets<T> extends DataFieldItem {
       items: items ?? this.items,
       mapItem: mapItem,
       onTap: onTap,
+      onChanged: onChanged,
       dropItems: dropItems,
     );
   }
 
-  List<Map<String, dynamic>> mapItems<U extends FieldWidgets<T>>(
-    String label,
-    String key, [
-    List<DataFieldItem> items,
-    U Function(DataFieldItem dataItem) create,
-    U itemsObj,
-  ]) {
+  /// Convert a list item into separate Email objects.
+  void one2Many<U extends FieldWidgets<T>>(
+    U Function() create,
+  ) {
+    if (value is! List<DataFieldItem>) {
+      return;
+    }
+    final List<DataFieldItem> dataItems = value;
+    value = null;
+
+    final List<U> fields = [];
+
+    for (final DataFieldItem item in dataItems) {
+      final field = create()
+        ..value = item.value
+        ..type = item.type
+        ..label = item.label
+        ..id = item.id;
+
+      fields.add(field);
+    }
+    items = fields;
+  }
+
+  List<Map<String, dynamic>> mapItems<U extends FieldWidgets<T>>(String key,
+      List<DataFieldItem> items, U Function(DataFieldItem dataItem) create,
+      [U itemsObj]) {
     //
     items = [];
 
@@ -1013,24 +1040,24 @@ class FieldWidgets<T> extends DataFieldItem {
 
     itemsObj.items ??= <U>[];
 
+    // A new value must be added to the 'items' iterable.
     if (itemsObj.value is String) {
       final String value = itemsObj.value;
       if (value.isNotEmpty) {
-        itemsObj.items.toList()..add(itemsObj);
+        final U newItem = create(DataFieldItem(
+          label: itemsObj.label,
+          value: itemsObj.value,
+          type: itemsObj.type,
+        ));
+        itemsObj.items = itemsObj.items.toList()..add(newItem);
       }
-      itemsObj.label = label;
-    }
-
-    for (final U item in itemsObj.items) {
-      final DataFieldItem data =
-          DataFieldItem(id: item.id, label: item.label, value: item.value)
-            ..keys(value: key);
-      items.add(data);
     }
 
     final List<Map<String, dynamic>> list = [];
 
-    for (final DataFieldItem item in items ?? []) {
+    for (final DataFieldItem item in itemsObj.items ?? []) {
+      // Assign the appropriate map key value.
+      item.keys(value: key);
       list.add(item.toMap);
     }
 
@@ -1044,33 +1071,41 @@ class FieldWidgets<T> extends DataFieldItem {
     final initials = StringBuffer();
 
     for (final String name in names) {
+      if(name.isEmpty){
+        continue;
+      }
       initials.write(name[0]);
     }
     return initials.toString().toUpperCase();
   }
 }
 
-/// Item class used for fields which only have a [label] and a [value]
+/// Item class used for fields which have a [label], a [value] and a maybe a [type] of value.
 class DataFieldItem {
-  DataFieldItem({this.id, this.label, this.value});
+  DataFieldItem({this.id, this.label, this.value, this.type});
 
   DataFieldItem.fromMap(Map<dynamic, dynamic> m,
-      {String id, String label, String value}) {
-    keys(id: id, label: label, value: value);
+      {String id, String label, String value, String type}) {
+    //
+    keys(id: id, label: label, value: value, type: type);
+
     this.id = m[_id];
     this.label = m[_label];
     this.value = m[_value];
+    this.type = m[_type];
   }
   dynamic id;
   String label;
   dynamic value;
+  dynamic type;
 
   String _id = 'id';
   String _label = 'label';
   String _value = 'value';
+  String _type = 'type';
 
   /// Assigns the names for the 'label' field and the 'value' field.
-  void keys({String id, String label, String value}) {
+  void keys({String id, String label, String value, String type}) {
     if (id != null && id.isNotEmpty) {
       _id = id;
     }
@@ -1080,10 +1115,14 @@ class DataFieldItem {
     if (value != null && value.isNotEmpty) {
       _value = value;
     }
+    if (type != null && type.isNotEmpty) {
+      _type = type;
+    }
   }
 
   // Fix Error: type '_InternalLinkedHashMap<dynamic, dynamic>' is not a subtype of type 'Map<String, String>'
-  Map<String, dynamic> get toMap => {_id: id, _label: label, _value: value};
+  Map<String, dynamic> get toMap =>
+      {_id: id, _label: label, _value: value, _type: type};
 }
 
 /// Supplies the 'current' State object.
@@ -1153,6 +1192,7 @@ class ListItems<T> extends StatefulWidget {
     this.items,
     this.mapItem,
     this.onTap,
+    this.onChanged,
     this.dropItems,
   }) : super(key: key);
 
@@ -1161,6 +1201,7 @@ class ListItems<T> extends StatefulWidget {
   final List<DataFieldItem> items;
   final MapItemFunction mapItem;
   final GestureTapCallback onTap;
+  final ValueChanged<String> onChanged;
   final List<String> dropItems;
   @override
   State createState() => _LIstItemsState<T>();
@@ -1193,16 +1234,19 @@ class _LIstItemsState<T> extends State<ListItems<T>> {
       children = [
         Row(children: [
           dropDown(
-              field: widget.field,
-              onChanged: (v) {
-                widget.field.label = v;
-                widget.field.onChanged(v);
-              }),
+            field: widget.field,
+            onChanged: widget.onChanged,
+          ),
           Expanded(child: widget.field.textFormField),
         ])
       ];
     } else {
-      children = [ListTile(subtitle: Text(widget.title))];
+      children = [
+        ListTile(
+          subtitle: Text(widget.title),
+          onTap: widget.onTap,
+        )
+      ];
     }
     if (items != null) {
       children.add(Column(
@@ -1218,13 +1262,16 @@ class _LIstItemsState<T> extends State<ListItems<T>> {
 
   Widget mapIt(DataFieldItem i) => ListTile(
         title: Text(i.value ?? ''),
-        subtitle: Text(i.label ?? ''),
+        subtitle: Text(i.type ?? ''),
         onTap: widget.onTap,
       );
 
   Widget editIt(FieldWidgets<T> i) => ListTile(
         title: Row(children: [
-          dropDown(field: i),
+          dropDown(
+            field: i,
+            onChanged: widget.onChanged,
+          ),
           Expanded(
               child: i.TextFormField(
             inputDecoration: const InputDecoration(labelText: ''),
@@ -1236,20 +1283,26 @@ class _LIstItemsState<T> extends State<ListItems<T>> {
       );
 
   Widget dropDown({FieldWidgets<T> field, ValueChanged<String> onChanged}) {
-    String value = field?.label;
+    String value = field?.type;
     if (widget.dropItems.where((String item) {
       return item == value;
     }).isEmpty) {
       value = widget.dropItems[0];
     }
-    field?.label = value;
+    field?.type = value;
     return DropdownButton<String>(
       hint: const Text('type...'),
       value: value,
       items: widget.dropItems.map((String v) {
         return DropdownMenuItem<String>(value: v, child: Text(v));
       }).toList(),
-      onChanged: onChanged ?? field?.onChanged,
+      onChanged: (String v) {
+        field.type = v;
+        field.onChanged(v);
+        if (onChanged != null) {
+          onChanged(v);
+        }
+      },
     );
   }
 }

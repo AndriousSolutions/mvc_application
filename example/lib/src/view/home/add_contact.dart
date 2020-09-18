@@ -50,11 +50,6 @@ class AddContact extends StatefulWidget {
 }
 
 class _AddContactState extends StateMVC<AddContact> {
-  //
-  _AddContactState() : super();
-
-  final PostalAddress address = PostalAddress(label: 'Home');
-
   @override
   void initState() {
     super.initState();
@@ -62,7 +57,6 @@ class _AddContactState extends StateMVC<AddContact> {
     contact ??= Contact();
     // ignore: cascade_invocations
     contact?.initState(this);
-    //   _address = PostalAddress(label: 'Home');
   }
 
   Contact contact;
@@ -80,8 +74,9 @@ class _AddContactState extends StateMVC<AddContact> {
         title: Text(widget.title ?? 'Add a contact'),
         actions: [
           FlatButton(
-            onPressed: () {
-              if (contact.onPressed()) {
+            onPressed: () async {
+              final pop = await contact.onPressed();
+              if (pop) {
                 Navigator.of(context).pop();
               }
             },
@@ -98,17 +93,10 @@ class _AddContactState extends StateMVC<AddContact> {
                 contact.givenName.textFormField,
                 contact.middleName.textFormField,
                 contact.familyName.textFormField,
-                contact.prefix.textFormField,
-                contact.suffix.textFormField,
                 contact.phone.onListItems(),
                 contact.email.onListItems(),
                 contact.company.textFormField,
                 contact.jobTitle.textFormField,
-                contact.street.textFormField,
-                contact.city.textFormField,
-                contact.region.textFormField,
-                contact.postcode.textFormField,
-                contact.country.textFormField,
               ],
             )),
       ),

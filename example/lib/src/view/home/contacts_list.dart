@@ -55,7 +55,7 @@ import '../../controller.dart' show Controller;
 
 import '../../model.dart' show Contact;
 
-import '../../view.dart' show AppMenu, ContactDetails, StateMVC;
+import '../../view.dart' show AppMenu, ContactDetails, StateMVC, unawaited;
 
 class ContactsList extends StatefulWidget {
   const ContactsList({Key key}) : super(key: key);
@@ -90,10 +90,9 @@ class _ContactListState extends StateMVC<ContactsList> {
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: _theme.primaryColor,
-          onPressed: () {
-            Navigator.of(context).pushNamed('/add').then((_) {
-              con.refresh();
-            });
+          onPressed: () async {
+            await Navigator.of(context).pushNamed('/add');
+            unawaited(con.refresh());
           },
           child: const Icon(Icons.add),
         ),
@@ -116,8 +115,8 @@ class _ContactListState extends StateMVC<ContactsList> {
                             Navigator.of(context)
                                 .push(MaterialPageRoute<void>(
                               builder: (BuildContext _) =>
-                                  InheritedTheme.captureAll(
-                                      context, ContactDetails(contact: contact)),
+                                  InheritedTheme.captureAll(context,
+                                      ContactDetails(contact: contact)),
                             ))
                                 .then((_) {
                               con.refresh();

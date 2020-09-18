@@ -21,14 +21,11 @@ import 'dart:async' show Future;
 import 'dart:core'
     show Future, List, Map, MapEntry, String, bool, dynamic, int, override;
 
-import 'package:contacts_example/src/model/postal_address.dart';
 import 'package:dbutils/sqlite_db.dart';
 
 import '../model.dart' show Contact;
 
 import '../view.dart' show DataFieldItem;
-
-
 
 class ContactsDB extends SQLiteDB {
   factory ContactsDB() => _this ??= ContactsDB._();
@@ -60,8 +57,6 @@ class ContactsDB extends SQLiteDB {
               id INTEGER PRIMARY KEY
               ,givenName TEXT
               ,middleName TEXT
-              ,prefix TEXT
-              ,suffix TEXT
               ,familyName TEXT
               ,company TEXT
               ,jobTitle TEXT
@@ -73,7 +68,7 @@ class ContactsDB extends SQLiteDB {
      CREATE TABLE Emails(
               id INTEGER PRIMARY KEY
               ,userid INTEGER
-              ,label TEXT
+              ,type TEXT
               ,email TEXT
               ,deleted INTEGER DEFAULT 0
               ,FOREIGN KEY (userid) REFERENCES Contacts (id)
@@ -84,18 +79,8 @@ class ContactsDB extends SQLiteDB {
      CREATE TABLE Phones(
               id INTEGER PRIMARY KEY
               ,userid INTEGER
-              ,label TEXT
+              ,type TEXT
               ,phone TEXT
-              ,deleted INTEGER DEFAULT 0
-              )
-     ''');
-
-      await txn.execute('''
-     CREATE TABLE Addresses(
-              id INTEGER PRIMARY KEY
-              ,userid INTEGER
-              ,label TEXT
-              ,address TEXT
               ,deleted INTEGER DEFAULT 0
               )
      ''');
@@ -112,6 +97,7 @@ class ContactsDB extends SQLiteDB {
     final List<Contact> contactList = [];
 
     for (final Map<String, dynamic> contact in query) {
+      //
       final Map<String, dynamic> map = contact.map((key, value) {
         return MapEntry(key, value is int ? value?.toString() : value);
       });
@@ -128,13 +114,6 @@ class ContactsDB extends SQLiteDB {
       map['emails'] =
           emails.map((m) => DataFieldItem.fromMap(m, value: 'email')).toList();
 
-      final List<Map<String, dynamic>> addresses = await _this.rawQuery(
-          'SELECT * FROM Addresses WHERE userid = ${contact['id']} AND deleted = 0');
-
-      map['postalAddresses'] = addresses
-          .map<PostalAddress>((m) => PostalAddress.fromMap(m))
-          .toList();
-
       final Contact _contact = Contact.fromMap(map);
 
       contactList.add(_contact);
@@ -149,11 +128,16 @@ class ContactsDB extends SQLiteDB {
 
     final Map<String, dynamic> map = contact.toMap;
 
+    // The Contact's unique id
+    dynamic id = map['id'];
+
     if (contact.isChanged()) {
       //
-      final rec = await _this.saveMap('Contacts', map);
+      final newContact = await _this.saveMap('Contacts', map);
 
-      add = rec.isNotEmpty;
+      id ??= newContact['id'];
+
+      add = newContact.isNotEmpty;
     }
 
     // Save Phone Numbers
@@ -165,15 +149,12 @@ class ContactsDB extends SQLiteDB {
           continue;
         }
 
-        phone.addAll({'userid': map['id']});
+        phone.addAll({'userid': id});
 
-        final rec = await _this.saveMap('Phones', phone);
-
-        if (rec.isEmpty) {}
+        await _this.saveMap('Phones', phone);
       }
     }
 
-    // Save Phone Numbers
     if (add && contact.emailChange()) {
       // Save Emails.
       for (final Map<String, dynamic> email in map['emails']) {
@@ -182,11 +163,9 @@ class ContactsDB extends SQLiteDB {
           continue;
         }
 
-        email.addAll({'userid': map['id']});
+        email.addAll({'userid': id});
 
-        final rec = await _this.saveMap('Emails', email);
-
-        if (rec.isEmpty) {}
+        await _this.saveMap('Emails', email);
       }
     }
     return add;
@@ -213,17 +192,24 @@ class ContactsDB extends SQLiteDB {
     rec = await _this.saveMap('Contacts', rec);
 
     if (rec.isNotEmpty) {
-      rec = _this.newRec('Phones', map['phones']);
+      //
+      for (final Map<String, dynamic> phone in map['phones']) {
+        //
+        rec = _this.newRec('Phones', phone);
 
-      rec['deleted'] = 1;
+        rec['deleted'] = 1;
 
-      await _this.saveMap('Phones', rec);
+        await _this.saveMap('Phones', rec);
+      }
 
-      rec = _this.newRec('Emails', map['emails']);
+      for (final Map<String, dynamic> email in map['emails']) {
+        //
+        rec = _this.newRec('Emails', email);
 
-      rec['deleted'] = 1;
+        rec['deleted'] = 1;
 
-      await _this.saveMap('Emails', rec);
+        await _this.saveMap('Emails', rec);
+      }
     }
 
     return rec.isNotEmpty;
