@@ -118,6 +118,7 @@ abstract class App extends v.AppMVC {
     );
   }
 
+  /// Runs all the asynchronous operations necessary before the app can proceed.
   @override
   Future<bool> initAsync() async {
     if (_hotReload) {
@@ -151,6 +152,7 @@ abstract class App extends v.AppMVC {
     return _isInit;
   }
 
+  /// Clean up resources before the app is finally terminated.
   @mustCallSuper
   @override
   void dispose() {
@@ -166,6 +168,8 @@ abstract class App extends v.AppMVC {
     super.dispose();
   }
 
+  /// Run the CircularProgressIndicator() until asynchronous operations are
+  /// completed before the app proceeds.
   Widget _asyncBuilder(AsyncSnapshot<bool> snapshot, Widget loading) {
     if (snapshot.hasError) {
       App._vw.home = AppError(snapshot.error).home;
@@ -942,6 +946,8 @@ class AppView extends AppViewState<_AppStatefulWidget> {
   bool onDebugShowCheckedModeBanner() => true;
 }
 
+/// The underlying State object representing the App's View in the MVC pattern.
+/// Allows for setting debug settings and defining the App's error routine.
 abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   AppViewState({
     this.con,
@@ -1082,6 +1088,7 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   }
 }
 
+/// The Error Screen if something happens at start up.
 class AppError extends AppView {
   AppError(Object exception, {Key key})
       : super(home: _AppError(exception, key: key));
@@ -1103,6 +1110,7 @@ class _AppErrorState extends State<_AppError> {
       );
 }
 
+/// A Drawer object for your Flutter app.
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key key}) : super(key: key);
 
