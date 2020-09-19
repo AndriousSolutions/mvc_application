@@ -111,8 +111,8 @@ class ContactList extends ContactFields {
     _displayName = DisplayName(this);
     _company = Company(ma.p('company'));
     _jobTitle = JobTitle(ma.p('jobTitle'));
-    _phone = Phone(ma.p('phones'), this);
-    _email = Email(ma.p('emails'), this);
+    _phone = Phone(ma.p('phones'));
+    _email = Email(ma.p('emails'));
   }
 
   Map<String, dynamic> get toMap {

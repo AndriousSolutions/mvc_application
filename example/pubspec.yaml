@@ -1,7 +1,7 @@
 name: contacts_example
 description: Demonstrates the MVC design pattern implementation.
 
-version: 1.8.1
+version: 2.0.0
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

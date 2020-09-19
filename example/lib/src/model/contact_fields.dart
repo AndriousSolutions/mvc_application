@@ -21,6 +21,7 @@ import '../model.dart' show Contact;
 
 import '../view.dart'
     show
+        App,
         DataFieldItem,
         FieldWidgets,
         GestureTapCallback,
@@ -126,18 +127,13 @@ class JobTitle extends FieldWidgets<Contact> with FormFields {
 
 class Phone extends FieldWidgets<Contact> with FormFields {
   //
-  Phone([dynamic value, Contact contact])
+  Phone([dynamic value])
       : super(
           label: 'Phone',
           value: value,
           inputDecoration: const InputDecoration(labelText: 'Phone'),
           keyboardType: TextInputType.phone,
         ) {
-    // Get a reference to the Contact object.
-    if(_contact == null || _contact.state == null) {
-      _contact ??= contact;
-    }
-
     // Change the name of the map's key fields.
     keys(value: 'phone');
     // There may be more than one phone number
@@ -150,8 +146,6 @@ class Phone extends FieldWidgets<Contact> with FormFields {
           value: dataItem.value,
           type: dataItem.type,
         );
-
-  static Contact _contact;
 
   @override
   ListItems<Contact> onListItems({
@@ -167,29 +161,20 @@ class Phone extends FieldWidgets<Contact> with FormFields {
         items: items,
         mapItem: mapItem,
         onTap: onTap,
-        onChanged: onChanged ??
-            (String value) {
-              // ignore: invalid_use_of_protected_member
-              _contact?.state?.setState(() {});
-            },
+        onChanged: onChanged ?? (String value) => App.refresh(),
         dropItems:
             dropItems ?? const ['home', 'work', 'landline', 'modile', 'other'],
       );
 }
 
 class Email extends FieldWidgets<Contact> with FormFields {
-  Email([dynamic value, Contact contact])
+  Email([dynamic value])
       : super(
           label: 'Email',
           value: value,
           inputDecoration: const InputDecoration(labelText: 'Email'),
           keyboardType: TextInputType.emailAddress,
         ) {
-    // Get a reference to the Contact object.
-    if(_contact == null || _contact.state == null) {
-      _contact = contact;
-    }
-
     // There may be more than one email address.
     one2Many<Email>(() => Email());
   }
@@ -200,8 +185,6 @@ class Email extends FieldWidgets<Contact> with FormFields {
           value: dataItem.value,
           type: dataItem.type,
         );
-
-  static Contact _contact;
 
   @override
   ListItems<Contact> onListItems({
@@ -218,10 +201,6 @@ class Email extends FieldWidgets<Contact> with FormFields {
         mapItem: mapItem,
         onTap: onTap,
         dropItems: dropItems ?? ['home', 'work', 'other'],
-        onChanged: onChanged ??
-            (String value) {
-              // ignore: invalid_use_of_protected_member
-              _contact?.state?.setState(() {});
-            },
+        onChanged: onChanged ?? (String value) => App.refresh(),
       );
 }

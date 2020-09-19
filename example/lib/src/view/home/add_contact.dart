@@ -37,7 +37,7 @@ import 'package:flutter/material.dart'
         Text,
         Widget;
 
-import '../../model.dart' show Contact, PostalAddress;
+import '../../model.dart' show Contact;
 
 import '../../view.dart' show StateMVC;
 

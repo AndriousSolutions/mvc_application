@@ -1,3 +1,8 @@
+## 5.11.1
+ September 18, 2020
+- Utilize App.refresh();
+- flutter_local_notifications: ^1.0.0
+
 ## 5.11.0
  September 16, 2020
 - New field, type, in class, DataFieldItem

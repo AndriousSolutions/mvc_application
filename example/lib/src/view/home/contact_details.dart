@@ -43,7 +43,6 @@ import 'package:mvc_application/view.dart'
         App,
         EditBarButton,
         HomeBarButton,
-        SearchBarButton,
         SimpleBottomAppBar,
         showBox;
 
@@ -97,7 +96,6 @@ class _DetailsState extends State<ContactDetails> {
               button01: HomeBarButton(onPressed: () {
                 Navigator.of(context).pop();
               }),
-              button02: SearchBarButton(),
               button03: EditBarButton(onPressed: onTap),
             ),
             body: CustomScrollView(slivers: <Widget>[

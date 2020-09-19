@@ -275,7 +275,9 @@ class FieldWidgets<T> extends DataFieldItem {
                     : false;
 
     // Record the initial value.
-    _initValue = value;
+    if(value is! Iterable) {
+      _initValue = value ?? initialValue;
+    }
 
     // Default values
     textCapitalization ??= TextCapitalization.none;
@@ -472,7 +474,7 @@ class FieldWidgets<T> extends DataFieldItem {
     bool create = false,
   }) {
     this.controller = controller ?? this.controller;
-    this.initialValue = initialValue ?? value;
+    this.initialValue = initialValue ?? this.initialValue;
     this.focusNode = focusNode ?? this.focusNode;
     this.inputDecoration = inputDecoration ?? this.inputDecoration;
     this.keyboardType = keyboardType ?? this.keyboardType;
@@ -531,8 +533,9 @@ class FieldWidgets<T> extends DataFieldItem {
   }) =>
       m.TextFormField(
         key: Key('TextFormField$_key'),
-        controller: controller ?? this.controller,
-        initialValue: initialValue ?? this.initialValue ?? value,
+        // just accept the parameter values and not this object's values.
+        controller: controller ?? initialValue == null ? null : FieldController(text: initialValue),
+        // ignore the initValue parameter: initialValue: null,
         focusNode: focusNode ?? focusNode,
         decoration: inputDecoration ?? this.inputDecoration,
         keyboardType: keyboardType ?? this.keyboardType,
@@ -966,10 +969,10 @@ class FieldWidgets<T> extends DataFieldItem {
   @mustCallSuper
   @protected
   void onChanged(String value) {
-    if (initialValue == null) {
+    if (_initValue == null) {
       _valueChanged = value != null;
     } else {
-      _valueChanged = initialValue != value;
+      _valueChanged = _initValue != value;
     }
   }
 
@@ -1071,7 +1074,7 @@ class FieldWidgets<T> extends DataFieldItem {
     final initials = StringBuffer();
 
     for (final String name in names) {
-      if(name.isEmpty){
+      if (name.isEmpty) {
         continue;
       }
       initials.write(name[0]);
@@ -1315,6 +1318,7 @@ class FieldController extends TextEditingController {
   FieldController({String text}) : super(text: text);
 }
 
+/// Used to test for a Map object before attempting to access it.
 class MapClass {
   MapClass(this.map);
 
