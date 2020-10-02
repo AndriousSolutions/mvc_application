@@ -21,12 +21,14 @@ import 'package:flutter/material.dart'
         BuildContext,
         Color,
         ColorSwatch,
+        FloatingActionButtonThemeData,
         PopupMenuButton,
         PopupMenuDivider,
         PopupMenuEntry,
         PopupMenuItem,
         showAboutDialog,
         Text,
+        ThemeData,
         Widget;
 
 import 'package:mvc_application/view.dart' show App, ColorPicker, StateMVC;
@@ -136,7 +138,13 @@ class AppMenu {
       Prefs.setInt('colorTheme', ColorPicker.colors.indexOf(value));
     }
 
-    App.themeData = value;
+    /// Assign the colour to the floating button as well.
+    App.themeData = ThemeData(
+      primaryColor: value,
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: value,
+      ),
+    );
 
     App.iOSTheme = value;
 

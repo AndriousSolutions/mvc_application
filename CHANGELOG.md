@@ -1,3 +1,8 @@
+## 5.11.2
+ October 02, 2020
+- missing LocaleListResolutionCallback
+- FloatingActionButtonThemeData to AppMenu class
+
 ## 5.11.1
  September 18, 2020
 - Utilize App.refresh();
