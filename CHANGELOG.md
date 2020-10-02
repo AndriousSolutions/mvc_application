@@ -1,6 +1,7 @@
 ## 5.12.0
  October 02, 2020
 - Conditional export of runApp()
+- Removed deprecated materialKey in view/app.dart
 
 ## 5.11.2
  October 02, 2020

@@ -102,7 +102,7 @@ abstract class App extends v.AppMVC {
   /// More efficient widget tree rebuilds
   @Deprecated('Use widgetsAppKey instead.')
   static final materialKey = GlobalKey();
-  static final widgetsAppKey = materialKey;
+  static final widgetsAppKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
