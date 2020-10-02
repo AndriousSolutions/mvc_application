@@ -23,6 +23,12 @@ export 'package:flutter/material.dart' hide runApp;
 /// Cupertino
 export 'package:flutter/cupertino.dart' hide RefreshCallback, runApp;
 
+/// Supply the custom runApp function
+export 'package:mvc_application/src/conditional_export.dart'
+if (dart.library.html) 'package:flutter/material.dart'
+if (dart.library.io) 'package:mvc_application/src/controller/app.dart'
+    show runApp;
+
 /// Futures are intentionally not awaited
 export 'package:pedantic/pedantic.dart' show unawaited;
 
@@ -40,9 +46,6 @@ export 'package:mvc_application/src/view/app.dart'
         ConnectivityListener,
         ConnectivityResult,
         StateMVC;
-
-/// Supply the custom runApp function
-export 'package:mvc_application/src/controller/app.dart' show runApp;
 
 /// Settings
 export 'package:mvc_application/src/view/utils/app_settings.dart';

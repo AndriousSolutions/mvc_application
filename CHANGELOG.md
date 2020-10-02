@@ -1,3 +1,7 @@
+## 5.12.0
+ October 02, 2020
+- Conditional export of runApp()
+
 ## 5.11.2
  October 02, 2020
 - missing LocaleListResolutionCallback
