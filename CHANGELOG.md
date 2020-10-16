@@ -1,3 +1,18 @@
+## 5.13.0
+ October 16, 2020
+- Incorporate text translation with package, I10n_translator 
+- Removed the second MaterialApp()
+- Removed AppError().home;
+- App.changeUI(String ui);
+- Enhanced getter App.locale
+- Corrected theme: property
+- Enhance dialog_box.dart
+- Update field_widgets.dart
+- Update schedule_notifications.dart and flutter_local_notifications: ^2.0.0
+- Removed deprecated properties: materialKey, getThemeData() and setThemeData()
+- Introduced the IOS-style interface feature: tab_buttons.dart
+- Introduced timezone.dart with plugin, flutter_native_timezone.
+
 ## 5.12.0
  October 02, 2020
 - Conditional export of runApp()

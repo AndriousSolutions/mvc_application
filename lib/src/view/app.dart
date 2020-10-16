@@ -26,13 +26,49 @@ import 'package:universal_platform/universal_platform.dart';
 import 'package:flutter/foundation.dart'
     show FlutterExceptionHandler, Key, kIsWeb, mustCallSuper, protected;
 
+import 'package:flutter/rendering.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter/cupertino.dart';
 
 import 'package:package_info/package_info.dart' show PackageInfo;
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart'
+    show
+        AsyncSnapshot,
+        BuildContext,
+        Center,
+        Color,
+        ColorSwatch,
+        ConnectionState,
+        FlutterErrorDetails,
+        FutureBuilder,
+        GenerateAppTitle,
+        GlobalKey,
+        Key,
+        ListView,
+        Locale,
+        LocaleListResolutionCallback,
+        LocaleResolutionCallback,
+        Localizations,
+        LocalizationsDelegate,
+        Navigator,
+        NavigatorObserver,
+        NavigatorState,
+        RouteFactory,
+        State,
+        StatefulWidget,
+        StatelessWidget,
+        TargetPlatform,
+        Text,
+        TransitionBuilder,
+        Widget,
+        WidgetBuilder,
+        WidgetsBinding,
+        mustCallSuper,
+        protected,
+        required;
 
 import 'package:connectivity/connectivity.dart'
     show Connectivity, ConnectivityResult;
@@ -100,8 +136,6 @@ abstract class App extends v.AppMVC {
   static bool _hotReload = false;
 
   /// More efficient widget tree rebuilds
-  @Deprecated('Use widgetsAppKey instead.')
-  static final materialKey = GlobalKey();
   static final widgetsAppKey = GlobalKey();
 
   @override
@@ -172,7 +206,7 @@ abstract class App extends v.AppMVC {
   /// completed before the app proceeds.
   Widget _asyncBuilder(AsyncSnapshot<bool> snapshot, Widget loading) {
     if (snapshot.hasError) {
-      App._vw.home = AppError(snapshot.error).home;
+      App._vw = AppError(snapshot.error);
       return const _AppStatefulWidget();
     } else if (snapshot.connectionState == ConnectionState.done &&
         snapshot.hasData &&
@@ -180,9 +214,10 @@ abstract class App extends v.AppMVC {
       return const _AppStatefulWidget();
     } else {
       if (UniversalPlatform.isAndroid) {
-        return const MaterialApp(
-            color: Colors.blue,
-            home: Center(child: CircularProgressIndicator()));
+        // return const MaterialApp(
+        //     color: Colors.blue,
+        //     home: Center(child: CircularProgressIndicator()));
+        return const Center(child: CircularProgressIndicator());
       } else {
         return const Center(child: CupertinoActivityIndicator());
       }
@@ -206,6 +241,12 @@ abstract class App extends v.AppMVC {
       (_vw != null && _vw.useCupertino) ||
       (UniversalPlatform.isIOS && (_vw == null || !_vw.switchUI)) ||
       (UniversalPlatform.isAndroid && (_vw == null || _vw.switchUI));
+
+  /// Explicitly change to a particular interface.
+  static void changeUI(String ui) {
+    _vw?.changeUI(ui);
+    refresh();
+  }
 
   /// Return the navigator key used by the App's View.
   static GlobalKey<NavigatorState> get navigatorKey => _vw.navigatorKey;
@@ -338,11 +379,51 @@ abstract class App extends v.AppMVC {
   }
 
   /// Returns the App's current locale.
-  static Locale get locale => _vw.locale;
+  static Locale get locale =>
+      _vw.locale ??
+      Localizations.localeOf(_context, nullOk: true) ??
+      _resolveLocales(
+        WidgetsBinding.instance.window.locales,
+        _vw.supportedLocales,
+      );
   static set locale(Locale v) {
     if (v != null) {
       _vw.locale = v;
     }
+  }
+
+  /// Determine the locale used by the Mobile phone.
+  static Locale _resolveLocales(
+    List<Locale> preferredLocales,
+    Iterable<Locale> supportedLocales,
+  ) {
+    // Attempt to use localeListResolutionCallback.
+    if (_vw.localeListResolutionCallback != null) {
+      final Locale locale = _vw.localeListResolutionCallback(
+          preferredLocales, _vw.supportedLocales);
+      if (locale != null) {
+        return locale;
+      }
+    }
+
+    final Locale preferred =
+        preferredLocales != null && preferredLocales.isNotEmpty
+            ? preferredLocales.first
+            : null;
+
+    // localeListResolutionCallback failed, falling back to localeResolutionCallback.
+    if (_vw.localeResolutionCallback != null) {
+      final Locale locale = _vw.localeResolutionCallback(
+        preferred,
+        _vw.supportedLocales,
+      );
+      if (locale != null) {
+        return locale;
+      }
+    }
+    // Both callbacks failed, falling back to default algorithm.
+//    return basicLocaleListResolution(preferredLocales, supportedLocales);
+    return preferred;
   }
 
   /// Returns the App's current localizations delegates.
@@ -499,7 +580,12 @@ abstract class App extends v.AppMVC {
   static void refresh() => _vw.refresh();
 
   /// Catch and explicitly handle the error.
-  static void catchError(Exception ex) => _vw.catchError(ex);
+  static void catchError(Object ex) {
+    if (ex is! Exception) {
+      ex = Exception(ex.toString());
+    }
+    _vw.catchError(ex);
+  }
 
   /// The Scaffold object for this App's View.
   static ScaffoldState get scaffold => App._getScaffold();
@@ -507,23 +593,6 @@ abstract class App extends v.AppMVC {
 
   static ScaffoldState _getScaffold() =>
       _scaffold ??= Scaffold.of(_context, nullOk: true);
-
-  @Deprecated('Use theme: parameter instead.')
-  static Future<ThemeData> getThemeData() async {
-    final theme = await Prefs.getStringF('theme');
-    ThemeData themeData;
-    switch (theme) {
-      case 'light':
-        themeData = ThemeData.light();
-        break;
-      case 'dark':
-        themeData = ThemeData.dark();
-        break;
-      default:
-        themeData = ThemeData.fallback();
-    }
-    return themeData;
-  }
 
   static ThemeData _getThemeData() {
     final theme = Prefs.getString('theme');
@@ -539,19 +608,6 @@ abstract class App extends v.AppMVC {
         themeData = ThemeData.fallback();
     }
     return themeData;
-  }
-
-  @Deprecated('Use theme: parameter instead.')
-  static void setThemeData(String theme) {
-    switch (theme) {
-      case 'light':
-        break;
-      case 'dark':
-        break;
-      default:
-        theme = 'fallback';
-    }
-    Prefs.setString('theme', theme);
   }
 
   static final Connectivity _connectivity = Connectivity();
@@ -755,7 +811,7 @@ class AppView extends AppViewState<_AppStatefulWidget> {
   // Don't override fields
 //  @override
 //  final AppController con;
-  final Key key;
+  Key key;
 
   Widget home;
   // Explicitly use the Material theme
@@ -797,12 +853,7 @@ class AppView extends AppViewState<_AppStatefulWidget> {
 
   /// Override to impose your own WidgetsApp (like CupertinoApp or MaterialApp)
   @override
-  Widget buildApp(BuildContext context) => buildView(context);
-
-  /// Deprecated. Now use buildApp(BuildContext context);
-  @Deprecated('Use buildApp(context) instead.')
-  @override
-  Widget buildView(BuildContext context) {
+  Widget buildApp(BuildContext context) {
     //
     if (useCupertino) {
       return CupertinoApp(
@@ -820,7 +871,7 @@ class AppView extends AppViewState<_AppStatefulWidget> {
         title: title ?? onTitle() ?? '',
         onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
         color: color ?? onColor() ?? Colors.white,
-        theme: App.iOSTheme,
+        theme: iOSTheme ?? oniOSTheme() ?? App.iOSTheme,
         locale: locale ?? onLocale(),
         localizationsDelegates:
             localizationsDelegates ?? onLocalizationsDelegates(),
@@ -861,7 +912,7 @@ class AppView extends AppViewState<_AppStatefulWidget> {
         title: title ?? onTitle() ?? '',
         onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
         color: color ?? onColor() ?? Colors.white,
-        theme: App.themeData,
+        theme: theme ?? onTheme() ?? App.themeData,
         darkTheme: darkTheme ?? onDarkTheme(),
         themeMode: themeMode ?? onThemeMode() ?? ThemeMode.system,
         locale: locale ?? onLocale(),
@@ -915,6 +966,26 @@ class AppView extends AppViewState<_AppStatefulWidget> {
   void reassemble() {
     App._hotReload = true;
     super.reassemble();
+  }
+
+  /// Explicity change to a particular interface.
+  void changeUI(String ui) {
+    if (ui == null || ui.isEmpty) {
+      return;
+    }
+    ui = ui.trim();
+    if (ui != 'Material' && ui != 'Cupertino') {
+      return;
+    }
+    if (ui == 'Material') {
+      useMaterial = true;
+      useCupertino = false;
+      switchUI = !UniversalPlatform.isAndroid;
+    } else {
+      useMaterial = false;
+      useCupertino = true;
+      switchUI = UniversalPlatform.isAndroid;
+    }
   }
 
   GlobalKey<NavigatorState> onNavigatorKey() =>
@@ -1049,8 +1120,8 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   GenerateAppTitle onGenerateTitle;
   final ThemeData theme;
   final CupertinoThemeData iOSTheme;
-  final ThemeData darkTheme;
-  final ThemeMode themeMode;
+  ThemeData darkTheme;
+  ThemeMode themeMode;
   Color color;
   Locale locale;
   Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates;

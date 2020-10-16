@@ -32,8 +32,9 @@ import 'package:mvc_application/view.dart' show ReportErrorHandler;
 /// if (dart.library.io) 'package:mvc_application/src/controller/app.dart' show runApp;
 
 /// This of course is fake. Merely to satisfy the Dart Analysis tool.
-void runApp(Widget app, {
+void runApp(
+  Widget app, {
   FlutterExceptionHandler handler,
   ErrorWidgetBuilder builder,
   ReportErrorHandler reportError,
-}){}
+}) {}

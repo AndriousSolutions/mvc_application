@@ -39,12 +39,7 @@ import 'package:flutter/material.dart'
         Widget;
 
 import 'package:mvc_application/view.dart'
-    show
-        App,
-        EditBarButton,
-        HomeBarButton,
-        SimpleBottomAppBar,
-        showBox;
+    show App, EditBarButton, HomeBarButton, SimpleBottomAppBar, showBox;
 
 import '../../model.dart' show Contact;
 

@@ -17,6 +17,8 @@
 ///
 ///
 
+import 'dart:ui' as ui show TextHeightBehavior;
+
 import 'package:flutter/material.dart' as m show TextFormField;
 
 import 'package:flutter/services.dart'
@@ -212,6 +214,10 @@ class FieldWidgets<T> extends DataFieldItem {
     this.enabled,
     this.keyboardAppearance,
     this.scrollPadding,
+    this.buildCounter,
+    this.scrollPhysics,
+    this.autofillHints,
+    this.autovalidateMode,
 // Text
     this.textDirection,
     this.locale,
@@ -219,6 +225,8 @@ class FieldWidgets<T> extends DataFieldItem {
     this.overflow,
     this.textScaleFactor,
     this.semanticsLabel,
+    this.textWidthBasis,
+    this.textHeightBehavior,
 // ListTile
     this.leading,
     this.title,
@@ -230,6 +238,10 @@ class FieldWidgets<T> extends DataFieldItem {
     this.tap,
     this.longPress,
     this.selected,
+    this.focusColor,
+    this.hoverColor,
+    this.tileColor,
+    this.selectedTileColor,
 // CheckboxListTile
     this.secondary,
     this.controlAffinity,
@@ -271,11 +283,15 @@ class FieldWidgets<T> extends DataFieldItem {
                     ? value > 0
                         ? true
                         // ignore: avoid_bool_literals_in_conditional_expressions
-                        : value is double ? value > 0 ? true : false : false
+                        : value is double
+                            ? value > 0
+                                ? true
+                                : false
+                            : false
                     : false;
 
     // Record the initial value.
-    if(value is! Iterable) {
+    if (value is! Iterable) {
       _initValue = value ?? initialValue;
     }
 
@@ -340,6 +356,10 @@ class FieldWidgets<T> extends DataFieldItem {
   bool enabled;
   Brightness keyboardAppearance;
   EdgeInsets scrollPadding;
+  InputCounterWidgetBuilder buildCounter;
+  ScrollPhysics scrollPhysics;
+  Iterable<String> autofillHints;
+  AutovalidateMode autovalidateMode;
 
   /// Text
 //  final String data;
@@ -355,6 +375,8 @@ class FieldWidgets<T> extends DataFieldItem {
 
 //final int maxLines;
   String semanticsLabel;
+  TextWidthBasis textWidthBasis;
+  ui.TextHeightBehavior textHeightBehavior;
 
   /// ListTile
   Widget leading;
@@ -369,6 +391,10 @@ class FieldWidgets<T> extends DataFieldItem {
   GestureTapCallback tap;
   GestureLongPressCallback longPress;
   bool selected;
+  Color focusColor;
+  Color hoverColor;
+  Color tileColor;
+  Color selectedTileColor;
 
   /// CheckboxListTile
   Widget secondary;
@@ -443,6 +469,10 @@ class FieldWidgets<T> extends DataFieldItem {
       enabled: enabled,
       keyboardAppearance: keyboardAppearance,
       scrollPadding: scrollPadding,
+      buildCounter: buildCounter,
+      scrollPhysics: scrollPhysics,
+      autofillHints: autofillHints,
+      autovalidateMode: autovalidateMode,
     );
   }
 
@@ -471,6 +501,10 @@ class FieldWidgets<T> extends DataFieldItem {
     bool enabled,
     Brightness keyboardAppearance,
     EdgeInsets scrollPadding,
+    InputCounterWidgetBuilder buildCounter,
+    ScrollPhysics scrollPhysics,
+    Iterable<String> autofillHints,
+    AutovalidateMode autovalidateMode,
     bool create = false,
   }) {
     this.controller = controller ?? this.controller;
@@ -497,6 +531,11 @@ class FieldWidgets<T> extends DataFieldItem {
     this.enabled = enabled ?? this.enabled;
     this.keyboardAppearance = keyboardAppearance ?? this.keyboardAppearance;
     this.scrollPadding = scrollPadding ?? this.scrollPadding;
+    this.buildCounter = buildCounter ?? this.buildCounter;
+    this.scrollPhysics = scrollPhysics ?? this.scrollPhysics;
+    this.autofillHints = autofillHints ?? this.autofillHints;
+    this.autovalidateMode = autovalidateMode ?? this.autovalidateMode;
+
     final m.TextFormField oldWidget = _textFormField;
     _textFormField = null;
     final m.TextFormField newWidget = textFormField;
@@ -530,11 +569,17 @@ class FieldWidgets<T> extends DataFieldItem {
     bool enabled,
     Brightness keyboardAppearance,
     EdgeInsets scrollPadding,
+    InputCounterWidgetBuilder buildCounter,
+    ScrollPhysics scrollPhysics,
+    Iterable<String> autofillHints,
+    AutovalidateMode autovalidateMode,
   }) =>
       m.TextFormField(
         key: Key('TextFormField$_key'),
         // just accept the parameter values and not this object's values.
-        controller: controller ?? initialValue == null ? null : FieldController(text: initialValue),
+        controller: controller ?? initialValue == null
+            ? null
+            : FieldController(text: initialValue),
         // ignore the initValue parameter: initialValue: null,
         focusNode: focusNode ?? focusNode,
         decoration: inputDecoration ?? this.inputDecoration,
@@ -561,6 +606,10 @@ class FieldWidgets<T> extends DataFieldItem {
         enabled: enabled ?? this.enabled,
         keyboardAppearance: keyboardAppearance ?? this.keyboardAppearance,
         scrollPadding: scrollPadding ?? this.scrollPadding,
+        buildCounter: buildCounter ?? this.buildCounter,
+        scrollPhysics: scrollPhysics ?? this.scrollPhysics,
+        autofillHints: autofillHints ?? this.autofillHints,
+        autovalidateMode: autovalidateMode ?? this.autovalidateMode,
       );
 
   // Override to perform what happens when finished editing the field.
@@ -603,6 +652,8 @@ class FieldWidgets<T> extends DataFieldItem {
       textScaleFactor: textScaleFactor,
       maxLines: maxLines,
       semanticsLabel: semanticsLabel,
+      textWidthBasis: textWidthBasis,
+      textHeightBehavior: textHeightBehavior,
     );
   }
 
@@ -617,6 +668,8 @@ class FieldWidgets<T> extends DataFieldItem {
     double textScaleFactor,
     int maxLines,
     String semanticsLabel,
+    TextWidthBasis textWidthBasis,
+    ui.TextHeightBehavior textHeightBehavior,
   }) {
     this.style = style ?? this.style;
     this.textAlign = textAlign ?? this.textAlign;
@@ -627,6 +680,8 @@ class FieldWidgets<T> extends DataFieldItem {
     this.textScaleFactor = textScaleFactor ?? this.textScaleFactor;
     this.maxLines = maxLines ?? this.maxLines;
     this.semanticsLabel = semanticsLabel ?? this.semanticsLabel;
+    this.textWidthBasis = textWidthBasis ?? this.textWidthBasis;
+    this.textHeightBehavior = textHeightBehavior ?? this.textHeightBehavior;
     final Text oldWidget = _text;
     _text = null;
     Text newWidget;
@@ -658,6 +713,8 @@ class FieldWidgets<T> extends DataFieldItem {
         textScaleFactor: textScaleFactor,
         maxLines: maxLines,
         semanticsLabel: semanticsLabel,
+        textWidthBasis: textWidthBasis,
+        textHeightBehavior: textHeightBehavior,
       );
     }
   }
@@ -673,6 +730,8 @@ class FieldWidgets<T> extends DataFieldItem {
     double textScaleFactor,
     int maxLines,
     String semanticsLabel,
+    TextWidthBasis textWidthBasis,
+    ui.TextHeightBehavior textHeightBehavior,
   }) {
     this.style = style ?? this.style;
     this.textAlign = textAlign ?? this.textAlign;
@@ -683,6 +742,8 @@ class FieldWidgets<T> extends DataFieldItem {
     this.textScaleFactor = textScaleFactor ?? this.textScaleFactor;
     this.maxLines = maxLines ?? this.maxLines;
     this.semanticsLabel = semanticsLabel ?? this.semanticsLabel;
+    this.textWidthBasis = textWidthBasis ?? this.textWidthBasis;
+    this.textHeightBehavior = textHeightBehavior ?? this.textHeightBehavior;
     final Text oldWidget = _richText;
     _richText = null;
     Text newWidget;
@@ -706,6 +767,8 @@ class FieldWidgets<T> extends DataFieldItem {
         softWrap: softWrap,
         overflow: overflow,
         maxLines: maxLines,
+        textWidthBasis: textWidthBasis,
+        textHeightBehavior: textHeightBehavior,
         child: child ?? text,
       );
 
@@ -715,6 +778,8 @@ class FieldWidgets<T> extends DataFieldItem {
     bool softWrap,
     TextOverflow overflow,
     int maxLines,
+    TextWidthBasis textWidthBasis,
+    ui.TextHeightBehavior textHeightBehavior,
     Widget child,
   }) {
     this.style = style ?? this.style;
@@ -722,6 +787,8 @@ class FieldWidgets<T> extends DataFieldItem {
     this.softWrap = softWrap ?? this.softWrap;
     this.overflow = overflow ?? this.overflow;
     this.maxLines = maxLines ?? this.maxLines;
+    this.textWidthBasis = textWidthBasis ?? this.textWidthBasis;
+    this.textHeightBehavior = textHeightBehavior ?? this.textHeightBehavior;
     this.child = child ?? this.child;
     final DefaultTextStyle oldWidget = _defaultTextStyle;
     _defaultTextStyle = null;
@@ -743,6 +810,12 @@ class FieldWidgets<T> extends DataFieldItem {
         onTap: tap ?? onTap,
         onLongPress: longPress ?? onLongPress,
         selected: selected ?? false,
+        focusColor: focusColor,
+        hoverColor: hoverColor,
+        focusNode: focusNode,
+        autofocus: autofocus ?? false,
+        tileColor: tileColor,
+        selectedTileColor: selectedTileColor,
       );
 
   ListTile onListTile({
@@ -987,8 +1060,11 @@ class FieldWidgets<T> extends DataFieldItem {
 
   void onToggle({bool value}) {}
 
-  ListItems<T> get listItems =>
-      ListItems<T>(this, title: label, items: items ?? [this]);
+  ListItems<T> get listItems => ListItems<T>(
+        this,
+        title: label,
+        items: items ?? [this],
+      );
 
   ListItems<T> onListItems({
     String title,

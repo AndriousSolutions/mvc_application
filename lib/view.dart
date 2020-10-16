@@ -25,12 +25,15 @@ export 'package:flutter/cupertino.dart' hide RefreshCallback, runApp;
 
 /// Supply the custom runApp function
 export 'package:mvc_application/src/conditional_export.dart'
-if (dart.library.html) 'package:flutter/material.dart'
-if (dart.library.io) 'package:mvc_application/src/controller/app.dart'
+    if (dart.library.html) 'package:flutter/material.dart'
+    if (dart.library.io) 'package:mvc_application/src/controller/app.dart'
     show runApp;
 
 /// Futures are intentionally not awaited
 export 'package:pedantic/pedantic.dart' show unawaited;
+
+// Replace 'dart:io' for Web applications
+export 'package:universal_platform/universal_platform.dart';
 
 /// MVC
 export 'package:mvc_pattern/mvc_pattern.dart'
@@ -60,6 +63,9 @@ export 'package:mvc_application/src/view/utils/loading_screen.dart';
 /// Fields
 export 'package:mvc_application/src/view/utils/field_widgets.dart';
 
+/// TimeZone
+export 'package:mvc_application/src/view/utils/timezone.dart';
+
 /// Menus
 export 'package:mvc_application/src/view/appmenu.dart' show AppMenu, Menu;
 
@@ -68,3 +74,6 @@ export 'package:mvc_application/src/view/uxutils/view.dart';
 
 /// Preferences
 export 'package:prefs/prefs.dart' show Prefs;
+
+/// Translations
+export 'package:i10n_translator/i10n.dart' show I10n, I10nDelegate;

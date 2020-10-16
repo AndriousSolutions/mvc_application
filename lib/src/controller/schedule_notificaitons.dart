@@ -29,10 +29,14 @@ import 'dart:ui' show Color;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:timezone/timezone.dart';
+
 import 'package:mvc_application/view.dart' show App;
 import 'package:mvc_application/controller.dart' show HandleError;
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+export 'dart:typed_data' show Int64List;
 
 /// Export those classes the user is likely to use and pass in.
 export 'package:flutter_local_notifications/flutter_local_notifications.dart'
@@ -65,8 +69,6 @@ export 'package:flutter_local_notifications/flutter_local_notifications.dart'
         SelectNotificationCallback,
         Time;
 
-export 'dart:typed_data' show Int64List;
-
 export 'package:flutter/material.dart' show Color;
 
 class ScheduleNotifications with HandleError {
@@ -76,7 +78,7 @@ class ScheduleNotifications with HandleError {
     this.channelName,
     this.channelDescription, {
     String appIcon,
-    DateTime schedule,
+    TZDateTime schedule,
     String title,
     String body,
     String payload,
@@ -114,7 +116,6 @@ class ScheduleNotifications with HandleError {
     String category,
     RepeatInterval repeatInterval,
     Day day,
-    Time notificationTime,
     SelectNotificationCallback onSelectNotification,
     bool requestAlertPermission,
     bool requestSoundPermission,
@@ -143,8 +144,8 @@ class ScheduleNotifications with HandleError {
     _payload = payload;
     _androidAllowWhileIdle = androidAllowWhileIdle ?? false;
     _icon = icon;
-    _importance = importance ?? Importance.Default;
-    _priority = priority ?? Priority.Default;
+    _importance = importance ?? Importance.defaultImportance;
+    _priority = priority ?? Priority.defaultPriority;
     _styleInformation = styleInformation;
     _playSound = playSound; // ?? false;
     _sound = sound;
@@ -152,7 +153,7 @@ class ScheduleNotifications with HandleError {
     _vibrationPattern = vibrationPattern;
     _groupKey = groupKey;
     _setAsGroupSummary = setAsGroupSummary;
-    _groupAlertBehavior = groupAlertBehavior ?? GroupAlertBehavior.All;
+    _groupAlertBehavior = groupAlertBehavior ?? GroupAlertBehavior.all;
     _autoCancel = autoCancel ?? true;
     _ongoing = ongoing;
     _color = color;
@@ -165,18 +166,17 @@ class ScheduleNotifications with HandleError {
     _progress = progress ?? 0;
     _indeterminate = indeterminate ?? false;
     _channelAction =
-        channelAction ?? AndroidNotificationChannelAction.CreateIfNotExists;
+        channelAction ?? AndroidNotificationChannelAction.createIfNotExists;
     _enableLights = enableLights ?? true;
     _ledColor = ledColor ?? const Color.fromARGB(255, 255, 0, 0);
     _ledOnMs = ledOnMs ?? 1000;
     _ledOffMs = ledOffMs ?? 500;
     _ticker = ticker;
-    _visibility = visibility ?? NotificationVisibility.Private;
+    _visibility = visibility ?? NotificationVisibility.private;
     _timeoutAfter = timeoutAfter;
     _category = category;
     _repeatInterval = repeatInterval;
     _day = day;
-    _notificationTime = notificationTime;
     _selectNotificationCallback = onSelectNotification;
     _requestAlertPermission = requestAlertPermission ?? true;
     _requestSoundPermission = requestSoundPermission ?? true;
@@ -246,7 +246,7 @@ class ScheduleNotifications with HandleError {
   String _category;
   RepeatInterval _repeatInterval;
   Day _day;
-  Time _notificationTime;
+//  Time _notificationTime;
   SelectNotificationCallback _selectNotificationCallback;
   bool _requestAlertPermission;
   bool _requestSoundPermission;
@@ -320,51 +320,129 @@ class ScheduleNotifications with HandleError {
     List<IOSNotificationAttachment> attachments,
   }) async {
     // No need to continue.
-    if (_init) return _init;
+    if (_init) {
+      return _init;
+    }
 
-    if (appIcon != null && appIcon.trim().isEmpty) appIcon = null;
+    if (appIcon != null && appIcon.trim().isEmpty) {
+      appIcon = null;
+    }
     appIcon ??= _appIcon;
     // init parameters take over initial parameter values.
-    if (schedule != null) _schedule = schedule;
-    if (title != null) _title = title;
-    if (body != null) _body = body;
-    if (payload != null) _payload = payload;
-    if (androidAllowWhileIdle != null)
+    if (schedule != null) {
+      _schedule = schedule;
+    }
+    if (title != null) {
+      _title = title;
+    }
+    if (body != null) {
+      _body = body;
+    }
+    if (payload != null) {
+      _payload = payload;
+    }
+    if (androidAllowWhileIdle != null) {
       _androidAllowWhileIdle = androidAllowWhileIdle;
-    if (icon != null) _icon = icon;
-    if (importance != null) _importance = importance;
-    if (priority != null) _priority = priority;
-    if (styleInformation != null) _styleInformation = styleInformation;
-    if (playSound != null) _playSound = playSound;
-    if (sound != null) _sound = sound;
-    if (enableVibration != null) _enableVibration = enableVibration;
-    if (vibrationPattern != null) _vibrationPattern = vibrationPattern;
-    if (groupKey != null) _groupKey = groupKey;
-    if (setAsGroupSummary != null) _setAsGroupSummary = setAsGroupSummary;
-    if (groupAlertBehavior != null) _groupAlertBehavior = groupAlertBehavior;
-    if (autoCancel != null) _autoCancel = autoCancel;
-    if (ongoing != null) _ongoing = ongoing;
-    if (color != null) _color = color;
-    if (largeIcon != null) _largeIcon = largeIcon;
-    if (onlyAlertOnce != null) _onlyAlertOnce = onlyAlertOnce;
-    if (showWhen != null) _showWhen = showWhen;
-    if (channelShowBadge != null) _channelShowBadge = channelShowBadge;
-    if (showProgress != null) _showProgress = showProgress;
-    if (maxProgress != null) _maxProgress = maxProgress;
-    if (progress != null) _progress = progress;
-    if (indeterminate != null) _indeterminate = indeterminate;
-    if (channelAction != null) _channelAction = channelAction;
-    if (enableLights != null) _enableLights = enableLights;
-    if (ledColor != null) _ledColor = ledColor;
-    if (ledOnMs != null) _ledOnMs = ledOnMs;
-    if (ledOffMs != null) _ledOffMs = ledOffMs;
-    if (ticker != null) _ticker = ticker;
-    if (visibility != null) _visibility = visibility;
-    if (timeoutAfter != null) _timeoutAfter = timeoutAfter;
-    if (category != null) _category = category;
-    if (repeatInterval != null) _repeatInterval = repeatInterval;
-    if (day != null) _day = day;
-    if (notificationTime != null) _notificationTime = notificationTime;
+    }
+    if (icon != null) {
+      _icon = icon;
+    }
+    if (importance != null) {
+      _importance = importance;
+    }
+    if (priority != null) {
+      _priority = priority;
+    }
+    if (styleInformation != null) {
+      _styleInformation = styleInformation;
+    }
+    if (playSound != null) {
+      _playSound = playSound;
+    }
+    if (sound != null) {
+      _sound = sound;
+    }
+    if (enableVibration != null) {
+      _enableVibration = enableVibration;
+    }
+    if (vibrationPattern != null) {
+      _vibrationPattern = vibrationPattern;
+    }
+    if (groupKey != null) {
+      _groupKey = groupKey;
+    }
+    if (setAsGroupSummary != null) {
+      _setAsGroupSummary = setAsGroupSummary;
+    }
+    if (groupAlertBehavior != null) {
+      _groupAlertBehavior = groupAlertBehavior;
+    }
+    if (autoCancel != null) {
+      _autoCancel = autoCancel;
+    }
+    if (ongoing != null) {
+      _ongoing = ongoing;
+    }
+    if (color != null) {
+      _color = color;
+    }
+    if (largeIcon != null) {
+      _largeIcon = largeIcon;
+    }
+    if (onlyAlertOnce != null) {
+      _onlyAlertOnce = onlyAlertOnce;
+    }
+    if (showWhen != null) {
+      _showWhen = showWhen;
+    }
+    if (channelShowBadge != null) {
+      _channelShowBadge = channelShowBadge;
+    }
+    if (showProgress != null) {
+      _showProgress = showProgress;
+    }
+    if (maxProgress != null) {
+      _maxProgress = maxProgress;
+    }
+    if (progress != null) {
+      _progress = progress;
+    }
+    if (indeterminate != null) {
+      _indeterminate = indeterminate;
+    }
+    if (channelAction != null) {
+      _channelAction = channelAction;
+    }
+    if (enableLights != null) {
+      _enableLights = enableLights;
+    }
+    if (ledColor != null) {
+      _ledColor = ledColor;
+    }
+    if (ledOnMs != null) {
+      _ledOnMs = ledOnMs;
+    }
+    if (ledOffMs != null) {
+      _ledOffMs = ledOffMs;
+    }
+    if (ticker != null) {
+      _ticker = ticker;
+    }
+    if (visibility != null) {
+      _visibility = visibility;
+    }
+    if (timeoutAfter != null) {
+      _timeoutAfter = timeoutAfter;
+    }
+    if (category != null) {
+      _category = category;
+    }
+    if (repeatInterval != null) {
+      _repeatInterval = repeatInterval;
+    }
+    if (day != null) {
+      _day = day;
+    }
     onSelectNotification ??=
         _selectNotificationCallback ?? _onSelectNotification;
     requestAlertPermission ??= _requestAlertPermission;
@@ -374,16 +452,28 @@ class ScheduleNotifications with HandleError {
     defaultPresentSound ??= _defaultPresentSound;
     defaultPresentBadge ??= _defaultPresentBadge;
     onDidReceiveLocalNotification ??= _onDidReceiveLocalNotification;
-    if (presentAlert != null) _presentAlert = presentAlert;
-    if (presentSound != null) _presentSound = presentSound;
-    if (presentBadge != null) _presentBadge = presentBadge;
-    if (soundFile != null) _soundFile = soundFile;
-    if (badgeNumber != null) _badgeNumber = badgeNumber;
-    if (attachments != null) _attachments = attachments;
+    if (presentAlert != null) {
+      _presentAlert = presentAlert;
+    }
+    if (presentSound != null) {
+      _presentSound = presentSound;
+    }
+    if (presentBadge != null) {
+      _presentBadge = presentBadge;
+    }
+    if (soundFile != null) {
+      _soundFile = soundFile;
+    }
+    if (badgeNumber != null) {
+      _badgeNumber = badgeNumber;
+    }
+    if (attachments != null) {
+      _attachments = attachments;
+    }
 
     //
     try {
-      var initializationSettingsIOS = IOSInitializationSettings(
+      final initializationSettingsIOS = IOSInitializationSettings(
         requestAlertPermission: requestAlertPermission,
         requestBadgePermission: requestSoundPermission,
         requestSoundPermission: requestBadgePermission,
@@ -397,8 +487,10 @@ class ScheduleNotifications with HandleError {
 
       WidgetsFlutterBinding.ensureInitialized();
 
-      var initializationSettings = InitializationSettings(
-          AndroidInitializationSettings(_appIcon), initializationSettingsIOS);
+      final initializationSettings = InitializationSettings(
+        android: AndroidInitializationSettings(_appIcon),
+        iOS: initializationSettingsIOS,
+      );
 
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -418,7 +510,7 @@ class ScheduleNotifications with HandleError {
     _flutterLocalNotificationsPlugin = null;
   }
 
-  /// Returns the underlying platform-specific implementation of given type [T], which
+  /// Returns the underlying platform-specific implementation of given generic type T, which
   /// must be a concrete subclass of [FlutterLocalNotificationsPlatform](https://pub.dev/documentation/flutter_local_notifications_platform_interface/latest/flutter_local_notifications_platform_interface/FlutterLocalNotificationsPlatform-class.html).
   Future<bool> resolveIOSImplementation({
     bool alert = true,
@@ -426,8 +518,11 @@ class ScheduleNotifications with HandleError {
     bool sound = true,
   }) async {
     assert(_init, 'ScheduleNotifications: Failed to call init() first!');
-    if (!_init) return false;
-    var implementation;
+
+    if (!_init) {
+      return false;
+    }
+    IOSFlutterLocalNotificationsPlugin implementation;
     try {
       implementation = _flutterLocalNotificationsPlugin
           ?.resolvePlatformSpecificImplementation<
@@ -498,7 +593,7 @@ class ScheduleNotifications with HandleError {
     List<IOSNotificationAttachment> attachments,
   }) {
     //
-    var notificationSpecifics = _notificationDetails(
+    final notificationSpecifics = _notificationDetails(
       title,
       body,
       payload,
@@ -548,7 +643,9 @@ class ScheduleNotifications with HandleError {
       //
       try {
         //
-        if (id == null || id < 0) id = Random().nextInt(999);
+        if (id == null || id < 0) {
+          id = Random().nextInt(999);
+        }
 
         _flutterLocalNotificationsPlugin.show(
           id,
@@ -566,12 +663,14 @@ class ScheduleNotifications with HandleError {
   }
 
   int schedule(
-    DateTime schedule, {
+    TZDateTime schedule, {
     int id,
     String title,
     String body,
     String payload,
     bool androidAllowWhileIdle,
+    UILocalNotificationDateInterpretation uiLocalNotificationDateInterpretation,
+    ScheduledNotificationRepeatFrequency scheduledNotificationRepeatFrequency,
     String icon,
     Importance importance,
     Priority priority,
@@ -618,7 +717,7 @@ class ScheduleNotifications with HandleError {
       return -1;
     }
 
-    var notificationSpecifics = _notificationDetails(
+    final notificationSpecifics = _notificationDetails(
       title,
       body,
       payload,
@@ -666,18 +765,24 @@ class ScheduleNotifications with HandleError {
       id = -1;
     } else {
       //
-      if (id == null || id < 0) id = Random().nextInt(999);
+      if (id == null || id < 0) {
+        id = Random().nextInt(999);
+      }
 
       try {
         //
-        _flutterLocalNotificationsPlugin.schedule(
+        _flutterLocalNotificationsPlugin.zonedSchedule(
           id,
           title,
           body,
           schedule,
           notificationSpecifics,
-          payload: payload,
+          uiLocalNotificationDateInterpretation:
+              uiLocalNotificationDateInterpretation,
           androidAllowWhileIdle: androidAllowWhileIdle,
+          payload: payload,
+          scheduledNotificationRepeatFrequency:
+              scheduledNotificationRepeatFrequency,
         );
       } catch (ex) {
         id = -1;
@@ -734,10 +839,12 @@ class ScheduleNotifications with HandleError {
   }) {
     repeatInterval ??= _repeatInterval;
 
-    if (repeatInterval == null) return -1;
+    if (repeatInterval == null) {
+      return -1;
+    }
 
     //
-    var notificationSpecifics = _notificationDetails(
+    final notificationSpecifics = _notificationDetails(
       title,
       body,
       payload,
@@ -787,7 +894,9 @@ class ScheduleNotifications with HandleError {
       //
       try {
         //
-        if (id == null || id < 0) id = Random().nextInt(999);
+        if (id == null || id < 0) {
+          id = Random().nextInt(999);
+        }
 
         _flutterLocalNotificationsPlugin.periodicallyShow(
           id,
@@ -806,12 +915,14 @@ class ScheduleNotifications with HandleError {
   }
 
   int showDailyAtTime(
-    Time notificationTime, {
+    TZDateTime schedule, {
     int id,
     String title,
     String body,
     String payload,
     bool androidAllowWhileIdle,
+    UILocalNotificationDateInterpretation uiLocalNotificationDateInterpretation,
+    ScheduledNotificationRepeatFrequency scheduledNotificationRepeatFrequency,
     String icon,
     Importance importance,
     Priority priority,
@@ -850,12 +961,14 @@ class ScheduleNotifications with HandleError {
     int badgeNumber,
     List<IOSNotificationAttachment> attachments,
   }) {
-    notificationTime ??= _notificationTime;
+    schedule ??= _schedule;
 
-    if (notificationTime == null) return -1;
+    if (schedule == null) {
+      return -1;
+    }
 
     //
-    var notificationSpecifics = _notificationDetails(
+    final notificationSpecifics = _notificationDetails(
       title,
       body,
       payload,
@@ -905,15 +1018,22 @@ class ScheduleNotifications with HandleError {
       //
       try {
         //
-        if (id == null || id < 0) id = Random().nextInt(999);
+        if (id == null || id < 0) {
+          id = Random().nextInt(999);
+        }
 
-        _flutterLocalNotificationsPlugin.showDailyAtTime(
+        _flutterLocalNotificationsPlugin.zonedSchedule(
           id,
           title,
           body,
-          notificationTime,
+          schedule,
           notificationSpecifics,
           payload: payload,
+          uiLocalNotificationDateInterpretation:
+              uiLocalNotificationDateInterpretation,
+          androidAllowWhileIdle: androidAllowWhileIdle,
+          scheduledNotificationRepeatFrequency:
+              scheduledNotificationRepeatFrequency,
         );
       } catch (ex) {
         id = -1;
@@ -925,12 +1045,15 @@ class ScheduleNotifications with HandleError {
 
   int showWeeklyAtDayAndTime(
     Day day,
-    Time notificationTime, {
+    TZDateTime schedule, {
     int id,
     String title,
     String body,
     String payload,
     bool androidAllowWhileIdle,
+    NotificationDetails notificationDetails,
+    UILocalNotificationDateInterpretation uiLocalNotificationDateInterpretation,
+    ScheduledNotificationRepeatFrequency scheduledNotificationRepeatFrequency,
     String icon,
     Importance importance,
     Priority priority,
@@ -971,12 +1094,14 @@ class ScheduleNotifications with HandleError {
   }) {
     day ??= _day;
 
-    notificationTime ??= _notificationTime;
+    schedule ??= _schedule;
 
-    if (day == null || notificationTime == null) return -1;
+    if (day == null || schedule == null) {
+      return -1;
+    }
 
     //
-    var notificationSpecifics = _notificationDetails(
+    final notificationSpecifics = _notificationDetails(
       title,
       body,
       payload,
@@ -1026,16 +1151,22 @@ class ScheduleNotifications with HandleError {
       //
       try {
         //
-        if (id == null || id < 0) id = Random().nextInt(999);
+        if (id == null || id < 0) {
+          id = Random().nextInt(999);
+        }
 
-        _flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
+        _flutterLocalNotificationsPlugin.zonedSchedule(
           id,
           title,
           body,
-          day,
-          notificationTime,
-          notificationSpecifics,
+          schedule,
+          notificationDetails,
+          uiLocalNotificationDateInterpretation:
+              uiLocalNotificationDateInterpretation,
+          androidAllowWhileIdle: androidAllowWhileIdle,
           payload: payload,
+          scheduledNotificationRepeatFrequency:
+              scheduledNotificationRepeatFrequency,
         );
       } catch (ex) {
         id = -1;
@@ -1217,7 +1348,10 @@ class ScheduleNotifications with HandleError {
         attachments: attachments,
       );
 
-      notificationSpecifics = NotificationDetails(androidSettings, iOSSettings);
+      notificationSpecifics = NotificationDetails(
+        android: androidSettings,
+        iOS: iOSSettings,
+      );
     } catch (ex) {
       notificationSpecifics = null;
       getError(ex);
@@ -1227,7 +1361,9 @@ class ScheduleNotifications with HandleError {
 
   /// Cancel a specific notification.
   Future<void> cancel(int id) async {
-    if (id == null || id < 0) return;
+    if (id == null || id < 0) {
+      return;
+    }
     await _flutterLocalNotificationsPlugin.cancel(id);
     return;
   }
@@ -1243,18 +1379,19 @@ class ScheduleNotifications with HandleError {
   Future<List<PendingNotificationRequest>> pendingNotificationRequests() =>
       _flutterLocalNotificationsPlugin.pendingNotificationRequests();
 
-  Future<void> _onSelectNotification(String payload) {
-    if (payload == null || payload.trim().isEmpty) return null;
-    return showDialog(
-      context: App.context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16.0))),
-          title: Text('PayLoad'),
-          content: Text('Payload : $payload'),
-        );
-      },
-    );
+  void _onSelectNotification(String payload) {
+    if (payload != null || payload.trim().isNotEmpty) {
+      showDialog(
+        context: App.context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            title: const Text('PayLoad'),
+            content: Text('Payload : $payload'),
+          );
+        },
+      );
+    }
   }
 }

@@ -32,3 +32,5 @@ export 'package:mvc_application/src/view/uxutils/src/view/common_widgets/custom_
 export 'package:mvc_application/src/view/uxutils/src/view/nav_bottom_bar.dart';
 
 export 'package:mvc_application/src/view/uxutils/src/view/show_cupertino_date_picker.dart';
+
+export 'package:mvc_application/src/view/uxutils/src/view/tab_buttons.dart';

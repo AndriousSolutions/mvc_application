@@ -31,13 +31,13 @@ class ColorPicker {
 
   static Color _color = Colors.red;
 
-  static ColorSwatch get colorSwatch => _colorSwatch;
-  static set colorSwatch(ColorSwatch swatch) {
+  static ColorSwatch<int> get colorSwatch => _colorSwatch;
+  static set colorSwatch(ColorSwatch<int> swatch) {
     _color = swatch;
     _colorSwatch = swatch;
   }
 
-  static ColorSwatch _colorSwatch = Colors.red;
+  static ColorSwatch<int> _colorSwatch = Colors.red;
 
   static bool allowShades = false;
   static double get circleSize => _circleSize;
@@ -56,23 +56,22 @@ class ColorPicker {
   static ValueChanged<Color> _onColorChange;
 
   // ignore: avoid_setters_without_getters
-  static set onChange(ValueChanged<ColorSwatch> func) => _onChange = func;
-  static ValueChanged<ColorSwatch> _onChange;
+  static set onChange(ValueChanged<ColorSwatch<int>> func) => _onChange = func;
+  static ValueChanged<ColorSwatch<int>> _onChange;
 
-  static List<ColorSwatch> get colors => Colors.primaries;
+  static List<ColorSwatch<int>> get colors => Colors.primaries;
 
-  static Text title = const Text('Color Theme');
+//  static Text title = const Text('Colour Theme');
 
-  static Future<ColorSwatch> showColorPicker({
+  static Future<ColorSwatch<int>> showColorPicker({
     @required BuildContext context,
     ValueChanged<Color> onColorChange,
-    ValueChanged<ColorSwatch> onChange,
+    ValueChanged<ColorSwatch<int>> onChange,
     bool shrinkWrap = false,
   }) {
-    return showDialog<ColorSwatch>(
+    return showDialog<ColorSwatch<int>>(
         context: context,
-        builder: (BuildContext context) =>
-            SimpleDialog(title: title, children: <Widget>[
+        builder: (BuildContext context) => SimpleDialog(children: <Widget>[
               MaterialColorPicker(
                 selectedColor: _color,
                 onColorChange: (Color color) {
@@ -85,7 +84,7 @@ class ColorPicker {
                   }
                   Navigator.pop(context, color);
                 },
-                onMainColorChange: (ColorSwatch color) {
+                onMainColorChange: (ColorSwatch<dynamic> color) {
                   _color = color;
                   _colorSwatch = color;
                   if (onChange != null) {

@@ -27,11 +27,11 @@ import 'package:flutter/material.dart'
         PopupMenuEntry,
         PopupMenuItem,
         showAboutDialog,
-        Text,
         ThemeData,
         Widget;
 
-import 'package:mvc_application/view.dart' show App, ColorPicker, StateMVC;
+import 'package:mvc_application/view.dart'
+    show App, ColorPicker, I10n, StateMVC;
 
 import 'package:mvc_application/controller.dart' show Prefs;
 
@@ -67,8 +67,8 @@ class AppMenu {
     _children = children;
 
     List<PopupMenuEntry<dynamic>> menuItems = [
-      PopupMenuItem<dynamic>(value: 'Color', child: ColorPicker.title),
-      const PopupMenuItem<dynamic>(value: 'About', child: Text('About'))
+      PopupMenuItem<dynamic>(value: 'Color', child: I10n.t('Colour Theme')),
+      PopupMenuItem<dynamic>(value: 'About', child: I10n.t('About'))
     ];
 
     if (_menu != null) {
@@ -111,7 +111,7 @@ class AppMenu {
       case 'About':
         showAboutDialog(
             context: _state.context,
-            applicationName: _applicationName ?? App?.vw?.title ?? '',
+            applicationName: I10n.s(_applicationName ?? App?.vw?.title ?? ''),
             applicationVersion: _applicationVersion,
             applicationIcon: _applicationIcon,
             applicationLegalese: _applicationLegalese,

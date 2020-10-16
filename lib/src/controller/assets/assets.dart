@@ -110,7 +110,9 @@ class Assets {
     /// In case 'assets' begins the key or if '/' begins the key.
     final path = key.indexOf(_dir) == 0
         ? ''
-        : key.substring(0, 0) == '/' ? _dir : '$_dir/';
+        : key.substring(0, 0) == '/'
+            ? _dir
+            : '$_dir/';
     return path;
   }
 }
