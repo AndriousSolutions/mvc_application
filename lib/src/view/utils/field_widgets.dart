@@ -543,6 +543,7 @@ class FieldWidgets<T> extends DataFieldItem {
     return newWidget;
   }
 
+  // ignore: non_constant_identifier_names
   m.TextFormField TextFormField({
     TextEditingController controller,
     String initialValue,

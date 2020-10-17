@@ -1,3 +1,8 @@
+## 5.13.0+2
+  October 17, 2020
+- switchButtons in class _DialogWindow
+- update README.md
+
 ## 5.13.0
  October 16, 2020
 - Incorporate text translation with package, I10n_translator 

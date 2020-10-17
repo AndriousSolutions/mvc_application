@@ -148,19 +148,21 @@ void dialogBox({
   VoidCallback press01,
   VoidCallback press02,
   bool barrierDismissible = false,
+  bool switchButtons = false,
 }) {
   showDialog<bool>(
       context: context,
       barrierDismissible: barrierDismissible,
       builder: (BuildContext context) {
         return _DialogWindow(
-                context: context,
-                title: title,
-                button01: button01,
-                button02: button02,
-                press01: press01,
-                press02: press02)
-            .show();
+          context: context,
+          title: title,
+          button01: button01,
+          button02: button02,
+          press01: press01,
+          press02: press02,
+          switchButtons: switchButtons,
+        ).show();
       });
 }
 
@@ -172,12 +174,14 @@ class _DialogWindow with DialogOptions {
     Option button02,
     VoidCallback press01,
     VoidCallback press02,
+    bool switchButtons,
   }) {
     this.context = context;
     this.button01 = button01;
     this.button02 = button02;
     this.press01 = press01;
     this.press02 = press02;
+    this.switchButtons = switchButtons;
   }
   final String title;
 
@@ -195,30 +199,36 @@ mixin DialogOptions {
   Option button02;
   VoidCallback press01;
   VoidCallback press02;
+  bool switchButtons;
 
   List<Widget> _listOptions() {
     final List<Widget> opList = [];
-    Option option;
+    Option option01, option02;
     if (button01 != null || press01 != null) {
-      option = Option(
+      option01 = Option(
           text: button01?.text ?? 'OK',
           onPressed: press01 ?? button01.onPressed,
           result: true);
     } else {
-      option = OKOption();
+      option01 = OKOption();
     }
-    opList.add(_simpleOption(option));
     if (button02 != null || press02 != null) {
-      option = Option(
+      option02 = Option(
           text: button02?.text ?? 'Cancel',
           onPressed: press02 ?? button02.onPressed,
           result: false);
-      opList.add(_simpleOption(option));
     } else {
-      if (option is! OKOption) {
-        option = CancelOption();
-        opList.add(_simpleOption(option));
+      if (option01 is! OKOption) {
+        option02 = CancelOption();
+        opList.add(_simpleOption(option02));
       }
+    }
+    if (switchButtons != null && switchButtons) {
+      opList.add(_simpleOption(option02));
+      opList.add(_simpleOption(option01));
+    }else{
+      opList.add(_simpleOption(option01));
+      opList.add(_simpleOption(option02));
     }
     return opList;
   }
@@ -334,6 +344,7 @@ class DialogBox with DialogOptions {
     Option button02,
     VoidCallback press01,
     VoidCallback press02,
+    bool switchButtons,
     this.body,
     this.actions,
     this.barrierDismissible = false,
@@ -343,6 +354,7 @@ class DialogBox with DialogOptions {
     this.button02 = button02;
     this.press01 = press01;
     this.press02 = press02;
+    this.switchButtons = switchButtons;
   }
   final String title;
   final List<Widget> body;
@@ -352,6 +364,11 @@ class DialogBox with DialogOptions {
   Future<void> show({
     BuildContext context,
     String title,
+    Option button01,
+    Option button02,
+    VoidCallback press01,
+    VoidCallback press02,
+    bool switchButtons,
     String msg,
     List<Widget> body,
     List<Widget> actions,
@@ -360,12 +377,16 @@ class DialogBox with DialogOptions {
     context = context ?? this.context;
     title = title ?? this.title;
     title ??= '';
+    this.button01 ??= button01;
+    this.button02 ??= button02;
+    this.press01 ??= press01;
+    this.press02 ??= press02;
+    this.switchButtons ??= switchButtons;
     body = body ?? this.body;
     body ??= [Container()];
-    actions = actions ?? this.actions;
+    actions ??= this.actions;
     actions ??= _listOptions();
-    barrierDismissible = barrierDismissible ?? this.barrierDismissible;
-    barrierDismissible ??= false;
+    barrierDismissible ??= this.barrierDismissible ?? false;
     return showDialog<void>(
         context: context,
         barrierDismissible: barrierDismissible,

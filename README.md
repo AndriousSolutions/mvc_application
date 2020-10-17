@@ -17,7 +17,7 @@ I know I should be changing the '**major**' instead, but since I chose to releas
 And so, in this case, add this to your package's pubspec.yaml file instead:
 ```javascript
 dependencies:
-   mvc_application:^5.11.0
+   mvc_application:^5.13.0
 ```
 For more information on version numbers: [The importance of semantic versioning](https://medium.com/@xabaras/the-importance-of-semantic-versioning-9b78e8e59bba).
 
