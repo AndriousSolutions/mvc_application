@@ -1,232 +1,78 @@
-///
-/// Copyright (C) 2018 Andrious Solutions
-///
-/// Licensed under the Apache License, Version 2.0 (the "License");
-/// you may not use this file except in compliance with the License.
-/// You may obtain a copy of the License at
-///
-///    http://www.apache.org/licenses/LICENSE-2.0
-///
-/// Unless required by applicable law or agreed to in writing, software
-/// distributed under the License is distributed on an "AS IS" BASIS,
-/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-/// See the License for the specific language governing permissions and
-/// limitations under the License.
-///
-///          Created  24 Dec 2018
-///
-
-//import 'dart:io' show Platform;
-
 import 'dart:async' show Future, StreamSubscription;
 
 // Replace 'dart:io' for Web applications
 import 'package:universal_platform/universal_platform.dart';
 
-import 'package:flutter/foundation.dart'
-    show FlutterExceptionHandler, Key, kIsWeb, mustCallSuper, protected;
-
-import 'package:flutter/rendering.dart';
-
-import 'package:flutter/material.dart';
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:package_info/package_info.dart' show PackageInfo;
-
-import 'package:flutter/widgets.dart'
-    show
-        AsyncSnapshot,
-        BuildContext,
-        Center,
-        Color,
-        ColorSwatch,
-        ConnectionState,
-        FlutterErrorDetails,
-        FutureBuilder,
-        GenerateAppTitle,
-        GlobalKey,
-        Key,
-        ListView,
-        Locale,
-        LocaleListResolutionCallback,
-        LocaleResolutionCallback,
-        Localizations,
-        LocalizationsDelegate,
-        Navigator,
-        NavigatorObserver,
-        NavigatorState,
-        RouteFactory,
-        State,
-        StatefulWidget,
-        StatelessWidget,
-        TargetPlatform,
-        Text,
-        TransitionBuilder,
-        Widget,
-        WidgetBuilder,
-        WidgetsBinding,
-        mustCallSuper,
-        protected,
-        required;
 
 import 'package:connectivity/connectivity.dart'
     show Connectivity, ConnectivityResult;
 
-import 'package:mvc_application/controller.dart'
-    show AppConMVC, AppController, ControllerMVC, HandleError;
-
-import 'package:mvc_application/view.dart' as v
-    show AppMenu, AppMVC, ErrorHandler, ReportErrorHandler, SetState;
-
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
-import 'package:mvc_application/controller.dart' show Assets, DeviceInfo;
+import 'package:mvc_application/model.dart';
 
-import 'package:mvc_application/model.dart' show Files;
+import 'package:mvc_application/view.dart' as v;
 
-import 'package:mvc_application/model.dart' show InstallFile;
+import 'package:mvc_application/controller.dart'
+    show ControllerMVC, DeviceInfo, HandleError;
 
-import 'package:prefs/prefs.dart' show Prefs;
+class App {
+  factory App() => _this ??= App._();
+  App._();
+  static App _this;
 
-/// Highlights UI while debugging.
-import 'package:flutter/rendering.dart' as debug;
-
-// Export the classes needed to use this file.
-export 'package:connectivity/connectivity.dart'
-    show Connectivity, ConnectivityResult;
-
-/// Error Screen Builder if an error occurs.
-typedef ErrorWidgetBuilder = Widget Function(
-    FlutterErrorDetails flutterErrorDetails);
-
-/// The widget passed to runApp(). It is a StatefulWidget.
-abstract class App extends v.AppMVC {
-  // extends StatefulWidget
-  // You must supply a 'View.'
-  App({
-    AppConMVC con,
-    Key key,
-    this.loadingScreen,
-    FlutterExceptionHandler errorHandler,
-    ErrorWidgetBuilder errorScreen,
-    v.ReportErrorHandler reportError,
-  })  : _errorHandler = v.ErrorHandler(
-            handler: errorHandler,
-            builder: errorScreen,
-            reportError: reportError),
-        super(con: con, key: key) {
-    // Listen to the device's connectivity.
-    addConnectivityListener(con);
+  /// Initialize the class with the AppState object.
+  bool setState(v.AppState vw) {
+    // Only assigned once with the first call.
+    _vw ??= vw;
+    return _vw != null;
   }
-  final v.ErrorHandler _errorHandler;
 
-  @protected
-  AppView createView();
+  /// Dispose the App properties.
+  void dispose() {
+    _connectivitySubscription?.cancel();
+    _connectivitySubscription = null;
+  }
 
-  /// Gives access to the App's View. The 'MyView' you first work with.
-  static AppView get vw => _vw;
-  static AppView _vw;
+  /// The App State object.
+  static v.AppState get vw => _vw;
+  static v.AppState _vw;
 
-  /// The snapshot used by the App's View.
-  static AsyncSnapshot<bool> get snapshot => _snapshot;
-  static AsyncSnapshot<bool> _snapshot;
-
-  final Widget loadingScreen;
-  static bool _hotReload = false;
+  /// Collect the device's information.
+  static Future<void> getDeviceInfo() async {
+    _packageInfo = await PackageInfo.fromPlatform();
+    // Collect Device Information
+    await DeviceInfo.init();
+  }
 
   /// More efficient widget tree rebuilds
   static final widgetsAppKey = GlobalKey();
 
-  @override
-  Widget build(BuildContext context) {
-    Assets.init(context);
-    _context = context;
-    return FutureBuilder<bool>(
-      future: initAsync(),
-      initialData: false,
-      builder: (_, snapshot) {
-        _snapshot = snapshot;
-        return _asyncBuilder(snapshot, loadingScreen);
-      },
-    );
-  }
-
-  /// Runs all the asynchronous operations necessary before the app can proceed.
-  @override
-  Future<bool> initAsync() async {
-    if (_hotReload) {
-      _vw = createView();
-      _vw?.con?.initApp();
-    } else {
-      // Initialize System Preferences
-      await Prefs.init();
-      await _initInternal();
-      // If not running on the Web.
-      if (!kIsWeb) {
-        _packageInfo = await PackageInfo.fromPlatform();
-        // Collect Device Information
-        await DeviceInfo.init();
-      }
-
-      // Supply a theme
-      themeData = _getThemeData();
-      iOSTheme = MaterialBasedCupertinoThemeData(materialTheme: themeData);
-      v.AppMenu.onChange();
-
-      _isInit = await super.initAsync();
-      if (_isInit) {
-        _vw = createView();
-        _isInit = await _vw?.initAsync();
-        if (_isInit) {
-          _vw?.con?.initApp();
-        }
-      }
-    }
-    return _isInit;
-  }
-
-  /// Clean up resources before the app is finally terminated.
-  @mustCallSuper
-  @override
-  void dispose() {
-    _context = null;
-    _scaffold = null;
-    _connectivitySubscription?.cancel();
-    _connectivitySubscription = null;
-    // Restore the original error handling.
-    _errorHandler.dispose();
-    Prefs.dispose();
-    // Assets.init(context); called in App.build() -gp
-    Assets.dispose();
-    super.dispose();
-  }
-
-  /// Run the CircularProgressIndicator() until asynchronous operations are
-  /// completed before the app proceeds.
-  Widget _asyncBuilder(AsyncSnapshot<bool> snapshot, Widget loading) {
-    if (snapshot.hasError) {
-      App._vw = AppError(snapshot.error);
-      return const _AppStatefulWidget();
-    } else if (snapshot.connectionState == ConnectionState.done &&
-        snapshot.hasData &&
-        snapshot.data) {
-      return const _AppStatefulWidget();
-    } else {
-      if (UniversalPlatform.isAndroid) {
-        // return const MaterialApp(
-        //     color: Colors.blue,
-        //     home: Center(child: CircularProgressIndicator()));
-        return const Center(child: CircularProgressIndicator());
-      } else {
-        return const Center(child: CupertinoActivityIndicator());
-      }
-    }
-  }
-
   /// Determine if the App initialized successfully.
+  // ignore: unnecessary_getters_setters
   static bool get isInit => _isInit;
-  static bool _isInit = false;
+  /// Set the init only once.
+  // ignore: unnecessary_getters_setters
+  static set isInit(bool init) => _isInit ??= init;
+  static bool _isInit;
+
+  /// Flag to set hot reload from now on.
+  // ignore: unnecessary_getters_setters
+  static bool get hotReload => _hotReload;
+  /// Once set, it will always hot reload.
+  // ignore: unnecessary_getters_setters
+  static set hotReload(bool hotReload) {
+    // It doesn't accept false.
+    // i.e. Once true, it stays true.
+    if(!hotReload){
+      return;
+    }
+    _hotReload = hotReload;
+  }
+  static bool _hotReload = false;
 
   // Use Material UI when explicitly specified or even when running in iOS
   /// Indicates if the App is running the Material interface theme.
@@ -249,102 +95,102 @@ abstract class App extends v.AppMVC {
   }
 
   /// Return the navigator key used by the App's View.
-  static GlobalKey<NavigatorState> get navigatorKey => _vw.navigatorKey;
+  static GlobalKey<NavigatorState> get navigatorKey => _vw?.navigatorKey;
   static set navigatorKey(GlobalKey<NavigatorState> v) {
     if (v != null) {
-      _vw.navigatorKey = v;
+      _vw?.navigatorKey = v;
     }
   }
 
   /// Returns the routes used by the App's View.
-  static Map<String, WidgetBuilder> get routes => _vw.routes;
+  static Map<String, WidgetBuilder> get routes => _vw?.routes;
   static set routes(Map<String, WidgetBuilder> v) {
     if (v != null) {
-      _vw.routes = v;
+      _vw?.routes = v;
     }
   }
 
   /// Returns to the initial route used by the App's View.
-  static String get initialRoute => _vw.initialRoute;
+  static String get initialRoute => _vw?.initialRoute;
   static set initialRoute(String v) {
     if (v != null) {
-      _vw.initialRoute = v;
+      _vw?.initialRoute = v;
     }
   }
 
   /// The route generator used when the app is navigated to a named route.
-  static RouteFactory get onGenerateRoute => _vw.onGenerateRoute;
+  static RouteFactory get onGenerateRoute => _vw?.onGenerateRoute;
   static set onGenerateRoute(RouteFactory v) {
     if (v != null) {
-      _vw.onGenerateRoute = v;
+      _vw?.onGenerateRoute = v;
     }
   }
 
   /// Called when [onGenerateRoute] fails except for the [initialRoute].
-  static RouteFactory get onUnknownRoute => _vw.onUnknownRoute;
+  static RouteFactory get onUnknownRoute => _vw?.onUnknownRoute;
   static set onUnknownRoute(RouteFactory v) {
     if (v != null) {
-      _vw.onUnknownRoute = v;
+      _vw?.onUnknownRoute = v;
     }
   }
 
   /// The list of observers for the [Navigator] for this app.
   static List<NavigatorObserver> get navigatorObservers =>
-      _vw.navigatorObservers;
+      _vw?.navigatorObservers;
   static set navigatorObservers(List<NavigatorObserver> v) {
     if (v != null) {
-      _vw.navigatorObservers = v;
+      _vw?.navigatorObservers = v;
     }
   }
 
   /// if neither [routes], or [onGenerateRoute] was passed.
-  static TransitionBuilder get builder => _vw.builder;
+  static TransitionBuilder get builder => _vw?.builder;
   static set builder(TransitionBuilder v) {
     if (v != null) {
-      _vw.builder = v;
+      _vw?.builder = v;
     }
   }
 
   /// Returns the title for the App's View.
-  static String get title => _vw.title;
+  static String get title => _vw?.title;
   static set title(String v) {
     if (v != null) {
-      _vw.title = v;
+      _vw?.title = v;
     }
   }
 
   /// Routine used to generate the App's title.
-  static GenerateAppTitle get onGenerateTitle => _vw.onGenerateTitle;
+  static GenerateAppTitle get onGenerateTitle => _vw?.onGenerateTitle;
   static set onGenerateTitle(GenerateAppTitle v) {
     if (v != null) {
-      _vw.onGenerateTitle = v;
+      _vw?.onGenerateTitle = v;
     }
   }
 
   // Allow it to be assigned null.
   /// The App's current Material theme.
   static ThemeData get themeData => _themeData;
-  static ThemeData _themeData;
   static set themeData(dynamic value) {
     if (value == null) {
       return;
     }
     if (value is ThemeData) {
-      App._themeData = value;
+      _themeData = value;
     } else if (value is CupertinoThemeData) {
       // Ignore the value
     } else if (value is! ColorSwatch) {
       // Ignore the value
-    } else if (App?._themeData == null) {
-      App._themeData = ThemeData(
+    } else if (_themeData == null) {
+      _themeData = ThemeData(
         primaryColor: value,
       );
     } else {
-      App._themeData = App?._themeData?.copyWith(
+      _themeData = _themeData?.copyWith(
         primaryColor: value,
       );
     }
   }
+  static ThemeData _themeData;
 
   /// The Apps's current Cupertino theme.
   static CupertinoThemeData get iOSTheme => _iOSTheme;
@@ -371,24 +217,24 @@ abstract class App extends v.AppMVC {
   }
 
   /// Returns the Color passed to the App's View.
-  static Color get color => _vw.color;
+  static Color get color => _vw?.color;
   static set color(Color v) {
     if (v != null) {
-      _vw.color = v;
+      _vw?.color = v;
     }
   }
 
   /// Returns the App's current locale.
   static Locale get locale =>
-      _vw.locale ??
-      Localizations.localeOf(_context, nullOk: true) ??
+      _vw?.locale ??
+      Localizations.localeOf(context, nullOk: true) ??
       _resolveLocales(
         WidgetsBinding.instance.window.locales,
-        _vw.supportedLocales,
+        _vw?.supportedLocales,
       );
   static set locale(Locale v) {
     if (v != null) {
-      _vw.locale = v;
+      _vw?.locale = v;
     }
   }
 
@@ -398,9 +244,9 @@ abstract class App extends v.AppMVC {
     Iterable<Locale> supportedLocales,
   ) {
     // Attempt to use localeListResolutionCallback.
-    if (_vw.localeListResolutionCallback != null) {
-      final Locale locale = _vw.localeListResolutionCallback(
-          preferredLocales, _vw.supportedLocales);
+    if (_vw?.localeListResolutionCallback != null) {
+      final Locale locale = _vw?.localeListResolutionCallback(
+          preferredLocales, _vw?.supportedLocales);
       if (locale != null) {
         return locale;
       }
@@ -412,10 +258,10 @@ abstract class App extends v.AppMVC {
             : null;
 
     // localeListResolutionCallback failed, falling back to localeResolutionCallback.
-    if (_vw.localeResolutionCallback != null) {
-      final Locale locale = _vw.localeResolutionCallback(
+    if (_vw?.localeResolutionCallback != null) {
+      final Locale locale = _vw?.localeResolutionCallback(
         preferred,
-        _vw.supportedLocales,
+        _vw?.supportedLocales,
       );
       if (locale != null) {
         return locale;
@@ -428,134 +274,128 @@ abstract class App extends v.AppMVC {
 
   /// Returns the App's current localizations delegates.
   static Iterable<LocalizationsDelegate<dynamic>> get localizationsDelegates =>
-      _vw.localizationsDelegates;
+      _vw?.localizationsDelegates;
   static set localizationsDelegates(
       Iterable<LocalizationsDelegate<dynamic>> v) {
     if (v != null) {
-      _vw.localizationsDelegates = v;
+      _vw?.localizationsDelegates = v;
     }
   }
 
   /// Resolves the App's locale.
   static LocaleResolutionCallback get localeResolutionCallback =>
-      _vw.localeResolutionCallback;
+      _vw?.localeResolutionCallback;
   static set localeResolutionCallback(LocaleResolutionCallback v) {
     if (v != null) {
-      _vw.localeResolutionCallback = v;
+      _vw?.localeResolutionCallback = v;
     }
   }
 
   /// Returns an iteration of the App's locales.
-  static Iterable<Locale> get supportedLocales => _vw.supportedLocales;
+  static Iterable<Locale> get supportedLocales => _vw?.supportedLocales;
   static set supportedLocales(Iterable<Locale> v) {
     if (v != null) {
-      _vw.supportedLocales = v;
+      _vw?.supportedLocales = v;
     }
   }
 
   /// If true, it paints a grid overlay on Material apps.
-  static bool get debugShowMaterialGrid => _vw.debugShowMaterialGrid;
+  static bool get debugShowMaterialGrid => _vw?.debugShowMaterialGrid;
   static set debugShowMaterialGrid(bool v) {
     if (v != null) {
-      _vw.debugShowMaterialGrid = v;
+      _vw?.debugShowMaterialGrid = v;
     }
   }
 
   /// If true, it turns on a performance overlay.
-  static bool get showPerformanceOverlay => _vw.showPerformanceOverlay;
+  static bool get showPerformanceOverlay => _vw?.showPerformanceOverlay;
   static set showPerformanceOverlay(bool v) {
     if (v != null) {
-      _vw.showPerformanceOverlay = v;
+      _vw?.showPerformanceOverlay = v;
     }
   }
 
   /// Checkerboard raster cache to speed up overall rendering.
   static bool get checkerboardRasterCacheImages =>
-      _vw.checkerboardRasterCacheImages;
+      _vw?.checkerboardRasterCacheImages;
   static set checkerboardRasterCacheImages(bool v) {
     if (v != null) {
-      _vw.checkerboardRasterCacheImages = v;
+      _vw?.checkerboardRasterCacheImages = v;
     }
   }
 
   /// Checkerboard layers rendered offscreen bitmaps.
-  static bool get checkerboardOffscreenLayers =>
-      _vw.checkerboardOffscreenLayers;
+  static bool get checkerboardOffscreenLayers => _vw?.checkerboardOffscreenLayers;
   static set checkerboardOffscreenLayers(bool v) {
     if (v != null) {
-      _vw.checkerboardOffscreenLayers = v;
+      _vw?.checkerboardOffscreenLayers = v;
     }
   }
 
   /// Shows an overlay of accessibility information
-  static bool get showSemanticsDebugger => _vw.showSemanticsDebugger;
+  static bool get showSemanticsDebugger => _vw?.showSemanticsDebugger;
   static set showSemanticsDebugger(bool v) {
     if (v != null) {
-      _vw.showSemanticsDebugger = v;
+      _vw?.showSemanticsDebugger = v;
     }
   }
 
   /// Shows a little "DEBUG" banner in checked mode.
-  static bool get debugShowCheckedModeBanner => _vw.debugShowCheckedModeBanner;
+  static bool get debugShowCheckedModeBanner => _vw?.debugShowCheckedModeBanner;
   static set debugShowCheckedModeBanner(bool v) {
     if (v != null) {
-      _vw.debugShowCheckedModeBanner = v;
+      _vw?.debugShowCheckedModeBanner = v;
     }
   }
 
   /// Each RenderBox to paint a box around its bounds.
-  static bool get debugPaintSizeEnabled => _vw.debugPaintSizeEnabled;
+  static bool get debugPaintSizeEnabled => _vw?.debugPaintSizeEnabled;
   static set debugPaintSizeEnabled(bool v) {
     if (v != null) {
-      _vw.debugPaintSizeEnabled = v;
+      _vw?.debugPaintSizeEnabled = v;
     }
   }
 
   /// RenderBox paints a line at its baselines.
-  static bool get debugPaintBaselinesEnabled => _vw.debugPaintBaselinesEnabled;
+  static bool get debugPaintBaselinesEnabled => _vw?.debugPaintBaselinesEnabled;
   static set debugPaintBaselinesEnabled(bool v) {
     if (v != null) {
-      _vw.debugPaintBaselinesEnabled = v;
+      _vw?.debugPaintBaselinesEnabled = v;
     }
   }
 
   /// Objects flash while they are being tapped.
-  static bool get debugPaintPointersEnabled => _vw.debugPaintPointersEnabled;
+  static bool get debugPaintPointersEnabled => _vw?.debugPaintPointersEnabled;
   static set debugPaintPointersEnabled(bool v) {
     if (v != null) {
-      _vw.debugPaintPointersEnabled = v;
+      _vw?.debugPaintPointersEnabled = v;
     }
   }
 
   /// Layer paints a box around its bound.
   static bool get debugPaintLayerBordersEnabled =>
-      _vw.debugPaintLayerBordersEnabled;
+      _vw?.debugPaintLayerBordersEnabled;
   static set debugPaintLayerBordersEnabled(bool v) {
     if (v != null) {
-      _vw.debugPaintLayerBordersEnabled = v;
+      _vw?.debugPaintLayerBordersEnabled = v;
     }
   }
 
   /// Overlay a rotating set of colors when repainting layers in checked mode.
-  static bool get debugRepaintRainbowEnabled => _vw.debugRepaintRainbowEnabled;
+  static bool get debugRepaintRainbowEnabled => _vw?.debugRepaintRainbowEnabled;
   static set debugRepaintRainbowEnabled(bool v) {
     if (v != null) {
-      _vw.debugRepaintRainbowEnabled = v;
+      _vw?.debugRepaintRainbowEnabled = v;
     }
   }
-
-  /// The BuildContext for the App's View.
-  static BuildContext get context => _context;
-  static BuildContext _context;
 
   /// The running platform
   static TargetPlatform get platform {
-    if (_platform == null && _context != null) {
-      _platform = Theme.of(_context).platform;
+    if (_platform == null && context != null) {
+      _platform = Theme.of(context).platform;
     }
     return _platform;
   }
-
   static TargetPlatform _platform;
 
   // Application information
@@ -577,24 +417,24 @@ abstract class App extends v.AppMVC {
   static bool get inDebugger => v.AppMVC.inDebugger;
 
   /// Refresh the root State object, AppView.
-  static void refresh() => _vw.refresh();
+  static void refresh() => _vw?.refresh();
 
   /// Catch and explicitly handle the error.
   static void catchError(Object ex) {
     if (ex is! Exception) {
       ex = Exception(ex.toString());
     }
-    _vw.catchError(ex);
+    _vw?.catchError(ex);
   }
 
+  /// The BuildContext for the App's View.
+  static BuildContext get context => _vw?.context;
+
   /// The Scaffold object for this App's View.
-  static ScaffoldState get scaffold => App._getScaffold();
-  static ScaffoldState _scaffold;
+  static ScaffoldState get scaffold => Scaffold.of(context, nullOk: true);
 
-  static ScaffoldState _getScaffold() =>
-      _scaffold ??= Scaffold.of(_context, nullOk: true);
-
-  static ThemeData _getThemeData() {
+  /// Return a pre-defined theme
+  static ThemeData getThemeData() {
     final theme = Prefs.getString('theme');
     ThemeData themeData;
     switch (theme) {
@@ -610,6 +450,7 @@ abstract class App extends v.AppMVC {
     return themeData;
   }
 
+  /// Determine the connectivity.
   static final Connectivity _connectivity = Connectivity();
 
   static StreamSubscription<ConnectivityResult> _connectivitySubscription;
@@ -625,6 +466,7 @@ abstract class App extends v.AppMVC {
   /// Indicates if the app has access to the Internet.
   static bool get isOnline => _connectivityStatus != 'none';
 
+  /// Connectivity listeners.
   static final Set<ConnectivityListener> _listeners = {};
 
   /// Add a Connectivity listener.
@@ -655,9 +497,9 @@ abstract class App extends v.AppMVC {
   static String get installNum => _installNum;
   static String _installNum;
 
-  // Internal Initialization routines.
-  static Future<void> _initInternal() async {
-//
+  /// Internal Initialization routines.
+  static Future<void> initInternal() async {
+    //
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
       for (final listener in _listeners) {
@@ -671,7 +513,7 @@ abstract class App extends v.AppMVC {
       _connectivityStatus = 'none';
     });
 
-    // If running on the web the rest of the code in incompatible.
+    // If running on the web the rest of the code is incompatible.
     if (kIsWeb) {
       return;
     }
@@ -695,495 +537,27 @@ abstract class App extends v.AppMVC {
   }
 }
 
-class _AppStatefulWidget extends StatefulWidget {
-  const _AppStatefulWidget({Key key}) : super(key: key);
-  @override
-  // ignore: no_logic_in_create_state
-  State createState() => App._vw;
+/// A Listener for the device's own connectivity status at any point in time.
+mixin ConnectivityListener {
+  void onConnectivityChanged(ConnectivityResult result);
 }
 
-/// The View for the app. The 'look and feel' for the whole app.
-/// This is a State object.
-class AppView extends AppViewState<_AppStatefulWidget> {
-  AppView({
-    this.key,
-    this.home,
-    AppController con,
-    List<ControllerMVC> controllers,
-    Object object,
-    GlobalKey<NavigatorState> navigatorKey,
-    Map<String, WidgetBuilder> routes,
-    String initialRoute,
-    RouteFactory onGenerateRoute,
-    RouteFactory onUnknownRoute,
-    List<NavigatorObserver> navigatorObservers,
-    TransitionBuilder builder,
-    String title,
-    GenerateAppTitle onGenerateTitle,
-    ThemeData theme,
-    CupertinoThemeData iOSTheme,
-    ThemeData darkTheme,
-    ThemeMode themeMode,
-    Color color,
-    Locale locale,
-    Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates,
-    LocaleListResolutionCallback localeListResolutionCallback,
-    LocaleResolutionCallback localeResolutionCallback,
-    Iterable<Locale> supportedLocales,
-    this.useMaterial,
-    this.useCupertino,
-    this.switchUI,
-    bool debugShowMaterialGrid,
-    bool showPerformanceOverlay,
-    bool checkerboardRasterCacheImages,
-    bool checkerboardOffscreenLayers,
-    bool showSemanticsDebugger,
-    bool debugShowCheckedModeBanner,
-    bool debugShowWidgetInspector,
-    bool debugPaintSizeEnabled,
-    bool debugPaintBaselinesEnabled,
-    bool debugPaintPointersEnabled,
-    bool debugPaintLayerBordersEnabled,
-    bool debugRepaintRainbowEnabled,
-    FlutterExceptionHandler errorHandler,
-    ErrorWidgetBuilder errorScreen,
-    v.ReportErrorHandler reportError,
-  }) : super(
-          con: con ?? AppController(),
-          controllers: controllers,
-          object: object,
-          navigatorKey: navigatorKey,
-          routes: routes,
-          initialRoute: initialRoute,
-          onGenerateRoute: onGenerateRoute,
-          onUnknownRoute: onUnknownRoute,
-          navigatorObservers: navigatorObservers,
-          builder: builder,
-          title: title,
-          onGenerateTitle: onGenerateTitle,
-          theme: theme,
-          iOSTheme: iOSTheme,
-          darkTheme: darkTheme,
-          themeMode: themeMode,
-          color: color,
-          locale: locale,
-          localizationsDelegates: localizationsDelegates,
-          localeListResolutionCallback: localeListResolutionCallback,
-          localeResolutionCallback: localeResolutionCallback,
-          supportedLocales: supportedLocales,
-          debugShowMaterialGrid: debugShowMaterialGrid,
-          showPerformanceOverlay: showPerformanceOverlay,
-          checkerboardRasterCacheImages: checkerboardRasterCacheImages,
-          checkerboardOffscreenLayers: checkerboardOffscreenLayers,
-          showSemanticsDebugger: showSemanticsDebugger,
-          debugShowWidgetInspector: debugShowWidgetInspector,
-          debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-          debugPaintSizeEnabled: debugPaintSizeEnabled,
-          debugPaintBaselinesEnabled: debugPaintBaselinesEnabled,
-          debugPaintPointersEnabled: debugPaintPointersEnabled,
-          debugPaintLayerBordersEnabled: debugPaintLayerBordersEnabled,
-          debugRepaintRainbowEnabled: debugRepaintRainbowEnabled,
-          errorHandler: errorHandler,
-          errorScreen: errorScreen,
-          reportError: reportError,
-        ) {
-    // In case null was explicitly passed in.
-    useMaterial ??= false;
-    useCupertino ??= false;
-    switchUI ??= false;
-
-    // if both useMaterial & useCupertino are set then rely on the Platform.
-    switchUI = switchUI && !useCupertino && !useMaterial;
-
-    useMaterial = kIsWeb ||
-        (useMaterial && !useCupertino) ||
-        (UniversalPlatform.isAndroid && !switchUI) ||
-        (UniversalPlatform.isIOS && switchUI);
-
-    _isMaterial = useMaterial;
-
-    useCupertino = (useCupertino && !useMaterial) ||
-        (UniversalPlatform.isIOS && !switchUI) ||
-        (UniversalPlatform.isAndroid && switchUI);
-
-    _isCupertino = useCupertino;
-  }
-  // Don't override fields
-//  @override
-//  final AppController con;
-  Key key;
-
-  Widget home;
-  // Explicitly use the Material theme
-  bool useMaterial;
-  // Explicitly use the Cupertino theme
-  bool useCupertino;
-  // Use Cupertino UI in Android and vice versa.
-  bool switchUI;
-
-  // The platform paradigm determined at startup. Can't be changed.
-  bool get isMaterial => _isMaterial;
-  bool _isMaterial;
-  bool get isCupertino => _isCupertino;
-  bool _isCupertino;
+/// Supply an MVC State object that hooks into the App class.
+abstract class StateMVC<T extends StatefulWidget> extends mvc.StateMVC<T>
+    with HandleError {
+  //
+  StateMVC([ControllerMVC controller]) : super(controller);
 
   @override
-  void initState() {
-    //
-    super.initState();
-
-    if (theme != null) {
-      App.themeData = theme;
-    } else {
-      final theme = onTheme();
-      if (theme != null) {
-        App.themeData = theme;
-      }
+  void refresh() {
+    if (mounted) {
+      super.refresh();
+      App.refresh();
     }
-
-    if (iOSTheme != null) {
-      App.iOSTheme = iOSTheme;
-    } else {
-      final iosTheme = oniOSTheme();
-      if (iosTheme != null) {
-        App.iOSTheme = iosTheme;
-      }
-    }
-  }
-
-  /// Override to impose your own WidgetsApp (like CupertinoApp or MaterialApp)
-  @override
-  Widget buildApp(BuildContext context) {
-    //
-    if (useCupertino) {
-      return CupertinoApp(
-        key: key ?? App.widgetsAppKey,
-        navigatorKey: navigatorKey ?? onNavigatorKey(),
-        home: home,
-        routes: routes ?? onRoutes() ?? const <String, WidgetBuilder>{},
-        initialRoute: initialRoute ?? onInitialRoute(),
-        onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
-        onUnknownRoute: onUnknownRoute ?? onOnUnknownRoute(),
-        navigatorObservers: navigatorObservers ??
-            onNavigatorObservers() ??
-            const <NavigatorObserver>[],
-        builder: builder ?? onBuilder(),
-        title: title ?? onTitle() ?? '',
-        onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
-        color: color ?? onColor() ?? Colors.white,
-        theme: iOSTheme ?? oniOSTheme() ?? App.iOSTheme,
-        locale: locale ?? onLocale(),
-        localizationsDelegates:
-            localizationsDelegates ?? onLocalizationsDelegates(),
-        localeListResolutionCallback:
-            localeListResolutionCallback ?? onLocaleListResolutionCallback(),
-        localeResolutionCallback:
-            localeResolutionCallback ?? onLocaleResolutionCallback(),
-        supportedLocales: supportedLocales ??
-            onSupportedLocales() ??
-            const <Locale>[Locale('en', 'US')],
-        showPerformanceOverlay:
-            showPerformanceOverlay ?? onShowPerformanceOverlay() ?? false,
-        checkerboardRasterCacheImages: checkerboardRasterCacheImages ??
-            onCheckerboardRasterCacheImages() ??
-            false,
-        checkerboardOffscreenLayers: checkerboardOffscreenLayers ??
-            onCheckerboardOffscreenLayers() ??
-            false,
-        showSemanticsDebugger:
-            showSemanticsDebugger ?? onShowSemanticsDebugger() ?? false,
-        debugShowCheckedModeBanner: debugShowCheckedModeBanner ??
-            onDebugShowCheckedModeBanner() ??
-            true,
-      );
-    } else {
-      return MaterialApp(
-        key: key ?? App.widgetsAppKey,
-        navigatorKey: navigatorKey ?? onNavigatorKey(),
-        home: home,
-        routes: routes ?? onRoutes() ?? const <String, WidgetBuilder>{},
-        initialRoute: initialRoute ?? onInitialRoute(),
-        onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
-        onUnknownRoute: onUnknownRoute ?? onOnUnknownRoute(),
-        navigatorObservers: navigatorObservers ??
-            onNavigatorObservers() ??
-            const <NavigatorObserver>[],
-        builder: builder ?? onBuilder(),
-        title: title ?? onTitle() ?? '',
-        onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
-        color: color ?? onColor() ?? Colors.white,
-        theme: theme ?? onTheme() ?? App.themeData,
-        darkTheme: darkTheme ?? onDarkTheme(),
-        themeMode: themeMode ?? onThemeMode() ?? ThemeMode.system,
-        locale: locale ?? onLocale(),
-        localizationsDelegates:
-            localizationsDelegates ?? onLocalizationsDelegates(),
-        localeListResolutionCallback:
-            localeListResolutionCallback ?? onLocaleListResolutionCallback(),
-        localeResolutionCallback:
-            localeResolutionCallback ?? onLocaleResolutionCallback(),
-        supportedLocales: supportedLocales ??
-            onSupportedLocales() ??
-            const <Locale>[Locale('en', 'US')],
-        debugShowMaterialGrid:
-            debugShowMaterialGrid ?? onDebugShowMaterialGrid() ?? false,
-        showPerformanceOverlay:
-            showPerformanceOverlay ?? onShowPerformanceOverlay() ?? false,
-        checkerboardRasterCacheImages: checkerboardRasterCacheImages ??
-            onCheckerboardRasterCacheImages() ??
-            false,
-        checkerboardOffscreenLayers: checkerboardOffscreenLayers ??
-            onCheckerboardOffscreenLayers() ??
-            false,
-        showSemanticsDebugger:
-            showSemanticsDebugger ?? onShowSemanticsDebugger() ?? false,
-        debugShowCheckedModeBanner: debugShowCheckedModeBanner ??
-            onDebugShowCheckedModeBanner() ??
-            true,
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    _navigatorKey = null;
-    super.dispose();
-  }
-
-  /// Override if you like to customize error handling.
-  @override
-  void onError(FlutterErrorDetails details) {
-    // Note, the Controller's Error Handler if any takes precedence.
-    if (con != null) {
-      con.onError(details);
-    } else {
-      super.onError(details);
-    }
-  }
-
-  /// During development, if a hot reload occurs, the reassemble method is called.
-  @override
-  void reassemble() {
-    App._hotReload = true;
-    super.reassemble();
-  }
-
-  /// Explicity change to a particular interface.
-  void changeUI(String ui) {
-    if (ui == null || ui.isEmpty) {
-      return;
-    }
-    ui = ui.trim();
-    if (ui != 'Material' && ui != 'Cupertino') {
-      return;
-    }
-    if (ui == 'Material') {
-      useMaterial = true;
-      useCupertino = false;
-      switchUI = !UniversalPlatform.isAndroid;
-    } else {
-      useMaterial = false;
-      useCupertino = true;
-      switchUI = UniversalPlatform.isAndroid;
-    }
-  }
-
-  GlobalKey<NavigatorState> onNavigatorKey() =>
-      _navigatorKey ??= GlobalKey<NavigatorState>();
-
-  GlobalKey<NavigatorState> _navigatorKey;
-
-  Map<String, WidgetBuilder> onRoutes() => const <String, WidgetBuilder>{};
-  String onInitialRoute() => null;
-  RouteFactory onOnGenerateRoute() => null;
-  RouteFactory onOnUnknownRoute() => null;
-  List<NavigatorObserver> onNavigatorObservers() => const <NavigatorObserver>[];
-  TransitionBuilder onBuilder() => null;
-  String onTitle() => '';
-  GenerateAppTitle onOnGenerateTitle(BuildContext context) => null;
-  Color onColor() => null;
-  ThemeData onTheme() => null;
-  CupertinoThemeData oniOSTheme() => null;
-  ThemeData onDarkTheme() => null;
-  ThemeMode onThemeMode() => ThemeMode.system;
-  Locale onLocale() => null;
-  Iterable<LocalizationsDelegate<dynamic>> onLocalizationsDelegates() => null;
-  LocaleListResolutionCallback onLocaleListResolutionCallback() => null;
-  LocaleResolutionCallback onLocaleResolutionCallback() => null;
-  Iterable<Locale> onSupportedLocales() => const <Locale>[Locale('en', 'US')];
-  bool onDebugShowMaterialGrid() => false;
-  bool onShowPerformanceOverlay() => false;
-  bool onCheckerboardRasterCacheImages() => false;
-  bool onCheckerboardOffscreenLayers() => false;
-  bool onShowSemanticsDebugger() => false;
-  bool onDebugShowCheckedModeBanner() => true;
-}
-
-/// The underlying State object representing the App's View in the MVC pattern.
-/// Allows for setting debug settings and defining the App's error routine.
-abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
-  AppViewState({
-    this.con,
-    List<ControllerMVC> controllers,
-    Object object,
-    this.navigatorKey,
-    this.routes,
-    this.initialRoute,
-    this.onGenerateRoute,
-    this.onUnknownRoute,
-    this.navigatorObservers,
-    this.builder,
-    this.title,
-    this.onGenerateTitle,
-    this.color,
-    this.theme,
-    this.iOSTheme,
-    this.darkTheme,
-    this.themeMode,
-    this.locale,
-    this.localizationsDelegates,
-    this.localeListResolutionCallback,
-    this.localeResolutionCallback,
-    this.supportedLocales,
-    this.debugShowMaterialGrid,
-    this.showPerformanceOverlay,
-    this.checkerboardRasterCacheImages,
-    this.checkerboardOffscreenLayers,
-    this.showSemanticsDebugger,
-    this.debugShowWidgetInspector,
-    this.debugShowCheckedModeBanner,
-    this.debugPaintSizeEnabled,
-    this.debugPaintBaselinesEnabled,
-    this.debugPaintPointersEnabled,
-    this.debugPaintLayerBordersEnabled,
-    this.debugRepaintRainbowEnabled,
-    FlutterExceptionHandler errorHandler,
-    ErrorWidgetBuilder errorScreen,
-    v.ReportErrorHandler reportError,
-  }) : super(
-          controller: con,
-          controllers: controllers,
-          object: object,
-        ) {
-    // In case null was explicitly passed in.
-    routes ??= const <String, WidgetBuilder>{};
-    navigatorObservers ??= const <NavigatorObserver>[];
-    title ??= '';
-    color ??= Colors.blue;
-    debugShowMaterialGrid ??= false;
-    showPerformanceOverlay ??= false;
-    checkerboardRasterCacheImages ??= false;
-    checkerboardOffscreenLayers ??= false;
-    showSemanticsDebugger ??= false;
-    debugShowWidgetInspector ??= false;
-    debugShowCheckedModeBanner ??= true;
-    debugPaintSizeEnabled ??= false;
-    debugPaintBaselinesEnabled ??= false;
-    debugPaintPointersEnabled ??= false;
-    debugPaintLayerBordersEnabled ??= false;
-    debugRepaintRainbowEnabled ??= false;
-
-    assert(() {
-      /// Highlights UI while debugging.
-      debug.debugPaintSizeEnabled = debugPaintSizeEnabled ?? false;
-      debug.debugPaintBaselinesEnabled = debugPaintBaselinesEnabled ?? false;
-      debug.debugPaintPointersEnabled = debugPaintPointersEnabled ?? false;
-      debug.debugPaintLayerBordersEnabled =
-          debugPaintLayerBordersEnabled ?? false;
-      debug.debugRepaintRainbowEnabled = debugRepaintRainbowEnabled ?? false;
-      debug.debugRepaintTextRainbowEnabled =
-          debugRepaintRainbowEnabled ?? false;
-      return true;
-    }());
-
-    if (errorHandler != null || errorScreen != null || reportError != null) {
-      // Supply a customized error handling.
-      _errorHandler = v.ErrorHandler(
-          handler: errorHandler,
-          builder: errorScreen,
-          reportError: reportError);
-    }
-  }
-
-  final AppController con;
-//  final List<ControllerMVC> controllers;
-  v.ErrorHandler _errorHandler;
-
-  GlobalKey<NavigatorState> navigatorKey;
-  Map<String, WidgetBuilder> routes;
-  String initialRoute;
-  RouteFactory onGenerateRoute;
-  RouteFactory onUnknownRoute;
-  List<NavigatorObserver> navigatorObservers;
-  TransitionBuilder builder;
-  String title;
-  GenerateAppTitle onGenerateTitle;
-  final ThemeData theme;
-  final CupertinoThemeData iOSTheme;
-  ThemeData darkTheme;
-  ThemeMode themeMode;
-  Color color;
-  Locale locale;
-  Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates;
-  LocaleListResolutionCallback localeListResolutionCallback;
-  LocaleResolutionCallback localeResolutionCallback;
-  Iterable<Locale> supportedLocales;
-  bool debugShowMaterialGrid;
-  bool showPerformanceOverlay;
-  bool checkerboardRasterCacheImages;
-  bool checkerboardOffscreenLayers;
-  bool showSemanticsDebugger;
-  bool debugShowWidgetInspector;
-  bool debugShowCheckedModeBanner;
-
-  /// Highlights UI while debugging.
-  bool debugPaintSizeEnabled;
-  bool debugPaintBaselinesEnabled;
-  bool debugPaintPointersEnabled;
-  bool debugPaintLayerBordersEnabled;
-  bool debugRepaintRainbowEnabled;
-
-  /// Provide 'the view'
-  @override
-  Widget build(BuildContext context);
-
-  @override
-  void initState() {
-    super.initState();
-    _errorHandler?.init();
-  }
-
-  @override
-  void dispose() {
-    object = null;
-    _errorHandler?.dispose();
-    super.dispose();
   }
 }
 
-/// The Error Screen if something happens at start up.
-class AppError extends AppView {
-  AppError(Object exception, {Key key})
-      : super(home: _AppError(exception, key: key));
-}
-
-class _AppError extends StatefulWidget {
-  const _AppError(this.exception, {Key key}) : super(key: key);
-  final Object exception;
-  @override
-  State<StatefulWidget> createState() => _AppErrorState();
-}
-
-class _AppErrorState extends State<_AppError> {
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Center(
-          child: Text(widget.exception.toString()),
-        ),
-      );
-}
-
-/// A Drawer object for your Flutter app.
+/// A standard Drawer object for your Flutter app.
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key key}) : super(key: key);
 
@@ -1209,51 +583,5 @@ class AppDrawer extends StatelessWidget {
         ),
       ],
     ));
-  }
-}
-
-/// A Listener for the device's own connectivity status at any point in time.
-mixin ConnectivityListener {
-  void onConnectivityChanged(ConnectivityResult result);
-}
-
-/// Obtains [Controllers<T>] from its ancestors and passes its value to [builder].
-///
-class ConConsumer<T extends ControllerMVC> extends StatelessWidget {
-  const ConConsumer({
-    Key key,
-    @required this.builder,
-    this.child,
-  })  : assert(builder != null),
-        super(key: key);
-
-  /// The builder
-  final Widget Function(BuildContext context, T controller, Widget child)
-      builder;
-
-  /// The child widget to pass to [builder].
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) => v.SetState(
-      builder: (context, object) => builder(
-            context,
-            App._vw?.controllerByType<T>(),
-            child,
-          ));
-}
-
-/// Supply an MVC State object that hooks into the App class.
-abstract class StateMVC<T extends StatefulWidget> extends mvc.StateMVC<T>
-    with HandleError {
-  //
-  StateMVC([ControllerMVC controller]) : super(controller);
-
-  @override
-  void refresh() {
-    if (mounted) {
-      super.refresh();
-      App.refresh();
-    }
   }
 }

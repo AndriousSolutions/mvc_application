@@ -16,42 +16,7 @@
 ///          Created  05 Feb 2019
 ///
 
-import 'package:flutter/material.dart'
-    show
-        AlertDialog,
-        BuildContext,
-        Container,
-        FlatButton,
-        ListBody,
-        Navigator,
-        SimpleDialog,
-        SimpleDialogOption,
-        SingleChildScrollView,
-        Text,
-        TextStyle,
-        Theme,
-        ThemeData,
-        VoidCallback,
-        Widget,
-        required,
-        showDialog;
-
-import 'package:flutter/cupertino.dart'
-    show
-        BuildContext,
-        CupertinoAlertDialog,
-        CupertinoDialogAction,
-        ListBody,
-        Navigator,
-        SingleChildScrollView,
-        Text,
-        TextStyle,
-        VoidCallback,
-        Widget,
-        required,
-        showCupertinoDialog;
-
-import 'package:mvc_application/view.dart' show App;
+import 'package:mvc_application/view.dart';
 
 /// A high-level function
 /// Displays a String passing specific one to two button options
@@ -204,22 +169,23 @@ mixin DialogOptions {
   List<Widget> _listOptions() {
     final List<Widget> opList = [];
     Option option01, option02;
+
     if (button01 != null || press01 != null) {
       option01 = Option(
-          text: button01?.text ?? 'OK',
+          text: button01?.text ?? 'Cancel',
           onPressed: press01 ?? button01.onPressed,
           result: true);
     } else {
-      option01 = OKOption();
+      option01 = CancelOption();
     }
     if (button02 != null || press02 != null) {
       option02 = Option(
-          text: button02?.text ?? 'Cancel',
+          text: button02?.text ?? 'OK',
           onPressed: press02 ?? button02.onPressed,
           result: false);
     } else {
       if (option01 is! OKOption) {
-        option02 = CancelOption();
+        option02 = OKOption();
         opList.add(_simpleOption(option02));
       }
     }

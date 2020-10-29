@@ -1,3 +1,14 @@
+## 6.0.0
+- sdk: ">=2.10.0 <3.0.0"
+- Separate the MVC components to individual dart files:
+  app_statefulwidget.dart, app_state.dart, app.dart and app_menu.dart
+- Renamed class, App, to AppStatefulWidget and in file, app_statefulwidget.dart
+- Renamed class, AppView, to AppState and in file, app_state.dart.
+- New separate class, App, in the file, app.dart.
+- In dialog_box.dart, switch the push buttons around.
+- Introduce dependency, flutter_localizations:, to support for other languages.
+- Introduce dependency, url_launcher_web: ^0.1.0, for web support
+
 ## 5.13.0+2
   October 17, 2020
 - switchButtons in class _DialogWindow

@@ -32,8 +32,12 @@ export 'package:mvc_application/src/conditional_export.dart'
 /// Futures are intentionally not awaited
 export 'package:pedantic/pedantic.dart' show unawaited;
 
-// Replace 'dart:io' for Web applications
+/// Replace 'dart:io' for Web applications
 export 'package:universal_platform/universal_platform.dart';
+
+/// Flutter Framework's Foundation
+export 'package:flutter/foundation.dart'
+    show kIsWeb, mustCallSuper, protected;
 
 /// MVC
 export 'package:mvc_pattern/mvc_pattern.dart'
@@ -41,14 +45,13 @@ export 'package:mvc_pattern/mvc_pattern.dart'
     hide AppConMVC;
 
 /// App
-export 'package:mvc_application/src/view/app.dart'
-    show
-        App,
-        AppView,
-        ConConsumer,
-        ConnectivityListener,
-        ConnectivityResult,
-        StateMVC;
+export 'package:mvc_application/src/view/app.dart';
+
+/// App StatefulWidget
+export 'package:mvc_application/src/view/app_statefulwidget.dart' hide ErrorWidgetBuilder;
+
+/// App State Object
+export 'package:mvc_application/src/view/app_state.dart';
 
 /// Settings
 export 'package:mvc_application/src/view/utils/app_settings.dart';
@@ -63,11 +66,18 @@ export 'package:mvc_application/src/view/utils/loading_screen.dart';
 /// Fields
 export 'package:mvc_application/src/view/utils/field_widgets.dart';
 
+/// Localiztions
+export 'package:flutter_localizations/flutter_localizations.dart'
+    show
+    GlobalCupertinoLocalizations,
+    GlobalMaterialLocalizations,
+    GlobalWidgetsLocalizations;
+
 /// TimeZone
 export 'package:mvc_application/src/view/utils/timezone.dart';
 
 /// Menus
-export 'package:mvc_application/src/view/appmenu.dart' show AppMenu, Menu;
+export 'package:mvc_application/src/view/app_menu.dart' show AppMenu, Menu;
 
 /// UX Utils
 export 'package:mvc_application/src/view/uxutils/view.dart';

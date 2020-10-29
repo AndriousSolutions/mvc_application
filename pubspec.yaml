@@ -1,21 +1,24 @@
 name: mvc_application
 description: Flutter Framework for Applications using the MVC Design Pattern
 
-version: 5.13.0+2
+version: 6.0.0
 
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  # To support for other languages other than US English localizations
+  flutter_localizations:
+    sdk: flutter
 
   # https://pub.dartlang.org/packages/mvc_pattern
   mvc_pattern: ^6.0.0
-  #  path: ../../packages/mvc_pattern
+ #   path: ../../packages/mvc_pattern
 
   # https://pub.dartlang.org/packages/connectivity
   connectivity: ^0.4.0
@@ -23,6 +26,7 @@ dependencies:
   # https://pub.dartlang.org/packages/url_launcher
   # used in AppSettings.dart
   url_launcher: ^5.0.0
+  url_launcher_web: ^0.1.0
 
   # https://pub.dartlang.org/packages/package_info
   package_info: ^0.4.0
@@ -66,7 +70,7 @@ dependencies:
 
   # https://pub.dev/packages/i10n_translator/
   i10n_translator: ^1.0.0
-#    path: ../i10n_translator
+  #    path: ../i10n_translator
 
 dev_dependencies:
   flutter_test:

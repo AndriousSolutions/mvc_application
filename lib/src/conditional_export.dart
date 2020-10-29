@@ -27,6 +27,7 @@ import 'package:mvc_application/view.dart' show ReportErrorHandler;
 
 /// Used in the conditional export statement:
 /// Found in 'package:mvc_application/view.dart'
+/// For example:
 /// export 'package:mvc_application/src/conditional_export.dart'
 /// if (dart.library.html) 'package:flutter/material.dart'
 /// if (dart.library.io) 'package:mvc_application/src/controller/app.dart' show runApp;
