@@ -96,6 +96,32 @@ class AppState extends AppViewState<AppStateWidget> {
     FlutterExceptionHandler errorHandler,
     ErrorWidgetBuilder errorScreen,
     v.ReportErrorHandler reportError,
+    this.inRoutes,
+    this.inInitialRoute,
+    this.inOnGenerateRoute,
+    this.inOnUnknownRoute,
+    this.inNavigatorObservers,
+    this.inTransBuilder,
+    this.inTitle,
+    this.inGenerateTitle,
+    this.inTheme,
+    this.iniOSTheme,
+    this.inDarkTheme,
+    this.inThemeMode,
+    this.inColor,
+    this.inLocale,
+    this.inLocalizationsDelegates,
+    this.inLocaleListResolutionCallback,
+    this.inLocaleResolutionCallback,
+    this.inSupportedLocales,
+    this.inDebugShowMaterialGrid,
+    this.inShowPerformanceOverlay,
+    this.inCheckerboardRasterCacheImages,
+    this.inCheckerboardOffscreenLayers,
+    this.inShowSemanticsDebugger,
+    this.inDebugShowCheckedModeBanner,
+    this.inShortcuts,
+    this.inActions,
   }) : super(
           con: con ?? AppController(),
           controllers: controllers,
@@ -174,6 +200,33 @@ class AppState extends AppViewState<AppStateWidget> {
   bool _isMaterial;
   bool get isCupertino => _isCupertino;
   bool _isCupertino;
+
+  Map<String, WidgetBuilder> Function() inRoutes;
+  String Function() inInitialRoute;
+  RouteFactory Function() inOnGenerateRoute;
+  RouteFactory Function() inOnUnknownRoute;
+  List<NavigatorObserver> Function() inNavigatorObservers;
+  TransitionBuilder Function() inTransBuilder;
+  String Function() inTitle;
+  GenerateAppTitle inGenerateTitle;
+  ThemeData Function() inTheme;
+  CupertinoThemeData Function() iniOSTheme;
+  ThemeData Function() inDarkTheme;
+  ThemeMode Function() inThemeMode;
+  Color Function() inColor;
+  Locale Function() inLocale;
+  Iterable<LocalizationsDelegate<dynamic>> Function() inLocalizationsDelegates;
+  LocaleListResolutionCallback Function() inLocaleListResolutionCallback;
+  LocaleResolutionCallback Function() inLocaleResolutionCallback;
+  Iterable<Locale> Function() inSupportedLocales;
+  bool Function() inDebugShowMaterialGrid;
+  bool Function() inShowPerformanceOverlay;
+  bool Function() inCheckerboardRasterCacheImages;
+  bool Function() inCheckerboardOffscreenLayers;
+  bool Function() inShowSemanticsDebugger;
+  bool Function() inDebugShowCheckedModeBanner;
+  Map<LogicalKeySet, Intent> Function() inShortcuts;
+  Map<Type, Action<Intent>> Function() inActions;
 
   /// The App State's initialization function.
   @override
@@ -345,32 +398,64 @@ class AppState extends AppViewState<AppStateWidget> {
       _navigatorKey ??= GlobalKey<NavigatorState>();
   GlobalKey<NavigatorState> _navigatorKey;
 
-  Map<String, WidgetBuilder> onRoutes() => const <String, WidgetBuilder>{};
-  String onInitialRoute() => null;
-  RouteFactory onOnGenerateRoute() => null;
-  RouteFactory onOnUnknownRoute() => null;
-  List<NavigatorObserver> onNavigatorObservers() => const <NavigatorObserver>[];
-  TransitionBuilder onBuilder() => null;
-  String onTitle() => '';
-  GenerateAppTitle onOnGenerateTitle(BuildContext context) => null;
-  Color onColor() => null;
-  ThemeData onTheme() => null;
-  CupertinoThemeData oniOSTheme() => null;
-  ThemeData onDarkTheme() => null;
-  ThemeMode onThemeMode() => ThemeMode.system;
-  Locale onLocale() => null;
-  Iterable<LocalizationsDelegate<dynamic>> onLocalizationsDelegates() => null;
-  LocaleListResolutionCallback onLocaleListResolutionCallback() => null;
-  LocaleResolutionCallback onLocaleResolutionCallback() => null;
-  Iterable<Locale> onSupportedLocales() => const <Locale>[Locale('en', 'US')];
-  bool onDebugShowMaterialGrid() => false;
-  bool onShowPerformanceOverlay() => false;
-  bool onCheckerboardRasterCacheImages() => false;
-  bool onCheckerboardOffscreenLayers() => false;
-  bool onShowSemanticsDebugger() => false;
-  bool onDebugShowCheckedModeBanner() => true;
-  Map<LogicalKeySet, Intent> onShortcuts() => null;
-  Map<Type, Action<Intent>> onActions() => null;
+  Map<String, WidgetBuilder> onRoutes() =>
+      inRoutes != null ? inRoutes() : const <String, WidgetBuilder>{};
+  String onInitialRoute() => inInitialRoute != null ? inInitialRoute() : null;
+  RouteFactory onOnGenerateRoute() =>
+      inOnGenerateRoute != null ? inOnGenerateRoute() : null;
+  RouteFactory onOnUnknownRoute() =>
+      inOnUnknownRoute != null ? inOnUnknownRoute() : null;
+  List<NavigatorObserver> onNavigatorObservers() => inNavigatorObservers != null
+      ? inNavigatorObservers()
+      : const <NavigatorObserver>[];
+  TransitionBuilder onBuilder() =>
+      inTransBuilder != null ? inTransBuilder() : null;
+  String onTitle() => inTitle != null ? inTitle() : '';
+  GenerateAppTitle onOnGenerateTitle(BuildContext context) => inGenerateTitle;
+  Color onColor() => inColor != null ? inColor() : null;
+  ThemeData onTheme() => inTheme != null ? inTheme() : null;
+  CupertinoThemeData oniOSTheme() => iniOSTheme != null ? iniOSTheme() : null;
+  ThemeData onDarkTheme() => inDarkTheme != null ? inDarkTheme() : null;
+  ThemeMode onThemeMode() =>
+      inThemeMode != null ? inThemeMode() : ThemeMode.system;
+  Locale onLocale() => inLocale != null ? inLocale() : null;
+  Iterable<LocalizationsDelegate<dynamic>> onLocalizationsDelegates() =>
+      inLocalizationsDelegates != null ? inLocalizationsDelegates() : null;
+  LocaleListResolutionCallback onLocaleListResolutionCallback() =>
+      inLocaleListResolutionCallback != null
+          ? inLocaleListResolutionCallback()
+          : null;
+  LocaleResolutionCallback onLocaleResolutionCallback() =>
+      inLocaleResolutionCallback != null ? inLocaleResolutionCallback() : null;
+  Iterable<Locale> onSupportedLocales() => inSupportedLocales != null
+      ? inSupportedLocales()
+      : const <Locale>[Locale('en', 'US')];
+  // ignore: avoid_bool_literals_in_conditional_expressions
+  bool onDebugShowMaterialGrid() =>
+      inDebugShowMaterialGrid != null ? inDebugShowMaterialGrid() : false;
+  // ignore: avoid_bool_literals_in_conditional_expressions
+  bool onShowPerformanceOverlay() =>
+      inShowPerformanceOverlay != null ? inShowPerformanceOverlay() : false;
+  // ignore: avoid_bool_literals_in_conditional_expressions
+  bool onCheckerboardRasterCacheImages() =>
+      inCheckerboardRasterCacheImages != null
+          ? inCheckerboardRasterCacheImages()
+          : false;
+  // ignore: avoid_bool_literals_in_conditional_expressions
+  bool onCheckerboardOffscreenLayers() => inCheckerboardOffscreenLayers != null
+      ? inCheckerboardOffscreenLayers()
+      : false;
+  // ignore: avoid_bool_literals_in_conditional_expressions
+  bool onShowSemanticsDebugger() =>
+      inShowSemanticsDebugger != null ? inShowSemanticsDebugger() : false;
+  // ignore: avoid_bool_literals_in_conditional_expressions
+  bool onDebugShowCheckedModeBanner() => inDebugShowCheckedModeBanner != null
+      ? inDebugShowCheckedModeBanner()
+      : true;
+  Map<LogicalKeySet, Intent> onShortcuts() =>
+      inShortcuts != null ? inShortcuts() : null;
+  Map<Type, Action<Intent>> onActions() =>
+      inActions != null ? inActions() : null;
 }
 
 /// The underlying State object representing the App's View in the MVC pattern.

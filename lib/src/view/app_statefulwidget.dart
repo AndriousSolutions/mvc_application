@@ -30,14 +30,12 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/cupertino.dart';
 
-import 'package:mvc_application/controller.dart'
-    show AppConMVC, ControllerMVC;
+import 'package:mvc_application/controller.dart' show AppConMVC, ControllerMVC;
 
 import 'package:mvc_application/view.dart' as v
     show
         App,
         AppError,
-        AppMenu,
         AppMVC,
         AppState,
         AppStateWidget,
@@ -59,7 +57,7 @@ typedef ErrorWidgetBuilder = Widget Function(
     FlutterErrorDetails flutterErrorDetails);
 
 /// The widget passed to runApp().
-abstract class AppStatefulWidget extends v.AppMVC  {
+abstract class AppStatefulWidget extends v.AppMVC {
   // You must supply a 'View.'
   AppStatefulWidget({
     AppConMVC con,
@@ -68,7 +66,8 @@ abstract class AppStatefulWidget extends v.AppMVC  {
     FlutterExceptionHandler errorHandler,
     ErrorWidgetBuilder errorScreen,
     v.ReportErrorHandler reportError,
-  })  : _app = v.App(), _errorHandler = v.ErrorHandler(
+  })  : _app = v.App(),
+        _errorHandler = v.ErrorHandler(
             handler: errorHandler,
             builder: errorScreen,
             reportError: reportError),
@@ -128,13 +127,8 @@ abstract class AppStatefulWidget extends v.AppMVC  {
       }
       // Initiate multi-language translations.
       await v.I10n.initAsync();
-      // Supply a theme
-      v.App.themeData = v.App.getThemeData();
-      // iOS theme
-      v.App.iOSTheme =
-          MaterialBasedCupertinoThemeData(materialTheme: v.App.themeData);
-      // App's menu system
-      v.AppMenu.onChange();
+      // Set the App's theme.
+      v.App.setThemeData();
 
       init = await super.initAsync();
 
@@ -151,7 +145,6 @@ abstract class AppStatefulWidget extends v.AppMVC  {
     }
     return v.App.isInit = init;
   }
-
 
   /// Clean up resources before the app is finally terminated.
   @mustCallSuper

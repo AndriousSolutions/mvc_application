@@ -54,6 +54,7 @@ class App {
   /// Determine if the App initialized successfully.
   // ignore: unnecessary_getters_setters
   static bool get isInit => _isInit;
+
   /// Set the init only once.
   // ignore: unnecessary_getters_setters
   static set isInit(bool init) => _isInit ??= init;
@@ -62,16 +63,18 @@ class App {
   /// Flag to set hot reload from now on.
   // ignore: unnecessary_getters_setters
   static bool get hotReload => _hotReload;
+
   /// Once set, it will always hot reload.
   // ignore: unnecessary_getters_setters
   static set hotReload(bool hotReload) {
     // It doesn't accept false.
     // i.e. Once true, it stays true.
-    if(!hotReload){
+    if (!hotReload) {
       return;
     }
     _hotReload = hotReload;
   }
+
   static bool _hotReload = false;
 
   // Use Material UI when explicitly specified or even when running in iOS
@@ -190,6 +193,7 @@ class App {
       );
     }
   }
+
   static ThemeData _themeData;
 
   /// The Apps's current Cupertino theme.
@@ -325,7 +329,8 @@ class App {
   }
 
   /// Checkerboard layers rendered offscreen bitmaps.
-  static bool get checkerboardOffscreenLayers => _vw?.checkerboardOffscreenLayers;
+  static bool get checkerboardOffscreenLayers =>
+      _vw?.checkerboardOffscreenLayers;
   static set checkerboardOffscreenLayers(bool v) {
     if (v != null) {
       _vw?.checkerboardOffscreenLayers = v;
@@ -396,6 +401,7 @@ class App {
     }
     return _platform;
   }
+
   static TargetPlatform _platform;
 
   // Application information
@@ -445,9 +451,21 @@ class App {
         themeData = ThemeData.dark();
         break;
       default:
-        themeData = ThemeData.fallback();
+        if (theme.isEmpty) {
+          themeData = ThemeData.fallback();
+        }
     }
     return themeData;
+  }
+
+  static void setThemeData() {
+    // Supply a theme
+    v.App.themeData = v.App.getThemeData();
+    // iOS theme
+    v.App.iOSTheme =
+        MaterialBasedCupertinoThemeData(materialTheme: v.App.themeData);
+    // App's menu system
+    v.AppMenu.setThemeData();
   }
 
   /// Determine the connectivity.

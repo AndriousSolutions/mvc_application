@@ -192,7 +192,7 @@ mixin DialogOptions {
     if (switchButtons != null && switchButtons) {
       opList.add(_simpleOption(option02));
       opList.add(_simpleOption(option01));
-    }else{
+    } else {
       opList.add(_simpleOption(option01));
       opList.add(_simpleOption(option02));
     }

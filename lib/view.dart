@@ -36,8 +36,7 @@ export 'package:pedantic/pedantic.dart' show unawaited;
 export 'package:universal_platform/universal_platform.dart';
 
 /// Flutter Framework's Foundation
-export 'package:flutter/foundation.dart'
-    show kIsWeb, mustCallSuper, protected;
+export 'package:flutter/foundation.dart' show kIsWeb, mustCallSuper, protected;
 
 /// MVC
 export 'package:mvc_pattern/mvc_pattern.dart'
@@ -48,7 +47,8 @@ export 'package:mvc_pattern/mvc_pattern.dart'
 export 'package:mvc_application/src/view/app.dart';
 
 /// App StatefulWidget
-export 'package:mvc_application/src/view/app_statefulwidget.dart' hide ErrorWidgetBuilder;
+export 'package:mvc_application/src/view/app_statefulwidget.dart'
+    hide ErrorWidgetBuilder;
 
 /// App State Object
 export 'package:mvc_application/src/view/app_state.dart';
@@ -69,9 +69,9 @@ export 'package:mvc_application/src/view/utils/field_widgets.dart';
 /// Localiztions
 export 'package:flutter_localizations/flutter_localizations.dart'
     show
-    GlobalCupertinoLocalizations,
-    GlobalMaterialLocalizations,
-    GlobalWidgetsLocalizations;
+        GlobalCupertinoLocalizations,
+        GlobalMaterialLocalizations,
+        GlobalWidgetsLocalizations;
 
 /// TimeZone
 export 'package:mvc_application/src/view/utils/timezone.dart';

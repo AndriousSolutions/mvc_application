@@ -20,7 +20,13 @@
 import '../../controller.dart';
 
 import '../../view.dart'
-    show AppStatefulWidget, AppState, AddContact, BuildContext, ContactsList, Key;
+    show
+        AppStatefulWidget,
+        AppState,
+        AddContact,
+        BuildContext,
+        ContactsList,
+        Key;
 
 class MyApp extends AppStatefulWidget {
   MyApp({Key key, this.rootKey}) : super(key: key);

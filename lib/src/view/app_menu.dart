@@ -138,6 +138,10 @@ class AppMenu {
       Prefs.setInt('colorTheme', ColorPicker.colors.indexOf(value));
     }
 
+    if (value == null) {
+      return;
+    }
+
     /// Assign the colour to the floating button as well.
     App.themeData = ThemeData(
       primaryColor: value,
@@ -151,6 +155,9 @@ class AppMenu {
     // Rebuild the state.
     _state?.refresh();
   }
+
+  /// Turn to the App's menu to set the App's theme.
+  static void setThemeData() => onChange();
 }
 
 abstract class Menu {

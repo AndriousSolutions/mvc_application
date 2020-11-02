@@ -1,4 +1,11 @@
+## 6.1.0
+  November 02, 2020
+- 25 new 'MaterialApp & CupertinoApp property methods' in the class, AppState
+- new method, App.setThemeData();
+- new method, AppMenu.setThemeData();
+
 ## 6.0.0
+  October 29, 2020
 - sdk: ">=2.10.0 <3.0.0"
 - Separate the MVC components to individual dart files:
   app_statefulwidget.dart, app_state.dart, app.dart and app_menu.dart
