@@ -1,3 +1,7 @@
+## 6.2.1
+  November 07, 2020
+- Corrected some named-parameters from 'reportError' to 'errorReport'
+
 ## 6.2.0
   November 07, 2020
 - Class ErrorHandler is deprecated replaced by class AppErrorHandler

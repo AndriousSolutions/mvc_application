@@ -541,9 +541,7 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
     if (errorHandler != null || errorScreen != null || errorReport != null) {
       // Supply a customized error handling.
       _errorHandler = v.AppErrorHandler(
-          handler: errorHandler,
-          builder: errorScreen,
-          report: errorReport);
+          handler: errorHandler, builder: errorScreen, report: errorReport);
     }
   }
   final AppController con;

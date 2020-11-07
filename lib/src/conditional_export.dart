@@ -37,5 +37,5 @@ void runApp(
   Widget app, {
   FlutterExceptionHandler handler,
   ErrorWidgetBuilder builder,
-  ReportErrorHandler reportError,
+  ReportErrorHandler errorReport,
 }) {}

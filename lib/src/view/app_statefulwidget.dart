@@ -64,8 +64,8 @@ abstract class AppStatefulWidget extends v.AppMVC {
     this.loadingScreen,
     FlutterExceptionHandler errorHandler,
     ErrorWidgetBuilder errorScreen,
-    v.ReportErrorHandler reportError,
-  })  : _app = v.App(errorHandler, errorScreen, reportError),
+    v.ReportErrorHandler errorReport,
+  })  : _app = v.App(errorHandler, errorScreen, errorReport),
         super(con: con, key: key) {
     // Listen to the device's connectivity.
     v.App.addConnectivityListener(con);
