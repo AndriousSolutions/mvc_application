@@ -32,9 +32,10 @@ import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
 import 'package:mvc_application/view.dart' as v
     show
+        App,
         ConnectivityListener,
         ConnectivityResult,
-        ErrorHandler,
+        AppErrorHandler,
         ReportErrorHandler,
         StateMVC;
 
@@ -43,11 +44,11 @@ void runApp(
   m.Widget app, {
   FlutterExceptionHandler handler,
   m.ErrorWidgetBuilder builder,
-  v.ReportErrorHandler reportError,
+  v.ReportErrorHandler errorReport,
 }) {
   //
-  final errorHandler = v.ErrorHandler(
-      handler: handler, builder: builder, reportError: reportError);
+  final errorHandler = v.AppErrorHandler(
+      handler: handler, builder: builder, report: errorReport);
 
   Isolate.current.addErrorListener(RawReceivePort((dynamic pair) {
     //
@@ -67,23 +68,24 @@ void runApp(
 }
 
 class AppController extends ControllerMVC implements mvc.AppConMVC {
-  AppController([this.state]) : super(state);
+  //
+  AppController([v.StateMVC state]) : super(state);
 
-  @override
-  final v.StateMVC state;
-
-  /// Initialize any immediate 'none time-consuming' operations at the very beginning.
+  /// Initialize any immediate 'none time-consuming' operations
+  /// at the very beginning.
   @override
   void initApp() {}
 
   /// Override if you like to customize your error handling.
   @override
   void onError(FlutterErrorDetails details) {
-    if (state != null) {
-      state.currentErrorFunc(details);
+    // Call the App's 'current'error handler.
+    final FlutterExceptionHandler handler =
+        v.App?.errorHandler?.flutterExceptionHandler;
+    if (handler != null) {
+      handler(details);
     } else {
-      // Will cause an infinite loop.
-      //stateMVC?.currentErrorFunc(details);
+      // Call Flutter's error handler.
       m.FlutterError.dumpErrorToConsole(details);
     }
   }

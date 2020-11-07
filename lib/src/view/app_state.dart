@@ -34,7 +34,7 @@ import 'package:mvc_application/controller.dart'
     show AppController, ControllerMVC;
 
 import 'package:mvc_application/view.dart' as v
-    show App, AppStatefulWidget, ErrorHandler, ReportErrorHandler;
+    show App, AppStatefulWidget, AppErrorHandler, ReportErrorHandler;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
@@ -95,7 +95,7 @@ class AppState extends AppViewState<AppStateWidget> {
     bool debugRepaintRainbowEnabled,
     FlutterExceptionHandler errorHandler,
     ErrorWidgetBuilder errorScreen,
-    v.ReportErrorHandler reportError,
+    v.ReportErrorHandler errorReport,
     this.inRoutes,
     this.inInitialRoute,
     this.inOnGenerateRoute,
@@ -161,7 +161,7 @@ class AppState extends AppViewState<AppStateWidget> {
           debugRepaintRainbowEnabled: debugRepaintRainbowEnabled,
           errorHandler: errorHandler,
           errorScreen: errorScreen,
-          reportError: reportError,
+          errorReport: errorReport,
         ) {
     // In case null was explicitly passed in.
     useMaterial ??= false;
@@ -501,7 +501,7 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
     this.debugRepaintRainbowEnabled,
     FlutterExceptionHandler errorHandler,
     ErrorWidgetBuilder errorScreen,
-    v.ReportErrorHandler reportError,
+    v.ReportErrorHandler errorReport,
   }) : super(
           controller: con,
           controllers: controllers,
@@ -538,16 +538,16 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
       return true;
     }());
 
-    if (errorHandler != null || errorScreen != null || reportError != null) {
+    if (errorHandler != null || errorScreen != null || errorReport != null) {
       // Supply a customized error handling.
-      _errorHandler = v.ErrorHandler(
+      _errorHandler = v.AppErrorHandler(
           handler: errorHandler,
           builder: errorScreen,
-          reportError: reportError);
+          report: errorReport);
     }
   }
   final AppController con;
-  v.ErrorHandler _errorHandler;
+  v.AppErrorHandler _errorHandler;
 
   /// All the fields found in the widgets, MaterialApp and CupertinoApp
   GlobalKey<NavigatorState> navigatorKey;
@@ -593,7 +593,6 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   @override
   void initState() {
     super.initState();
-    _errorHandler?.init();
   }
 
   @override

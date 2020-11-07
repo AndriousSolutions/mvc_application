@@ -58,7 +58,7 @@ export 'package:mvc_application/src/view/utils/app_settings.dart';
 
 /// Error Handling
 export 'package:mvc_application/src/view/utils/error_handler.dart'
-    show ErrorHandler, ReportErrorHandler;
+    show AppErrorHandler, ReportErrorHandler;
 
 /// Screens
 export 'package:mvc_application/src/view/utils/loading_screen.dart';

@@ -17,7 +17,8 @@
 ///
 ///
 
-import 'package:mvc_application/view.dart';
+import 'package:mvc_application/view.dart'
+    show GlobalKey, Prefs, ScaffoldState, StateMVC, unawaited;
 
 import '../controller.dart' show AppController;
 

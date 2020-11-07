@@ -54,100 +54,90 @@ import 'package:flutter/rendering.dart'
 typedef ReportErrorHandler = Future<void> Function(
     dynamic exception, StackTrace stack);
 
-///
-///
-///   typedef FlutterExceptionHandler = void Function(FlutterErrorDetails details);
-///
-///   Example 1:
-///
-///        void main() => ErrorHandler.runApp(MyApp());
-///
-///   Example 2:
-///
-///        ErrorHandler.onError = (FlutterErrorDetails details) async {
-///           await _reportError(details.exception, details.stack);
-///        };
-///
-///   Example 3:
-///
-///        // Returns to the standard 'Red Screen'
-///        ErrorHandler.builder = null;
-///
+@Deprecated('Use the AppErrorHandler class now.')
 class ErrorHandler {
   ErrorHandler({
     FlutterExceptionHandler handler,
     ErrorWidgetBuilder builder,
-    ReportErrorHandler reportError,
+    ReportErrorHandler report,
   }) {
+    errorHandler = AppErrorHandler(
+      handler: handler,
+      builder: builder,
+      report: report,
+    );
+  }
+  AppErrorHandler errorHandler;
+
+  FlutterExceptionHandler get oldOnError => AppErrorHandler._oldOnError;
+
+  ErrorWidgetBuilder get oldBuilder => errorHandler._oldBuilder;
+
+  FlutterExceptionHandler get flutterExceptionHandler =>
+      errorHandler.flutterExceptionHandler;
+
+  FlutterExceptionHandler get onError => errorHandler.onError;
+
+  /// Set to null to use the 'old' handler.
+  set onError(FlutterExceptionHandler handler) =>
+      errorHandler.onError = handler;
+
+  ErrorWidgetBuilder get builder => ErrorWidget.builder;
+
+  /// Set the ErrorWidget.builder
+  /// If assigned null, use the 'old' builder.
+  set builder(ErrorWidgetBuilder builder) => errorHandler.builder = builder;
+
+  static void set(
+          {@required void Function(FlutterErrorDetails details) handler,
+          Widget Function(FlutterErrorDetails details) builder}) =>
+      AppErrorHandler.set(handler: handler, builder: builder);
+
+  void dispose() => errorHandler.dispose();
+
+  static bool get inDebugger => AppErrorHandler.inDebugger;
+
+  Future<void> reportError(
+    dynamic ex,
+    StackTrace stack, {
+    String message,
+    String library,
+    InformationCollector informationCollector,
+  }) =>
+      errorHandler.reportError(
+        ex,
+        stack,
+        message: message,
+        library: library,
+        informationCollector: informationCollector,
+      );
+
+  void isolateError(dynamic ex, StackTrace stack) =>
+      errorHandler.isolateError(ex, stack);
+
+  void runZonedError(dynamic ex, StackTrace stack) =>
+      errorHandler.runZonedError(ex, stack);
+}
+
+/// Your App's error handler.
+class AppErrorHandler {
+  factory AppErrorHandler({
+    FlutterExceptionHandler handler,
+    ErrorWidgetBuilder builder,
+    ReportErrorHandler report,
+  }) {
+    _this ??= AppErrorHandler._();
+
+    set(handler: handler, builder: builder, report: report);
+
+    return _this;
+  }
+
+  AppErrorHandler._() {
     //
     _oldOnError = FlutterError.onError;
 
     _oldBuilder = ErrorWidget.builder;
-
-    _reportError = reportError;
-
-    // init() shouldn't overwrite the build initialized here.
-    _initBuilder = builder != null;
-
-    // Don't set anything if there nothing passed.
-    if (handler != null || builder != null) {
-      init(builder: builder, handler: handler);
-    }
-  }
-
-  void init({
-    FlutterExceptionHandler handler,
-    ErrorWidgetBuilder builder,
-  }) {
-    // Assign the default ErrorWidget if not assigned yet.
-    if (builder == null && !_initBuilder) {
-      builder = _defaultErrorWidget;
-    }
-
-    set(builder: builder, handler: handler);
-  }
-
-  FlutterExceptionHandler _onError;
-
-  FlutterExceptionHandler _oldOnError;
-
-  ErrorWidgetBuilder _oldBuilder;
-
-  ReportErrorHandler _reportError;
-
-  bool _initBuilder = false;
-
-  bool _inHandler = false;
-
-  static bool ranApp = false;
-
-  /// Set to null to use the 'old' handler.
-  // ignore: avoid_setters_without_getters
-  set onError(FlutterExceptionHandler handler) {
-    // So you can assign null and use the original error routine.
-    _onError = handler;
-    set(handler: handler);
-  }
-
-  /// Set the ErrorWidget.builder
-  /// If assigned null, use the 'old' builder.
-  // ignore: avoid_setters_without_getters
-  set builder(ErrorWidgetBuilder builder) {
-    builder ??= _oldBuilder;
-    set(builder: builder);
-  }
-
-  void set({
-    Widget Function(FlutterErrorDetails details) builder,
-    void Function(FlutterErrorDetails details) handler,
-  }) {
-    if (builder != null) {
-      ErrorWidget.builder = builder;
-    }
-
-    if (handler != null) {
-      _onError = handler;
-    }
 
     FlutterError.onError = (FlutterErrorDetails details) {
       // Prevent an infinite loop and fall back to the original handler.
@@ -174,8 +164,72 @@ class ErrorHandler {
         _inHandler = false;
       }
     };
+
+    _flutterExceptionHandler = FlutterError.onError;
+  }
+  static AppErrorHandler _this;
+
+  FlutterExceptionHandler get oldOnError => _oldOnError;
+  static FlutterExceptionHandler _oldOnError;
+
+  ErrorWidgetBuilder get oldBuilder => _oldBuilder;
+  ErrorWidgetBuilder _oldBuilder;
+
+  static ReportErrorHandler _errorReport;
+
+  static bool _inHandler = false;
+
+  static bool ranApp = false;
+
+  FlutterExceptionHandler get flutterExceptionHandler =>
+      _flutterExceptionHandler;
+  static FlutterExceptionHandler _flutterExceptionHandler;
+
+  FlutterExceptionHandler get onError => _onError ?? _oldOnError;
+
+  /// Set to null to use the 'old' handler.
+  set onError(FlutterExceptionHandler handler) {
+    // So you can assign null and use the original error routine.
+    _onError = handler;
+    set(handler: handler);
   }
 
+  static FlutterExceptionHandler _onError;
+
+  ErrorWidgetBuilder get builder => ErrorWidget.builder;
+
+  /// Set the ErrorWidget.builder
+  set builder(ErrorWidgetBuilder builder) =>
+      set(handler: onError, builder: builder);
+
+  ReportErrorHandler get report => _errorReport;
+
+  /// Set the ErrorWidget.builder
+  set report(ReportErrorHandler report) =>
+      set(handler: onError, report: report);
+
+  /// Set a handler and the builder
+  /// Set the 'default' ErrorWidget if no builder is specified.
+  static void set({
+    @required void Function(FlutterErrorDetails details) handler,
+    Widget Function(FlutterErrorDetails details) builder,
+    Future<void> Function(dynamic exception, StackTrace stack) report,
+  }) {
+    if (handler != null) {
+      _onError = handler;
+
+      // Set the 'default' ErrorWidget if no builder is specified.
+      builder ??= _defaultErrorWidget;
+
+      ErrorWidget.builder = builder;
+
+      if (report != null) {
+        _errorReport = report;
+      }
+    }
+  }
+
+  /// Return the original handlers.
   void dispose() {
     // Restore the error widget routine.
     if (_oldBuilder != null) {
@@ -195,6 +249,7 @@ class ErrorHandler {
     return inDebugMode;
   }
 
+  /// Report the error.
   Future<void> reportError(
     dynamic ex,
     StackTrace stack, {
@@ -202,7 +257,7 @@ class ErrorHandler {
     String library,
     InformationCollector informationCollector,
   }) async {
-    if (_reportError == null) {
+    if (_errorReport == null) {
       message ??= 'while attempting to execute your app';
       library ??= 'Your app';
       _debugReportException(
@@ -213,10 +268,11 @@ class ErrorHandler {
         informationCollector: informationCollector,
       );
     } else {
-      await _reportError(ex, stack);
+      await _errorReport(ex, stack);
     }
   }
 
+  /// Report the error in an isolate.
   void isolateError(dynamic ex, StackTrace stack) {
     reportError(
       ex,
@@ -226,6 +282,7 @@ class ErrorHandler {
     );
   }
 
+  /// Report the error in a zone.
   void runZonedError(dynamic ex, StackTrace stack) {
     reportError(
       ex,
@@ -283,6 +340,7 @@ Widget _defaultErrorWidget(FlutterErrorDetails details) {
       message: message, error: exception is FlutterError ? exception : null);
 }
 
+/// A low-level widget to present instead of the failed widget.
 class _WidgetError extends LeafRenderObjectWidget {
   _WidgetError({this.message = '', FlutterError error})
       : _flutterError = error,

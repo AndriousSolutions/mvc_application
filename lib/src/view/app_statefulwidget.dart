@@ -39,7 +39,6 @@ import 'package:mvc_application/view.dart' as v
         AppMVC,
         AppState,
         AppStateWidget,
-        ErrorHandler,
         I10n,
         ReportErrorHandler,
         SetState;
@@ -66,16 +65,11 @@ abstract class AppStatefulWidget extends v.AppMVC {
     FlutterExceptionHandler errorHandler,
     ErrorWidgetBuilder errorScreen,
     v.ReportErrorHandler reportError,
-  })  : _app = v.App(),
-        _errorHandler = v.ErrorHandler(
-            handler: errorHandler,
-            builder: errorScreen,
-            reportError: reportError),
+  })  : _app = v.App(errorHandler, errorScreen, reportError),
         super(con: con, key: key) {
     // Listen to the device's connectivity.
     v.App.addConnectivityListener(con);
   }
-  final v.ErrorHandler _errorHandler;
   final v.App _app;
 
   @protected
@@ -150,12 +144,11 @@ abstract class AppStatefulWidget extends v.AppMVC {
   @mustCallSuper
   @override
   void dispose() {
-    _app.dispose();
-    // Restore the original error handling.
-    _errorHandler.dispose();
     Prefs.dispose();
     // Assets.init(context); called in App.build() -gp
     Assets.dispose();
+    //
+    _app.dispose();
     super.dispose();
   }
 
@@ -170,11 +163,17 @@ abstract class AppStatefulWidget extends v.AppMVC {
         snapshot.data) {
       return const v.AppStateWidget();
     } else {
-      if (UniversalPlatform.isAndroid) {
-        return const Center(child: CircularProgressIndicator());
+      Widget widget;
+      if (loading != null) {
+        widget = loading;
       } else {
-        return const Center(child: CupertinoActivityIndicator());
+        if (UniversalPlatform.isAndroid) {
+          widget = const Center(child: CircularProgressIndicator());
+        } else {
+          widget = const Center(child: CupertinoActivityIndicator());
+        }
       }
+      return widget;
     }
   }
 }

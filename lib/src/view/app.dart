@@ -3,7 +3,7 @@ import 'dart:async' show Future, StreamSubscription;
 // Replace 'dart:io' for Web applications
 import 'package:universal_platform/universal_platform.dart';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show FlutterExceptionHandler, kIsWeb;
 
 import 'package:package_info/package_info.dart' show PackageInfo;
 
@@ -20,9 +20,29 @@ import 'package:mvc_application/controller.dart'
     show ControllerMVC, DeviceInfo, HandleError;
 
 class App {
-  factory App() => _this ??= App._();
-  App._();
+  //
+  factory App([
+    FlutterExceptionHandler errorHandler,
+    ErrorWidgetBuilder errorScreen,
+    v.ReportErrorHandler errorReport,
+  ]) =>
+      _this ??= App._(errorHandler, errorScreen, errorReport);
+
+  App._(
+    FlutterExceptionHandler errorHandler,
+    ErrorWidgetBuilder errorScreen,
+    v.ReportErrorHandler errorReport,
+  ) {
+    _errorHandler = v.AppErrorHandler(
+      handler: errorHandler,
+      builder: errorScreen,
+      report: errorReport,
+    );
+  }
   static App _this;
+
+  static v.AppErrorHandler get errorHandler => _errorHandler;
+  static v.AppErrorHandler _errorHandler;
 
   /// Initialize the class with the AppState object.
   bool setState(v.AppState vw) {
@@ -35,6 +55,8 @@ class App {
   void dispose() {
     _connectivitySubscription?.cancel();
     _connectivitySubscription = null;
+    // Restore the original error handling.
+    _errorHandler.dispose();
   }
 
   /// The App State object.

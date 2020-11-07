@@ -670,7 +670,7 @@ class ScheduleNotifications with HandleError {
     String payload,
     bool androidAllowWhileIdle,
     UILocalNotificationDateInterpretation uiLocalNotificationDateInterpretation,
-    ScheduledNotificationRepeatFrequency scheduledNotificationRepeatFrequency,
+    DateTimeComponents matchDateTimeComponents,
     String icon,
     Importance importance,
     Priority priority,
@@ -781,8 +781,7 @@ class ScheduleNotifications with HandleError {
               uiLocalNotificationDateInterpretation,
           androidAllowWhileIdle: androidAllowWhileIdle,
           payload: payload,
-          scheduledNotificationRepeatFrequency:
-              scheduledNotificationRepeatFrequency,
+          matchDateTimeComponents: matchDateTimeComponents,
         );
       } catch (ex) {
         id = -1;
@@ -922,7 +921,7 @@ class ScheduleNotifications with HandleError {
     String payload,
     bool androidAllowWhileIdle,
     UILocalNotificationDateInterpretation uiLocalNotificationDateInterpretation,
-    ScheduledNotificationRepeatFrequency scheduledNotificationRepeatFrequency,
+    DateTimeComponents matchDateTimeComponents,
     String icon,
     Importance importance,
     Priority priority,
@@ -1032,8 +1031,7 @@ class ScheduleNotifications with HandleError {
           uiLocalNotificationDateInterpretation:
               uiLocalNotificationDateInterpretation,
           androidAllowWhileIdle: androidAllowWhileIdle,
-          scheduledNotificationRepeatFrequency:
-              scheduledNotificationRepeatFrequency,
+          matchDateTimeComponents: matchDateTimeComponents,
         );
       } catch (ex) {
         id = -1;
@@ -1053,7 +1051,7 @@ class ScheduleNotifications with HandleError {
     bool androidAllowWhileIdle,
     NotificationDetails notificationDetails,
     UILocalNotificationDateInterpretation uiLocalNotificationDateInterpretation,
-    ScheduledNotificationRepeatFrequency scheduledNotificationRepeatFrequency,
+    DateTimeComponents matchDateTimeComponents,
     String icon,
     Importance importance,
     Priority priority,
@@ -1165,8 +1163,7 @@ class ScheduleNotifications with HandleError {
               uiLocalNotificationDateInterpretation,
           androidAllowWhileIdle: androidAllowWhileIdle,
           payload: payload,
-          scheduledNotificationRepeatFrequency:
-              scheduledNotificationRepeatFrequency,
+          matchDateTimeComponents: matchDateTimeComponents,
         );
       } catch (ex) {
         id = -1;

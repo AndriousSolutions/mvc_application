@@ -1,3 +1,11 @@
+## 6.2.0
+  November 07, 2020
+- Class ErrorHandler is deprecated replaced by class AppErrorHandler
+- Many more error handler setters and getters.
+- App class object now has reference to the error handler.
+- Renamed AppState.reportError to AppState.errorReport.
+- Updated to latest plugin, FlutterLocalNotificationsPlugin
+
 ## 6.1.0
   November 02, 2020
 - 25 new 'MaterialApp & CupertinoApp property methods' in the class, AppState
