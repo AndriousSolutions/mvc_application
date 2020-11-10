@@ -122,6 +122,8 @@ class AppState extends AppViewState<AppStateWidget> {
     this.inDebugShowCheckedModeBanner,
     this.inShortcuts,
     this.inActions,
+    this.inError,
+    this.inAsyncError,
   }) : super(
           con: con ?? AppController(),
           controllers: controllers,
@@ -227,6 +229,9 @@ class AppState extends AppViewState<AppStateWidget> {
   bool Function() inDebugShowCheckedModeBanner;
   Map<LogicalKeySet, Intent> Function() inShortcuts;
   Map<Type, Action<Intent>> Function() inActions;
+  void Function(FlutterErrorDetails details) inError;
+  bool Function(FlutterErrorDetails details) inAsyncError;
+  bool _inError = false;
 
   /// The App State's initialization function.
   @override
@@ -359,12 +364,20 @@ class AppState extends AppViewState<AppStateWidget> {
   /// Override if you like to customize error handling.
   @override
   void onError(FlutterErrorDetails details) {
-    // Note, the Controller's Error Handler takes precedence if any.
+    // Don't call this routine within itself.
+    if (_inError) {
+      return;
+    }
+    _inError = true;
+    // Note, the AppController's Error Handler takes precedence if any.
     if (con != null) {
       con.onError(details);
+    } else if (inError != null) {
+      inError(details);
     } else {
       super.onError(details);
     }
+    _inError = false;
   }
 
   /// During development, if a hot reload occurs, the reassemble method is called.
@@ -430,14 +443,14 @@ class AppState extends AppViewState<AppStateWidget> {
   Iterable<Locale> onSupportedLocales() => inSupportedLocales != null
       ? inSupportedLocales()
       : const <Locale>[Locale('en', 'US')];
-  // ignore: avoid_bool_literals_in_conditional_expressions
   bool onDebugShowMaterialGrid() =>
+      // ignore: avoid_bool_literals_in_conditional_expressions
       inDebugShowMaterialGrid != null ? inDebugShowMaterialGrid() : false;
-  // ignore: avoid_bool_literals_in_conditional_expressions
   bool onShowPerformanceOverlay() =>
+      // ignore: avoid_bool_literals_in_conditional_expressions
       inShowPerformanceOverlay != null ? inShowPerformanceOverlay() : false;
-  // ignore: avoid_bool_literals_in_conditional_expressions
   bool onCheckerboardRasterCacheImages() =>
+      // ignore: avoid_bool_literals_in_conditional_expressions
       inCheckerboardRasterCacheImages != null
           ? inCheckerboardRasterCacheImages()
           : false;
@@ -445,8 +458,8 @@ class AppState extends AppViewState<AppStateWidget> {
   bool onCheckerboardOffscreenLayers() => inCheckerboardOffscreenLayers != null
       ? inCheckerboardOffscreenLayers()
       : false;
-  // ignore: avoid_bool_literals_in_conditional_expressions
   bool onShowSemanticsDebugger() =>
+      // ignore: avoid_bool_literals_in_conditional_expressions
       inShowSemanticsDebugger != null ? inShowSemanticsDebugger() : false;
   // ignore: avoid_bool_literals_in_conditional_expressions
   bool onDebugShowCheckedModeBanner() => inDebugShowCheckedModeBanner != null
@@ -456,6 +469,20 @@ class AppState extends AppViewState<AppStateWidget> {
       inShortcuts != null ? inShortcuts() : null;
   Map<Type, Action<Intent>> onActions() =>
       inActions != null ? inActions() : null;
+  // An error handler for any async operations.
+  @override
+  bool onAsyncError(FlutterErrorDetails details) {
+    bool handled;
+    handled = con?.onAsyncError(details) ?? false;
+    if (!handled && inAsyncError != null) {
+      try {
+        handled = inAsyncError(details);
+      } catch (ex) {
+        handled = false;
+      }
+    }
+    return handled;
+  }
 }
 
 /// The underlying State object representing the App's View in the MVC pattern.

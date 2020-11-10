@@ -1,3 +1,10 @@
+## 6.3.0
+  November 09, 2020
+- New method onAsyncError(FlutterErrorDetails details)
+- App-level & Async error handling
+- Deprecated getter, snapshot.
+- Deprecated ErrorHandler for AppErrorHandler
+
 ## 6.2.1
   November 07, 2020
 - Corrected some named-parameters from 'reportError' to 'errorReport'

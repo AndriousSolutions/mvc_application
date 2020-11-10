@@ -69,30 +69,6 @@ class ErrorHandler {
   }
   AppErrorHandler errorHandler;
 
-  FlutterExceptionHandler get oldOnError => AppErrorHandler._oldOnError;
-
-  ErrorWidgetBuilder get oldBuilder => errorHandler._oldBuilder;
-
-  FlutterExceptionHandler get flutterExceptionHandler =>
-      errorHandler.flutterExceptionHandler;
-
-  FlutterExceptionHandler get onError => errorHandler.onError;
-
-  /// Set to null to use the 'old' handler.
-  set onError(FlutterExceptionHandler handler) =>
-      errorHandler.onError = handler;
-
-  ErrorWidgetBuilder get builder => ErrorWidget.builder;
-
-  /// Set the ErrorWidget.builder
-  /// If assigned null, use the 'old' builder.
-  set builder(ErrorWidgetBuilder builder) => errorHandler.builder = builder;
-
-  static void set(
-          {@required void Function(FlutterErrorDetails details) handler,
-          Widget Function(FlutterErrorDetails details) builder}) =>
-      AppErrorHandler.set(handler: handler, builder: builder);
-
   void dispose() => errorHandler.dispose();
 
   static bool get inDebugger => AppErrorHandler.inDebugger;
@@ -125,18 +101,18 @@ class AppErrorHandler {
     FlutterExceptionHandler handler,
     ErrorWidgetBuilder builder,
     ReportErrorHandler report,
-  }) {
-    _this ??= AppErrorHandler._();
+  }) =>
+      _this ??= AppErrorHandler._(handler, builder, report);
 
-    set(handler: handler, builder: builder, report: report);
-
-    return _this;
-  }
-
-  AppErrorHandler._() {
-    //
+  AppErrorHandler._(
+    FlutterExceptionHandler handler,
+    ErrorWidgetBuilder builder,
+    ReportErrorHandler report,
+  ) {
+    // Record the current error handler.
     _oldOnError = FlutterError.onError;
 
+    // Record the current Widget builder when a widget fails to build.
     _oldBuilder = ErrorWidget.builder;
 
     FlutterError.onError = (FlutterErrorDetails details) {
@@ -157,22 +133,30 @@ class AppErrorHandler {
       // If there's an error in the error handler, we want to know about it.
       _inHandler = true;
 
-      final FlutterExceptionHandler handler = _onError ?? _oldOnError;
+      final FlutterExceptionHandler _handler = _onError ?? _oldOnError;
 
-      if (handler != null) {
-        handler(details);
+      if (_handler != null) {
+        _handler(details);
         _inHandler = false;
       }
     };
-
+    // Record the 'current' error handler.
     _flutterExceptionHandler = FlutterError.onError;
+
+    // Set the 'default' ErrorWidget if no builder is specified.
+    builder ??= errorDisplayWidget;
+
+    // Change the widget presented when another widget fails to build.
+    ErrorWidget.builder = builder;
+
+    _set(handler: handler, report: report);
   }
   static AppErrorHandler _this;
 
-  FlutterExceptionHandler get oldOnError => _oldOnError;
+  // FlutterExceptionHandler get oldOnError => _oldOnError;
   static FlutterExceptionHandler _oldOnError;
-
-  ErrorWidgetBuilder get oldBuilder => _oldBuilder;
+  //
+  // ErrorWidgetBuilder get oldBuilder => _oldBuilder;
   ErrorWidgetBuilder _oldBuilder;
 
   static ReportErrorHandler _errorReport;
@@ -186,42 +170,27 @@ class AppErrorHandler {
   static FlutterExceptionHandler _flutterExceptionHandler;
 
   FlutterExceptionHandler get onError => _onError ?? _oldOnError;
-
-  /// Set to null to use the 'old' handler.
-  set onError(FlutterExceptionHandler handler) {
-    // So you can assign null and use the original error routine.
-    _onError = handler;
-    set(handler: handler);
-  }
-
   static FlutterExceptionHandler _onError;
 
-  ErrorWidgetBuilder get builder => ErrorWidget.builder;
+  /// Display the Error details in a widget.
+  /// try..catch to ensure a widget is returned.
+  Widget displayError(FlutterErrorDetails details) {
+    Widget widget;
+    try {
+      widget = ErrorWidget.builder(details);
+    } catch (ex) {
+      widget = errorDisplayWidget(details);
+    }
+    return widget;
+  }
 
-  /// Set the ErrorWidget.builder
-  set builder(ErrorWidgetBuilder builder) =>
-      set(handler: onError, builder: builder);
-
-  ReportErrorHandler get report => _errorReport;
-
-  /// Set the ErrorWidget.builder
-  set report(ReportErrorHandler report) =>
-      set(handler: onError, report: report);
-
-  /// Set a handler and the builder
-  /// Set the 'default' ErrorWidget if no builder is specified.
-  static void set({
+  /// Set a handler and the report
+  static void _set({
     @required void Function(FlutterErrorDetails details) handler,
-    Widget Function(FlutterErrorDetails details) builder,
     Future<void> Function(dynamic exception, StackTrace stack) report,
   }) {
     if (handler != null) {
       _onError = handler;
-
-      // Set the 'default' ErrorWidget if no builder is specified.
-      builder ??= _defaultErrorWidget;
-
-      ErrorWidget.builder = builder;
 
       if (report != null) {
         _errorReport = report;
@@ -311,57 +280,75 @@ class AppErrorHandler {
     FlutterError.reportError(details);
     return details;
   }
-}
 
-/// This class is intentionally doing things using the low-level
-/// primitives to avoid depending on any subsystems that may have ended
-/// up in an unstable state -- after all, this class is mainly used when
-/// things have gone wrong.
-Widget _defaultErrorWidget(FlutterErrorDetails details) {
-  String message;
-  try {
-    message = 'ERROR\n\n${details.exception}\n\n';
+  /// This class is intentionally doing things using the low-level
+  /// primitives to avoid depending on any subsystems that may have ended
+  /// up in an unstable state -- after all, this class is mainly used when
+  /// things have gone wrong.
+  static Widget errorDisplayWidget(FlutterErrorDetails details) {
+    String message;
+    try {
+      message = 'ERROR\n\n${details.exception}\n\n';
 
-    final List<String> stackTrace = details.stack.toString().split('\n');
+      final List<String> stackTrace = details.stack.toString().split('\n');
 
-    final int length = stackTrace.length > 5 ? 5 : stackTrace.length;
+      final int length = stackTrace.length > 5 ? 5 : stackTrace.length;
 
-    final buffer = StringBuffer()..write(message);
-    for (var i = 0; i < length; i++) {
-      buffer.write('${stackTrace[i]}\n');
+      final buffer = StringBuffer()..write(message);
+      for (var i = 0; i < length; i++) {
+        buffer.write('${stackTrace[i]}\n');
+      }
+      message = buffer.toString();
+    } catch (e) {
+      message = 'Error';
     }
-    message = buffer.toString();
-  } catch (e) {
-    message = 'Error';
-  }
 
-  final Object exception = details.exception;
-  return _WidgetError(
-      message: message, error: exception is FlutterError ? exception : null);
+    final Object exception = details.exception;
+    return DisplayErrorWidget(
+        message: message, error: exception is Error ? exception : null);
+  }
 }
 
 /// A low-level widget to present instead of the failed widget.
-class _WidgetError extends LeafRenderObjectWidget {
-  _WidgetError({this.message = '', FlutterError error})
-      : _flutterError = error,
+class DisplayErrorWidget extends LeafRenderObjectWidget {
+  DisplayErrorWidget({this.message = '', Error error})
+      : _error = error,
         super(key: UniqueKey());
 
   /// The message to display.
   final String message;
-  final FlutterError _flutterError;
+  final Error _error;
 
   @override
-  RenderBox createRenderObject(BuildContext context) => _ErrorBox(message);
+  RenderBox createRenderObject(BuildContext context) =>
+      _ErrorBox(_errorMessage());
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    if (_flutterError == null) {
-      properties.add(StringProperty('message', message, quoted: false));
+    if (_error == null || _error is! FlutterError) {
+      properties.add(StringProperty('message', _errorMessage(), quoted: false));
     } else {
+      final FlutterError _flutterError = _error;
       properties.add(_flutterError.toDiagnosticsNode(
           style: DiagnosticsTreeStyle.whitespace));
     }
+  }
+
+  // Compose an error message to be displayed.
+  // An empty string if no message was provided.
+  String _errorMessage() {
+    String _message;
+    if (message.isEmpty) {
+      if (_error == null) {
+        _message = '';
+      } else {
+        _message = _error.toString();
+      }
+    } else {
+      _message = message;
+    }
+    return _message;
   }
 }
 
@@ -493,7 +480,7 @@ class _ErrorBox extends RenderBox {
         }
         context.canvas.drawParagraph(_paragraph, offset + Offset(left, top));
       }
-    } catch (e) {
+    } catch (ex) {
       // Intentionally left empty.
     }
   }

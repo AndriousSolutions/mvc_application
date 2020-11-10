@@ -63,6 +63,31 @@ class App {
   static v.AppState get vw => _vw;
   static v.AppState _vw;
 
+  /// App-level error handling.
+  static void onError(FlutterErrorDetails details) {
+    // Call the App's 'current'error handler.
+    final FlutterExceptionHandler handler =
+        errorHandler?.flutterExceptionHandler;
+    if (handler != null) {
+      handler(details);
+    } else {
+      // Call Flutter's error handler default behaviour.
+      FlutterError.presentError(details);
+    }
+  }
+
+  /// App-level error handling if async operation at start up fails
+  static void onAsyncError(AsyncSnapshot<bool> snapshot) {
+    final dynamic exception = snapshot.error;
+    final details = FlutterErrorDetails(
+      exception: exception,
+      stack: exception is Error ? exception.stackTrace : null,
+      library: 'app_statefulwidget',
+      context: ErrorDescription('while getting ready with FutureBuilder Async'),
+    );
+    onError(details);
+  }
+
   /// Collect the device's information.
   static Future<void> getDeviceInfo() async {
     _packageInfo = await PackageInfo.fromPlatform();

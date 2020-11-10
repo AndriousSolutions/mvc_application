@@ -17,8 +17,8 @@ dependencies:
     sdk: flutter
 
   # https://pub.dartlang.org/packages/mvc_pattern
-  mvc_pattern: ^6.0.0
- #   path: ../../packages/mvc_pattern
+  mvc_pattern:  ^6.0.0
+#    path: ../../packages/mvc_pattern
 
   # https://pub.dartlang.org/packages/connectivity
   connectivity: ^2.0.0

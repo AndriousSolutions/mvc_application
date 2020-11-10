@@ -21,7 +21,7 @@ import 'dart:async' show runZonedGuarded;
 import 'dart:isolate' show Isolate, RawReceivePort;
 
 import 'package:flutter/material.dart' as m
-    show ErrorWidgetBuilder, FlutterError, Widget, runApp;
+    show ErrorWidgetBuilder, Widget, runApp;
 
 import 'package:flutter/foundation.dart'
     show FlutterExceptionHandler, FlutterErrorDetails;
@@ -79,15 +79,8 @@ class AppController extends ControllerMVC implements mvc.AppConMVC {
   /// Override if you like to customize your error handling.
   @override
   void onError(FlutterErrorDetails details) {
-    // Call the App's 'current'error handler.
-    final FlutterExceptionHandler handler =
-        v.App?.errorHandler?.flutterExceptionHandler;
-    if (handler != null) {
-      handler(details);
-    } else {
-      // Call Flutter's error handler.
-      m.FlutterError.dumpErrorToConsole(details);
-    }
+    // Call the App's 'current' error handler.
+    v.App?.onError(details);
   }
 }
 

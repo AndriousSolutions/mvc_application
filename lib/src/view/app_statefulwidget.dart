@@ -35,7 +35,6 @@ import 'package:mvc_application/controller.dart' show AppConMVC, ControllerMVC;
 import 'package:mvc_application/view.dart' as v
     show
         App,
-        AppError,
         AppMVC,
         AppState,
         AppStateWidget,
@@ -84,6 +83,7 @@ abstract class AppStatefulWidget extends v.AppMVC {
   static BuildContext _context;
 
   /// The snapshot used by the App's View.
+  @Deprecated('getter, snapshot, will be removed.')
   static AsyncSnapshot<bool> get snapshot => _snapshot;
   static AsyncSnapshot<bool> _snapshot;
 
@@ -128,6 +128,7 @@ abstract class AppStatefulWidget extends v.AppMVC {
 
       if (init) {
         _vw = createView();
+        // Supply the state object to the App object.
         init = _app.setState(_vw);
         if (init) {
           init = await _vw?.initAsync();
@@ -156,8 +157,22 @@ abstract class AppStatefulWidget extends v.AppMVC {
   /// completed before the app proceeds.
   Widget _asyncBuilder(AsyncSnapshot<bool> snapshot, Widget loading) {
     if (snapshot.hasError) {
-      AppStatefulWidget._vw = v.AppError(snapshot.error);
-      return const v.AppStateWidget();
+      final dynamic exception = snapshot.error;
+      final details = FlutterErrorDetails(
+        exception: exception,
+        stack: exception is Error ? exception.stackTrace : null,
+        library: 'app_statefulwidget',
+        context:
+            ErrorDescription('While getting ready in FutureBuilder Async'),
+      );
+      bool handled = false;
+      if (_vw != null) {
+        handled = _vw.onAsyncError(details);
+      }
+      if (!handled) {
+        v.App.onAsyncError(snapshot);
+      }
+      return v.App.errorHandler.displayError(details);
     } else if (snapshot.connectionState == ConnectionState.done &&
         snapshot.hasData &&
         snapshot.data) {
