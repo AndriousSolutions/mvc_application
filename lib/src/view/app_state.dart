@@ -473,13 +473,13 @@ class AppState extends AppViewState<AppStateWidget> {
   @override
   bool onAsyncError(FlutterErrorDetails details) {
     bool handled;
-    handled = con?.onAsyncError(details) ?? false;
-    if (!handled && inAsyncError != null) {
-      try {
+    try {
+      handled = con?.onAsyncError(details) ?? false;
+      if (!handled && inAsyncError != null) {
         handled = inAsyncError(details);
-      } catch (ex) {
-        handled = false;
       }
+    } catch (ex) {
+      handled = false;
     }
     return handled;
   }

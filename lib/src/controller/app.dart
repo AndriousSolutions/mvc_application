@@ -44,11 +44,15 @@ void runApp(
   m.Widget app, {
   FlutterExceptionHandler handler,
   m.ErrorWidgetBuilder builder,
-  v.ReportErrorHandler errorReport,
+  v.ReportErrorHandler report,
+  bool allowNewHandlers = false,
 }) {
-  //
+  // Instantiate the app's error handler.
   final errorHandler = v.AppErrorHandler(
-      handler: handler, builder: builder, report: errorReport);
+      handler: handler,
+      builder: builder,
+      report: report,
+      allowNewHandlers: allowNewHandlers);
 
   Isolate.current.addErrorListener(RawReceivePort((dynamic pair) {
     //

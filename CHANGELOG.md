@@ -1,3 +1,7 @@
+## 6.4.0
+  November 10, 2020
+- New parameter allowNewHandlers in AppErrorHandler
+
 ## 6.3.0
   November 09, 2020
 - New method onAsyncError(FlutterErrorDetails details)

@@ -54,66 +54,36 @@ import 'package:flutter/rendering.dart'
 typedef ReportErrorHandler = Future<void> Function(
     dynamic exception, StackTrace stack);
 
-@Deprecated('Use the AppErrorHandler class now.')
-class ErrorHandler {
-  ErrorHandler({
-    FlutterExceptionHandler handler,
-    ErrorWidgetBuilder builder,
-    ReportErrorHandler report,
-  }) {
-    errorHandler = AppErrorHandler(
-      handler: handler,
-      builder: builder,
-      report: report,
-    );
-  }
-  AppErrorHandler errorHandler;
-
-  void dispose() => errorHandler.dispose();
-
-  static bool get inDebugger => AppErrorHandler.inDebugger;
-
-  Future<void> reportError(
-    dynamic ex,
-    StackTrace stack, {
-    String message,
-    String library,
-    InformationCollector informationCollector,
-  }) =>
-      errorHandler.reportError(
-        ex,
-        stack,
-        message: message,
-        library: library,
-        informationCollector: informationCollector,
-      );
-
-  void isolateError(dynamic ex, StackTrace stack) =>
-      errorHandler.isolateError(ex, stack);
-
-  void runZonedError(dynamic ex, StackTrace stack) =>
-      errorHandler.runZonedError(ex, stack);
-}
-
 /// Your App's error handler.
 class AppErrorHandler {
   factory AppErrorHandler({
     FlutterExceptionHandler handler,
     ErrorWidgetBuilder builder,
     ReportErrorHandler report,
-  }) =>
-      _this ??= AppErrorHandler._(handler, builder, report);
+    bool allowNewHandlers = true,
+  }) {
+    _this ??= AppErrorHandler._(builder);
 
-  AppErrorHandler._(
-    FlutterExceptionHandler handler,
-    ErrorWidgetBuilder builder,
-    ReportErrorHandler report,
-  ) {
+    set(handler: handler, builder: builder, report: report);
+
+    // Once set to false, you can't assign different handlers anymore.
+    if (!allowNewHandlers) {
+      _allowNewHandlers = false;
+    }
+    return _this;
+  }
+
+  AppErrorHandler._(ErrorWidgetBuilder builder) {
     // Record the current error handler.
     _oldOnError = FlutterError.onError;
 
     // Record the current Widget builder when a widget fails to build.
     _oldBuilder = ErrorWidget.builder;
+
+    // At the start, define our own 'error building widget' widget if one is not provided.
+    builder ??= errorDisplayWidget;
+
+    ErrorWidget.builder = builder;
 
     FlutterError.onError = (FlutterErrorDetails details) {
       // Prevent an infinite loop and fall back to the original handler.
@@ -142,16 +112,9 @@ class AppErrorHandler {
     };
     // Record the 'current' error handler.
     _flutterExceptionHandler = FlutterError.onError;
-
-    // Set the 'default' ErrorWidget if no builder is specified.
-    builder ??= errorDisplayWidget;
-
-    // Change the widget presented when another widget fails to build.
-    ErrorWidget.builder = builder;
-
-    _set(handler: handler, report: report);
   }
   static AppErrorHandler _this;
+  static bool _allowNewHandlers = true;
 
   // FlutterExceptionHandler get oldOnError => _oldOnError;
   static FlutterExceptionHandler _oldOnError;
@@ -172,6 +135,42 @@ class AppErrorHandler {
   FlutterExceptionHandler get onError => _onError ?? _oldOnError;
   static FlutterExceptionHandler _onError;
 
+  /// Set a handler and the report
+  static bool set({
+    @required FlutterExceptionHandler handler,
+    ErrorWidgetBuilder builder,
+    ReportErrorHandler report,
+  }) {
+
+    // Once you're not allowed to reset the handlers, it can't be reversed.
+    if (!_allowNewHandlers) {
+      return false;
+    }
+
+    // Are you allowed to reset a handler?
+    // Only if an item was passed to reset.
+    bool reset = false;
+
+    if (handler != null) {
+      // The default is to dump the error to the console. You can do more.
+      _onError = handler;
+      reset = true;
+    }
+
+    if (report != null) {
+      _errorReport = report;
+      reset = true;
+    }
+
+    if (builder != null) {
+      // Change the widget presented when another widget fails to build.
+      ErrorWidget.builder = builder;
+      reset = true;
+    }
+    // Something was set;
+    return reset;
+  }
+
   /// Display the Error details in a widget.
   /// try..catch to ensure a widget is returned.
   Widget displayError(FlutterErrorDetails details) {
@@ -182,20 +181,6 @@ class AppErrorHandler {
       widget = errorDisplayWidget(details);
     }
     return widget;
-  }
-
-  /// Set a handler and the report
-  static void _set({
-    @required void Function(FlutterErrorDetails details) handler,
-    Future<void> Function(dynamic exception, StackTrace stack) report,
-  }) {
-    if (handler != null) {
-      _onError = handler;
-
-      if (report != null) {
-        _errorReport = report;
-      }
-    }
   }
 
   /// Return the original handlers.
@@ -484,4 +469,45 @@ class _ErrorBox extends RenderBox {
       // Intentionally left empty.
     }
   }
+}
+
+@Deprecated('Use the AppErrorHandler class now.')
+class ErrorHandler {
+  ErrorHandler({
+    FlutterExceptionHandler handler,
+    ErrorWidgetBuilder builder,
+    ReportErrorHandler report,
+  }) {
+    errorHandler = AppErrorHandler(
+      handler: handler,
+      builder: builder,
+      report: report,
+    );
+  }
+  AppErrorHandler errorHandler;
+
+  void dispose() => errorHandler.dispose();
+
+  static bool get inDebugger => AppErrorHandler.inDebugger;
+
+  Future<void> reportError(
+    dynamic ex,
+    StackTrace stack, {
+    String message,
+    String library,
+    InformationCollector informationCollector,
+  }) =>
+      errorHandler.reportError(
+        ex,
+        stack,
+        message: message,
+        library: library,
+        informationCollector: informationCollector,
+      );
+
+  void isolateError(dynamic ex, StackTrace stack) =>
+      errorHandler.isolateError(ex, stack);
+
+  void runZonedError(dynamic ex, StackTrace stack) =>
+      errorHandler.runZonedError(ex, stack);
 }

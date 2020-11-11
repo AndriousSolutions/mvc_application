@@ -21,22 +21,25 @@ import 'package:mvc_application/controller.dart'
 
 class App {
   //
-  factory App([
-    FlutterExceptionHandler errorHandler,
-    ErrorWidgetBuilder errorScreen,
-    v.ReportErrorHandler errorReport,
-  ]) =>
-      _this ??= App._(errorHandler, errorScreen, errorReport);
+  factory App({
+    FlutterExceptionHandler handler,
+    ErrorWidgetBuilder builder,
+    v.ReportErrorHandler report,
+    bool allowNewHandlers = true,
+  }) =>
+      _this ??= App._(handler, builder, report, allowNewHandlers);
 
   App._(
     FlutterExceptionHandler errorHandler,
     ErrorWidgetBuilder errorScreen,
     v.ReportErrorHandler errorReport,
+    bool allowNewHandlers,
   ) {
     _errorHandler = v.AppErrorHandler(
       handler: errorHandler,
       builder: errorScreen,
       report: errorReport,
+      allowNewHandlers: allowNewHandlers,
     );
   }
   static App _this;

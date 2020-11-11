@@ -61,10 +61,16 @@ abstract class AppStatefulWidget extends v.AppMVC {
     AppConMVC con,
     Key key,
     this.loadingScreen,
-    FlutterExceptionHandler errorHandler,
-    ErrorWidgetBuilder errorScreen,
-    v.ReportErrorHandler errorReport,
-  })  : _app = v.App(errorHandler, errorScreen, errorReport),
+    FlutterExceptionHandler handler,
+    ErrorWidgetBuilder builder,
+    v.ReportErrorHandler report,
+    bool allowNewHandlers = true,
+  })  : _app = v.App(
+          handler: handler,
+          builder: builder,
+          report: report,
+          allowNewHandlers: allowNewHandlers,
+        ),
         super(con: con, key: key) {
     // Listen to the device's connectivity.
     v.App.addConnectivityListener(con);
@@ -162,8 +168,7 @@ abstract class AppStatefulWidget extends v.AppMVC {
         exception: exception,
         stack: exception is Error ? exception.stackTrace : null,
         library: 'app_statefulwidget',
-        context:
-            ErrorDescription('While getting ready in FutureBuilder Async'),
+        context: ErrorDescription('While getting ready in FutureBuilder Async'),
       );
       bool handled = false;
       if (_vw != null) {
