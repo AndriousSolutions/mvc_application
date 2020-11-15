@@ -34,7 +34,7 @@ import 'package:mvc_application/controller.dart'
     show AppController, ControllerMVC;
 
 import 'package:mvc_application/view.dart' as v
-    show App, AppStatefulWidget, AppErrorHandler, ReportErrorHandler;
+    show App, AppStatefulWidget, AppErrorHandler, I10nDelegate, ReportErrorHandler;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
@@ -325,8 +325,7 @@ class AppState extends AppViewState<AppStateWidget> {
         darkTheme: darkTheme ?? onDarkTheme(),
         themeMode: themeMode ?? onThemeMode() ?? ThemeMode.system,
         locale: locale ?? onLocale(),
-        localizationsDelegates:
-            localizationsDelegates ?? onLocalizationsDelegates(),
+        localizationsDelegates: onLocalizationsDelegates(),
         localeListResolutionCallback:
             localeListResolutionCallback ?? onLocaleListResolutionCallback(),
         localeResolutionCallback:
@@ -432,8 +431,20 @@ class AppState extends AppViewState<AppStateWidget> {
   ThemeMode onThemeMode() =>
       inThemeMode != null ? inThemeMode() : ThemeMode.system;
   Locale onLocale() => inLocale != null ? inLocale() : null;
-  Iterable<LocalizationsDelegate<dynamic>> onLocalizationsDelegates() =>
-      inLocalizationsDelegates != null ? inLocalizationsDelegates() : null;
+  @mustCallSuper
+  Iterable<LocalizationsDelegate<dynamic>> onLocalizationsDelegates() sync* {
+    if (localizationsDelegates != null) {
+      yield* localizationsDelegates;
+    }
+    if (inLocalizationsDelegates != null) {
+      yield* inLocalizationsDelegates();
+    }
+    // Supply MaterialLocalizations just in case you're in Cupertino interface.
+    yield DefaultMaterialLocalizations.delegate;
+    // Very important to allow Material to Cupertino and back!
+    yield v.I10nDelegate();
+  }
+
   LocaleListResolutionCallback onLocaleListResolutionCallback() =>
       inLocaleListResolutionCallback != null
           ? inLocaleListResolutionCallback()

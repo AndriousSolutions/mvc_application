@@ -141,7 +141,6 @@ class AppErrorHandler {
     ErrorWidgetBuilder builder,
     ReportErrorHandler report,
   }) {
-
     // Once you're not allowed to reset the handlers, it can't be reversed.
     if (!_allowNewHandlers) {
       return false;

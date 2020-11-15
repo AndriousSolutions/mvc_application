@@ -178,9 +178,9 @@ abstract class AppStatefulWidget extends v.AppMVC {
         v.App.onAsyncError(snapshot);
       }
       return v.App.errorHandler.displayError(details);
-    } else if (snapshot.connectionState == ConnectionState.done &&
-        snapshot.hasData &&
-        snapshot.data) {
+    } else if (snapshot.connectionState == ConnectionState.done) {
+      // If snapshot doesn't have data or is false, let the developer's app handle it.
+//        && snapshot.hasData && snapshot.data) {
       return const v.AppStateWidget();
     } else {
       Widget widget;

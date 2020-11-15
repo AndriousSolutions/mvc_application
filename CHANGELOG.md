@@ -1,3 +1,7 @@
+## 6.5.0
+  November 15, 2020
+- Allow interface switching.
+
 ## 6.4.0
   November 10, 2020
 - New parameter allowNewHandlers in AppErrorHandler

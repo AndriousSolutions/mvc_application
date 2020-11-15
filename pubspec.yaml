@@ -1,7 +1,7 @@
 name: mvc_application
 description: Flutter Framework for Applications using the MVC Design Pattern
 
-version: 6.3.0
+version: 6.5.0
 
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
@@ -69,6 +69,7 @@ dependencies:
   pedantic: ^1.0.0
 
   # https://pub.dev/packages/i10n_translator/
+  # /// Proven very important in createElement()!
   i10n_translator: ^1.0.0
   #    path: ../i10n_translator
 
