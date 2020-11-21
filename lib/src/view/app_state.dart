@@ -34,7 +34,12 @@ import 'package:mvc_application/controller.dart'
     show AppController, ControllerMVC;
 
 import 'package:mvc_application/view.dart' as v
-    show App, AppStatefulWidget, AppErrorHandler, I10nDelegate, ReportErrorHandler;
+    show
+        App,
+        AppStatefulWidget,
+        AppErrorHandler,
+        I10nDelegate,
+        ReportErrorHandler;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
@@ -96,6 +101,7 @@ class AppState extends AppViewState<AppStateWidget> {
     FlutterExceptionHandler errorHandler,
     ErrorWidgetBuilder errorScreen,
     v.ReportErrorHandler errorReport,
+    this.inHome,
     this.inRoutes,
     this.inInitialRoute,
     this.inOnGenerateRoute,
@@ -203,6 +209,7 @@ class AppState extends AppViewState<AppStateWidget> {
   bool get isCupertino => _isCupertino;
   bool _isCupertino;
 
+  Widget Function() inHome;
   Map<String, WidgetBuilder> Function() inRoutes;
   String Function() inInitialRoute;
   RouteFactory Function() inOnGenerateRoute;
@@ -232,6 +239,10 @@ class AppState extends AppViewState<AppStateWidget> {
   void Function(FlutterErrorDetails details) inError;
   bool Function(FlutterErrorDetails details) inAsyncError;
   bool _inError = false;
+
+  /// Supply to the 'home' StatefulWidget
+  /// Allows you to 're-create' the home widget's state object.
+  static Key homeKey = UniqueKey();
 
   /// The App State's initialization function.
   @override
@@ -266,7 +277,7 @@ class AppState extends AppViewState<AppStateWidget> {
       return CupertinoApp(
         key: key ?? v.App.widgetsAppKey,
         navigatorKey: navigatorKey ?? onNavigatorKey(),
-        home: home,
+        home: home ?? onHome(),
         routes: routes ?? onRoutes() ?? const <String, WidgetBuilder>{},
         initialRoute: initialRoute ?? onInitialRoute(),
         onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
@@ -309,7 +320,7 @@ class AppState extends AppViewState<AppStateWidget> {
       return MaterialApp(
         key: key ?? v.App.widgetsAppKey,
         navigatorKey: navigatorKey ?? onNavigatorKey(),
-        home: home,
+        home: home ?? onHome(),
         routes: routes ?? onRoutes() ?? const <String, WidgetBuilder>{},
         initialRoute: initialRoute ?? onInitialRoute(),
         onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
@@ -391,6 +402,8 @@ class AppState extends AppViewState<AppStateWidget> {
     if (ui == null || ui.isEmpty) {
       return;
     }
+    // Assigned to the 'home' StatefulWidget to re-create Stat object.
+    homeKey = UniqueKey();
     ui = ui.trim();
     if (ui != 'Material' && ui != 'Cupertino') {
       return;
@@ -409,7 +422,7 @@ class AppState extends AppViewState<AppStateWidget> {
   GlobalKey<NavigatorState> onNavigatorKey() =>
       _navigatorKey ??= GlobalKey<NavigatorState>();
   GlobalKey<NavigatorState> _navigatorKey;
-
+  Widget onHome() => inHome != null ? inHome() : null;
   Map<String, WidgetBuilder> onRoutes() =>
       inRoutes != null ? inRoutes() : const <String, WidgetBuilder>{};
   String onInitialRoute() => inInitialRoute != null ? inInitialRoute() : null;

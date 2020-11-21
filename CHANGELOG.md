@@ -1,6 +1,11 @@
+## 6.5.1
+  November 21, 2020
+- home: home ?? onHome(); Introduced function for named-parameter, home.
+
 ## 6.5.0
   November 15, 2020
 - Allow interface switching.
+- merge DefaultMaterialLocalizations.delegate & I10nDelegate()
 
 ## 6.4.0
   November 10, 2020
