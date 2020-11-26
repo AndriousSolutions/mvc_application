@@ -1,7 +1,7 @@
 name: mvc_application
 description: Flutter Framework for Applications using the MVC Design Pattern
 
-version: 6.5.1
+version: 6.5.2
 
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
@@ -35,7 +35,7 @@ dependencies:
   path_provider: ^1.0.0
 
   # https://pub.dartlang.org/packages/device_info
-  device_info: ^0.4.0
+  device_info: ^1.0.0
 
   # https://pub.dev/packages/flutter_material_color_picker
   flutter_material_color_picker: ^1.0.0

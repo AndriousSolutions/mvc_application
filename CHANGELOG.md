@@ -1,3 +1,7 @@
+## 6.5.2
+  November 26, 2020
+- Updated device_info: ^0.4.0
+
 ## 6.5.1
   November 21, 2020
 - home: home ?? onHome(); Introduced function for named-parameter, home.
