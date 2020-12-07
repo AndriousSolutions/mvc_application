@@ -49,6 +49,7 @@ import 'package:flutter/foundation.dart' as p
     show defaultTargetPlatform, TargetPlatform;
 
 // ignore: avoid_classes_with_only_static_members
+/// Readily supply the app's settings in an about window.
 class AppSettings {
   static p.TargetPlatform get defaultTargetPlatform => p.defaultTargetPlatform;
 

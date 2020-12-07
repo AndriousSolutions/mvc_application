@@ -111,7 +111,7 @@ void showCupertinoDatePicker(
   final cancelButton = CupertinoButton(
     padding: const EdgeInsets.symmetric(horizontal: 15),
     onPressed: () {
-      onDateTimeChanged(DateTime(0000, 01, 01, 0, 0, 0, 0, 0));
+      onDateTimeChanged(DateTime(0000));
       Navigator.of(context).pop();
     },
     child: cancelText,

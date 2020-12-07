@@ -26,12 +26,10 @@ import 'package:flutter/material.dart'
         BottomAppBar,
         BuildContext,
         Center,
-        Clip,
         ClipRect,
         Colors,
         Column,
         Container,
-        CrossAxisAlignment,
         CurvedAnimation,
         Curves,
         EdgeInsets,
@@ -46,7 +44,6 @@ import 'package:flutter/material.dart'
         Interval,
         Key,
         MainAxisAlignment,
-        MainAxisSize,
         Matrix4,
         Offset,
         Opacity,
@@ -85,13 +82,13 @@ class SimpleBottomAppBarState extends State<SimpleBottomAppBar>
   List<double> verticalShiftValues = [-4.0, 8.0, 8.0, 8.0];
   List<double> skewValues = [0.0, 0.0, 0.0, 0.0];
   AnimationController _controller;
-  Animation animation;
-  Animation skewFirstHalfAnimation;
-  Animation skewSecondHalfAnimation;
-  Animation translationFirstHalfAnimation;
-  Animation translationSecondHalfAnimation;
-  Animation opacityFirstHalfAnimation;
-  Animation opacitySecondHalfAnimation;
+  Animation<double> animation;
+  Animation<double> skewFirstHalfAnimation;
+  Animation<double> skewSecondHalfAnimation;
+  Animation<double> translationFirstHalfAnimation;
+  Animation<double> translationSecondHalfAnimation;
+  Animation<double> opacityFirstHalfAnimation;
+  Animation<double> opacitySecondHalfAnimation;
 
   @override
   void initState() {

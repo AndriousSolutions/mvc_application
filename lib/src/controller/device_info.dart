@@ -26,6 +26,7 @@ import 'package:device_info/device_info.dart'
     show AndroidDeviceInfo, DeviceInfoPlugin, IosDeviceInfo;
 
 // ignore: avoid_classes_with_only_static_members
+/// Supplies the devices information.
 class DeviceInfo {
   static bool _init = false;
   static final Map<String, dynamic> _deviceParameters = {};

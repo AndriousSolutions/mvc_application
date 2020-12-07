@@ -195,7 +195,8 @@ class AppState extends AppViewState<AppStateWidget> {
 
   Key key;
 
-  Widget home;
+  final Widget home;
+
   // Explicitly use the Material theme
   bool useMaterial;
   // Explicitly use the Cupertino theme
@@ -209,35 +210,38 @@ class AppState extends AppViewState<AppStateWidget> {
   bool get isCupertino => _isCupertino;
   bool _isCupertino;
 
-  Widget Function() inHome;
-  Map<String, WidgetBuilder> Function() inRoutes;
-  String Function() inInitialRoute;
-  RouteFactory Function() inOnGenerateRoute;
-  RouteFactory Function() inOnUnknownRoute;
-  List<NavigatorObserver> Function() inNavigatorObservers;
-  TransitionBuilder Function() inTransBuilder;
-  String Function() inTitle;
-  GenerateAppTitle inGenerateTitle;
-  ThemeData Function() inTheme;
-  CupertinoThemeData Function() iniOSTheme;
-  ThemeData Function() inDarkTheme;
-  ThemeMode Function() inThemeMode;
-  Color Function() inColor;
-  Locale Function() inLocale;
-  Iterable<LocalizationsDelegate<dynamic>> Function() inLocalizationsDelegates;
-  LocaleListResolutionCallback Function() inLocaleListResolutionCallback;
-  LocaleResolutionCallback Function() inLocaleResolutionCallback;
-  Iterable<Locale> Function() inSupportedLocales;
-  bool Function() inDebugShowMaterialGrid;
-  bool Function() inShowPerformanceOverlay;
-  bool Function() inCheckerboardRasterCacheImages;
-  bool Function() inCheckerboardOffscreenLayers;
-  bool Function() inShowSemanticsDebugger;
-  bool Function() inDebugShowCheckedModeBanner;
-  Map<LogicalKeySet, Intent> Function() inShortcuts;
-  Map<Type, Action<Intent>> Function() inActions;
-  void Function(FlutterErrorDetails details) inError;
-  bool Function(FlutterErrorDetails details) inAsyncError;
+  final Widget Function() inHome;
+  final Map<String, WidgetBuilder> Function() inRoutes;
+  final String Function() inInitialRoute;
+  final RouteFactory Function() inOnGenerateRoute;
+  final RouteFactory Function() inOnUnknownRoute;
+  final List<NavigatorObserver> Function() inNavigatorObservers;
+  final TransitionBuilder Function() inTransBuilder;
+  final String Function() inTitle;
+  final GenerateAppTitle inGenerateTitle;
+  final ThemeData Function() inTheme;
+  final CupertinoThemeData Function() iniOSTheme;
+  final ThemeData Function() inDarkTheme;
+  final ThemeMode Function() inThemeMode;
+  final Color Function() inColor;
+  final Locale Function() inLocale;
+  final Iterable<LocalizationsDelegate<dynamic>> Function()
+      inLocalizationsDelegates;
+  final LocaleListResolutionCallback Function() inLocaleListResolutionCallback;
+  final LocaleResolutionCallback Function() inLocaleResolutionCallback;
+  final Iterable<Locale> Function() inSupportedLocales;
+  final bool Function() inDebugShowMaterialGrid;
+  final bool Function() inShowPerformanceOverlay;
+  final bool Function() inCheckerboardRasterCacheImages;
+  final bool Function() inCheckerboardOffscreenLayers;
+  final bool Function() inShowSemanticsDebugger;
+  final bool Function() inDebugShowCheckedModeBanner;
+  final Map<LogicalKeySet, Intent> Function() inShortcuts;
+  final Map<Type, Action<Intent>> Function() inActions;
+  final void Function(FlutterErrorDetails details) inError;
+  final bool Function(FlutterErrorDetails details) inAsyncError;
+
+  // The error flag.
   bool _inError = false;
 
   /// Supply to the 'home' StatefulWidget

@@ -21,26 +21,25 @@ import 'dart:io' show File;
 import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory;
 
+// ignore: avoid_classes_with_only_static_members
 class Files {
   static String _path;
 
   static Future<String> get localPath async {
     if (_path == null) {
-      var directory = await getApplicationDocumentsDirectory();
+      final directory = await getApplicationDocumentsDirectory();
       _path = directory.path;
     }
     return _path;
   }
 
   static Future<String> read(String fileName) async {
-    var file = await get(fileName);
-
+    final file = await get(fileName);
     return readFile(file);
   }
 
   static Future<String> readFile(File file) async {
     String contents;
-
     try {
       // Read the file
       contents = await file.readAsString();
@@ -51,24 +50,24 @@ class Files {
     return contents;
   }
 
+  /// Write the file
   static Future<File> write(String fileName, String content) async {
-    var file = await get(fileName);
-    // Write the file
+    final File file = await get(fileName);
     return writeFile(file, content);
   }
 
-  static Future<File> writeFile(File file, String content) async {
-    // Write the file
-    return file.writeAsString(content, flush: true);
-  }
+  /// Write the file
+  static Future<File> writeFile(File file, String content) =>
+      file.writeAsString(content, flush: true);
 
   static Future<bool> exists(String fileName) async {
-    var file = await get(fileName);
+    final File file = await get(fileName);
+    // ignore: avoid_slow_async_io
     return file.exists();
   }
 
   static Future<File> get(String fileName) async {
-    var path = await localPath;
+    final String path = await localPath;
     return File('$path/$fileName');
   }
 }

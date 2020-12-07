@@ -71,6 +71,7 @@ void runApp(
   }, errorHandler.runZonedError);
 }
 
+/// A Controller for the 'app level'.
 class AppController extends ControllerMVC implements mvc.AppConMVC {
   //
   AppController([v.StateMVC state]) : super(state);
@@ -88,6 +89,7 @@ class AppController extends ControllerMVC implements mvc.AppConMVC {
   }
 }
 
+/// A Controller for the 'app level' to influence the whole app.
 class AppConMVC extends mvc.AppConMVC with v.ConnectivityListener, HandleError {
   //
   AppConMVC([v.StateMVC state]) : super(state);
@@ -97,6 +99,8 @@ class AppConMVC extends mvc.AppConMVC with v.ConnectivityListener, HandleError {
   void onConnectivityChanged(v.ConnectivityResult result) {}
 }
 
+/// Your 'working' class most concerned with the app's functionality.
+/// Incorporates an Error Handler.
 class ControllerMVC extends mvc.ControllerMVC with HandleError {
   //
   ControllerMVC([v.StateMVC state]) : super(state);

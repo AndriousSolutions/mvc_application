@@ -201,7 +201,7 @@ class FieldWidgets<T> extends DataFieldItem {
     this.autofocus,
     this.obscureText,
     this.autocorrect,
-    this.autovalidate,
+//    this.autovalidate,
     this.maxLengthEnforced,
     this.maxLines,
     this.maxLength,
@@ -285,8 +285,6 @@ class FieldWidgets<T> extends DataFieldItem {
                         // ignore: avoid_bool_literals_in_conditional_expressions
                         : value is double
                             ? value > 0
-                                ? true
-                                : false
                             : false
                     : false;
 
@@ -302,7 +300,7 @@ class FieldWidgets<T> extends DataFieldItem {
     autofocus ??= false;
     obscureText ??= false;
     autocorrect ??= true;
-    autovalidate ??= false;
+//    autovalidate ??= false;
     maxLengthEnforced ??= true;
     maxLines ??= 1;
     scrollPadding ??= const EdgeInsets.all(20);
@@ -343,7 +341,7 @@ class FieldWidgets<T> extends DataFieldItem {
   bool autofocus;
   bool obscureText;
   bool autocorrect;
-  bool autovalidate;
+//  bool autovalidate;
   bool maxLengthEnforced;
   int maxLines;
   int maxLength;
@@ -456,7 +454,7 @@ class FieldWidgets<T> extends DataFieldItem {
       autofocus: autofocus,
       obscureText: obscureText,
       autocorrect: autocorrect,
-      autovalidate: autovalidate,
+//      autovalidate: autovalidate,
       maxLengthEnforced: maxLengthEnforced,
       maxLines: maxLines,
       onChanged: changed ?? onChanged,
@@ -519,7 +517,7 @@ class FieldWidgets<T> extends DataFieldItem {
     this.autofocus = autofocus ?? this.autofocus;
     this.obscureText = obscureText ?? this.obscureText;
     this.autocorrect = autocorrect ?? this.autocorrect;
-    this.autovalidate = autovalidate ?? this.autovalidate;
+//    this.autovalidate = autovalidate ?? this.autovalidate;
     this.maxLengthEnforced = maxLengthEnforced ?? this.maxLengthEnforced;
     this.maxLines = maxLines ?? this.maxLines;
     this.maxLength = maxLength ?? this.maxLength;
@@ -592,7 +590,7 @@ class FieldWidgets<T> extends DataFieldItem {
         autofocus: autofocus ?? this.autofocus,
         obscureText: obscureText ?? this.obscureText,
         autocorrect: autocorrect ?? this.autocorrect,
-        autovalidate: autovalidate ?? this.autovalidate,
+//        autovalidate: autovalidate ?? this.autovalidate,
         maxLengthEnforced: maxLengthEnforced ?? this.maxLengthEnforced,
         maxLines: maxLines ?? this.maxLines,
         maxLength: maxLength ?? this.maxLength,
@@ -1065,6 +1063,7 @@ class FieldWidgets<T> extends DataFieldItem {
         this,
         title: label,
         items: items ?? [this],
+        dropItems: onDropItems() ?? [''],
       );
 
   ListItems<T> onListItems({
@@ -1082,9 +1081,12 @@ class FieldWidgets<T> extends DataFieldItem {
       mapItem: mapItem,
       onTap: onTap,
       onChanged: onChanged,
-      dropItems: dropItems,
+      dropItems: dropItems ?? onDropItems() ?? [''],
     );
   }
+
+  /// Allow a subclass supply the drop items.
+  List<String> onDropItems() => [''];
 
   /// Convert a list item into separate Email objects.
   void one2Many<U extends FieldWidgets<T>>(
@@ -1363,17 +1365,18 @@ class _LIstItemsState<T> extends State<ListItems<T>> {
       );
 
   Widget dropDown({FieldWidgets<T> field, ValueChanged<String> onChanged}) {
+    final List<String> dropItems = widget.dropItems ?? [''];
     String value = field?.type;
-    if (widget.dropItems.where((String item) {
+    if (dropItems.where((String item) {
       return item == value;
     }).isEmpty) {
-      value = widget.dropItems[0];
+      value = dropItems[0];
     }
     field?.type = value;
     return DropdownButton<String>(
       hint: const Text('type...'),
       value: value,
-      items: widget.dropItems.map((String v) {
+      items: dropItems.map((String v) {
         return DropdownMenuItem<String>(value: v, child: Text(v));
       }).toList(),
       onChanged: (String v) {

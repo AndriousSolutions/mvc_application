@@ -24,6 +24,7 @@ import 'package:flutter/material.dart'
 
 import 'package:flutter/services.dart' show AssetBundle, ByteData;
 
+/// The Assets manager.
 class Assets {
   static Future<bool> init(BuildContext context, {String dir}) {
     if (_assets == null) {

@@ -54,6 +54,7 @@ export 'package:connectivity/connectivity.dart'
 typedef ErrorWidgetBuilder = Widget Function(
     FlutterErrorDetails flutterErrorDetails);
 
+/// The app-level StatefulWidget
 /// The widget passed to runApp().
 abstract class AppStatefulWidget extends v.AppMVC {
   // You must supply a 'View.'

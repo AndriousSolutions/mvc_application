@@ -20,6 +20,7 @@
 import 'package:flutter_string_encryption/flutter_string_encryption.dart'
     show PlatformStringCryptor;
 
+/// Encryption os String values.
 class StringCrypt {
   StringCrypt({
     String key,

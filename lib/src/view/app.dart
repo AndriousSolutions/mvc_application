@@ -19,6 +19,8 @@ import 'package:mvc_application/view.dart' as v;
 import 'package:mvc_application/controller.dart'
     show ControllerMVC, DeviceInfo, HandleError;
 
+/// This class is available throughout the app
+/// Readily supply properties about the App.
 class App {
   //
   factory App({

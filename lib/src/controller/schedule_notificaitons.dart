@@ -71,6 +71,7 @@ export 'package:flutter_local_notifications/flutter_local_notifications.dart'
 
 export 'package:flutter/material.dart' show Color;
 
+/// The Notification feature for the phone.
 class ScheduleNotifications with HandleError {
 //
   ScheduleNotifications(

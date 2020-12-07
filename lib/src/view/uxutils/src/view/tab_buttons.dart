@@ -345,6 +345,7 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
     }
   }
 
+/*
   Color _getForegroundColor(int index) {
     // the same as the above
     if (index == _currentIndex) {
@@ -355,4 +356,5 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
       return _foregroundOff;
     }
   }
+*/
 }

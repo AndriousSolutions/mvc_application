@@ -23,6 +23,7 @@ import 'package:uuid/uuid.dart' show Uuid;
 
 import 'files.dart' show Files;
 
+/// Introduces a 'install file' unique to the app.
 class InstallFile {
   static const String FILE_NAME = '.install';
 
@@ -66,12 +67,9 @@ class InstallFile {
 
   static String writeInstallationFile(File file) {
     final uuid = Uuid();
-
     // Generate a v4 (random) id
-    var id = uuid.v4(); // -> '110ec58a-a0f2-4ac4-8393-c866d813b8d1'
-
+    final String id = uuid.v4(); // -> '110ec58a-a0f2-4ac4-8393-c866d813b8d1'
     Files.writeFile(file, id);
-
     return id;
   }
 }

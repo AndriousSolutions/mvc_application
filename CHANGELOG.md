@@ -1,3 +1,9 @@
+## 6.6.0
+  December 06, 2020
+- Further documentation
+- Finalize variables in app_state.dart
+- No longer using deprecated autovalidate from TextFormField
+
 ## 6.5.2
   November 26, 2020
 - Updated device_info: ^0.4.0

@@ -201,6 +201,9 @@ class Email extends FieldWidgets<Contact> with FormFields {
         mapItem: mapItem,
         onTap: onTap,
         dropItems: dropItems ?? ['home', 'work', 'other'],
-        onChanged: onChanged ?? (String value) => App.refresh(),
+        onChanged: onChanged ??
+            (String value) {
+              App.refresh();
+            },
       );
 }

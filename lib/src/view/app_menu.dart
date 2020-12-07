@@ -125,7 +125,7 @@ class AppMenu {
     /// Implement to take in a color change.
   }
 
-  static void onChange([ColorSwatch value]) {
+  static void onChange([ColorSwatch<int> value]) {
     //
     if (value == null) {
       final swatch = Prefs.getInt('colorTheme', -1);
