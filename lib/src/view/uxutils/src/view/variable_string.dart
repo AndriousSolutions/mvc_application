@@ -38,7 +38,7 @@ class VariableString {
   set value(String str) {
     _value = '';
     if (str != null && str.isNotEmpty) {
-      final RegExpMatch match = regExp.firstMatch(str);
+      final match = regExp.firstMatch(str);
       if (match != null) {
         _value = match.group(0).replaceAll("'", '');
       }

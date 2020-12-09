@@ -15,8 +15,7 @@ import '../example/lib/src/view.dart'
         State,
         StateMVC,
         StatefulWidget,
-        UniqueKey,
-        Widget;
+        UniqueKey;
 
 void main() {
   final test = _TestApp()
@@ -38,7 +37,7 @@ class _TestApp {
       await tester.pumpAndSettle();
 
       /// You can directly access the 'internal workings' of the app!
-      Widget widget = tester.widget(find.byKey(appKey));
+      var widget = tester.widget(find.byKey(appKey));
 
       expect(widget, isInstanceOf<AppMVC>());
 

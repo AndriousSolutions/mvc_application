@@ -71,8 +71,7 @@ class App {
   /// App-level error handling.
   static void onError(FlutterErrorDetails details) {
     // Call the App's 'current'error handler.
-    final FlutterExceptionHandler handler =
-        errorHandler?.flutterExceptionHandler;
+    final handler = errorHandler?.flutterExceptionHandler;
     if (handler != null) {
       handler(details);
     } else {
@@ -301,21 +300,20 @@ class App {
   ) {
     // Attempt to use localeListResolutionCallback.
     if (_vw?.localeListResolutionCallback != null) {
-      final Locale locale = _vw?.localeListResolutionCallback(
+      final locale = _vw?.localeListResolutionCallback(
           preferredLocales, _vw?.supportedLocales);
       if (locale != null) {
         return locale;
       }
     }
 
-    final Locale preferred =
-        preferredLocales != null && preferredLocales.isNotEmpty
-            ? preferredLocales.first
-            : null;
+    final preferred = preferredLocales != null && preferredLocales.isNotEmpty
+        ? preferredLocales.first
+        : null;
 
     // localeListResolutionCallback failed, falling back to localeResolutionCallback.
     if (_vw?.localeResolutionCallback != null) {
-      final Locale locale = _vw?.localeResolutionCallback(
+      final locale = _vw?.localeResolutionCallback(
         preferred,
         _vw?.supportedLocales,
       );
@@ -489,7 +487,9 @@ class App {
   static BuildContext get context => _vw?.context;
 
   /// The Scaffold object for this App's View.
-  static ScaffoldState get scaffold => Scaffold.of(context, nullOk: true);
+  static ScaffoldState get scaffold => Scaffold.of(context);
+  // 'maybeOf' only in Beta channel
+//  static ScaffoldState get scaffold => Scaffold.maybeOf(context);
 
   /// Return a pre-defined theme
   static ThemeData getThemeData() {
@@ -541,7 +541,7 @@ class App {
 
   /// Add a Connectivity listener.
   static bool addConnectivityListener(ConnectivityListener listener) {
-    bool add = false;
+    var add = false;
     if (listener != null) {
       add = _listeners.add(listener);
     }
@@ -550,7 +550,7 @@ class App {
 
   /// Remove a Connectivity listener.
   static bool removeConnectivityListener(ConnectivityListener listener) {
-    bool remove = false;
+    var remove = false;
     if (listener != null) {
       remove = _listeners.remove(listener);
     }

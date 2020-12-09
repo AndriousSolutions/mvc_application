@@ -103,7 +103,7 @@ class AppErrorHandler {
       // If there's an error in the error handler, we want to know about it.
       _inHandler = true;
 
-      final FlutterExceptionHandler _handler = _onError ?? _oldOnError;
+      final _handler = _onError ?? _oldOnError;
 
       if (_handler != null) {
         _handler(details);
@@ -148,7 +148,7 @@ class AppErrorHandler {
 
     // Are you allowed to reset a handler?
     // Only if an item was passed to reset.
-    bool reset = false;
+    var reset = false;
 
     if (handler != null) {
       // The default is to dump the error to the console. You can do more.
@@ -274,9 +274,9 @@ class AppErrorHandler {
     try {
       message = 'ERROR\n\n${details.exception}\n\n';
 
-      final List<String> stackTrace = details.stack.toString().split('\n');
+      final stackTrace = details.stack.toString().split('\n');
 
-      final int length = stackTrace.length > 5 ? 5 : stackTrace.length;
+      final length = stackTrace.length > 5 ? 5 : stackTrace.length;
 
       final buffer = StringBuffer()..write(message);
       for (var i = 0; i < length; i++) {
@@ -287,7 +287,7 @@ class AppErrorHandler {
       message = 'Error';
     }
 
-    final Object exception = details.exception;
+    final exception = details.exception;
     return DisplayErrorWidget(
         message: message, error: exception is Error ? exception : null);
   }
@@ -347,7 +347,7 @@ class _ErrorBox extends RenderBox {
         /// Generally, the much better way to draw text in a RenderObject is to
         /// use the TextPainter class. If you're looking for code to crib from,
         /// see the paragraph.dart file and the RenderParagraph class.
-        final ui.ParagraphBuilder builder = ui.ParagraphBuilder(paragraphStyle)
+        final builder = ui.ParagraphBuilder(paragraphStyle)
           ..pushStyle(textStyle)
           ..addText(message);
         _paragraph = builder.build();
@@ -409,7 +409,7 @@ class _ErrorBox extends RenderBox {
 
   /// Ligt gray in production; Red in development.
   static Color _initBackgroundColor() {
-    Color result = const Color(0xF0C0C0C0);
+    var result = const Color(0xF0C0C0C0);
     assert(() {
       result = const Color(0xF0900000);
       return true;
@@ -423,7 +423,7 @@ class _ErrorBox extends RenderBox {
 
   /// Black text in production; Yellow in development.
   static ui.TextStyle _initTextStyle() {
-    ui.TextStyle result = ui.TextStyle(
+    var result = ui.TextStyle(
       color: const Color(0xFF303030),
       fontFamily: 'sans-serif',
       fontSize: 18,
@@ -451,9 +451,9 @@ class _ErrorBox extends RenderBox {
     try {
       context.canvas.drawRect(offset & size, Paint()..color = backgroundColor);
       if (_paragraph != null) {
-        double width = size.width;
-        double left = 0;
-        double top = 0;
+        var width = size.width;
+        var left = 0.0;
+        var top = 0.0;
         if (width > padding.left + minimumWidth + padding.right) {
           width -= padding.left + padding.right;
           left += padding.left;

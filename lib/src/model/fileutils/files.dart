@@ -52,7 +52,7 @@ class Files {
 
   /// Write the file
   static Future<File> write(String fileName, String content) async {
-    final File file = await get(fileName);
+    final file = await get(fileName);
     return writeFile(file, content);
   }
 
@@ -61,13 +61,13 @@ class Files {
       file.writeAsString(content, flush: true);
 
   static Future<bool> exists(String fileName) async {
-    final File file = await get(fileName);
+    final file = await get(fileName);
     // ignore: avoid_slow_async_io
     return file.exists();
   }
 
   static Future<File> get(String fileName) async {
-    final String path = await localPath;
+    final path = await localPath;
     return File('$path/$fileName');
   }
 }

@@ -182,8 +182,8 @@ class SimpleBottomAppBarState extends State<SimpleBottomAppBar>
     BarButton button03,
     BarButton button04,
   ) {
-    final List<Widget> btnList = [];
-    int btnCount = 0;
+    final btnList = <Widget>[];
+    var btnCount = 0;
     if (button01 != null) {
       btnList.add(_barButton(button01, btnCount));
       btnCount++;

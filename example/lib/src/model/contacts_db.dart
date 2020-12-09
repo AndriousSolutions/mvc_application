@@ -94,27 +94,27 @@ class ContactsDB extends SQLiteDB {
 
   Future<List<Contact>> listContacts(List<Map<String, dynamic>> query) async {
     //
-    final List<Contact> contactList = [];
+    final contactList = <Contact>[];
 
-    for (final Map<String, dynamic> contact in query) {
+    for (final contact in query) {
       //
-      final Map<String, dynamic> map = contact.map((key, value) {
+      final map = contact.map((key, value) {
         return MapEntry(key, value is int ? value?.toString() : value);
       });
 
-      final List<Map<String, dynamic>> phones = await _this.rawQuery(
+      final phones = await _this.rawQuery(
           'SELECT * FROM Phones WHERE userid = ${contact['id']} AND deleted = 0');
 
       map['phones'] =
           phones.map((m) => DataFieldItem.fromMap(m, value: 'phone')).toList();
 
-      final List<Map<String, dynamic>> emails = await _this.rawQuery(
+      final emails = await _this.rawQuery(
           'SELECT * FROM Emails WHERE userid = ${contact['id']} AND deleted = 0');
 
       map['emails'] =
           emails.map((m) => DataFieldItem.fromMap(m, value: 'email')).toList();
 
-      final Contact _contact = Contact.fromMap(map);
+      final _contact = Contact.fromMap(map);
 
       contactList.add(_contact);
     }
@@ -124,9 +124,9 @@ class ContactsDB extends SQLiteDB {
 
   Future<bool> addContact(Contact contact) async {
     //
-    bool add = true;
+    var add = true;
 
-    final Map<String, dynamic> map = contact.toMap;
+    final map = contact.toMap;
 
     // The Contact's unique id
     dynamic id = map['id'];
@@ -175,7 +175,7 @@ class ContactsDB extends SQLiteDB {
 
   Future<bool> deleteContact(Contact contact) async {
     //
-    final Map<String, dynamic> map = contact.toMap;
+    final map = contact.toMap;
     //
     final id = map['id'];
 
@@ -217,7 +217,7 @@ class ContactsDB extends SQLiteDB {
 
   Future<int> undeleteContact(Contact contact) async {
     //
-    final Map<String, dynamic> map = contact.toMap;
+    final map = contact.toMap;
 
     var id = map['id'];
 
@@ -229,9 +229,9 @@ class ContactsDB extends SQLiteDB {
       id = int.parse(id);
     }
 
-    List<Map<String, dynamic>> query =
+    var query =
         await _this.rawQuery('UPDATE Contacts SET deleted = 0 WHERE id = $id');
-    final int rec = query.length;
+    final rec = query.length;
 
     if (rec > 0) {
       query =

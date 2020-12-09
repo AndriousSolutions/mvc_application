@@ -66,13 +66,13 @@ class AppMenu {
     _applicationLegalese = applicationLegalese;
     _children = children;
 
-    List<PopupMenuEntry<dynamic>> menuItems = [
+    var menuItems = <PopupMenuEntry<dynamic>>[
       PopupMenuItem<dynamic>(value: 'Color', child: I10n.t('Colour Theme')),
       PopupMenuItem<dynamic>(value: 'About', child: I10n.t('About'))
     ];
 
     if (_menu != null) {
-      final List<PopupMenuEntry<dynamic>> temp = [
+      final temp = <PopupMenuEntry<dynamic>>[
         ..._menu.menuItems(),
         const PopupMenuDivider(),
         ...menuItems

@@ -41,7 +41,7 @@ class Controller extends AppController {
   @override
   Future<bool> initAsync() async {
     _sortedAlpha = Prefs.getBool(_SORT_KEY, false);
-    final bool init = await model.initState();
+    final init = await model.initState();
     if (init) {
       await getContacts();
     }
@@ -84,7 +84,7 @@ class Controller extends AppController {
   Contact itemAt(int index) => items?.elementAt(index);
 
   Future<bool> deleteItem(int index) async {
-    final Contact contact = items?.elementAt(index);
+    final contact = items?.elementAt(index);
     final delete = await contact.delete();
     await refresh();
     return delete;

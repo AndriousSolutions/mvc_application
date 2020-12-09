@@ -57,7 +57,7 @@ void runApp(
   Isolate.current.addErrorListener(RawReceivePort((dynamic pair) {
     //
     if (pair is List<dynamic>) {
-      final List<dynamic> isolateError = pair;
+      final isolateError = pair;
       errorHandler.isolateError(
         isolateError.first.toString(),
         StackTrace.fromString(isolateError.last.toString()),

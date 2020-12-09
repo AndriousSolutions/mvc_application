@@ -1,3 +1,9 @@
+## 6.7.0
+  December 09, 2020
+- flutter analyze with pedantic: ^1.10.0-nullsafety.3
+- No annotation of local variables
+- Removed named parameter, nullOK from Scaffold.of(context);
+
 ## 6.6.0
   December 06, 2020
 - Further documentation

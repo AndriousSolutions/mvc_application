@@ -117,13 +117,13 @@ class ContactList extends ContactFields {
 
   Map<String, dynamic> get toMap {
     //
-    final List<Map<String, dynamic>> emailList = email.mapItems<Email>(
+    final emailList = email.mapItems<Email>(
       'email',
       _emails,
       (data) => Email.init(data),
     );
 
-    final List<Map<String, dynamic>> phoneList = phone.mapItems<Phone>(
+    final phoneList = phone.mapItems<Phone>(
       'phone',
       _phones,
       (data) => Phone.init(data),

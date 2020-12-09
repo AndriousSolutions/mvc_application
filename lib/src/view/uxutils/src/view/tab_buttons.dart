@@ -63,8 +63,8 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
   Animation<Color> _colorTweenBackgroundOff;
 
   // this will give the foreground color values of a button when it changes to an ON state
-  Animation<Color> _colorTweenForegroundOn;
-  Animation<Color> _colorTweenForegroundOff;
+  // Animation<Color> _colorTweenForegroundOn;
+  // Animation<Color> _colorTweenForegroundOff;
 
   // when swiping, the _controller.index value only changes after the animation, therefore, we need this to trigger the animations and save the current index
   int _currentIndex = 0;
@@ -100,8 +100,8 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
       _tabValues = widget._tabViews.values.toList();
     }
 
-    _foregroundOn = widget.foregroundOn ?? Colors.white;
-    _foregroundOff = widget.foregroundOff ?? Colors.black;
+    // _foregroundOn = widget.foregroundOn ?? Colors.white;
+    // _foregroundOff = widget.foregroundOff ?? Colors.black;
     _backgroundOn = widget.backgroundOn ?? Colors.blue;
     _backgroundOff = widget.backgroundOff ?? Colors.grey[300];
     _height = widget.height ?? 49;
@@ -110,7 +110,7 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
     _durationOff = widget.durationOff ?? 75;
     _durationOn = widget.durationOn ?? 150;
 
-    for (int index = 0; index < _tabKeys.length; index++) {
+    for (var index = 0; index < _tabKeys.length; index++) {
       // create a GlobalKey for each Tab
       _keys.add(GlobalKey());
     }
@@ -129,9 +129,9 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
     _colorTweenBackgroundOff =
         ColorTween(begin: _backgroundOn, end: _backgroundOff)
             .animate(_animationControllerOff);
-    _colorTweenForegroundOff =
-        ColorTween(begin: _foregroundOn, end: _foregroundOff)
-            .animate(_animationControllerOff);
+    // _colorTweenForegroundOff =
+    //     ColorTween(begin: _foregroundOn, end: _foregroundOff)
+    //         .animate(_animationControllerOff);
 
     _animationControllerOn = AnimationController(
         vsync: this, duration: Duration(milliseconds: _durationOn));
@@ -140,18 +140,18 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
     _colorTweenBackgroundOn =
         ColorTween(begin: _backgroundOff, end: _backgroundOn)
             .animate(_animationControllerOn);
-    _colorTweenForegroundOn =
-        ColorTween(begin: _foregroundOff, end: _foregroundOn)
-            .animate(_animationControllerOn);
+    // _colorTweenForegroundOn =
+    //     ColorTween(begin: _foregroundOff, end: _foregroundOn)
+    //         .animate(_animationControllerOn);
   }
 
   //
   List<Widget> _tabKeys;
   List<Widget> _tabValues;
 
-  // active button's foreground color
-  Color _foregroundOn;
-  Color _foregroundOff;
+  // // active button's foreground color
+  // Color _foregroundOn;
+  // Color _foregroundOff;
   // active button's background color
   Color _backgroundOn;
   Color _backgroundOff;
@@ -283,17 +283,17 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
 
   void _scrollTo(int index) {
     // get the screen width. This is used to check if we have an element off screen
-    double screenWidth = MediaQuery.of(context).size.width;
+    var screenWidth = MediaQuery.of(context).size.width;
 
     // get the button we want to scroll to
     RenderBox renderBox = _keys[index].currentContext.findRenderObject();
     // get its size
-    double size = renderBox.size.width;
+    var size = renderBox.size.width;
     // and position
-    double position = renderBox.localToGlobal(Offset.zero).dx;
+    var position = renderBox.localToGlobal(Offset.zero).dx;
 
     // this is how much the button is away from the center of the screen and how much we must scroll to get it into place
-    double offset = (position + size / 2) - screenWidth / 2;
+    var offset = (position + size / 2) - screenWidth / 2;
 
     // if the button is to the left of the middle
     if (offset < 0) {

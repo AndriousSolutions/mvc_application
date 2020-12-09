@@ -1,7 +1,7 @@
 name: mvc_application
 description: Flutter Framework for Applications using the MVC Design Pattern
 
-version: 6.6.0
+version: 6.7.0
 
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
@@ -21,7 +21,7 @@ dependencies:
 #    path: ../../packages/mvc_pattern
 
   # https://pub.dartlang.org/packages/connectivity
-  connectivity: ^2.0.0
+  connectivity: ^2.0.0 #^3.0.0-nullsafety.1
 
   # https://pub.dartlang.org/packages/url_launcher
   # used in AppSettings.dart
@@ -35,7 +35,7 @@ dependencies:
   path_provider: ^1.0.0
 
   # https://pub.dartlang.org/packages/device_info
-  device_info: ^1.0.0
+  device_info: ^1.0.0 #^2.0.0-nullsafety.1
 
   # https://pub.dev/packages/flutter_material_color_picker
   flutter_material_color_picker: ^1.0.0
@@ -66,7 +66,7 @@ dependencies:
   # Most of the recommended lints directly implement the guidelines set out in Effective Dart:
   # https://dart.dev/guides/language/effective-dart
   # https://pub.dev/packages/pedantic
-  pedantic: ^1.0.0
+  pedantic: ^1.0.0 #^1.10.0-nullsafety.3
 
   # https://pub.dev/packages/i10n_translator/
   # /// Proven very important in createElement()!
@@ -77,12 +77,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
 #  # Setting up Lint Rules
 #  # Most of the recommended lints directly implement the guidelines set out in Effective Dart:
 #  # https://dart.dev/guides/language/effective-dart
 #  # https://pub.dev/packages/pedantic
-#  pedantic: ^1.0.0
+#  pedantic: ^1.10.0-nullsafety.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

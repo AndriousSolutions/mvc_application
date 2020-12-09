@@ -60,7 +60,7 @@ class InstallFile {
   static Future<String> readInstallationFile(File installFile) async {
     final file = await Files.get(FILE_NAME);
 
-    final String content = await Files.readFile(file);
+    final content = await Files.readFile(file);
 
     return content;
   }
@@ -68,7 +68,7 @@ class InstallFile {
   static String writeInstallationFile(File file) {
     final uuid = Uuid();
     // Generate a v4 (random) id
-    final String id = uuid.v4(); // -> '110ec58a-a0f2-4ac4-8393-c866d813b8d1'
+    final id = uuid.v4(); // -> '110ec58a-a0f2-4ac4-8393-c866d813b8d1'
     Files.writeFile(file, id);
     return id;
   }

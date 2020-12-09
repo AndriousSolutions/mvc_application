@@ -36,7 +36,6 @@ import 'package:flutter/cupertino.dart'
         CupertinoDatePickerMode,
         CupertinoIcons,
         CupertinoTheme,
-        CupertinoThemeData,
         EdgeInsets,
         Expanded,
         FontWeight,
@@ -81,7 +80,7 @@ void showCupertinoDatePicker(
   initialDateTime ??= DateTime.now();
 
   // Retrieve the current 'theme'
-  final CupertinoThemeData theme = CupertinoTheme.of(context);
+  final theme = CupertinoTheme.of(context);
 
   // Assign the spinner's background colour.
   backgroundColor ??= theme.scaffoldBackgroundColor;

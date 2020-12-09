@@ -42,10 +42,10 @@ class DeviceInfo {
       return _deviceParameters;
     }
     if (UniversalPlatform.isAndroid) {
-      final AndroidDeviceInfo info = await DeviceInfoPlugin().androidInfo;
+      final info = await DeviceInfoPlugin().androidInfo;
       _loadAndroidParameters(info);
     } else if (UniversalPlatform.isIOS) {
-      final IosDeviceInfo info = await DeviceInfoPlugin().iosInfo;
+      final info = await DeviceInfoPlugin().iosInfo;
       _loadiOSParameters(info);
     } else if (UniversalPlatform.isWindows) {
     } else if (UniversalPlatform.isFuchsia) {

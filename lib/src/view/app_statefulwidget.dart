@@ -113,7 +113,7 @@ abstract class AppStatefulWidget extends v.AppMVC {
   /// Runs all the asynchronous operations necessary before the app can proceed.
   @override
   Future<bool> initAsync() async {
-    bool init = true;
+    var init = true;
     if (v.App.hotReload) {
       _vw = createView();
       _vw?.con?.initApp();
@@ -171,7 +171,7 @@ abstract class AppStatefulWidget extends v.AppMVC {
         library: 'app_statefulwidget',
         context: ErrorDescription('While getting ready in FutureBuilder Async'),
       );
-      bool handled = false;
+      var handled = false;
       if (_vw != null) {
         handled = _vw.onAsyncError(details);
       }

@@ -53,8 +53,6 @@ import 'package:mvc_application/view.dart' show App, AppMenu, StateMVC;
 
 import '../../controller.dart' show Controller;
 
-import '../../model.dart' show Contact;
-
 import '../../view.dart' show AppMenu, ContactDetails, StateMVC, unawaited;
 
 class ContactsList extends StatefulWidget {
@@ -102,7 +100,7 @@ class _ContactListState extends StateMVC<ContactsList> {
               : ListView.builder(
                   itemCount: con.items?.length ?? 0,
                   itemBuilder: (BuildContext context, int index) {
-                    final Contact contact = con.itemAt(index);
+                    final contact = con.itemAt(index);
                     return contact.displayName.onDismissible(
                       child: Container(
                         decoration: BoxDecoration(
@@ -128,7 +126,7 @@ class _ContactListState extends StateMVC<ContactsList> {
                       ),
                       dismissed: (DismissDirection direction) {
                         con.deleteItem(index);
-                        final String action =
+                        final action =
                             (direction == DismissDirection.endToStart)
                                 ? 'deleted'
                                 : 'archived';

@@ -32,8 +32,8 @@ Future<bool> showBox({
 }) {
   button01 ??= OKOption();
   button02 ??= CancelOption();
-  final ThemeData theme = Theme.of(context);
-  final TextStyle dialogTextStyle =
+  final theme = Theme.of(context);
+  final dialogTextStyle =
       theme.textTheme.subtitle1.copyWith(color: theme.textTheme.caption.color);
   if (App.useMaterial) {
     return showDialog<bool>(
@@ -167,7 +167,7 @@ mixin DialogOptions {
   bool switchButtons;
 
   List<Widget> _listOptions() {
-    final List<Widget> opList = [];
+    final opList = <Widget>[];
     Option option01, option02;
 
     if (button01 != null || press01 != null) {

@@ -54,7 +54,7 @@ class DataFields<T> extends _AddFields<T> {
   Widget linkForm(Widget child) => _ChildForm<T>(parent: this, child: child);
 
   bool saveForm() {
-    final bool save = _formState?.validate() ?? true;
+    final save = _formState?.validate() ?? true;
     if (save) {
       _formState?.save();
     } else {
@@ -85,8 +85,8 @@ class DataFields<T> extends _AddFields<T> {
 
   /// Any errors from every [FormField] that is a descendant of this [Form].
   String fieldErrors() {
-    String errors = '';
-    for (final FormFieldState<dynamic> field in _fields) {
+    var errors = '';
+    for (final field in _fields) {
       if (field.hasError) {
         errors = errors + field.errorText;
       }
@@ -534,9 +534,9 @@ class FieldWidgets<T> extends DataFieldItem {
     this.autofillHints = autofillHints ?? this.autofillHints;
     this.autovalidateMode = autovalidateMode ?? this.autovalidateMode;
 
-    final m.TextFormField oldWidget = _textFormField;
+    final oldWidget = _textFormField;
     _textFormField = null;
-    final m.TextFormField newWidget = textFormField;
+    final newWidget = textFormField;
     _textFormField = oldWidget;
     return newWidget;
   }
@@ -681,7 +681,7 @@ class FieldWidgets<T> extends DataFieldItem {
     this.semanticsLabel = semanticsLabel ?? this.semanticsLabel;
     this.textWidthBasis = textWidthBasis ?? this.textWidthBasis;
     this.textHeightBehavior = textHeightBehavior ?? this.textHeightBehavior;
-    final Text oldWidget = _text;
+    final oldWidget = _text;
     _text = null;
     Text newWidget;
     // text getter
@@ -743,7 +743,7 @@ class FieldWidgets<T> extends DataFieldItem {
     this.semanticsLabel = semanticsLabel ?? this.semanticsLabel;
     this.textWidthBasis = textWidthBasis ?? this.textWidthBasis;
     this.textHeightBehavior = textHeightBehavior ?? this.textHeightBehavior;
-    final Text oldWidget = _richText;
+    final oldWidget = _richText;
     _richText = null;
     Text newWidget;
     // text getter
@@ -789,9 +789,9 @@ class FieldWidgets<T> extends DataFieldItem {
     this.textWidthBasis = textWidthBasis ?? this.textWidthBasis;
     this.textHeightBehavior = textHeightBehavior ?? this.textHeightBehavior;
     this.child = child ?? this.child;
-    final DefaultTextStyle oldWidget = _defaultTextStyle;
+    final oldWidget = _defaultTextStyle;
     _defaultTextStyle = null;
-    final DefaultTextStyle newWidget = defaultTextStyle;
+    final newWidget = defaultTextStyle;
     _defaultTextStyle = oldWidget;
     return newWidget;
   }
@@ -841,9 +841,9 @@ class FieldWidgets<T> extends DataFieldItem {
     this.tap = tap ?? this.tap;
     this.longPress = longPress ?? this.longPress;
     this.selected = selected ?? this.selected;
-    final ListTile oldWidget = _listTile;
+    final oldWidget = _listTile;
     _listTile = null;
-    final ListTile newWidget = listTile;
+    final newWidget = listTile;
     _listTile = oldWidget;
     return newWidget;
   }
@@ -901,9 +901,9 @@ class FieldWidgets<T> extends DataFieldItem {
     this.secondary = secondary ?? this.secondary;
     this.selected = selected ?? this.selected;
     this.controlAffinity = controlAffinity ?? this.controlAffinity;
-    final CheckboxListTile oldWidget = _checkboxListTile;
+    final oldWidget = _checkboxListTile;
     _checkboxListTile = null;
-    final CheckboxListTile newWidget = checkboxListTile;
+    final newWidget = checkboxListTile;
     _checkboxListTile = oldWidget;
     return newWidget;
   }
@@ -976,9 +976,9 @@ class FieldWidgets<T> extends DataFieldItem {
     this.dismissThresholds = dismissThresholds ?? this.dismissThresholds;
     this.movementDuration = movementDuration ?? this.movementDuration;
     this.crossAxisEndOffset = crossAxisEndOffset ?? this.crossAxisEndOffset;
-    final Dismissible oldWidget = _dismissible;
+    final oldWidget = _dismissible;
     _dismissible = null;
-    final Dismissible newWidget = dismissible;
+    final newWidget = dismissible;
     _dismissible = oldWidget;
     return newWidget;
   }
@@ -1031,9 +1031,9 @@ class FieldWidgets<T> extends DataFieldItem {
     this.tristate = tristate ?? this.tristate;
     this.materialTapTargetSize =
         materialTapTargetSize ?? this.materialTapTargetSize;
-    final Checkbox oldWidget = _checkbox;
+    final oldWidget = _checkbox;
     _checkbox = null;
-    final Checkbox newWidget = checkbox;
+    final newWidget = checkbox;
     _checkbox = oldWidget;
     return newWidget;
   }
@@ -1098,9 +1098,9 @@ class FieldWidgets<T> extends DataFieldItem {
     final List<DataFieldItem> dataItems = value;
     value = null;
 
-    final List<U> fields = [];
+    final fields = <U>[];
 
-    for (final DataFieldItem item in dataItems) {
+    for (final item in dataItems) {
       final field = create()
         ..value = item.value
         ..type = item.type
@@ -1126,7 +1126,7 @@ class FieldWidgets<T> extends DataFieldItem {
     if (itemsObj.value is String) {
       final String value = itemsObj.value;
       if (value.isNotEmpty) {
-        final U newItem = create(DataFieldItem(
+        final newItem = create(DataFieldItem(
           label: itemsObj.label,
           value: itemsObj.value,
           type: itemsObj.type,
@@ -1135,9 +1135,9 @@ class FieldWidgets<T> extends DataFieldItem {
       }
     }
 
-    final List<Map<String, dynamic>> list = [];
+    final list = <Map<String, dynamic>>[];
 
-    for (final DataFieldItem item in itemsObj.items ?? []) {
+    for (final item in itemsObj.items ?? []) {
       // Assign the appropriate map key value.
       item.keys(value: key);
       list.add(item.toMap);
@@ -1148,11 +1148,11 @@ class FieldWidgets<T> extends DataFieldItem {
 
   String initials(String fullName) {
     //
-    final List<String> names = fullName.split(' ');
+    final names = fullName.split(' ');
 
     final initials = StringBuffer();
 
-    for (final String name in names) {
+    for (final name in names) {
       if (name.isEmpty) {
         continue;
       }
@@ -1365,7 +1365,7 @@ class _LIstItemsState<T> extends State<ListItems<T>> {
       );
 
   Widget dropDown({FieldWidgets<T> field, ValueChanged<String> onChanged}) {
-    final List<String> dropItems = widget.dropItems ?? [''];
+    final dropItems = widget.dropItems ?? [''];
     String value = field?.type;
     if (dropItems.where((String item) {
       return item == value;

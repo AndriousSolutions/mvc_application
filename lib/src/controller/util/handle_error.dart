@@ -19,7 +19,7 @@
 mixin HandleError {
   /// Return the 'last' error if any.
   Exception getError([dynamic error]) {
-    Exception ex = _error;
+    var ex = _error;
     if (error == null) {
       _error = null;
     } else {

@@ -51,7 +51,7 @@ class SnappingListScrollPhysics extends ScrollPhysics {
 
   double _getTargetPixels(
       ScrollPosition position, Tolerance tolerance, double velocity) {
-    double item = _getItem(position);
+    var item = _getItem(position);
     if (velocity < -tolerance.velocity) {
       item -= 0.5;
     } else if (velocity > tolerance.velocity) {
@@ -69,8 +69,8 @@ class SnappingListScrollPhysics extends ScrollPhysics {
         (velocity >= 0.0 && position.pixels >= position.maxScrollExtent)) {
       return super.createBallisticSimulation(position, velocity);
     }
-    final Tolerance tolerance = this.tolerance;
-    final double target = _getTargetPixels(position, tolerance, velocity);
+    final tolerance = this.tolerance;
+    final target = _getTargetPixels(position, tolerance, velocity);
     if (target != position.pixels) {
       return ScrollSpringSimulation(spring, position.pixels, target, velocity,
           tolerance: tolerance);
