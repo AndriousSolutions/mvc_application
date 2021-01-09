@@ -42,23 +42,23 @@ import 'package:mvc_application/view.dart' as v
 /// Add an Error Handler right at the start.
 void runApp(
   m.Widget app, {
-  FlutterExceptionHandler handler,
-  m.ErrorWidgetBuilder builder,
-  v.ReportErrorHandler report,
+  FlutterExceptionHandler errorHandler,
+  m.ErrorWidgetBuilder errorScreen,
+  v.ReportErrorHandler errorReport,
   bool allowNewHandlers = false,
 }) {
   // Instantiate the app's error handler.
-  final errorHandler = v.AppErrorHandler(
-      handler: handler,
-      builder: builder,
-      report: report,
+  final handler = v.AppErrorHandler(
+      handler: errorHandler,
+      builder: errorScreen,
+      report: errorReport,
       allowNewHandlers: allowNewHandlers);
 
   Isolate.current.addErrorListener(RawReceivePort((dynamic pair) {
     //
     if (pair is List<dynamic>) {
       final isolateError = pair;
-      errorHandler.isolateError(
+      handler.isolateError(
         isolateError.first.toString(),
         StackTrace.fromString(isolateError.last.toString()),
       );
@@ -68,7 +68,7 @@ void runApp(
   // Catch any errors attempting to execute runApp();
   runZonedGuarded(() {
     m.runApp(app);
-  }, errorHandler.runZonedError);
+  }, handler.runZonedError);
 }
 
 /// A Controller for the 'app level'.

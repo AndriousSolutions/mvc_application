@@ -1,3 +1,7 @@
+## 6.8.1
+  January 09, 2021
+- Renamed parameters errorHandler, errorScreen, errorReport in controller/app.dart
+
 ## 6.8.0
   January 09, 2021
 - consistency naming of named parameters: errorHandler, errorScreen, errorReport
