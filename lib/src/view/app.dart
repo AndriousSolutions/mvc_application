@@ -24,12 +24,12 @@ import 'package:mvc_application/controller.dart'
 class App {
   //
   factory App({
-    FlutterExceptionHandler handler,
-    ErrorWidgetBuilder builder,
-    v.ReportErrorHandler report,
+    FlutterExceptionHandler errorHandler,
+    ErrorWidgetBuilder errorScreen,
+    v.ReportErrorHandler errorReport,
     bool allowNewHandlers = true,
   }) =>
-      _this ??= App._(handler, builder, report, allowNewHandlers);
+      _this ??= App._(errorHandler, errorScreen, errorReport, allowNewHandlers);
 
   App._(
     FlutterExceptionHandler errorHandler,

@@ -35,7 +35,7 @@ import 'package:mvc_application/view.dart' show ReportErrorHandler;
 /// This of course is fake. Merely to satisfy the Dart Analysis tool.
 void runApp(
   Widget app, {
-  FlutterExceptionHandler handler,
-  ErrorWidgetBuilder builder,
+  FlutterExceptionHandler errorHandler,
+  ErrorWidgetBuilder errorScreen,
   ReportErrorHandler errorReport,
 }) {}

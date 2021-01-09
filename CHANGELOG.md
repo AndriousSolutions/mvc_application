@@ -1,3 +1,7 @@
+## 6.8.0
+  January 09, 2021
+- consistency naming of named parameters: errorHandler, errorScreen, errorReport
+
 ## 6.7.0
   December 09, 2020
 - flutter analyze with pedantic: ^1.10.0-nullsafety.3

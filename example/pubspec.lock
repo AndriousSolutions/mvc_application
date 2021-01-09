@@ -307,14 +307,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "6.7.0"
+    version: "6.8.0"
   mvc_pattern:
     dependency: transitive
     description:
       name: mvc_pattern
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.6.3"
+    version: "6.6.3+2"
   package_info:
     dependency: transitive
     description:
@@ -335,7 +335,7 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.24"
+    version: "1.6.27"
   path_provider_linux:
     dependency: transitive
     description:
@@ -349,7 +349,7 @@ packages:
       name: path_provider_macos
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.4+6"
+    version: "0.0.4+8"
   path_provider_platform_interface:
     dependency: transitive
     description:
