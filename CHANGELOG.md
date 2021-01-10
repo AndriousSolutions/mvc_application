@@ -1,3 +1,7 @@
+## 6.9.1
+  January 09, 2021
+- app_menu.dart' show AppMenu, AppPopupMenu
+
 ## 6.9.0
   January 09, 2021
 - Introduced class AppPopupMenu<T>

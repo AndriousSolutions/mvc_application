@@ -77,7 +77,8 @@ export 'package:flutter_localizations/flutter_localizations.dart'
 export 'package:mvc_application/src/view/utils/timezone.dart';
 
 /// Menus
-export 'package:mvc_application/src/view/app_menu.dart' show AppMenu, Menu;
+export 'package:mvc_application/src/view/app_menu.dart'
+    show AppMenu, AppPopupMenu, Menu;
 
 /// UX Utils
 export 'package:mvc_application/src/view/uxutils/view.dart';
