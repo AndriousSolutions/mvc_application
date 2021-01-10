@@ -1,3 +1,7 @@
+## 6.9.0
+  January 09, 2021
+- Introduced class AppPopupMenu<T>
+
 ## 6.8.1
   January 09, 2021
 - Renamed parameters errorHandler, errorScreen, errorReport in controller/app.dart
