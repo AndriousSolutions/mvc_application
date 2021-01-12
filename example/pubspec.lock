@@ -307,13 +307,13 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "6.10.0"
+    version: "6.10.1"
   mvc_pattern:
     dependency: transitive
     description:
-      path: "../../mvc_pattern"
-      relative: true
-    source: path
+      name: mvc_pattern
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "6.6.3+2"
   package_info:
     dependency: transitive

@@ -1,8 +1,12 @@
+## 6.10.1
+  January 12, 2021
+- abstract class AppPopupMenu<T>;
+- key: key ?? this.key,
+- timezone: ^0.5.0
+
 ## 6.10.0
   January 10, 2021
 - Allow for popup menu on iOS: popupMenu = Material(child: popupMenu);
-- abstract class AppPopupMenu<T>;
-- key: key ?? this.key,
 
 ## 6.9.1
   January 09, 2021
