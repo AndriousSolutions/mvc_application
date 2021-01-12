@@ -26,6 +26,7 @@ import 'package:flutter/material.dart'
         EdgeInsetsGeometry,
         FloatingActionButtonThemeData,
         Key,
+        Material,
         Offset,
         PopupMenuButton,
         PopupMenuCanceled,
@@ -217,7 +218,8 @@ abstract class Menu {
   StateMVC state;
 }
 
-class AppPopupMenu<T> {
+/// Abstract so to override fields
+abstract class AppPopupMenu<T> {
   //
   AppPopupMenu({
     this.key,
@@ -370,7 +372,8 @@ class AppPopupMenu<T> {
     return Builder(builder: (context) {
       this.context ??= context;
       items ??= this.items;
-      return PopupMenuButton<T>(
+      Widget popupMenu = PopupMenuButton<T>(
+        key: key ?? this.key,
         itemBuilder: itemBuilder ?? items != null && items.isNotEmpty
             ? _onItems(items)
             : this.itemBuilder ?? onItemBuilder ?? _onItems(onItems()),
@@ -392,6 +395,12 @@ class AppPopupMenu<T> {
             true,
         child: child ?? this.child ?? onChild(),
       );
+      // If not running under the MaterialApp widget.
+      if (context.widget is! Material &&
+          context.findAncestorWidgetOfExactType<Material>() == null) {
+        popupMenu = Material(child: popupMenu);
+      }
+      return popupMenu;
     });
   }
 }

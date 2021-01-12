@@ -1,3 +1,9 @@
+## 6.10.0
+  January 10, 2021
+- Allow for popup menu on iOS: popupMenu = Material(child: popupMenu);
+- abstract class AppPopupMenu<T>;
+- key: key ?? this.key,
+
 ## 6.9.1
   January 09, 2021
 - app_menu.dart' show AppMenu, AppPopupMenu
