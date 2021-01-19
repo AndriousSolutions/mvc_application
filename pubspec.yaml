@@ -1,7 +1,7 @@
 name: mvc_application
 description: Flutter Framework for Applications using the MVC Design Pattern
 
-version: 6.10.1
+version: 6.10.2
 
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
@@ -17,7 +17,7 @@ dependencies:
     sdk: flutter
 
   # https://pub.dartlang.org/packages/mvc_pattern
-  mvc_pattern: ^6.0.0
+  mvc_pattern: '>=6.0.0 <7.0.0'
 #    path: ../../packages/mvc_pattern
 
   # https://pub.dartlang.org/packages/connectivity
@@ -25,52 +25,52 @@ dependencies:
 
   # https://pub.dartlang.org/packages/url_launcher
   # used in AppSettings.dart
-  url_launcher: ^5.0.0
-  url_launcher_web: ^0.1.0
+  url_launcher: '>=5.0.0 <6.0.0'
+  url_launcher_web: '>=0.1.0 <1.0.0'
 
   # https://pub.dartlang.org/packages/package_info
-  package_info: ^0.4.0
+  package_info: '>=0.4.0 <1.0.0'
 
   # https://pub.dev/packages/path_provider
-  path_provider: ^1.0.0
+  path_provider: '>=1.0.0 <2.0.0'
 
   # https://pub.dartlang.org/packages/device_info
-  device_info: ^1.0.0 #^2.0.0-nullsafety.1
+  device_info: '>=1.0.0 <2.0.0' #^2.0.0-nullsafety.1
 
   # https://pub.dev/packages/flutter_material_color_picker
-  flutter_material_color_picker: ^1.0.0
+  flutter_material_color_picker: '>=1.0.0 <2.0.0'
 
   # https://pub.dartlang.org/packages/prefs
-  prefs: ^3.0.0
+  prefs: '>=3.0.0 <4.0.0'
   #  path: ../../packages/prefs
 
   # https://pub.dartlang.org/packages/uuid
-  uuid: ^2.0.0
+  uuid: '>=2.0.0 <3.0.0'
 
   # https://pub.dev/packages/flutter_string_encryption
-  flutter_string_encryption: ^0.3.0
+  flutter_string_encryption: '>=0.3.0 <1.0.0'
 
   # https://pub.dev/packages/flutter_local_notifications
-  flutter_local_notifications: ^3.0.0
+  flutter_local_notifications: '>=3.0.0 <4.0.0'
 
   # https://pub.dev/packages/timezone
-  timezone: ^0.5.0
+  timezone: '>=0.5.0 <1.0.0'
 
   # https://pub.dev/packages/flutter_native_timezone/
-  flutter_native_timezone: ^1.0.0
+  flutter_native_timezone: '>=1.0.0 <2.0.0'
 
   # https://pub.dev/packages/universal_platform
-  universal_platform: ^0.1.0
+  universal_platform: '>=0.1.0 <1.0.0'
 
   # Setting up Lint Rules
   # Most of the recommended lints directly implement the guidelines set out in Effective Dart:
   # https://dart.dev/guides/language/effective-dart
   # https://pub.dev/packages/pedantic
-  pedantic: ^1.0.0 #^1.10.0-nullsafety.3
+  pedantic: '>=1.0.0 <2.0.0' #^1.10.0-nullsafety.3
 
   # https://pub.dev/packages/i10n_translator/
   # /// Proven very important in createElement()!
-  i10n_translator: ^1.0.0
+  i10n_translator: '>=1.0.0 <2.0.0'
   #    path: ../i10n_translator
 
 dev_dependencies:

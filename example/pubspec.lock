@@ -307,7 +307,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "6.10.1"
+    version: "6.10.2"
   mvc_pattern:
     dependency: transitive
     description:

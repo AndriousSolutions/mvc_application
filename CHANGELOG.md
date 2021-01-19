@@ -1,3 +1,7 @@
+## 6.10.2
+ January 13, 2021
+- Supply a range to pre-release dependencies '>=0.1.0 <1.0.0'
+
 ## 6.10.1
   January 12, 2021
 - abstract class AppPopupMenu<T>;
