@@ -1,4 +1,4 @@
-## 6.11.0
+## 6.11.0+2
  January 25, 2021
 - bool setAppStatefulWidget()
 - static BuildContext get context => _appWidget.context;
@@ -6,6 +6,7 @@
 - m.Material(child: m.TextFormField(
 - Widget get listTile => App.useCupertino ? CupertinoListTile(
 - return Material(child: DropdownButton<String>(
+- file format
 
 ## 6.10.2
  January 13, 2021

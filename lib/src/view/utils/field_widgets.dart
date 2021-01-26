@@ -750,8 +750,7 @@ class FieldWidgets<T> extends DataFieldItem {
     return newWidget;
   }
 
-  DefaultTextStyle get defaultTextStyle =>
-      DefaultTextStyle(
+  DefaultTextStyle get defaultTextStyle => DefaultTextStyle(
         key: Key('DefaultTextStyle$_key'),
         style: style,
         textAlign: textAlign,
@@ -856,8 +855,7 @@ class FieldWidgets<T> extends DataFieldItem {
   // Override to place what happens when the field is 'long' pressed.
   void onLongPress() {}
 
-  CheckboxListTile get checkboxListTile =>
-      CheckboxListTile(
+  CheckboxListTile get checkboxListTile => CheckboxListTile(
         key: Key('CheckboxListTile$_key'),
         value: _checkValue,
         onChanged: toggle ?? onToggle,

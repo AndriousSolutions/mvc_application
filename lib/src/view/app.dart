@@ -58,11 +58,12 @@ class App {
   }
 
   /// Assign the AppStateful object
-  bool setAppStatefulWidget(v.AppStatefulWidget appWidget){
+  bool setAppStatefulWidget(v.AppStatefulWidget appWidget) {
     // Only assigned once with the first call.
     _appWidget ??= appWidget;
     return appWidget != null;
   }
+
   static v.AppStatefulWidget _appWidget;
 
   /// Assign the class with the AppState object.
@@ -140,7 +141,8 @@ class App {
   /// Indicates if the App is running the Material interface theme.
   static bool get useMaterial =>
       (_appState != null && _appState.useMaterial) ||
-      (UniversalPlatform.isAndroid && (_appState == null || !_appState.switchUI)) ||
+      (UniversalPlatform.isAndroid &&
+          (_appState == null || !_appState.switchUI)) ||
       (UniversalPlatform.isIOS && (_appState == null || _appState.switchUI));
 
   // Use Cupertino UI when explicitly specified or even when running in Android
@@ -148,7 +150,8 @@ class App {
   static bool get useCupertino =>
       (_appState != null && _appState.useCupertino) ||
       (UniversalPlatform.isIOS && (_appState == null || !_appState.switchUI)) ||
-      (UniversalPlatform.isAndroid && (_appState == null || _appState.switchUI));
+      (UniversalPlatform.isAndroid &&
+          (_appState == null || _appState.switchUI));
 
   /// Explicitly change to a particular interface.
   static void changeUI(String ui) {
@@ -289,12 +292,11 @@ class App {
 
   /// Returns the App's current locale.
   static Locale get locale =>
-      _appState?.locale ??=
-      Localizations.localeOf(context, nullOk: true) ??
-      _resolveLocales(
-        WidgetsBinding.instance.window.locales,
-        _appState?.supportedLocales,
-      );
+      _appState?.locale ??= Localizations.localeOf(context, nullOk: true) ??
+          _resolveLocales(
+            WidgetsBinding.instance.window.locales,
+            _appState?.supportedLocales,
+          );
   static set locale(Locale v) {
     if (v != null) {
       _appState?.locale = v;
@@ -404,7 +406,8 @@ class App {
   }
 
   /// Shows a little "DEBUG" banner in checked mode.
-  static bool get debugShowCheckedModeBanner => _appState?.debugShowCheckedModeBanner;
+  static bool get debugShowCheckedModeBanner =>
+      _appState?.debugShowCheckedModeBanner;
   static set debugShowCheckedModeBanner(bool v) {
     if (v != null) {
       _appState?.debugShowCheckedModeBanner = v;
@@ -420,7 +423,8 @@ class App {
   }
 
   /// RenderBox paints a line at its baselines.
-  static bool get debugPaintBaselinesEnabled => _appState?.debugPaintBaselinesEnabled;
+  static bool get debugPaintBaselinesEnabled =>
+      _appState?.debugPaintBaselinesEnabled;
   static set debugPaintBaselinesEnabled(bool v) {
     if (v != null) {
       _appState?.debugPaintBaselinesEnabled = v;
@@ -428,7 +432,8 @@ class App {
   }
 
   /// Objects flash while they are being tapped.
-  static bool get debugPaintPointersEnabled => _appState?.debugPaintPointersEnabled;
+  static bool get debugPaintPointersEnabled =>
+      _appState?.debugPaintPointersEnabled;
   static set debugPaintPointersEnabled(bool v) {
     if (v != null) {
       _appState?.debugPaintPointersEnabled = v;
@@ -445,7 +450,8 @@ class App {
   }
 
   /// Overlay a rotating set of colors when repainting layers in checked mode.
-  static bool get debugRepaintRainbowEnabled => _appState?.debugRepaintRainbowEnabled;
+  static bool get debugRepaintRainbowEnabled =>
+      _appState?.debugRepaintRainbowEnabled;
   static set debugRepaintRainbowEnabled(bool v) {
     if (v != null) {
       _appState?.debugRepaintRainbowEnabled = v;
