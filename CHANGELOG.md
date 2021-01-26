@@ -1,4 +1,4 @@
-## 6.11.0+2
+## 6.11.0+3
  January 25, 2021
 - bool setAppStatefulWidget()
 - static BuildContext get context => _appWidget.context;
