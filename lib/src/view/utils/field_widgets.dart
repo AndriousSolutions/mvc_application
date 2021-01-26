@@ -19,7 +19,7 @@
 
 import 'dart:ui' as ui show TextHeightBehavior;
 
-import 'package:flutter/material.dart' as m show TextFormField;
+import 'package:flutter/material.dart' as m; //show TextFormField;
 
 import 'package:flutter/services.dart'
     show
@@ -425,21 +425,17 @@ class FieldWidgets<T> extends DataFieldItem {
   bool tristate;
   MaterialTapTargetSize materialTapTargetSize;
 
-  m.TextFormField _textFormField;
-  Text _text;
-  Text _richText;
-  DefaultTextStyle _defaultTextStyle;
-  ListTile _listTile;
-  CheckboxListTile _checkboxListTile;
+  m.Widget _textFormField;
   Dismissible _dismissible;
   Checkbox _checkbox;
 
-  m.TextFormField get textFormField {
+  m.Widget get textFormField {
     if (items == null && value != null && value is! String) {
       items = value;
       value = null;
     }
-    return _textFormField ??= m.TextFormField(
+    return _textFormField ??= m.Material(
+        child: m.TextFormField(
       key: Key('TextFormField$_key'),
       controller:
           controller ?? value == null ? null : FieldController(text: value),
@@ -471,7 +467,7 @@ class FieldWidgets<T> extends DataFieldItem {
       scrollPhysics: scrollPhysics,
       autofillHints: autofillHints,
       autovalidateMode: autovalidateMode,
-    );
+    ));
   }
 
   m.TextFormField onTextFormField({
@@ -542,7 +538,7 @@ class FieldWidgets<T> extends DataFieldItem {
   }
 
   // ignore: non_constant_identifier_names
-  m.TextFormField TextFormField({
+  m.Widget TextFormField({
     TextEditingController controller,
     String initialValue,
     FocusNode focusNode,
@@ -573,42 +569,44 @@ class FieldWidgets<T> extends DataFieldItem {
     Iterable<String> autofillHints,
     AutovalidateMode autovalidateMode,
   }) =>
-      m.TextFormField(
-        key: Key('TextFormField$_key'),
-        // just accept the parameter values and not this object's values.
-        controller: controller ?? initialValue == null
-            ? null
-            : FieldController(text: initialValue),
-        // ignore the initValue parameter: initialValue: null,
-        focusNode: focusNode ?? focusNode,
-        decoration: inputDecoration ?? this.inputDecoration,
-        keyboardType: keyboardType ?? this.keyboardType,
-        textCapitalization: textCapitalization ?? this.textCapitalization,
-        textInputAction: textInputAction ?? this.textInputAction,
-        style: style ?? this.style,
-        textAlign: textAlign ?? this.textAlign,
-        autofocus: autofocus ?? this.autofocus,
-        obscureText: obscureText ?? this.obscureText,
-        autocorrect: autocorrect ?? this.autocorrect,
+      m.Material(
+        child: m.TextFormField(
+          key: Key('TextFormField$_key'),
+          // just accept the parameter values and not this object's values.
+          controller: controller ?? initialValue == null
+              ? null
+              : FieldController(text: initialValue),
+          // ignore the initValue parameter: initialValue: null,
+          focusNode: focusNode ?? focusNode,
+          decoration: inputDecoration ?? this.inputDecoration,
+          keyboardType: keyboardType ?? this.keyboardType,
+          textCapitalization: textCapitalization ?? this.textCapitalization,
+          textInputAction: textInputAction ?? this.textInputAction,
+          style: style ?? this.style,
+          textAlign: textAlign ?? this.textAlign,
+          autofocus: autofocus ?? this.autofocus,
+          obscureText: obscureText ?? this.obscureText,
+          autocorrect: autocorrect ?? this.autocorrect,
 //        autovalidate: autovalidate ?? this.autovalidate,
-        maxLengthEnforced: maxLengthEnforced ?? this.maxLengthEnforced,
-        maxLines: maxLines ?? this.maxLines,
-        maxLength: maxLength ?? this.maxLength,
-        onChanged: changed ?? this.changed ?? onChanged,
-        onEditingComplete:
-            editingComplete ?? this.editingComplete ?? onEditingComplete,
-        onFieldSubmitted:
-            fieldSubmitted ?? this.fieldSubmitted ?? onFieldSubmitted,
-        onSaved: saved ?? this.saved ?? onSaved,
-        validator: validator ?? this.validator ?? onValidator,
-        inputFormatters: inputFormatters ?? this.inputFormatters,
-        enabled: enabled ?? this.enabled,
-        keyboardAppearance: keyboardAppearance ?? this.keyboardAppearance,
-        scrollPadding: scrollPadding ?? this.scrollPadding,
-        buildCounter: buildCounter ?? this.buildCounter,
-        scrollPhysics: scrollPhysics ?? this.scrollPhysics,
-        autofillHints: autofillHints ?? this.autofillHints,
-        autovalidateMode: autovalidateMode ?? this.autovalidateMode,
+          maxLengthEnforced: maxLengthEnforced ?? this.maxLengthEnforced,
+          maxLines: maxLines ?? this.maxLines,
+          maxLength: maxLength ?? this.maxLength,
+          onChanged: changed ?? this.changed ?? onChanged,
+          onEditingComplete:
+              editingComplete ?? this.editingComplete ?? onEditingComplete,
+          onFieldSubmitted:
+              fieldSubmitted ?? this.fieldSubmitted ?? onFieldSubmitted,
+          onSaved: saved ?? this.saved ?? onSaved,
+          validator: validator ?? this.validator ?? onValidator,
+          inputFormatters: inputFormatters ?? this.inputFormatters,
+          enabled: enabled ?? this.enabled,
+          keyboardAppearance: keyboardAppearance ?? this.keyboardAppearance,
+          scrollPadding: scrollPadding ?? this.scrollPadding,
+          buildCounter: buildCounter ?? this.buildCounter,
+          scrollPhysics: scrollPhysics ?? this.scrollPhysics,
+          autofillHints: autofillHints ?? this.autofillHints,
+          autovalidateMode: autovalidateMode ?? this.autovalidateMode,
+        ),
       );
 
   // Override to perform what happens when finished editing the field.
@@ -639,7 +637,7 @@ class FieldWidgets<T> extends DataFieldItem {
       items = value;
       value = null;
     }
-    return _text ??= Text(
+    return Text(
       value ?? '',
       key: Key('Text$_key'),
       style: style,
@@ -681,8 +679,6 @@ class FieldWidgets<T> extends DataFieldItem {
     this.semanticsLabel = semanticsLabel ?? this.semanticsLabel;
     this.textWidthBasis = textWidthBasis ?? this.textWidthBasis;
     this.textHeightBehavior = textHeightBehavior ?? this.textHeightBehavior;
-    final oldWidget = _text;
-    _text = null;
     Text newWidget;
     // text getter
     if (textSpan == null) {
@@ -692,7 +688,6 @@ class FieldWidgets<T> extends DataFieldItem {
       // richText getter
       newWidget = richText;
     }
-    _text = oldWidget;
     return newWidget;
   }
 
@@ -700,7 +695,7 @@ class FieldWidgets<T> extends DataFieldItem {
     if (textSpan == null) {
       return text;
     } else {
-      return _richText ??= Text.rich(
+      return Text.rich(
         textSpan,
         key: Key('Text.rich$_key'),
         style: style,
@@ -743,8 +738,6 @@ class FieldWidgets<T> extends DataFieldItem {
     this.semanticsLabel = semanticsLabel ?? this.semanticsLabel;
     this.textWidthBasis = textWidthBasis ?? this.textWidthBasis;
     this.textHeightBehavior = textHeightBehavior ?? this.textHeightBehavior;
-    final oldWidget = _richText;
-    _richText = null;
     Text newWidget;
     // text getter
     if (textSpan == null) {
@@ -754,12 +747,11 @@ class FieldWidgets<T> extends DataFieldItem {
       // richText getter
       newWidget = richText;
     }
-    _richText = oldWidget;
     return newWidget;
   }
 
   DefaultTextStyle get defaultTextStyle =>
-      _defaultTextStyle ??= DefaultTextStyle(
+      DefaultTextStyle(
         key: Key('DefaultTextStyle$_key'),
         style: style,
         textAlign: textAlign,
@@ -789,35 +781,39 @@ class FieldWidgets<T> extends DataFieldItem {
     this.textWidthBasis = textWidthBasis ?? this.textWidthBasis;
     this.textHeightBehavior = textHeightBehavior ?? this.textHeightBehavior;
     this.child = child ?? this.child;
-    final oldWidget = _defaultTextStyle;
-    _defaultTextStyle = null;
-    final newWidget = defaultTextStyle;
-    _defaultTextStyle = oldWidget;
-    return newWidget;
+    return defaultTextStyle;
   }
 
-  ListTile get listTile => _listTile ??= ListTile(
-        key: Key('ListTile$_key'),
-        leading: leading ?? onLeading(),
-        title: title ?? onTitle(),
-        subtitle: subtitle ?? onSubtitle(),
-        trailing: trailing,
-        isThreeLine: isThreeLine ?? false,
-        dense: dense,
-        contentPadding: contentPadding,
-        enabled: enabled ?? true,
-        onTap: tap ?? onTap,
-        onLongPress: longPress ?? onLongPress,
-        selected: selected ?? false,
-        focusColor: focusColor,
-        hoverColor: hoverColor,
-        focusNode: focusNode,
-        autofocus: autofocus ?? false,
-        tileColor: tileColor,
-        selectedTileColor: selectedTileColor,
-      );
+  Widget get listTile => App.useCupertino
+      ? CupertinoListTile(
+          key: Key('ListTile$_key'),
+          leading: leading ?? onLeading(),
+          title: title ?? onTitle(),
+          subtitle: subtitle ?? onSubtitle(),
+          trailing: trailing,
+        )
+      : ListTile(
+          key: Key('ListTile$_key'),
+          leading: leading ?? onLeading(),
+          title: title ?? onTitle(),
+          subtitle: subtitle ?? onSubtitle(),
+          trailing: trailing,
+          isThreeLine: isThreeLine ?? false,
+          dense: dense,
+          contentPadding: contentPadding,
+          enabled: enabled ?? true,
+          onTap: tap ?? onTap,
+          onLongPress: longPress ?? onLongPress,
+          selected: selected ?? false,
+          focusColor: focusColor,
+          hoverColor: hoverColor,
+          focusNode: focusNode,
+          autofocus: autofocus ?? false,
+          tileColor: tileColor,
+          selectedTileColor: selectedTileColor,
+        );
 
-  ListTile onListTile({
+  Widget onListTile({
     Widget leading,
     Widget title,
     Widget subtitle,
@@ -841,11 +837,7 @@ class FieldWidgets<T> extends DataFieldItem {
     this.tap = tap ?? this.tap;
     this.longPress = longPress ?? this.longPress;
     this.selected = selected ?? this.selected;
-    final oldWidget = _listTile;
-    _listTile = null;
-    final newWidget = listTile;
-    _listTile = oldWidget;
-    return newWidget;
+    return listTile;
   }
 
   //for LisTile
@@ -865,7 +857,7 @@ class FieldWidgets<T> extends DataFieldItem {
   void onLongPress() {}
 
   CheckboxListTile get checkboxListTile =>
-      _checkboxListTile ??= CheckboxListTile(
+      CheckboxListTile(
         key: Key('CheckboxListTile$_key'),
         value: _checkValue,
         onChanged: toggle ?? onToggle,
@@ -901,11 +893,7 @@ class FieldWidgets<T> extends DataFieldItem {
     this.secondary = secondary ?? this.secondary;
     this.selected = selected ?? this.selected;
     this.controlAffinity = controlAffinity ?? this.controlAffinity;
-    final oldWidget = _checkboxListTile;
-    _checkboxListTile = null;
-    final newWidget = checkboxListTile;
-    _checkboxListTile = oldWidget;
-    return newWidget;
+    return checkboxListTile;
   }
 
   // A widget to display on the opposite side of the tile from the checkbox.
@@ -976,11 +964,7 @@ class FieldWidgets<T> extends DataFieldItem {
     this.dismissThresholds = dismissThresholds ?? this.dismissThresholds;
     this.movementDuration = movementDuration ?? this.movementDuration;
     this.crossAxisEndOffset = crossAxisEndOffset ?? this.crossAxisEndOffset;
-    final oldWidget = _dismissible;
-    _dismissible = null;
-    final newWidget = dismissible;
-    _dismissible = oldWidget;
-    return newWidget;
+    return dismissible;
   }
 
   // Override to place a different child in the Dismissible.
@@ -1162,6 +1146,76 @@ class FieldWidgets<T> extends DataFieldItem {
   }
 }
 
+/// Cupertino needs a ListTile equivalent
+/// https://github.com/flutter/flutter/issues/50668
+class CupertinoListTile extends StatefulWidget {
+  const CupertinoListTile({
+    Key key,
+    this.leading,
+    this.title,
+    this.subtitle,
+    this.trailing,
+    this.onTap,
+  }) : super(key: key);
+  final Widget leading;
+  final Widget title;
+  final Widget subtitle;
+  final Widget trailing;
+  final Function onTap;
+  @override
+  _StatefulStateCupertino createState() => _StatefulStateCupertino();
+}
+
+class _StatefulStateCupertino extends State<CupertinoListTile> {
+  @override
+  Widget build(BuildContext context) {
+    Widget leading;
+    if (widget.leading == null) {
+      leading = const SizedBox();
+    } else {
+      leading = widget.leading;
+    }
+    Widget trailing;
+    if (widget.trailing == null) {
+      trailing = const SizedBox();
+    } else {
+      trailing = widget.trailing;
+    }
+    return GestureDetector(
+      onTap: () {
+        if (widget.onTap != null) {
+          widget.onTap();
+        }
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              leading,
+              const SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: columnChildren(context),
+              ),
+            ],
+          ),
+          trailing,
+        ],
+      ),
+    );
+  }
+
+  List<Widget> columnChildren(BuildContext context) {
+    final children = <Widget>[];
+    children.add(widget.title ?? const SizedBox());
+    if (widget.subtitle != null) {
+      children.add(widget.subtitle);
+    }
+    return children;
+  }
+}
+
 /// Item class used for fields which have a [label], a [value] and a maybe a [type] of value.
 class DataFieldItem {
   DataFieldItem({this.id, this.label, this.value, this.type});
@@ -1323,11 +1377,20 @@ class _LIstItemsState<T> extends State<ListItems<T>> {
         ])
       ];
     } else {
-      children = [
-        ListTile(
+      var tile;
+      if (App.useMaterial) {
+        tile = ListTile(
           subtitle: Text(widget.title),
           onTap: widget.onTap,
-        )
+        );
+      } else {
+        tile = CupertinoListTile(
+          subtitle: Text(widget.title),
+          onTap: widget.onTap,
+        );
+      }
+      children = [
+        tile,
       ];
     }
     if (items != null) {
@@ -1342,27 +1405,52 @@ class _LIstItemsState<T> extends State<ListItems<T>> {
         crossAxisAlignment: CrossAxisAlignment.start, children: children);
   }
 
-  Widget mapIt(DataFieldItem i) => ListTile(
-        title: Text(i.value ?? ''),
-        subtitle: Text(i.type ?? ''),
-        onTap: widget.onTap,
-      );
+  Widget mapIt(DataFieldItem i) => App.useMaterial
+      ? ListTile(
+          title: Text(i.value ?? ''),
+          subtitle: Text(i.type ?? ''),
+          onTap: widget.onTap,
+        )
+      : CupertinoListTile(
+          title: Text(i.value ?? ''),
+          subtitle: Text(i.type ?? ''),
+          onTap: widget.onTap,
+        );
 
-  Widget editIt(FieldWidgets<T> i) => ListTile(
-        title: Row(children: [
-          dropDown(
-            field: i,
-            onChanged: widget.onChanged,
-          ),
-          Expanded(
+  Widget editIt(FieldWidgets<T> i) => App.useMaterial
+      ? ListTile(
+          title: Row(children: [
+            dropDown(
+              field: i,
+              onChanged: widget.onChanged,
+            ),
+            Expanded(
+                child: i.TextFormField(
+              inputDecoration: const InputDecoration(labelText: ''),
+              initialValue: i.value,
+              changed: i.onChanged,
+            )),
+          ]),
+          onTap: widget.onTap,
+        )
+      : CupertinoListTile(
+          title: Row(children: [
+            dropDown(
+              field: i,
+              onChanged: widget.onChanged,
+            ),
+//            Expanded(child:
+            Container(
+              width: 200, // do it in both Container
               child: i.TextFormField(
-            inputDecoration: const InputDecoration(labelText: ''),
-            initialValue: i.value,
-            changed: i.onChanged,
-          )),
-        ]),
-        onTap: widget.onTap,
-      );
+                inputDecoration: const InputDecoration(labelText: ''),
+                initialValue: i.value,
+                changed: i.onChanged,
+              ),
+            ),
+          ]),
+          onTap: widget.onTap,
+        );
 
   Widget dropDown({FieldWidgets<T> field, ValueChanged<String> onChanged}) {
     final dropItems = widget.dropItems ?? [''];
@@ -1373,19 +1461,21 @@ class _LIstItemsState<T> extends State<ListItems<T>> {
       value = dropItems[0];
     }
     field?.type = value;
-    return DropdownButton<String>(
-      hint: const Text('type...'),
-      value: value,
-      items: dropItems.map((String v) {
-        return DropdownMenuItem<String>(value: v, child: Text(v));
-      }).toList(),
-      onChanged: (String v) {
-        field.type = v;
-        field.onChanged(v);
-        if (onChanged != null) {
-          onChanged(v);
-        }
-      },
+    return Material(
+      child: DropdownButton<String>(
+        hint: const Text('type...'),
+        value: value,
+        items: dropItems.map((String v) {
+          return DropdownMenuItem<String>(value: v, child: Text(v));
+        }).toList(),
+        onChanged: (String v) {
+          field.type = v;
+          field.onChanged(v);
+          if (onChanged != null) {
+            onChanged(v);
+          }
+        },
+      ),
     );
   }
 }

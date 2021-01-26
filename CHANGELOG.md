@@ -1,3 +1,12 @@
+## 6.11.0
+ January 25, 2021
+- bool setAppStatefulWidget()
+- static BuildContext get context => _appWidget.context;
+- _app.addConnectivityListener(con); _app.initInternal();
+- m.Material(child: m.TextFormField(
+- Widget get listTile => App.useCupertino ? CupertinoListTile(
+- return Material(child: DropdownButton<String>(
+
 ## 6.10.2
  January 13, 2021
 - Supply a range to pre-release dependencies '>=0.1.0 <1.0.0'

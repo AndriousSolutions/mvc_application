@@ -74,7 +74,8 @@ abstract class AppStatefulWidget extends v.AppMVC {
         ),
         super(con: con, key: key) {
     // Listen to the device's connectivity.
-    v.App.addConnectivityListener(con);
+    _app.addConnectivityListener(con);
+    _app.setAppStatefulWidget(this);
   }
   final v.App _app;
 
@@ -85,9 +86,9 @@ abstract class AppStatefulWidget extends v.AppMVC {
   static v.AppState get vw => _vw;
   static v.AppState _vw;
 
-  /// The context used by the App's view.
-  static BuildContext get context => _context;
-  static BuildContext _context;
+  // /// The context used by the App's view.
+  // static BuildContext get context => _context;
+  // static BuildContext _context;
 
   /// The snapshot used by the App's View.
   @Deprecated('getter, snapshot, will be removed.')
@@ -99,7 +100,7 @@ abstract class AppStatefulWidget extends v.AppMVC {
   @override
   Widget build(BuildContext context) {
     Assets.init(context);
-    _context = context;
+//    _context = context;
     return FutureBuilder<bool>(
       future: initAsync(),
       initialData: false,
@@ -121,7 +122,7 @@ abstract class AppStatefulWidget extends v.AppMVC {
       // Initialize System Preferences
       await Prefs.init();
       // Collect installation & connectivity information
-      await v.App.initInternal();
+      await _app.initInternal();
       // If not running on the Web.
       if (!kIsWeb) {
         await v.App.getDeviceInfo();
@@ -136,7 +137,7 @@ abstract class AppStatefulWidget extends v.AppMVC {
       if (init) {
         _vw = createView();
         // Supply the state object to the App object.
-        init = _app.setState(_vw);
+        init = _app.setAppState(_vw);
         if (init) {
           init = await _vw?.initAsync();
         }
@@ -176,7 +177,7 @@ abstract class AppStatefulWidget extends v.AppMVC {
         handled = _vw.onAsyncError(details);
       }
       if (!handled) {
-        v.App.onAsyncError(snapshot);
+        _app.onAsyncError(snapshot);
       }
       return v.App.errorHandler.displayError(details);
     } else if (snapshot.connectionState == ConnectionState.done) {
