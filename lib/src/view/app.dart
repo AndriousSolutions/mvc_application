@@ -292,7 +292,7 @@ class App {
 
   /// Returns the App's current locale.
   static Locale get locale =>
-      _appState?.locale ??= Localizations.localeOf(context, nullOk: true) ??
+      _appState?.locale ??= Localizations.maybeLocaleOf(context) ??
           _resolveLocales(
             WidgetsBinding.instance.window.locales,
             _appState?.supportedLocales,
@@ -532,6 +532,24 @@ class App {
         MaterialBasedCupertinoThemeData(materialTheme: v.App.themeData);
     // App's menu system
     v.AppMenu.setThemeData();
+  }
+
+  /// The Physical width of the screen
+  static double get screenPhysicalWidth {
+    final media = MediaQuery.of(context);
+    return media.size.width * media.devicePixelRatio;
+  }
+
+  /// The logical width of the screen
+  static double get screenWidth => MediaQuery.of(context).size.width;
+
+  /// The Physical height of the screen
+  static double get screenPhysicalHeight => MediaQuery.of(context).size.height;
+
+  /// The Logical height of the screen
+  static double get screenHeight {
+    final media = MediaQuery.of(context);
+    return media.size.height - media.padding.top - kToolbarHeight - kBottomNavigationBarHeight;
   }
 
   /// Determine the connectivity.

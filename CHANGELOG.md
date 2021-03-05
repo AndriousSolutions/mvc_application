@@ -1,3 +1,12 @@
+
+## 6.12.0
+ March 05, 2021
+- Localizations.maybeLocaleOf(context);
+- ScaffoldMessenger.maybeOf(context);
+- PopupMenuButton(captureInheritedThemes: true);
+- m.Material( in field_widgets.dart
+
+
 ## 6.11.0+3
  January 25, 2021
 - bool setAppStatefulWidget()

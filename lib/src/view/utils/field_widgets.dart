@@ -977,9 +977,17 @@ class FieldWidgets<T> extends DataFieldItem {
   // for Dismissible
   Widget onBackground() {
     return Container(
-        color: Colors.red,
-        child: const ListTile(
-            trailing: Icon(Icons.delete, color: Colors.white, size: 36)));
+      color: Colors.red,
+      child: m.Material(
+        child: ListTile(
+          trailing: Icon(
+            Icons.delete,
+            color: Colors.white,
+            size: 36,
+          ),
+        ),
+      ),
+    );
   }
 
   // Override to provide a secondary background.

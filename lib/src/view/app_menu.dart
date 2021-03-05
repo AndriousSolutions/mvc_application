@@ -35,7 +35,7 @@ import 'package:flutter/material.dart'
         PopupMenuItem,
         PopupMenuItemBuilder,
         PopupMenuItemSelected,
-        Scaffold,
+        ScaffoldMessenger,
         ShapeBorder,
         SnackBar,
         Text,
@@ -336,7 +336,7 @@ abstract class AppPopupMenu<T> {
   bool onCaptureInheritedThemes() => true;
 
   void errorSnackBar() {
-    var state = Scaffold.of(context);
+    var state = ScaffoldMessenger.maybeOf(context);
     state?.showSnackBar(
       SnackBar(
         content: Text('Error. No menu options defined.'),
@@ -389,10 +389,10 @@ abstract class AppPopupMenu<T> {
         enabled: enabled ?? this.enabled ?? onEnabled() ?? true,
         shape: shape ?? this.shape ?? onShape(),
         color: color ?? this.color ?? onColor(),
-        captureInheritedThemes: captureInheritedThemes ??
-            this.captureInheritedThemes ??
-            onCaptureInheritedThemes() ??
-            true,
+        // captureInheritedThemes: captureInheritedThemes ??
+        //     this.captureInheritedThemes ??
+        //     onCaptureInheritedThemes() ??
+        //     true,
         child: child ?? this.child ?? onChild(),
       );
       // If not running under the MaterialApp widget.
