@@ -1,7 +1,8 @@
 
-## 7.0.0
+## 7.0.0-nullsafety
  March 10, 2021
 - Null safety 2.12.0
+- Removed example app
 
 ## 6.12.0
  March 05, 2021
