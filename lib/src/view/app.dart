@@ -271,12 +271,12 @@ class App {
       _iOSTheme = MaterialBasedCupertinoThemeData(materialTheme: value);
     } else if (value is! ColorSwatch) {
       // Ignore the value
-    } else if (App?._iOSTheme == null) {
+    } else if (App._iOSTheme == null) {
       App._iOSTheme = CupertinoThemeData(
         primaryColor: value,
       );
     } else {
-      App._iOSTheme = App?._iOSTheme?.copyWith(
+      App._iOSTheme = App._iOSTheme?.copyWith(
         primaryColor: value,
       );
     }

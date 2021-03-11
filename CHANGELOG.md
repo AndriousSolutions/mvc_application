@@ -1,4 +1,8 @@
 
+## 7.0.1-nullsafety
+ March 10, 2021
+- 'App' cannot be null replacing '?.' with '.'
+
 ## 7.0.0-nullsafety
  March 10, 2021
 - Null safety 2.12.0

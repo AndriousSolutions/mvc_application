@@ -146,7 +146,7 @@ class AppMenu {
       case 'About':
         showAboutDialog(
             context: _state!.context,
-            applicationName: I10n.s(_applicationName ?? App?.vw?.title ?? ''),
+            applicationName: I10n.s(_applicationName ?? App.vw?.title ?? ''),
             applicationVersion: _applicationVersion,
             applicationIcon: _applicationIcon,
             applicationLegalese: _applicationLegalese,
