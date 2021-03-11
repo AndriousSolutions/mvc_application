@@ -69,8 +69,8 @@ class CustomRaisedButton extends StatelessWidget {
     return SizedBox(
       height: height,
       child: ElevatedButton(
-          onPressed: onPressed,
-          child: loading ? buildSpinner(context) : child,
+        onPressed: onPressed,
+        child: loading ? buildSpinner(context) : child,
       ),
       // RaisedButton(
       //   shape: RoundedRectangleBorder(

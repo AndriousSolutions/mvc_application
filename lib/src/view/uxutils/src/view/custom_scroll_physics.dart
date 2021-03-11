@@ -69,7 +69,8 @@ class SnappingListScrollPhysics extends ScrollPhysics {
       return super.createBallisticSimulation(position, velocity);
     }
     final tolerance = this.tolerance;
-    final target = _getTargetPixels(position as ScrollPosition, tolerance, velocity);
+    final target =
+        _getTargetPixels(position as ScrollPosition, tolerance, velocity);
     if (target != position.pixels) {
       return ScrollSpringSimulation(spring, position.pixels, target, velocity,
           tolerance: tolerance);

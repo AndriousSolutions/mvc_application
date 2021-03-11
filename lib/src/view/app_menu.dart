@@ -374,9 +374,11 @@ abstract class AppPopupMenu<T> {
       items ??= this.items;
       Widget popupMenu = PopupMenuButton<T>(
         key: key ?? this.key,
-        itemBuilder: itemBuilder ?? (items != null && items!.isNotEmpty
-            ? _onItems(items)
-            : this.itemBuilder) ?? onItemBuilder,
+        itemBuilder: itemBuilder ??
+            (items != null && items!.isNotEmpty
+                ? _onItems(items)
+                : this.itemBuilder) ??
+            onItemBuilder,
         initialValue: initialValue ?? this.initialValue ?? onInitialValue(),
         onSelected: onSelected ?? this.onSelected ?? onSelection,
         onCanceled: onCanceled ?? this.onCanceled ?? onCancellation,

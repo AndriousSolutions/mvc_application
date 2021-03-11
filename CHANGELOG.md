@@ -1,4 +1,8 @@
 
+## 7.0.2-nullsafety
+ March 10, 2021
+- i10n_translator: ^2.0.0
+
 ## 7.0.1-nullsafety
  March 10, 2021
 - 'App' cannot be null replacing '?.' with '.'

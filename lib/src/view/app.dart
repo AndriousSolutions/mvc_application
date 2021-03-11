@@ -149,7 +149,8 @@ class App {
   /// Indicates if the App is running the Cupertino interface theme.
   static bool get useCupertino =>
       (_appState != null && _appState!.useCupertino!) ||
-      (UniversalPlatform.isIOS && (_appState == null || !_appState!.switchUI!)) ||
+      (UniversalPlatform.isIOS &&
+          (_appState == null || !_appState!.switchUI!)) ||
       (UniversalPlatform.isAndroid &&
           (_appState == null || _appState!.switchUI!));
 
@@ -305,14 +306,14 @@ class App {
 
   /// Determine the locale used by the Mobile phone.
   static Locale? _resolveLocales(
-    List<Locale> preferredLocales,
+    List<Locale>? preferredLocales,
     Iterable<Locale>? supportedLocales,
   ) {
     // Attempt to use localeListResolutionCallback.
     if (_appState?.localeListResolutionCallback != null) {
-      var locales =  _appState?.supportedLocales;
-      final locale = _appState?.localeListResolutionCallback!(
-          preferredLocales, locales!);
+      var locales = _appState?.supportedLocales;
+      final locale =
+          _appState?.localeListResolutionCallback!(preferredLocales, locales!);
       if (locale != null) {
         return locale;
       }
@@ -324,7 +325,7 @@ class App {
 
     // localeListResolutionCallback failed, falling back to localeResolutionCallback.
     if (_appState?.localeResolutionCallback != null) {
-      var locales =  _appState?.supportedLocales;
+      var locales = _appState?.supportedLocales;
       final locale = _appState?.localeResolutionCallback!(
         preferred,
         locales!,
@@ -551,7 +552,10 @@ class App {
   /// The Logical height of the screen
   static double get screenHeight {
     final media = MediaQuery.of(context!);
-    return media.size.height - media.padding.top - kToolbarHeight - kBottomNavigationBarHeight;
+    return media.size.height -
+        media.padding.top -
+        kToolbarHeight -
+        kBottomNavigationBarHeight;
   }
 
   /// Determine the connectivity.
@@ -583,7 +587,7 @@ class App {
   }
 
   /// Remove a Connectivity listener.
-  static bool removeConnectivityListener(ConnectivityListener listener) {
+  static bool removeConnectivityListener(ConnectivityListener? listener) {
     var remove = false;
     if (listener != null) {
       remove = _listeners.remove(listener);

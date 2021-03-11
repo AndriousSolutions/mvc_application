@@ -102,7 +102,7 @@ class NavBottomBar {
     // In case null was directly assigned.
     this.hide ??= false;
     hide ??= this.hide;
-    if (hide!){
+    if (hide!) {
       return null;
     }
 

@@ -287,7 +287,8 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
     var screenWidth = MediaQuery.of(context).size.width;
 
     // get the button we want to scroll to
-    var renderBox = _keys[index].currentContext!.findRenderObject() as RenderBox;
+    var renderBox =
+        _keys[index].currentContext!.findRenderObject() as RenderBox;
     // get its size
     var size = renderBox.size.width;
     // and position
@@ -311,7 +312,8 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
       // if the button is to the right of the middle
 
       // get the last button
-      renderBox = _keys[_tabKeys!.length - 1].currentContext!.findRenderObject() as RenderBox;
+      renderBox = _keys[_tabKeys!.length - 1].currentContext!.findRenderObject()
+          as RenderBox;
       // get its position
       position = renderBox.localToGlobal(Offset.zero).dx;
       // and size

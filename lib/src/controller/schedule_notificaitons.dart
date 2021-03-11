@@ -444,8 +444,8 @@ class ScheduleNotifications with HandleError {
     if (day != null) {
       _day = day;
     }
-    onSelectNotification ??=
-        _selectNotificationCallback ?? _onSelectNotification as Future<dynamic> Function(String?)?;
+    onSelectNotification ??= _selectNotificationCallback ??
+        _onSelectNotification as Future<dynamic> Function(String?)?;
     requestAlertPermission ??= _requestAlertPermission;
     requestSoundPermission ??= _requestSoundPermission;
     requestBadgePermission ??= _requestBadgePermission;
@@ -670,7 +670,8 @@ class ScheduleNotifications with HandleError {
     String? body,
     String? payload,
     bool? androidAllowWhileIdle,
-    UILocalNotificationDateInterpretation? uiLocalNotificationDateInterpretation,
+    UILocalNotificationDateInterpretation?
+        uiLocalNotificationDateInterpretation,
     DateTimeComponents? matchDateTimeComponents,
     String? icon,
     Importance? importance,
@@ -921,7 +922,8 @@ class ScheduleNotifications with HandleError {
     String? body,
     String? payload,
     bool? androidAllowWhileIdle,
-    UILocalNotificationDateInterpretation? uiLocalNotificationDateInterpretation,
+    UILocalNotificationDateInterpretation?
+        uiLocalNotificationDateInterpretation,
     DateTimeComponents? matchDateTimeComponents,
     String? icon,
     Importance? importance,
@@ -1051,7 +1053,8 @@ class ScheduleNotifications with HandleError {
     String? payload,
     bool? androidAllowWhileIdle,
     NotificationDetails? notificationDetails,
-    UILocalNotificationDateInterpretation? uiLocalNotificationDateInterpretation,
+    UILocalNotificationDateInterpretation?
+        uiLocalNotificationDateInterpretation,
     DateTimeComponents? matchDateTimeComponents,
     String? icon,
     Importance? importance,

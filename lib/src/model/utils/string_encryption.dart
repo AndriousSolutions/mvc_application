@@ -106,7 +106,7 @@ class StringCrypt {
 
   Exception? getError([Object? error]) {
     // Return the stored exception
-    Exception? ex = _error as Exception?;
+    var ex = _error as Exception?;
     // Empty the stored exception
     if (error == null) {
       _error = null;

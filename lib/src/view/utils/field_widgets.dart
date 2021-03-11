@@ -521,7 +521,8 @@ class FieldWidgets<T> extends DataFieldItem {
     this.autocorrect = autocorrect ?? this.autocorrect;
 //    this.autovalidate = autovalidate ?? this.autovalidate;
 //    this.maxLengthEnforced = maxLengthEnforced ?? this.maxLengthEnforced;
-    this.maxLengthEnforcement = maxLengthEnforcement ?? this.maxLengthEnforcement;
+    this.maxLengthEnforcement =
+        maxLengthEnforcement ?? this.maxLengthEnforcement;
     this.maxLines = maxLines ?? this.maxLines;
     this.maxLength = maxLength ?? this.maxLength;
     this.editingComplete = editingComplete ?? this.editingComplete;
@@ -598,7 +599,8 @@ class FieldWidgets<T> extends DataFieldItem {
           autocorrect: autocorrect ?? this.autocorrect!,
 //        autovalidate: autovalidate ?? this.autovalidate,
 //          maxLengthEnforced: maxLengthEnforced ?? this.maxLengthEnforced!,
-          maxLengthEnforcement: maxLengthEnforcement ?? this.maxLengthEnforcement!,
+          maxLengthEnforcement:
+              maxLengthEnforcement ?? this.maxLengthEnforcement!,
           maxLines: maxLines ?? this.maxLines,
           maxLength: maxLength ?? this.maxLength,
           onChanged: changed ?? this.changed ?? onChanged,
