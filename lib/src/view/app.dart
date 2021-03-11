@@ -24,17 +24,17 @@ import 'package:mvc_application/controller.dart'
 class App {
   //
   factory App({
-    FlutterExceptionHandler errorHandler,
-    ErrorWidgetBuilder errorScreen,
-    v.ReportErrorHandler errorReport,
+    FlutterExceptionHandler? errorHandler,
+    ErrorWidgetBuilder? errorScreen,
+    v.ReportErrorHandler? errorReport,
     bool allowNewHandlers = true,
   }) =>
       _this ??= App._(errorHandler, errorScreen, errorReport, allowNewHandlers);
 
   App._(
-    FlutterExceptionHandler errorHandler,
-    ErrorWidgetBuilder errorScreen,
-    v.ReportErrorHandler errorReport,
+    FlutterExceptionHandler? errorHandler,
+    ErrorWidgetBuilder? errorScreen,
+    v.ReportErrorHandler? errorReport,
     bool allowNewHandlers,
   ) {
     _errorHandler = v.AppErrorHandler(
@@ -44,17 +44,17 @@ class App {
       allowNewHandlers: allowNewHandlers,
     );
   }
-  static App _this;
+  static App? _this;
 
-  static v.AppErrorHandler get errorHandler => _errorHandler;
-  static v.AppErrorHandler _errorHandler;
+  static v.AppErrorHandler? get errorHandler => _errorHandler;
+  static v.AppErrorHandler? _errorHandler;
 
   /// Dispose the App properties.
   void dispose() {
     _connectivitySubscription?.cancel();
     _connectivitySubscription = null;
     // Restore the original error handling.
-    _errorHandler.dispose();
+    _errorHandler!.dispose();
   }
 
   /// Assign the AppStateful object
@@ -64,18 +64,18 @@ class App {
     return appWidget != null;
   }
 
-  static v.AppStatefulWidget _appWidget;
+  static v.AppStatefulWidget? _appWidget;
 
   /// Assign the class with the AppState object.
-  bool setAppState(v.AppState vw) {
+  bool setAppState(v.AppState? vw) {
     // Only assigned once with the first call.
     _appState ??= vw;
     return vw != null;
   }
 
   /// The App State object.
-  static v.AppState get vw => _appState;
-  static v.AppState _appState;
+  static v.AppState? get vw => _appState;
+  static v.AppState? _appState;
 
   /// App-level error handling.
   static void onError(FlutterErrorDetails details) {
@@ -113,12 +113,12 @@ class App {
 
   /// Determine if the App initialized successfully.
   // ignore: unnecessary_getters_setters
-  static bool get isInit => _isInit;
+  static bool? get isInit => _isInit;
 
   /// Set the init only once.
   // ignore: unnecessary_getters_setters
-  static set isInit(bool init) => _isInit ??= init;
-  static bool _isInit;
+  static set isInit(bool? init) => _isInit ??= init;
+  static bool? _isInit;
 
   /// Flag to set hot reload from now on.
   // ignore: unnecessary_getters_setters
@@ -140,18 +140,18 @@ class App {
   // Use Material UI when explicitly specified or even when running in iOS
   /// Indicates if the App is running the Material interface theme.
   static bool get useMaterial =>
-      (_appState != null && _appState.useMaterial) ||
+      (_appState != null && _appState!.useMaterial!) ||
       (UniversalPlatform.isAndroid &&
-          (_appState == null || !_appState.switchUI)) ||
-      (UniversalPlatform.isIOS && (_appState == null || _appState.switchUI));
+          (_appState == null || !_appState!.switchUI!)) ||
+      (UniversalPlatform.isIOS && (_appState == null || _appState!.switchUI!));
 
   // Use Cupertino UI when explicitly specified or even when running in Android
   /// Indicates if the App is running the Cupertino interface theme.
   static bool get useCupertino =>
-      (_appState != null && _appState.useCupertino) ||
-      (UniversalPlatform.isIOS && (_appState == null || !_appState.switchUI)) ||
+      (_appState != null && _appState!.useCupertino!) ||
+      (UniversalPlatform.isIOS && (_appState == null || !_appState!.switchUI!)) ||
       (UniversalPlatform.isAndroid &&
-          (_appState == null || _appState.switchUI));
+          (_appState == null || _appState!.switchUI!));
 
   /// Explicitly change to a particular interface.
   static void changeUI(String ui) {
@@ -160,73 +160,73 @@ class App {
   }
 
   /// Return the navigator key used by the App's View.
-  static GlobalKey<NavigatorState> get navigatorKey => _appState?.navigatorKey;
-  static set navigatorKey(GlobalKey<NavigatorState> v) {
+  static GlobalKey<NavigatorState>? get navigatorKey => _appState?.navigatorKey;
+  static set navigatorKey(GlobalKey<NavigatorState>? v) {
     if (v != null) {
       _appState?.navigatorKey = v;
     }
   }
 
   /// Returns the routes used by the App's View.
-  static Map<String, WidgetBuilder> get routes => _appState?.routes;
-  static set routes(Map<String, WidgetBuilder> v) {
+  static Map<String, WidgetBuilder>? get routes => _appState?.routes;
+  static set routes(Map<String, WidgetBuilder>? v) {
     if (v != null) {
       _appState?.routes = v;
     }
   }
 
   /// Returns to the initial route used by the App's View.
-  static String get initialRoute => _appState?.initialRoute;
-  static set initialRoute(String v) {
+  static String? get initialRoute => _appState?.initialRoute;
+  static set initialRoute(String? v) {
     if (v != null) {
       _appState?.initialRoute = v;
     }
   }
 
   /// The route generator used when the app is navigated to a named route.
-  static RouteFactory get onGenerateRoute => _appState?.onGenerateRoute;
-  static set onGenerateRoute(RouteFactory v) {
+  static RouteFactory? get onGenerateRoute => _appState?.onGenerateRoute;
+  static set onGenerateRoute(RouteFactory? v) {
     if (v != null) {
       _appState?.onGenerateRoute = v;
     }
   }
 
   /// Called when [onGenerateRoute] fails except for the [initialRoute].
-  static RouteFactory get onUnknownRoute => _appState?.onUnknownRoute;
-  static set onUnknownRoute(RouteFactory v) {
+  static RouteFactory? get onUnknownRoute => _appState?.onUnknownRoute;
+  static set onUnknownRoute(RouteFactory? v) {
     if (v != null) {
       _appState?.onUnknownRoute = v;
     }
   }
 
   /// The list of observers for the [Navigator] for this app.
-  static List<NavigatorObserver> get navigatorObservers =>
+  static List<NavigatorObserver>? get navigatorObservers =>
       _appState?.navigatorObservers;
-  static set navigatorObservers(List<NavigatorObserver> v) {
+  static set navigatorObservers(List<NavigatorObserver>? v) {
     if (v != null) {
       _appState?.navigatorObservers = v;
     }
   }
 
   /// if neither [routes], or [onGenerateRoute] was passed.
-  static TransitionBuilder get builder => _appState?.builder;
-  static set builder(TransitionBuilder v) {
+  static TransitionBuilder? get builder => _appState?.builder;
+  static set builder(TransitionBuilder? v) {
     if (v != null) {
       _appState?.builder = v;
     }
   }
 
   /// Returns the title for the App's View.
-  static String get title => _appState?.title;
-  static set title(String v) {
+  static String? get title => _appState?.title;
+  static set title(String? v) {
     if (v != null) {
       _appState?.title = v;
     }
   }
 
   /// Routine used to generate the App's title.
-  static GenerateAppTitle get onGenerateTitle => _appState?.onGenerateTitle;
-  static set onGenerateTitle(GenerateAppTitle v) {
+  static GenerateAppTitle? get onGenerateTitle => _appState?.onGenerateTitle;
+  static set onGenerateTitle(GenerateAppTitle? v) {
     if (v != null) {
       _appState?.onGenerateTitle = v;
     }
@@ -234,7 +234,7 @@ class App {
 
   // Allow it to be assigned null.
   /// The App's current Material theme.
-  static ThemeData get themeData => _themeData;
+  static ThemeData? get themeData => _themeData;
   static set themeData(dynamic value) {
     if (value == null) {
       return;
@@ -256,11 +256,11 @@ class App {
     }
   }
 
-  static ThemeData _themeData;
+  static ThemeData? _themeData;
 
   /// The Apps's current Cupertino theme.
-  static CupertinoThemeData get iOSTheme => _iOSTheme;
-  static CupertinoThemeData _iOSTheme;
+  static CupertinoThemeData? get iOSTheme => _iOSTheme;
+  static CupertinoThemeData? _iOSTheme;
   static set iOSTheme(dynamic value) {
     if (value == null) {
       return;
@@ -283,35 +283,36 @@ class App {
   }
 
   /// Returns the Color passed to the App's View.
-  static Color get color => _appState?.color;
-  static set color(Color v) {
+  static Color? get color => _appState?.color;
+  static set color(Color? v) {
     if (v != null) {
       _appState?.color = v;
     }
   }
 
   /// Returns the App's current locale.
-  static Locale get locale =>
-      _appState?.locale ??= Localizations.maybeLocaleOf(context) ??
+  static Locale? get locale =>
+      _appState?.locale ??= Localizations.maybeLocaleOf(context!) ??
           _resolveLocales(
-            WidgetsBinding.instance.window.locales,
+            WidgetsBinding.instance!.window.locales,
             _appState?.supportedLocales,
           );
-  static set locale(Locale v) {
+  static set locale(Locale? v) {
     if (v != null) {
       _appState?.locale = v;
     }
   }
 
   /// Determine the locale used by the Mobile phone.
-  static Locale _resolveLocales(
+  static Locale? _resolveLocales(
     List<Locale> preferredLocales,
-    Iterable<Locale> supportedLocales,
+    Iterable<Locale>? supportedLocales,
   ) {
     // Attempt to use localeListResolutionCallback.
     if (_appState?.localeListResolutionCallback != null) {
-      final locale = _appState?.localeListResolutionCallback(
-          preferredLocales, _appState?.supportedLocales);
+      var locales =  _appState?.supportedLocales;
+      final locale = _appState?.localeListResolutionCallback!(
+          preferredLocales, locales!);
       if (locale != null) {
         return locale;
       }
@@ -323,9 +324,10 @@ class App {
 
     // localeListResolutionCallback failed, falling back to localeResolutionCallback.
     if (_appState?.localeResolutionCallback != null) {
-      final locale = _appState?.localeResolutionCallback(
+      var locales =  _appState?.supportedLocales;
+      final locale = _appState?.localeResolutionCallback!(
         preferred,
-        _appState?.supportedLocales,
+        locales!,
       );
       if (locale != null) {
         return locale;
@@ -337,151 +339,151 @@ class App {
   }
 
   /// Returns the App's current localizations delegates.
-  static Iterable<LocalizationsDelegate<dynamic>> get localizationsDelegates =>
+  static Iterable<LocalizationsDelegate<dynamic>>? get localizationsDelegates =>
       _appState?.localizationsDelegates;
   static set localizationsDelegates(
-      Iterable<LocalizationsDelegate<dynamic>> v) {
+      Iterable<LocalizationsDelegate<dynamic>>? v) {
     if (v != null) {
       _appState?.localizationsDelegates = v;
     }
   }
 
   /// Resolves the App's locale.
-  static LocaleResolutionCallback get localeResolutionCallback =>
+  static LocaleResolutionCallback? get localeResolutionCallback =>
       _appState?.localeResolutionCallback;
-  static set localeResolutionCallback(LocaleResolutionCallback v) {
+  static set localeResolutionCallback(LocaleResolutionCallback? v) {
     if (v != null) {
       _appState?.localeResolutionCallback = v;
     }
   }
 
   /// Returns an iteration of the App's locales.
-  static Iterable<Locale> get supportedLocales => _appState?.supportedLocales;
-  static set supportedLocales(Iterable<Locale> v) {
+  static Iterable<Locale>? get supportedLocales => _appState?.supportedLocales;
+  static set supportedLocales(Iterable<Locale>? v) {
     if (v != null) {
       _appState?.supportedLocales = v;
     }
   }
 
   /// If true, it paints a grid overlay on Material apps.
-  static bool get debugShowMaterialGrid => _appState?.debugShowMaterialGrid;
-  static set debugShowMaterialGrid(bool v) {
+  static bool? get debugShowMaterialGrid => _appState?.debugShowMaterialGrid;
+  static set debugShowMaterialGrid(bool? v) {
     if (v != null) {
       _appState?.debugShowMaterialGrid = v;
     }
   }
 
   /// If true, it turns on a performance overlay.
-  static bool get showPerformanceOverlay => _appState?.showPerformanceOverlay;
-  static set showPerformanceOverlay(bool v) {
+  static bool? get showPerformanceOverlay => _appState?.showPerformanceOverlay;
+  static set showPerformanceOverlay(bool? v) {
     if (v != null) {
       _appState?.showPerformanceOverlay = v;
     }
   }
 
   /// Checkerboard raster cache to speed up overall rendering.
-  static bool get checkerboardRasterCacheImages =>
+  static bool? get checkerboardRasterCacheImages =>
       _appState?.checkerboardRasterCacheImages;
-  static set checkerboardRasterCacheImages(bool v) {
+  static set checkerboardRasterCacheImages(bool? v) {
     if (v != null) {
       _appState?.checkerboardRasterCacheImages = v;
     }
   }
 
   /// Checkerboard layers rendered offscreen bitmaps.
-  static bool get checkerboardOffscreenLayers =>
+  static bool? get checkerboardOffscreenLayers =>
       _appState?.checkerboardOffscreenLayers;
-  static set checkerboardOffscreenLayers(bool v) {
+  static set checkerboardOffscreenLayers(bool? v) {
     if (v != null) {
       _appState?.checkerboardOffscreenLayers = v;
     }
   }
 
   /// Shows an overlay of accessibility information
-  static bool get showSemanticsDebugger => _appState?.showSemanticsDebugger;
-  static set showSemanticsDebugger(bool v) {
+  static bool? get showSemanticsDebugger => _appState?.showSemanticsDebugger;
+  static set showSemanticsDebugger(bool? v) {
     if (v != null) {
       _appState?.showSemanticsDebugger = v;
     }
   }
 
   /// Shows a little "DEBUG" banner in checked mode.
-  static bool get debugShowCheckedModeBanner =>
+  static bool? get debugShowCheckedModeBanner =>
       _appState?.debugShowCheckedModeBanner;
-  static set debugShowCheckedModeBanner(bool v) {
+  static set debugShowCheckedModeBanner(bool? v) {
     if (v != null) {
       _appState?.debugShowCheckedModeBanner = v;
     }
   }
 
   /// Each RenderBox to paint a box around its bounds.
-  static bool get debugPaintSizeEnabled => _appState?.debugPaintSizeEnabled;
-  static set debugPaintSizeEnabled(bool v) {
+  static bool? get debugPaintSizeEnabled => _appState?.debugPaintSizeEnabled;
+  static set debugPaintSizeEnabled(bool? v) {
     if (v != null) {
       _appState?.debugPaintSizeEnabled = v;
     }
   }
 
   /// RenderBox paints a line at its baselines.
-  static bool get debugPaintBaselinesEnabled =>
+  static bool? get debugPaintBaselinesEnabled =>
       _appState?.debugPaintBaselinesEnabled;
-  static set debugPaintBaselinesEnabled(bool v) {
+  static set debugPaintBaselinesEnabled(bool? v) {
     if (v != null) {
       _appState?.debugPaintBaselinesEnabled = v;
     }
   }
 
   /// Objects flash while they are being tapped.
-  static bool get debugPaintPointersEnabled =>
+  static bool? get debugPaintPointersEnabled =>
       _appState?.debugPaintPointersEnabled;
-  static set debugPaintPointersEnabled(bool v) {
+  static set debugPaintPointersEnabled(bool? v) {
     if (v != null) {
       _appState?.debugPaintPointersEnabled = v;
     }
   }
 
   /// Layer paints a box around its bound.
-  static bool get debugPaintLayerBordersEnabled =>
+  static bool? get debugPaintLayerBordersEnabled =>
       _appState?.debugPaintLayerBordersEnabled;
-  static set debugPaintLayerBordersEnabled(bool v) {
+  static set debugPaintLayerBordersEnabled(bool? v) {
     if (v != null) {
       _appState?.debugPaintLayerBordersEnabled = v;
     }
   }
 
   /// Overlay a rotating set of colors when repainting layers in checked mode.
-  static bool get debugRepaintRainbowEnabled =>
+  static bool? get debugRepaintRainbowEnabled =>
       _appState?.debugRepaintRainbowEnabled;
-  static set debugRepaintRainbowEnabled(bool v) {
+  static set debugRepaintRainbowEnabled(bool? v) {
     if (v != null) {
       _appState?.debugRepaintRainbowEnabled = v;
     }
   }
 
   /// The running platform
-  static TargetPlatform get platform {
+  static TargetPlatform? get platform {
     if (_platform == null && context != null) {
-      _platform = Theme.of(context).platform;
+      _platform = Theme.of(context!).platform;
     }
     return _platform;
   }
 
-  static TargetPlatform _platform;
+  static TargetPlatform? _platform;
 
   // Application information
-  static PackageInfo _packageInfo;
+  static PackageInfo? _packageInfo;
 
   /// The Name of the App.
-  static String get appName => _packageInfo?.appName;
+  static String? get appName => _packageInfo?.appName;
 
   /// The 'Package Name' of the App.
-  static String get packageName => _packageInfo?.packageName;
+  static String? get packageName => _packageInfo?.packageName;
 
   /// The current version of the App.
-  static String get version => _packageInfo?.version;
+  static String? get version => _packageInfo?.version;
 
   /// The build number of the App.
-  static String get buildNumber => _packageInfo?.buildNumber;
+  static String? get buildNumber => _packageInfo?.buildNumber;
 
   /// Determines if running in an IDE or in production.
   static bool get inDebugger => v.AppMVC.inDebugger;
@@ -498,17 +500,17 @@ class App {
   }
 
   /// The BuildContext for the App's View.
-  static BuildContext get context => _appWidget.context;
+  static BuildContext? get context => _appWidget?.context;
 
   /// The Scaffold object for this App's View.
-  static ScaffoldState get scaffold => Scaffold.of(context);
+  static ScaffoldState get scaffold => Scaffold.of(context!);
   // 'maybeOf' only in Beta channel
 //  static ScaffoldState get scaffold => Scaffold.maybeOf(context);
 
   /// Return a pre-defined theme
-  static ThemeData getThemeData() {
+  static ThemeData? getThemeData() {
     final theme = Prefs.getString('theme');
-    ThemeData themeData;
+    ThemeData? themeData;
     switch (theme) {
       case 'light':
         themeData = ThemeData.light();
@@ -529,41 +531,41 @@ class App {
     v.App.themeData = v.App.getThemeData();
     // iOS theme
     v.App.iOSTheme =
-        MaterialBasedCupertinoThemeData(materialTheme: v.App.themeData);
+        MaterialBasedCupertinoThemeData(materialTheme: v.App.themeData!);
     // App's menu system
     v.AppMenu.setThemeData();
   }
 
   /// The Physical width of the screen
   static double get screenPhysicalWidth {
-    final media = MediaQuery.of(context);
+    final media = MediaQuery.of(context!);
     return media.size.width * media.devicePixelRatio;
   }
 
   /// The logical width of the screen
-  static double get screenWidth => MediaQuery.of(context).size.width;
+  static double get screenWidth => MediaQuery.of(context!).size.width;
 
   /// The Physical height of the screen
-  static double get screenPhysicalHeight => MediaQuery.of(context).size.height;
+  static double get screenPhysicalHeight => MediaQuery.of(context!).size.height;
 
   /// The Logical height of the screen
   static double get screenHeight {
-    final media = MediaQuery.of(context);
+    final media = MediaQuery.of(context!);
     return media.size.height - media.padding.top - kToolbarHeight - kBottomNavigationBarHeight;
   }
 
   /// Determine the connectivity.
   static final Connectivity _connectivity = Connectivity();
 
-  static StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  static StreamSubscription<ConnectivityResult>? _connectivitySubscription;
 
   /// The local directory for this App.
-  static String get filesDir => _path;
-  static String _path;
+  static String? get filesDir => _path;
+  static String? _path;
 
   /// Returns the connection status of the device.
-  static String get connectivity => _connectivityStatus;
-  static String _connectivityStatus;
+  static String? get connectivity => _connectivityStatus;
+  static String? _connectivityStatus;
 
   /// Indicates if the app has access to the Internet.
   static bool get isOnline => _connectivityStatus != 'none';
@@ -572,7 +574,7 @@ class App {
   static final Set<ConnectivityListener> _listeners = {};
 
   /// Add a Connectivity listener.
-  bool addConnectivityListener(ConnectivityListener listener) {
+  bool addConnectivityListener(ConnectivityListener? listener) {
     var add = false;
     if (listener != null) {
       add = _listeners.add(listener);
@@ -593,11 +595,11 @@ class App {
   static void clearConnectivityListener() => _listeners.clear();
 
   /// The id for this App's particular installation.
-  static Future<String> getInstallNum() => InstallFile.id();
+  static Future<String?> getInstallNum() => InstallFile.id();
 
   /// The id for this App's particular installation.
-  static String get installNum => _installNum;
-  static String _installNum;
+  static String? get installNum => _installNum;
+  static String? _installNum;
 
   /// Internal Initialization routines.
   Future<void> initInternal() async {
@@ -648,7 +650,7 @@ mixin ConnectivityListener {
 abstract class StateMVC<T extends StatefulWidget> extends mvc.StateMVC<T>
     with HandleError {
   //
-  StateMVC([ControllerMVC controller]) : super(controller);
+  StateMVC([ControllerMVC? controller]) : super(controller);
 
   @override
   void refresh() {
@@ -661,7 +663,7 @@ abstract class StateMVC<T extends StatefulWidget> extends mvc.StateMVC<T>
 
 /// A standard Drawer object for your Flutter app.
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({Key key}) : super(key: key);
+  const AppDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

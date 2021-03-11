@@ -73,25 +73,25 @@ export 'package:flutter/material.dart'
 class AppMenu {
   factory AppMenu() => _this ??= AppMenu._();
   AppMenu._();
-  static AppMenu _this;
+  static AppMenu? _this;
 
-  static StateMVC _state;
+  static StateMVC? _state;
 
-  Menu _menu;
-  String _applicationName;
-  String _applicationVersion;
-  Widget _applicationIcon;
-  String _applicationLegalese;
-  List<Widget> _children;
+  Menu? _menu;
+  String? _applicationName;
+  String? _applicationVersion;
+  Widget? _applicationIcon;
+  String? _applicationLegalese;
+  List<Widget>? _children;
 
   PopupMenuButton<dynamic> show(
     StateMVC state, {
-    String applicationName,
-    Widget applicationIcon,
-    String applicationLegalese,
-    List<Widget> children,
+    String? applicationName,
+    Widget? applicationIcon,
+    String? applicationLegalese,
+    List<Widget>? children,
     bool useRootNavigator = true,
-    Menu menu,
+    Menu? menu,
   }) {
     _state = state;
     _menu = menu;
@@ -108,15 +108,15 @@ class AppMenu {
 
     if (_menu != null) {
       final temp = <PopupMenuEntry<dynamic>>[
-        ..._menu.menuItems(),
+        ..._menu!.menuItems(),
         const PopupMenuDivider(),
         ...menuItems
       ];
       menuItems = temp;
 
-      if (_menu.tailItems.isNotEmpty) {
+      if (_menu!.tailItems.isNotEmpty) {
         menuItems.add(const PopupMenuDivider());
-        menuItems.addAll(_menu.tailItems);
+        menuItems.addAll(_menu!.tailItems);
       }
     }
 
@@ -128,24 +128,24 @@ class AppMenu {
 
   void _showMenuSelection(dynamic value) {
     if (_menu != null) {
-      _menu.onSelected(value);
+      _menu!.onSelected(value);
     }
     if (value is! String) {
       return;
     }
     // Set the current colour.
-    ColorPicker.color = App.themeData.primaryColor;
+    ColorPicker.color = App.themeData!.primaryColor;
     switch (value) {
       case 'Color':
         ColorPicker.showColorPicker(
-            context: _state.context,
+            context: _state!.context,
             onColorChange: AppMenu.onColorChange,
             onChange: AppMenu.onChange,
             shrinkWrap: true);
         break;
       case 'About':
         showAboutDialog(
-            context: _state.context,
+            context: _state!.context,
             applicationName: I10n.s(_applicationName ?? App?.vw?.title ?? ''),
             applicationVersion: _applicationVersion,
             applicationIcon: _applicationIcon,
@@ -160,7 +160,7 @@ class AppMenu {
     /// Implement to take in a color change.
   }
 
-  static void onChange([ColorSwatch<int> value]) {
+  static void onChange([ColorSwatch<int?>? value]) {
     //
     if (value == null) {
       final swatch = Prefs.getInt('colorTheme', -1);
@@ -206,7 +206,7 @@ abstract class Menu {
   // abstract
   void onSelected(dynamic menuItem);
 
-  PopupMenuButton<dynamic> show(StateMVC state, {String applicationName}) {
+  PopupMenuButton<dynamic> show(StateMVC state, {String? applicationName}) {
     this.state = state;
     return _appMenu.show(
       state,
@@ -215,7 +215,7 @@ abstract class Menu {
     );
   }
 
-  StateMVC state;
+  StateMVC? state;
 }
 
 /// Abstract so to override fields
@@ -241,38 +241,38 @@ abstract class AppPopupMenu<T> {
   });
 
   ///
-  final Key key;
-  final List<T> items;
-  final PopupMenuItemBuilder<T> itemBuilder;
-  final T initialValue;
-  final PopupMenuItemSelected<T> onSelected;
-  PopupMenuCanceled onCanceled;
-  String tooltip;
-  double elevation;
-  EdgeInsetsGeometry padding;
-  Widget child;
-  Widget icon;
-  Offset offset;
-  bool enabled;
-  ShapeBorder shape;
-  Color color;
+  final Key? key;
+  final List<T>? items;
+  final PopupMenuItemBuilder<T>? itemBuilder;
+  final T? initialValue;
+  final PopupMenuItemSelected<T>? onSelected;
+  PopupMenuCanceled? onCanceled;
+  String? tooltip;
+  double? elevation;
+  EdgeInsetsGeometry? padding;
+  Widget? child;
+  Widget? icon;
+  Offset? offset;
+  bool? enabled;
+  ShapeBorder? shape;
+  Color? color;
   bool captureInheritedThemes;
 
-  BuildContext get context => _context;
+  BuildContext? get context => _context;
 
-  set context(BuildContext context) {
+  set context(BuildContext? context) {
     if (context != null) {
       // Don't assign again. Too dangerous.
       _context ??= context;
     }
   }
 
-  BuildContext _context;
+  BuildContext? _context;
 
-  PopupMenuItemBuilder<T> _onItems(List<T> menuItems) {
+  PopupMenuItemBuilder<T> _onItems(List<T>? menuItems) {
     menuItems ??= items;
-    var popupMenuItems = menuItems
-        .map((Object item) =>
+    var popupMenuItems = menuItems!
+        .map((T? item) =>
             PopupMenuItem<T>(value: item, child: Text(item.toString())))
         .toList();
     return (BuildContext context) => <PopupMenuEntry<T>>[
@@ -294,10 +294,10 @@ abstract class AppPopupMenu<T> {
   }
 
   /// override in subclass
-  List<T> onItems() => [];
+  List<T>? onItems() => [];
 
   /// override in subclass
-  T onInitialValue() => null;
+  T? onInitialValue() => null;
 
   /// override in subclass
   void onSelection(T value) {}
@@ -306,37 +306,37 @@ abstract class AppPopupMenu<T> {
   void onCancellation() {}
 
   /// override in subclass
-  String onTooltip() => null;
+  String? onTooltip() => null;
 
   /// override in subclass
-  double onElevation() => null;
+  double? onElevation() => null;
 
   /// override in subclass
-  EdgeInsetsGeometry onPadding() => const EdgeInsets.all(8);
+  EdgeInsetsGeometry? onPadding() => const EdgeInsets.all(8);
 
   /// override in subclass
-  Widget onChild() => null;
+  Widget? onChild() => null;
 
   /// override in subclass
-  Widget onIcon() => null;
+  Widget? onIcon() => null;
 
   /// override in subclass
-  Offset onOffset() => Offset.zero;
+  Offset? onOffset() => Offset.zero;
 
   /// override in subclass
-  bool onEnabled() => true;
+  bool? onEnabled() => true;
 
   /// override in subclass
-  ShapeBorder onShape() => null;
+  ShapeBorder? onShape() => null;
 
   /// override in subclass
-  Color onColor() => null;
+  Color? onColor() => null;
 
   /// override in subclass
-  bool onCaptureInheritedThemes() => true;
+  bool? onCaptureInheritedThemes() => true;
 
   void errorSnackBar() {
-    var state = ScaffoldMessenger.maybeOf(context);
+    var state = ScaffoldMessenger.maybeOf(context!);
     state?.showSnackBar(
       SnackBar(
         content: Text('Error. No menu options defined.'),
@@ -351,22 +351,22 @@ abstract class AppPopupMenu<T> {
   ///
   // Returning a widget allows for the Builder() widget below.
   Widget buttonMenu({
-    Key key,
-    List<T> items,
-    PopupMenuItemBuilder<T> itemBuilder,
-    T initialValue,
-    PopupMenuItemSelected<T> onSelected,
-    PopupMenuCanceled onCanceled,
-    String tooltip,
-    double elevation,
-    EdgeInsetsGeometry padding,
-    Widget child,
-    Widget icon,
-    Offset offset,
-    bool enabled,
-    ShapeBorder shape,
-    Color color,
-    bool captureInheritedThemes,
+    Key? key,
+    List<T>? items,
+    PopupMenuItemBuilder<T>? itemBuilder,
+    T? initialValue,
+    PopupMenuItemSelected<T>? onSelected,
+    PopupMenuCanceled? onCanceled,
+    String? tooltip,
+    double? elevation,
+    EdgeInsetsGeometry? padding,
+    Widget? child,
+    Widget? icon,
+    Offset? offset,
+    bool? enabled,
+    ShapeBorder? shape,
+    Color? color,
+    bool? captureInheritedThemes,
   }) {
     // So to retrieve the Scaffold object if any.
     return Builder(builder: (context) {
@@ -374,9 +374,9 @@ abstract class AppPopupMenu<T> {
       items ??= this.items;
       Widget popupMenu = PopupMenuButton<T>(
         key: key ?? this.key,
-        itemBuilder: itemBuilder ?? items != null && items.isNotEmpty
+        itemBuilder: itemBuilder ?? (items != null && items!.isNotEmpty
             ? _onItems(items)
-            : this.itemBuilder ?? onItemBuilder ?? _onItems(onItems()),
+            : this.itemBuilder) ?? onItemBuilder,
         initialValue: initialValue ?? this.initialValue ?? onInitialValue(),
         onSelected: onSelected ?? this.onSelected ?? onSelection,
         onCanceled: onCanceled ?? this.onCanceled ?? onCancellation,
@@ -389,10 +389,6 @@ abstract class AppPopupMenu<T> {
         enabled: enabled ?? this.enabled ?? onEnabled() ?? true,
         shape: shape ?? this.shape ?? onShape(),
         color: color ?? this.color ?? onColor(),
-        // captureInheritedThemes: captureInheritedThemes ??
-        //     this.captureInheritedThemes ??
-        //     onCaptureInheritedThemes() ??
-        //     true,
         child: child ?? this.child ?? onChild(),
       );
       // If not running under the MaterialApp widget.

@@ -55,7 +55,7 @@ class Id extends FieldWidgets<Contact> with FormFields {
   Id(dynamic value) : super(label: 'Identifier', value: value);
 }
 
-String notEmpty(String v) => v.isEmpty ? 'Cannot be empty' : null;
+String? notEmpty(String? v) => v!.isEmpty ? 'Cannot be empty' : null;
 
 class DisplayName extends FieldWidgets<Contact> with FormFields {
   DisplayName(Contact contact)
@@ -64,13 +64,13 @@ class DisplayName extends FieldWidgets<Contact> with FormFields {
           value: _displayName(contact),
           child: Text(_displayName(contact) ?? ''),
         );
-  static String displayName;
+  static String? displayName;
 
-  static String _displayName(Contact contact) {
-    if (displayName == null || displayName.isEmpty) {
-      if (contact.givenName.value != null) {
-        displayName = contact.givenName.value ?? '';
-        displayName = '$displayName ${contact.familyName.value}';
+  static String? _displayName(Contact contact) {
+    if (displayName == null || displayName!.isEmpty) {
+      if (contact.givenName!.value != null) {
+        displayName = contact.givenName!.value ?? '';
+        displayName = '$displayName ${contact.familyName!.value}';
       }
       displayName ??= '';
     }
@@ -149,19 +149,19 @@ class Phone extends FieldWidgets<Contact> with FormFields {
 
   @override
   ListItems<Contact> onListItems({
-    String title,
-    List<FieldWidgets<Contact>> items,
-    MapItemFunction mapItem,
-    GestureTapCallback onTap,
-    ValueChanged<String> onChanged,
-    List<String> dropItems,
+    String? title,
+    List<FieldWidgets<Contact>>? items,
+    MapItemFunction? mapItem,
+    GestureTapCallback? onTap,
+    ValueChanged<String?>? onChanged,
+    List<String>? dropItems,
   }) =>
       super.onListItems(
         title: title,
         items: items,
         mapItem: mapItem,
         onTap: onTap,
-        onChanged: onChanged ?? (String value) => App.refresh(),
+        onChanged: onChanged ?? ((String? value) => App.refresh()),
         dropItems:
             dropItems ?? const ['home', 'work', 'landline', 'modile', 'other'],
       );
@@ -188,12 +188,12 @@ class Email extends FieldWidgets<Contact> with FormFields {
 
   @override
   ListItems<Contact> onListItems({
-    String title,
-    List<FieldWidgets<Contact>> items,
-    MapItemFunction mapItem,
-    GestureTapCallback onTap,
-    ValueChanged<String> onChanged,
-    List<String> dropItems,
+    String? title,
+    List<FieldWidgets<Contact>>? items,
+    MapItemFunction? mapItem,
+    GestureTapCallback? onTap,
+    ValueChanged<String?>? onChanged,
+    List<String>? dropItems,
   }) =>
       super.onListItems(
         title: title,
@@ -202,7 +202,7 @@ class Email extends FieldWidgets<Contact> with FormFields {
         onTap: onTap,
         dropItems: dropItems ?? ['home', 'work', 'other'],
         onChanged: onChanged ??
-            (String value) {
+            (String? value) {
               App.refresh();
             },
       );

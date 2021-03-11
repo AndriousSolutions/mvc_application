@@ -31,13 +31,13 @@ class ColorPicker {
 
   static Color _color = Colors.red;
 
-  static ColorSwatch<int> get colorSwatch => _colorSwatch;
-  static set colorSwatch(ColorSwatch<int> swatch) {
+  static ColorSwatch<int?> get colorSwatch => _colorSwatch;
+  static set colorSwatch(ColorSwatch<int?> swatch) {
     _color = swatch;
     _colorSwatch = swatch;
   }
 
-  static ColorSwatch<int> _colorSwatch = Colors.red;
+  static ColorSwatch<int?> _colorSwatch = Colors.red;
 
   static bool allowShades = false;
   static double get circleSize => _circleSize;
@@ -53,20 +53,20 @@ class ColorPicker {
 
   // ignore: avoid_setters_without_getters
   static set onColorChange(ValueChanged<Color> func) => _onColorChange = func;
-  static ValueChanged<Color> _onColorChange;
+  static ValueChanged<Color>? _onColorChange;
 
   // ignore: avoid_setters_without_getters
-  static set onChange(ValueChanged<ColorSwatch<int>> func) => _onChange = func;
-  static ValueChanged<ColorSwatch<int>> _onChange;
+  static set onChange(ValueChanged<ColorSwatch<int?>> func) => _onChange = func;
+  static ValueChanged<ColorSwatch<int?>>? _onChange;
 
-  static List<ColorSwatch<int>> get colors => Colors.primaries;
+  static List<ColorSwatch<int?>> get colors => Colors.primaries;
 
 //  static Text title = const Text('Colour Theme');
 
-  static Future<ColorSwatch<int>> showColorPicker({
-    @required BuildContext context,
-    ValueChanged<Color> onColorChange,
-    ValueChanged<ColorSwatch<int>> onChange,
+  static Future<ColorSwatch<int>?> showColorPicker({
+    required BuildContext context,
+    ValueChanged<Color>? onColorChange,
+    ValueChanged<ColorSwatch<int?>>? onChange,
     bool shrinkWrap = false,
   }) {
     return showDialog<ColorSwatch<int>>(
@@ -80,18 +80,18 @@ class ColorPicker {
                     onColorChange(color);
                   }
                   if (_onColorChange != null) {
-                    _onColorChange(color);
+                    _onColorChange!(color);
                   }
                   Navigator.pop(context, color);
                 },
                 onMainColorChange: (ColorSwatch<dynamic> color) {
                   _color = color;
-                  _colorSwatch = color;
+                  _colorSwatch = color as ColorSwatch<int?>;
                   if (onChange != null) {
                     onChange(color);
                   }
                   if (_onChange != null) {
-                    _onChange(color);
+                    _onChange!(color);
                   }
                   Navigator.pop(context, color);
                 },

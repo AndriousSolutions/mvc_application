@@ -24,7 +24,6 @@ import 'package:flutter/material.dart'
         Colors,
         Container,
         EdgeInsets,
-        FlatButton,
         Form,
         Icon,
         Icons,
@@ -35,6 +34,7 @@ import 'package:flutter/material.dart'
         State,
         StatefulWidget,
         Text,
+        TextButton,
         Widget;
 
 import '../../model.dart' show Contact;
@@ -42,9 +42,9 @@ import '../../model.dart' show Contact;
 import '../../view.dart' show StateMVC;
 
 class AddContact extends StatefulWidget {
-  const AddContact({this.contact, this.title, Key key}) : super(key: key);
-  final Contact contact;
-  final String title;
+  const AddContact({this.contact, this.title, Key? key}) : super(key: key);
+  final Contact? contact;
+  final String? title;
   @override
   State createState() => _AddContactState();
 }
@@ -59,11 +59,11 @@ class _AddContactState extends StateMVC<AddContact> {
     contact?.initState(this);
   }
 
-  Contact contact;
+  Contact? contact;
 
   @override
   void dispose() {
-    contact.dispose();
+    contact!.dispose();
     super.dispose();
   }
 
@@ -73,9 +73,9 @@ class _AddContactState extends StateMVC<AddContact> {
       appBar: AppBar(
         title: Text(widget.title ?? 'Add a contact'),
         actions: [
-          FlatButton(
+          TextButton(
             onPressed: () async {
-              final pop = await contact.onPressed();
+              final pop = await contact!.onPressed();
               if (pop) {
                 Navigator.of(context).pop();
               }
@@ -87,16 +87,16 @@ class _AddContactState extends StateMVC<AddContact> {
       body: Container(
         padding: const EdgeInsets.all(12),
         child: Form(
-            key: contact.formKey,
+            key: contact!.formKey,
             child: ListView(
               children: [
-                contact.givenName.textFormField,
-                contact.middleName.textFormField,
-                contact.familyName.textFormField,
-                contact.phone.onListItems(),
-                contact.email.onListItems(),
-                contact.company.textFormField,
-                contact.jobTitle.textFormField,
+                contact!.givenName!.textFormField,
+                contact!.middleName!.textFormField,
+                contact!.familyName!.textFormField,
+                contact!.phone!.onListItems(),
+                contact!.email!.onListItems(),
+                contact!.company!.textFormField,
+                contact!.jobTitle!.textFormField,
               ],
             )),
       ),

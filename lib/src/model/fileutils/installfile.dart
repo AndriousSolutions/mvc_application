@@ -27,12 +27,12 @@ import 'files.dart' show Files;
 class InstallFile {
   static const String FILE_NAME = '.install';
 
-  static String sID;
+  static String? sID;
 
   static bool _justInstalled = false;
   bool get justInstalled => _justInstalled;
 
-  static Future<String> id() async {
+  static Future<String?> id() async {
     if (sID != null) {
       return sID;
     }

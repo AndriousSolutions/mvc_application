@@ -27,15 +27,15 @@ import '../model.dart' show Contact, ContactsDB;
 
 class Controller extends AppController {
   //
-  factory Controller([StateMVC state]) => _this ??= Controller._(state);
+  factory Controller([StateMVC? state]) => _this ??= Controller._(state);
 
-  Controller._([StateMVC state])
+  Controller._([StateMVC? state])
       : model = ContactsDB(),
         super(state);
   final ContactsDB model;
-  static Controller _this;
+  static Controller? _this;
 
-  static bool _sortedAlpha;
+  static late bool _sortedAlpha;
   static const String _SORT_KEY = 'sort_by_alpha';
 
   @override
@@ -54,10 +54,10 @@ class Controller extends AppController {
     super.dispose();
   }
 
-  Future<List<Contact>> getContacts() async {
+  Future<List<Contact>?> getContacts() async {
     _contacts = await model.getContacts();
     if (_sortedAlpha) {
-      _contacts.sort();
+      _contacts!.sort();
     }
     return _contacts;
   }
@@ -69,7 +69,7 @@ class Controller extends AppController {
   }
 
   /// Called by menu option
-  Future<List<Contact>> sort() async {
+  Future<List<Contact>?> sort() async {
     _sortedAlpha = !_sortedAlpha;
     await Prefs.setBool(_SORT_KEY, _sortedAlpha);
     unawaited(refresh());
@@ -78,14 +78,14 @@ class Controller extends AppController {
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  List<Contact> get items => _contacts;
-  List<Contact> _contacts;
+  List<Contact>? get items => _contacts;
+  List<Contact>? _contacts;
 
-  Contact itemAt(int index) => items?.elementAt(index);
+  Contact? itemAt(int index) => items?.elementAt(index);
 
-  Future<bool> deleteItem(int index) async {
+  Future<bool?> deleteItem(int index) async {
     final contact = items?.elementAt(index);
-    final delete = await contact.delete();
+    final delete = await contact?.delete();
     await refresh();
     return delete;
   }

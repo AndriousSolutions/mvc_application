@@ -47,10 +47,10 @@ import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 import 'package:flutter/rendering.dart' as debug;
 
 class AppStateWidget extends StatefulWidget {
-  const AppStateWidget({Key key}) : super(key: key);
+  const AppStateWidget({Key? key}) : super(key: key);
   @override
   // ignore: no_logic_in_create_state
-  State createState() => v.AppStatefulWidget.vw;
+  State createState() => v.AppStatefulWidget.vw!;
 }
 
 /// The View for the app. The 'look and feel' for the whole app.
@@ -59,48 +59,48 @@ class AppState extends AppViewState<AppStateWidget> {
   AppState({
     this.key,
     this.home,
-    AppController con,
-    List<ControllerMVC> controllers,
-    Object object,
-    GlobalKey<NavigatorState> navigatorKey,
-    Map<String, WidgetBuilder> routes,
-    String initialRoute,
-    RouteFactory onGenerateRoute,
-    RouteFactory onUnknownRoute,
-    List<NavigatorObserver> navigatorObservers,
-    TransitionBuilder builder,
-    String title,
-    GenerateAppTitle onGenerateTitle,
-    ThemeData theme,
-    CupertinoThemeData iOSTheme,
-    ThemeData darkTheme,
-    ThemeMode themeMode,
-    Color color,
-    Locale locale,
-    Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates,
-    LocaleListResolutionCallback localeListResolutionCallback,
-    LocaleResolutionCallback localeResolutionCallback,
-    Iterable<Locale> supportedLocales,
+    AppController? con,
+    List<ControllerMVC>? controllers,
+    Object? object,
+    GlobalKey<NavigatorState>? navigatorKey,
+    Map<String, WidgetBuilder>? routes,
+    String? initialRoute,
+    RouteFactory? onGenerateRoute,
+    RouteFactory? onUnknownRoute,
+    List<NavigatorObserver>? navigatorObservers,
+    TransitionBuilder? builder,
+    String? title,
+    GenerateAppTitle? onGenerateTitle,
+    ThemeData? theme,
+    CupertinoThemeData? iOSTheme,
+    ThemeData? darkTheme,
+    ThemeMode? themeMode,
+    Color? color,
+    Locale? locale,
+    Iterable<LocalizationsDelegate<dynamic>>? localizationsDelegates,
+    LocaleListResolutionCallback? localeListResolutionCallback,
+    LocaleResolutionCallback? localeResolutionCallback,
+    Iterable<Locale>? supportedLocales,
     this.useMaterial,
     this.useCupertino,
     this.switchUI,
-    bool debugShowMaterialGrid,
-    bool showPerformanceOverlay,
-    bool checkerboardRasterCacheImages,
-    bool checkerboardOffscreenLayers,
-    bool showSemanticsDebugger,
-    bool debugShowCheckedModeBanner,
-    Map<LogicalKeySet, Intent> shortcuts,
-    Map<Type, Action<Intent>> actions,
-    bool debugShowWidgetInspector,
-    bool debugPaintSizeEnabled,
-    bool debugPaintBaselinesEnabled,
-    bool debugPaintPointersEnabled,
-    bool debugPaintLayerBordersEnabled,
-    bool debugRepaintRainbowEnabled,
-    FlutterExceptionHandler errorHandler,
-    ErrorWidgetBuilder errorScreen,
-    v.ReportErrorHandler errorReport,
+    bool? debugShowMaterialGrid,
+    bool? showPerformanceOverlay,
+    bool? checkerboardRasterCacheImages,
+    bool? checkerboardOffscreenLayers,
+    bool? showSemanticsDebugger,
+    bool? debugShowCheckedModeBanner,
+    Map<LogicalKeySet, Intent>? shortcuts,
+    Map<Type, Action<Intent>>? actions,
+    bool? debugShowWidgetInspector,
+    bool? debugPaintSizeEnabled,
+    bool? debugPaintBaselinesEnabled,
+    bool? debugPaintPointersEnabled,
+    bool? debugPaintLayerBordersEnabled,
+    bool? debugRepaintRainbowEnabled,
+    FlutterExceptionHandler? errorHandler,
+    ErrorWidgetBuilder? errorScreen,
+    v.ReportErrorHandler? errorReport,
     this.inHome,
     this.inRoutes,
     this.inInitialRoute,
@@ -177,69 +177,69 @@ class AppState extends AppViewState<AppStateWidget> {
     switchUI ??= false;
 
     // if both useMaterial & useCupertino are set then rely on the Platform.
-    switchUI = switchUI && !useCupertino && !useMaterial;
+    switchUI = switchUI! && !useCupertino! && !useMaterial!;
 
     useMaterial = kIsWeb ||
-        (useMaterial && !useCupertino) ||
-        (UniversalPlatform.isAndroid && !switchUI) ||
-        (UniversalPlatform.isIOS && switchUI);
+        (useMaterial! && !useCupertino!) ||
+        (UniversalPlatform.isAndroid && !switchUI!) ||
+        (UniversalPlatform.isIOS && switchUI!);
 
     _isMaterial = useMaterial;
 
-    useCupertino = (useCupertino && !useMaterial) ||
-        (UniversalPlatform.isIOS && !switchUI) ||
-        (UniversalPlatform.isAndroid && switchUI);
+    useCupertino = (useCupertino! && !useMaterial!) ||
+        (UniversalPlatform.isIOS && !switchUI!) ||
+        (UniversalPlatform.isAndroid && switchUI!);
 
     _isCupertino = useCupertino;
   }
 
-  Key key;
+  Key? key;
 
-  final Widget home;
+  final Widget? home;
 
   // Explicitly use the Material theme
-  bool useMaterial;
+  bool? useMaterial;
   // Explicitly use the Cupertino theme
-  bool useCupertino;
+  bool? useCupertino;
   // Use Cupertino UI in Android and vice versa.
-  bool switchUI;
+  bool? switchUI;
 
   // The platform paradigm determined at startup. Can't be changed.
-  bool get isMaterial => _isMaterial;
-  bool _isMaterial;
-  bool get isCupertino => _isCupertino;
-  bool _isCupertino;
+  bool? get isMaterial => _isMaterial;
+  bool? _isMaterial;
+  bool? get isCupertino => _isCupertino;
+  bool? _isCupertino;
 
-  final Widget Function() inHome;
-  final Map<String, WidgetBuilder> Function() inRoutes;
-  final String Function() inInitialRoute;
-  final RouteFactory Function() inOnGenerateRoute;
-  final RouteFactory Function() inOnUnknownRoute;
-  final List<NavigatorObserver> Function() inNavigatorObservers;
-  final TransitionBuilder Function() inTransBuilder;
-  final String Function() inTitle;
-  final GenerateAppTitle inGenerateTitle;
-  final ThemeData Function() inTheme;
-  final CupertinoThemeData Function() iniOSTheme;
-  final ThemeData Function() inDarkTheme;
-  final ThemeMode Function() inThemeMode;
-  final Color Function() inColor;
-  final Locale Function() inLocale;
-  final Iterable<LocalizationsDelegate<dynamic>> Function()
+  final Widget Function()? inHome;
+  final Map<String, WidgetBuilder> Function()? inRoutes;
+  final String Function()? inInitialRoute;
+  final RouteFactory Function()? inOnGenerateRoute;
+  final RouteFactory Function()? inOnUnknownRoute;
+  final List<NavigatorObserver> Function()? inNavigatorObservers;
+  final TransitionBuilder Function()? inTransBuilder;
+  final String Function()? inTitle;
+  final GenerateAppTitle? inGenerateTitle;
+  final ThemeData Function()? inTheme;
+  final CupertinoThemeData Function()? iniOSTheme;
+  final ThemeData Function()? inDarkTheme;
+  final ThemeMode Function()? inThemeMode;
+  final Color Function()? inColor;
+  final Locale Function()? inLocale;
+  final Iterable<LocalizationsDelegate<dynamic>> Function()?
       inLocalizationsDelegates;
-  final LocaleListResolutionCallback Function() inLocaleListResolutionCallback;
-  final LocaleResolutionCallback Function() inLocaleResolutionCallback;
-  final Iterable<Locale> Function() inSupportedLocales;
-  final bool Function() inDebugShowMaterialGrid;
-  final bool Function() inShowPerformanceOverlay;
-  final bool Function() inCheckerboardRasterCacheImages;
-  final bool Function() inCheckerboardOffscreenLayers;
-  final bool Function() inShowSemanticsDebugger;
-  final bool Function() inDebugShowCheckedModeBanner;
-  final Map<LogicalKeySet, Intent> Function() inShortcuts;
-  final Map<Type, Action<Intent>> Function() inActions;
-  final void Function(FlutterErrorDetails details) inError;
-  final bool Function(FlutterErrorDetails details) inAsyncError;
+  final LocaleListResolutionCallback Function()? inLocaleListResolutionCallback;
+  final LocaleResolutionCallback Function()? inLocaleResolutionCallback;
+  final Iterable<Locale> Function()? inSupportedLocales;
+  final bool Function()? inDebugShowMaterialGrid;
+  final bool Function()? inShowPerformanceOverlay;
+  final bool Function()? inCheckerboardRasterCacheImages;
+  final bool Function()? inCheckerboardOffscreenLayers;
+  final bool Function()? inShowSemanticsDebugger;
+  final bool Function()? inDebugShowCheckedModeBanner;
+  final Map<LogicalKeySet, Intent> Function()? inShortcuts;
+  final Map<Type, Action<Intent>> Function()? inActions;
+  final void Function(FlutterErrorDetails details)? inError;
+  final bool Function(FlutterErrorDetails details)? inAsyncError;
 
   // The error flag.
   bool _inError = false;
@@ -277,7 +277,7 @@ class AppState extends AppViewState<AppStateWidget> {
   @override
   Widget buildApp(BuildContext context) {
     //
-    if (useCupertino) {
+    if (useCupertino!) {
       return CupertinoApp(
         key: key ?? v.App.widgetsAppKey,
         navigatorKey: navigatorKey ?? onNavigatorKey(),
@@ -290,7 +290,7 @@ class AppState extends AppViewState<AppStateWidget> {
             onNavigatorObservers() ??
             const <NavigatorObserver>[],
         builder: builder ?? onBuilder(),
-        title: title ?? onTitle() ?? '',
+        title: title ?? onTitle(),
         onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
         color: color ?? onColor() ?? Colors.white,
         theme: iOSTheme ?? oniOSTheme() ?? v.App.iOSTheme,
@@ -301,22 +301,17 @@ class AppState extends AppViewState<AppStateWidget> {
             localeListResolutionCallback ?? onLocaleListResolutionCallback(),
         localeResolutionCallback:
             localeResolutionCallback ?? onLocaleResolutionCallback(),
-        supportedLocales: supportedLocales ??
-            onSupportedLocales() ??
-            const <Locale>[Locale('en', 'US')],
+        supportedLocales: supportedLocales ?? onSupportedLocales(),
         showPerformanceOverlay:
-            showPerformanceOverlay ?? onShowPerformanceOverlay() ?? false,
-        checkerboardRasterCacheImages: checkerboardRasterCacheImages ??
-            onCheckerboardRasterCacheImages() ??
-            false,
-        checkerboardOffscreenLayers: checkerboardOffscreenLayers ??
-            onCheckerboardOffscreenLayers() ??
-            false,
+            showPerformanceOverlay ?? onShowPerformanceOverlay(),
+        checkerboardRasterCacheImages:
+            checkerboardRasterCacheImages ?? onCheckerboardRasterCacheImages(),
+        checkerboardOffscreenLayers:
+            checkerboardOffscreenLayers ?? onCheckerboardOffscreenLayers(),
         showSemanticsDebugger:
-            showSemanticsDebugger ?? onShowSemanticsDebugger() ?? false,
-        debugShowCheckedModeBanner: debugShowCheckedModeBanner ??
-            onDebugShowCheckedModeBanner() ??
-            true,
+            showSemanticsDebugger ?? onShowSemanticsDebugger(),
+        debugShowCheckedModeBanner:
+            debugShowCheckedModeBanner ?? onDebugShowCheckedModeBanner(),
         shortcuts: shortcuts ?? onShortcuts(),
         actions: actions ?? onActions(),
       );
@@ -333,36 +328,31 @@ class AppState extends AppViewState<AppStateWidget> {
             onNavigatorObservers() ??
             const <NavigatorObserver>[],
         builder: builder ?? onBuilder(),
-        title: title ?? onTitle() ?? '',
+        title: title ?? onTitle(),
         onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
         color: color ?? onColor() ?? Colors.white,
         theme: theme ?? onTheme() ?? v.App.themeData,
         darkTheme: darkTheme ?? onDarkTheme(),
-        themeMode: themeMode ?? onThemeMode() ?? ThemeMode.system,
+        themeMode: themeMode ?? onThemeMode(),
         locale: locale ?? onLocale(),
         localizationsDelegates: onLocalizationsDelegates(),
         localeListResolutionCallback:
             localeListResolutionCallback ?? onLocaleListResolutionCallback(),
         localeResolutionCallback:
             localeResolutionCallback ?? onLocaleResolutionCallback(),
-        supportedLocales: supportedLocales ??
-            onSupportedLocales() ??
-            const <Locale>[Locale('en', 'US')],
+        supportedLocales: supportedLocales ?? onSupportedLocales(),
         debugShowMaterialGrid:
-            debugShowMaterialGrid ?? onDebugShowMaterialGrid() ?? false,
+            debugShowMaterialGrid ?? onDebugShowMaterialGrid(),
         showPerformanceOverlay:
-            showPerformanceOverlay ?? onShowPerformanceOverlay() ?? false,
-        checkerboardRasterCacheImages: checkerboardRasterCacheImages ??
-            onCheckerboardRasterCacheImages() ??
-            false,
-        checkerboardOffscreenLayers: checkerboardOffscreenLayers ??
-            onCheckerboardOffscreenLayers() ??
-            false,
+            showPerformanceOverlay ?? onShowPerformanceOverlay(),
+        checkerboardRasterCacheImages:
+            checkerboardRasterCacheImages ?? onCheckerboardRasterCacheImages(),
+        checkerboardOffscreenLayers:
+            checkerboardOffscreenLayers ?? onCheckerboardOffscreenLayers(),
         showSemanticsDebugger:
-            showSemanticsDebugger ?? onShowSemanticsDebugger() ?? false,
-        debugShowCheckedModeBanner: debugShowCheckedModeBanner ??
-            onDebugShowCheckedModeBanner() ??
-            true,
+            showSemanticsDebugger ?? onShowSemanticsDebugger(),
+        debugShowCheckedModeBanner:
+            debugShowCheckedModeBanner ?? onDebugShowCheckedModeBanner(),
         shortcuts: shortcuts ?? onShortcuts(),
         actions: actions ?? onActions(),
       );
@@ -385,9 +375,9 @@ class AppState extends AppViewState<AppStateWidget> {
     _inError = true;
     // Note, the AppController's Error Handler takes precedence if any.
     if (con != null) {
-      con.onError(details);
+      con!.onError(details);
     } else if (inError != null) {
-      inError(details);
+      inError!(details);
     } else {
       super.onError(details);
     }
@@ -402,7 +392,7 @@ class AppState extends AppViewState<AppStateWidget> {
   }
 
   /// Explicity change to a particular interface.
-  void changeUI(String ui) {
+  void changeUI(String? ui) {
     if (ui == null || ui.isEmpty) {
       return;
     }
@@ -425,36 +415,37 @@ class AppState extends AppViewState<AppStateWidget> {
 
   GlobalKey<NavigatorState> onNavigatorKey() =>
       _navigatorKey ??= GlobalKey<NavigatorState>();
-  GlobalKey<NavigatorState> _navigatorKey;
-  Widget onHome() => inHome != null ? inHome() : null;
-  Map<String, WidgetBuilder> onRoutes() =>
-      inRoutes != null ? inRoutes() : const <String, WidgetBuilder>{};
-  String onInitialRoute() => inInitialRoute != null ? inInitialRoute() : null;
-  RouteFactory onOnGenerateRoute() =>
-      inOnGenerateRoute != null ? inOnGenerateRoute() : null;
-  RouteFactory onOnUnknownRoute() =>
-      inOnUnknownRoute != null ? inOnUnknownRoute() : null;
-  List<NavigatorObserver> onNavigatorObservers() => inNavigatorObservers != null
-      ? inNavigatorObservers()
-      : const <NavigatorObserver>[];
-  TransitionBuilder onBuilder() =>
-      inTransBuilder != null ? inTransBuilder() : null;
-  String onTitle() => inTitle != null ? inTitle() : '';
-  GenerateAppTitle onOnGenerateTitle(BuildContext context) => inGenerateTitle;
-  Color onColor() => inColor != null ? inColor() : null;
-  ThemeData onTheme() => inTheme != null ? inTheme() : null;
-  CupertinoThemeData oniOSTheme() => iniOSTheme != null ? iniOSTheme() : null;
-  ThemeData onDarkTheme() => inDarkTheme != null ? inDarkTheme() : null;
+  GlobalKey<NavigatorState>? _navigatorKey;
+  Widget? onHome() => inHome != null ? inHome!() : null;
+  Map<String, WidgetBuilder>? onRoutes() =>
+      inRoutes != null ? inRoutes!() : const <String, WidgetBuilder>{};
+  String? onInitialRoute() => inInitialRoute != null ? inInitialRoute!() : null;
+  RouteFactory? onOnGenerateRoute() =>
+      inOnGenerateRoute != null ? inOnGenerateRoute!() : null;
+  RouteFactory? onOnUnknownRoute() =>
+      inOnUnknownRoute != null ? inOnUnknownRoute!() : null;
+  List<NavigatorObserver>? onNavigatorObservers() =>
+      inNavigatorObservers != null
+          ? inNavigatorObservers!()
+          : const <NavigatorObserver>[];
+  TransitionBuilder? onBuilder() =>
+      inTransBuilder != null ? inTransBuilder!() : null;
+  String onTitle() => inTitle != null ? inTitle!() : '';
+  GenerateAppTitle? onOnGenerateTitle(BuildContext context) => inGenerateTitle;
+  Color? onColor() => inColor != null ? inColor!() : null;
+  ThemeData? onTheme() => inTheme != null ? inTheme!() : null;
+  CupertinoThemeData? oniOSTheme() => iniOSTheme != null ? iniOSTheme!() : null;
+  ThemeData? onDarkTheme() => inDarkTheme != null ? inDarkTheme!() : null;
   ThemeMode onThemeMode() =>
-      inThemeMode != null ? inThemeMode() : ThemeMode.system;
-  Locale onLocale() => inLocale != null ? inLocale() : null;
+      inThemeMode != null ? inThemeMode!() : ThemeMode.system;
+  Locale? onLocale() => inLocale != null ? inLocale!() : null;
   @mustCallSuper
   Iterable<LocalizationsDelegate<dynamic>> onLocalizationsDelegates() sync* {
     if (localizationsDelegates != null) {
-      yield* localizationsDelegates;
+      yield* localizationsDelegates!;
     }
     if (inLocalizationsDelegates != null) {
-      yield* inLocalizationsDelegates();
+      yield* inLocalizationsDelegates!();
     }
     // Supply MaterialLocalizations just in case you're in Cupertino interface.
     yield DefaultMaterialLocalizations.delegate;
@@ -462,41 +453,41 @@ class AppState extends AppViewState<AppStateWidget> {
     yield v.I10nDelegate();
   }
 
-  LocaleListResolutionCallback onLocaleListResolutionCallback() =>
+  LocaleListResolutionCallback? onLocaleListResolutionCallback() =>
       inLocaleListResolutionCallback != null
-          ? inLocaleListResolutionCallback()
+          ? inLocaleListResolutionCallback!()
           : null;
-  LocaleResolutionCallback onLocaleResolutionCallback() =>
-      inLocaleResolutionCallback != null ? inLocaleResolutionCallback() : null;
+  LocaleResolutionCallback? onLocaleResolutionCallback() =>
+      inLocaleResolutionCallback != null ? inLocaleResolutionCallback!() : null;
   Iterable<Locale> onSupportedLocales() => inSupportedLocales != null
-      ? inSupportedLocales()
+      ? inSupportedLocales!()
       : const <Locale>[Locale('en', 'US')];
   bool onDebugShowMaterialGrid() =>
       // ignore: avoid_bool_literals_in_conditional_expressions
-      inDebugShowMaterialGrid != null ? inDebugShowMaterialGrid() : false;
+      inDebugShowMaterialGrid != null ? inDebugShowMaterialGrid!() : false;
   bool onShowPerformanceOverlay() =>
       // ignore: avoid_bool_literals_in_conditional_expressions
-      inShowPerformanceOverlay != null ? inShowPerformanceOverlay() : false;
+      inShowPerformanceOverlay != null ? inShowPerformanceOverlay!() : false;
   bool onCheckerboardRasterCacheImages() =>
       // ignore: avoid_bool_literals_in_conditional_expressions
       inCheckerboardRasterCacheImages != null
-          ? inCheckerboardRasterCacheImages()
+          ? inCheckerboardRasterCacheImages!()
           : false;
   // ignore: avoid_bool_literals_in_conditional_expressions
   bool onCheckerboardOffscreenLayers() => inCheckerboardOffscreenLayers != null
-      ? inCheckerboardOffscreenLayers()
+      ? inCheckerboardOffscreenLayers!()
       : false;
   bool onShowSemanticsDebugger() =>
       // ignore: avoid_bool_literals_in_conditional_expressions
-      inShowSemanticsDebugger != null ? inShowSemanticsDebugger() : false;
+      inShowSemanticsDebugger != null ? inShowSemanticsDebugger!() : false;
   // ignore: avoid_bool_literals_in_conditional_expressions
   bool onDebugShowCheckedModeBanner() => inDebugShowCheckedModeBanner != null
-      ? inDebugShowCheckedModeBanner()
+      ? inDebugShowCheckedModeBanner!()
       : true;
-  Map<LogicalKeySet, Intent> onShortcuts() =>
-      inShortcuts != null ? inShortcuts() : null;
-  Map<Type, Action<Intent>> onActions() =>
-      inActions != null ? inActions() : null;
+  Map<LogicalKeySet, Intent>? onShortcuts() =>
+      inShortcuts != null ? inShortcuts!() : null;
+  Map<Type, Action<Intent>>? onActions() =>
+      inActions != null ? inActions!() : null;
   // An error handler for any async operations.
   @override
   bool onAsyncError(FlutterErrorDetails details) {
@@ -504,7 +495,7 @@ class AppState extends AppViewState<AppStateWidget> {
     try {
       handled = con?.onAsyncError(details) ?? false;
       if (!handled && inAsyncError != null) {
-        handled = inAsyncError(details);
+        handled = inAsyncError!(details);
       }
     } catch (ex) {
       handled = false;
@@ -519,8 +510,8 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   //
   AppViewState({
     this.con,
-    List<ControllerMVC> controllers,
-    Object object,
+    List<ControllerMVC>? controllers,
+    Object? object,
     this.navigatorKey,
     this.routes,
     this.initialRoute,
@@ -554,9 +545,9 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
     this.debugPaintPointersEnabled,
     this.debugPaintLayerBordersEnabled,
     this.debugRepaintRainbowEnabled,
-    FlutterExceptionHandler errorHandler,
-    ErrorWidgetBuilder errorScreen,
-    v.ReportErrorHandler errorReport,
+    FlutterExceptionHandler? errorHandler,
+    ErrorWidgetBuilder? errorScreen,
+    v.ReportErrorHandler? errorReport,
   }) : super(
           controller: con,
           controllers: controllers,
@@ -599,45 +590,45 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
           handler: errorHandler, builder: errorScreen, report: errorReport);
     }
   }
-  final AppController con;
-  v.AppErrorHandler _errorHandler;
+  final AppController? con;
+  v.AppErrorHandler? _errorHandler;
 
   /// All the fields found in the widgets, MaterialApp and CupertinoApp
-  GlobalKey<NavigatorState> navigatorKey;
-  Map<String, WidgetBuilder> routes;
-  String initialRoute;
-  RouteFactory onGenerateRoute;
-  RouteFactory onUnknownRoute;
-  List<NavigatorObserver> navigatorObservers;
-  TransitionBuilder builder;
-  String title;
-  GenerateAppTitle onGenerateTitle;
-  final ThemeData theme;
-  final CupertinoThemeData iOSTheme;
-  ThemeData darkTheme;
-  ThemeMode themeMode;
-  Color color;
-  Locale locale;
-  Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates;
-  LocaleListResolutionCallback localeListResolutionCallback;
-  LocaleResolutionCallback localeResolutionCallback;
-  Iterable<Locale> supportedLocales;
-  bool debugShowMaterialGrid;
-  bool showPerformanceOverlay;
-  bool checkerboardRasterCacheImages;
-  bool checkerboardOffscreenLayers;
-  bool showSemanticsDebugger;
-  bool debugShowWidgetInspector;
-  bool debugShowCheckedModeBanner;
-  Map<LogicalKeySet, Intent> shortcuts;
-  Map<Type, Action<Intent>> actions;
+  GlobalKey<NavigatorState>? navigatorKey;
+  Map<String, WidgetBuilder>? routes;
+  String? initialRoute;
+  RouteFactory? onGenerateRoute;
+  RouteFactory? onUnknownRoute;
+  List<NavigatorObserver>? navigatorObservers;
+  TransitionBuilder? builder;
+  String? title;
+  GenerateAppTitle? onGenerateTitle;
+  final ThemeData? theme;
+  final CupertinoThemeData? iOSTheme;
+  ThemeData? darkTheme;
+  ThemeMode? themeMode;
+  Color? color;
+  Locale? locale;
+  Iterable<LocalizationsDelegate<dynamic>>? localizationsDelegates;
+  LocaleListResolutionCallback? localeListResolutionCallback;
+  LocaleResolutionCallback? localeResolutionCallback;
+  Iterable<Locale>? supportedLocales;
+  bool? debugShowMaterialGrid;
+  bool? showPerformanceOverlay;
+  bool? checkerboardRasterCacheImages;
+  bool? checkerboardOffscreenLayers;
+  bool? showSemanticsDebugger;
+  bool? debugShowWidgetInspector;
+  bool? debugShowCheckedModeBanner;
+  Map<LogicalKeySet, Intent>? shortcuts;
+  Map<Type, Action<Intent>>? actions;
 
   /// Highlights UI while debugging.
-  bool debugPaintSizeEnabled;
-  bool debugPaintBaselinesEnabled;
-  bool debugPaintPointersEnabled;
-  bool debugPaintLayerBordersEnabled;
-  bool debugRepaintRainbowEnabled;
+  bool? debugPaintSizeEnabled;
+  bool? debugPaintBaselinesEnabled;
+  bool? debugPaintPointersEnabled;
+  bool? debugPaintLayerBordersEnabled;
+  bool? debugRepaintRainbowEnabled;
 
   /// Provide 'the view'
   @override
@@ -659,13 +650,13 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
 /// The Error Screen if something happens at start up.
 class AppError extends AppState {
   //
-  AppError(Object exception, {Key key})
+  AppError(Object exception, {Key? key})
       : super(home: _AppError(exception, key: key));
 }
 
 class _AppError extends StatefulWidget {
   //
-  const _AppError(this.exception, {Key key}) : super(key: key);
+  const _AppError(this.exception, {Key? key}) : super(key: key);
   final Object exception;
   @override
   State<StatefulWidget> createState() => _AppErrorState();

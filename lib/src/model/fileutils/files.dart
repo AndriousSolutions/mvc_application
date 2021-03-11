@@ -23,9 +23,9 @@ import 'package:path_provider/path_provider.dart'
 
 // ignore: avoid_classes_with_only_static_members
 class Files {
-  static String _path;
+  static String? _path;
 
-  static Future<String> get localPath async {
+  static Future<String?> get localPath async {
     if (_path == null) {
       final directory = await getApplicationDocumentsDirectory();
       _path = directory.path;

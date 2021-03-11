@@ -42,9 +42,9 @@ import 'package:mvc_application/view.dart' as v
 /// Add an Error Handler right at the start.
 void runApp(
   m.Widget app, {
-  FlutterExceptionHandler errorHandler,
-  m.ErrorWidgetBuilder errorScreen,
-  v.ReportErrorHandler errorReport,
+  FlutterExceptionHandler? errorHandler,
+  m.ErrorWidgetBuilder? errorScreen,
+  v.ReportErrorHandler? errorReport,
   bool allowNewHandlers = false,
 }) {
   // Instantiate the app's error handler.
@@ -74,7 +74,7 @@ void runApp(
 /// A Controller for the 'app level'.
 class AppController extends ControllerMVC implements mvc.AppConMVC {
   //
-  AppController([v.StateMVC state]) : super(state);
+  AppController([v.StateMVC? state]) : super(state);
 
   /// Initialize any immediate 'none time-consuming' operations
   /// at the very beginning.
@@ -92,7 +92,7 @@ class AppController extends ControllerMVC implements mvc.AppConMVC {
 /// A Controller for the 'app level' to influence the whole app.
 class AppConMVC extends mvc.AppConMVC with v.ConnectivityListener, HandleError {
   //
-  AppConMVC([v.StateMVC state]) : super(state);
+  AppConMVC([v.StateMVC? state]) : super(state);
 
   /// If the device's connectivity changes.
   @override
@@ -103,5 +103,5 @@ class AppConMVC extends mvc.AppConMVC with v.ConnectivityListener, HandleError {
 /// Incorporates an Error Handler.
 class ControllerMVC extends mvc.ControllerMVC with HandleError {
   //
-  ControllerMVC([v.StateMVC state]) : super(state);
+  ControllerMVC([v.StateMVC? state]) : super(state);
 }

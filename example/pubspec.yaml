@@ -1,17 +1,17 @@
 name: contacts_example
 description: Demonstrates the MVC design pattern implementation.
 
-version: 2.0.0
+version: 3.0.0
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
   # https://pub.dev/packages/dbutils
-  dbutils: ">=2.0.0 <3.0.0"
+  dbutils: ^3.0.0
 
   mvc_application:
     path: ../../mvc_application
@@ -68,3 +68,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
+
+
+##  http://127.0.0.1:50804/C:/Programs/Tools/Projects/Flutter/packages/mvc_application/example?authToken=qj7iNWJwIfY%3D

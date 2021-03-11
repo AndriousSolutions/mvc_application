@@ -18,7 +18,7 @@
 ///
 mixin HandleError {
   /// Return the 'last' error if any.
-  Exception getError([dynamic error]) {
+  Exception? getError([dynamic error]) {
     var ex = _error;
     if (error == null) {
       _error = null;
@@ -39,5 +39,5 @@ mixin HandleError {
   /// Determine if app is 'in error.'
   bool get inError => _error != null;
   bool get hasError => _error != null;
-  Exception _error;
+  Exception? _error;
 }

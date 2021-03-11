@@ -21,7 +21,7 @@
 class ModelMVC {
   factory ModelMVC() => _firstMod ??= ModelMVC._();
   ModelMVC._();
-  static ModelMVC _firstMod;
+  static ModelMVC? _firstMod;
 
   /// Allow for easy access to 'the first Model' throughout the application.
   // ignore: prefer_constructors_over_static_methods

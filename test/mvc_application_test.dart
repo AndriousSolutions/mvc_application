@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mvc_application/view.dart' show AppMVC, Key;
 
+import 'package:mvc_pattern/mvc_pattern.dart' show ControllerMVC, StateMVC;
+
 // ignore: avoid_relative_lib_imports
-import '../example/lib/src/controller.dart' show ControllerMVC;
+import '../example/lib/src/controller.dart' hide ControllerMVC;
 
 // ignore: avoid_relative_lib_imports
 import '../example/lib/src/view.dart'
@@ -13,7 +15,6 @@ import '../example/lib/src/view.dart'
         MaterialApp,
         MyApp,
         State,
-        StateMVC,
         StatefulWidget,
         UniqueKey;
 
@@ -41,21 +42,21 @@ class _TestApp {
 
       expect(widget, isInstanceOf<AppMVC>());
 
-      final AppMVC appObj = widget;
+      final appObj = widget as AppMVC;
 
       /// Reference to the Controller.
-      final ControllerMVC con = appObj.controller;
+      final ControllerMVC? con = appObj.controller;
 
       if (con != null) {
         expect(con, isInstanceOf<ControllerMVC>());
 
         /// Reference to the StateMVC.
-        final StateMVC _sv = con.stateMVC;
+        final StateMVC? _sv = con.stateMVC;
 
         expect(_sv, isInstanceOf<StateMVC<StatefulWidget>>());
 
         /// The State object.
-        final State _state = con.stateMVC;
+        final State _state = con.stateMVC as State<StatefulWidget>;
 
         expect(_state, isInstanceOf<State<StatefulWidget>>());
 
@@ -65,7 +66,7 @@ class _TestApp {
         expect(id, isInstanceOf<String>());
 
         /// The StateView's unique identifier.
-        final svId = _sv.keyId;
+        final svId = _sv!.keyId;
 
         expect(svId, isInstanceOf<String>());
 

@@ -27,13 +27,10 @@ import 'package:flutter/material.dart'
         BuildContext,
         Center,
         ClipRect,
-        Colors,
         Column,
         Container,
         CurvedAnimation,
         Curves,
-        EdgeInsets,
-        FlatButton,
         FlexFit,
         Flexible,
         FontWeight,
@@ -51,22 +48,22 @@ import 'package:flutter/material.dart'
         State,
         StatefulWidget,
         Text,
+        TextButton,
         TextStyle,
         TickerProviderStateMixin,
         Transform,
         Tween,
         VoidCallback,
-        Widget,
-        required;
+        Widget;
 
 class SimpleBottomAppBar extends StatefulWidget {
   const SimpleBottomAppBar(
-      {this.button01, this.button02, this.button03, this.button04, Key key})
+      {this.button01, this.button02, this.button03, this.button04, Key? key})
       : super(key: key);
-  final BarButton button01;
-  final BarButton button02;
-  final BarButton button03;
-  final BarButton button04;
+  final BarButton? button01;
+  final BarButton? button02;
+  final BarButton? button03;
+  final BarButton? button04;
 
   @override
   State<StatefulWidget> createState() => SimpleBottomAppBarState();
@@ -75,20 +72,20 @@ class SimpleBottomAppBar extends StatefulWidget {
 class SimpleBottomAppBarState extends State<SimpleBottomAppBar>
     with TickerProviderStateMixin {
   int currentIndex = 0;
-  int previousIndex;
+  late int previousIndex;
   List<int> flexValues = [150, 100, 100, 100];
   List<double> opacityValues = [1.0, 0.0, 0.0, 0.0];
   List<double> fractionalOffsetValues = [0.0, 0.0, 0.0, 0.0];
   List<double> verticalShiftValues = [-4.0, 8.0, 8.0, 8.0];
   List<double> skewValues = [0.0, 0.0, 0.0, 0.0];
-  AnimationController _controller;
-  Animation<double> animation;
-  Animation<double> skewFirstHalfAnimation;
-  Animation<double> skewSecondHalfAnimation;
-  Animation<double> translationFirstHalfAnimation;
-  Animation<double> translationSecondHalfAnimation;
-  Animation<double> opacityFirstHalfAnimation;
-  Animation<double> opacitySecondHalfAnimation;
+  late AnimationController _controller;
+  late Animation<double> animation;
+  late Animation<double> skewFirstHalfAnimation;
+  late Animation<double> skewSecondHalfAnimation;
+  late Animation<double> translationFirstHalfAnimation;
+  late Animation<double> translationSecondHalfAnimation;
+  late Animation<double> opacityFirstHalfAnimation;
+  late Animation<double> opacitySecondHalfAnimation;
 
   @override
   void initState() {
@@ -167,7 +164,7 @@ class SimpleBottomAppBarState extends State<SimpleBottomAppBar>
     );
   }
 
-  void _onOptionClicked({@required int pressedIndex}) {
+  void _onOptionClicked({required int pressedIndex}) {
     if (pressedIndex != currentIndex) {
       previousIndex = currentIndex;
       currentIndex = pressedIndex;
@@ -177,10 +174,10 @@ class SimpleBottomAppBarState extends State<SimpleBottomAppBar>
   }
 
   List<Widget> _listButtons(
-    BarButton button01,
-    BarButton button02,
-    BarButton button03,
-    BarButton button04,
+    BarButton? button01,
+    BarButton? button02,
+    BarButton? button03,
+    BarButton? button04,
   ) {
     final btnList = <Widget>[];
     var btnCount = 0;
@@ -207,13 +204,13 @@ class SimpleBottomAppBarState extends State<SimpleBottomAppBar>
     return Flexible(
       fit: FlexFit.tight,
       flex: flexValues[count],
-      child: FlatButton(
-        highlightColor: Colors.transparent,
-        splashColor: Colors.transparent,
-        padding: const EdgeInsets.all(0),
+      child: TextButton(
+        // highlightColor: Colors.transparent,
+        // splashColor: Colors.transparent,
+        // padding: const EdgeInsets.all(0),
         onPressed: () {
           _onOptionClicked(pressedIndex: count);
-          btn.onPressed();
+          btn.onPressed!();
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -235,7 +232,7 @@ class SimpleBottomAppBarState extends State<SimpleBottomAppBar>
                   opacity: opacityValues[count],
                   child: Center(
                     child: Text(
-                      btn.text,
+                      btn.text!,
                       style: const TextStyle(fontWeight: FontWeight.w400),
                     ),
                   ),
@@ -251,13 +248,13 @@ class SimpleBottomAppBarState extends State<SimpleBottomAppBar>
 
 class BarButton {
   const BarButton({this.text, this.icon, this.onPressed});
-  final String text;
-  final IconData icon;
-  final VoidCallback onPressed;
+  final String? text;
+  final IconData? icon;
+  final VoidCallback? onPressed;
 }
 
 class HomeBarButton extends BarButton {
-  HomeBarButton({VoidCallback onPressed})
+  HomeBarButton({VoidCallback? onPressed})
       : super(
           text: 'Home',
           icon: Icons.home,
@@ -270,7 +267,7 @@ class HomeBarButton extends BarButton {
 }
 
 class DeleteBarButton extends BarButton {
-  DeleteBarButton({VoidCallback onPressed})
+  DeleteBarButton({VoidCallback? onPressed})
       : super(
           text: 'Delete',
           icon: Icons.delete,
@@ -283,7 +280,7 @@ class DeleteBarButton extends BarButton {
 }
 
 class EditBarButton extends BarButton {
-  EditBarButton({VoidCallback onPressed})
+  EditBarButton({VoidCallback? onPressed})
       : super(
           text: 'Edit',
           icon: Icons.edit,
@@ -296,7 +293,7 @@ class EditBarButton extends BarButton {
 }
 
 class SearchBarButton extends BarButton {
-  SearchBarButton({VoidCallback onPressed})
+  SearchBarButton({VoidCallback? onPressed})
       : super(
           text: 'Search',
           icon: Icons.search,
@@ -309,7 +306,7 @@ class SearchBarButton extends BarButton {
 }
 
 class StatsBarButton extends BarButton {
-  StatsBarButton({VoidCallback onPressed})
+  StatsBarButton({VoidCallback? onPressed})
       : super(
           text: 'Stats',
           icon: Icons.timeline,
@@ -322,7 +319,7 @@ class StatsBarButton extends BarButton {
 }
 
 class EventsBarButton extends BarButton {
-  EventsBarButton({VoidCallback onPressed})
+  EventsBarButton({VoidCallback? onPressed})
       : super(
           text: 'Events',
           icon: Icons.event,
@@ -335,7 +332,7 @@ class EventsBarButton extends BarButton {
 }
 
 class HistoryBarButton extends BarButton {
-  HistoryBarButton({VoidCallback onPressed})
+  HistoryBarButton({VoidCallback? onPressed})
       : super(
           text: 'History',
           icon: Icons.history,

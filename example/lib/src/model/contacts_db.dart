@@ -32,7 +32,7 @@ class ContactsDB extends SQLiteDB {
   ContactsDB._() : super();
 
   /// Make only one instance of this class.
-  static ContactsDB _this;
+  static ContactsDB? _this;
 
   @override
   String get name => 'Contacts';
@@ -89,7 +89,7 @@ class ContactsDB extends SQLiteDB {
 
   Future<List<Contact>> getContacts() async {
     return listContacts(
-        await _this.rawQuery('SELECT * FROM Contacts WHERE deleted = 0'));
+        await _this!.rawQuery('SELECT * FROM Contacts WHERE deleted = 0'));
   }
 
   Future<List<Contact>> listContacts(List<Map<String, dynamic>> query) async {
@@ -99,16 +99,16 @@ class ContactsDB extends SQLiteDB {
     for (final contact in query) {
       //
       final map = contact.map((key, value) {
-        return MapEntry(key, value is int ? value?.toString() : value);
+        return MapEntry(key, value is int ? value.toString() : value);
       });
 
-      final phones = await _this.rawQuery(
+      final phones = await _this!.rawQuery(
           'SELECT * FROM Phones WHERE userid = ${contact['id']} AND deleted = 0');
 
       map['phones'] =
           phones.map((m) => DataFieldItem.fromMap(m, value: 'phone')).toList();
 
-      final emails = await _this.rawQuery(
+      final emails = await _this!.rawQuery(
           'SELECT * FROM Emails WHERE userid = ${contact['id']} AND deleted = 0');
 
       map['emails'] =
@@ -133,7 +133,7 @@ class ContactsDB extends SQLiteDB {
 
     if (contact.isChanged()) {
       //
-      final newContact = await _this.saveMap('Contacts', map);
+      final newContact = await _this!.saveMap('Contacts', map);
 
       id ??= newContact['id'];
 
@@ -151,7 +151,7 @@ class ContactsDB extends SQLiteDB {
 
         phone.addAll({'userid': id});
 
-        await _this.saveMap('Phones', phone);
+        await _this!.saveMap('Phones', phone);
       }
     }
 
@@ -165,7 +165,7 @@ class ContactsDB extends SQLiteDB {
 
         email.addAll({'userid': id});
 
-        await _this.saveMap('Emails', email);
+        await _this!.saveMap('Emails', email);
       }
     }
     return add;
@@ -183,32 +183,32 @@ class ContactsDB extends SQLiteDB {
       return Future.value(false);
     }
 
-    Map<String, dynamic> rec;
+    Map<String?, dynamic> rec;
 
-    rec = _this.newRec('Contacts', map);
+    rec = _this!.newRec('Contacts', map);
 
     rec['deleted'] = 1;
 
-    rec = await _this.saveMap('Contacts', rec);
+    rec = await _this!.saveMap('Contacts', rec as Map<String, dynamic>);
 
     if (rec.isNotEmpty) {
       //
       for (final Map<String, dynamic> phone in map['phones']) {
         //
-        rec = _this.newRec('Phones', phone);
+        rec = _this!.newRec('Phones', phone);
 
         rec['deleted'] = 1;
 
-        await _this.saveMap('Phones', rec);
+        await _this!.saveMap('Phones', rec as Map<String, dynamic>);
       }
 
       for (final Map<String, dynamic> email in map['emails']) {
         //
-        rec = _this.newRec('Emails', email);
+        rec = _this!.newRec('Emails', email);
 
         rec['deleted'] = 1;
 
-        await _this.saveMap('Emails', rec);
+        await _this!.saveMap('Emails', rec as Map<String, dynamic>);
       }
     }
 
@@ -230,15 +230,15 @@ class ContactsDB extends SQLiteDB {
     }
 
     var query =
-        await _this.rawQuery('UPDATE Contacts SET deleted = 0 WHERE id = $id');
+        await _this!.rawQuery('UPDATE Contacts SET deleted = 0 WHERE id = $id');
     final rec = query.length;
 
     if (rec > 0) {
       query =
-          await _this.rawQuery('UPDATE Phones SET deleted = 0 WHERE id = $id');
+          await _this!.rawQuery('UPDATE Phones SET deleted = 0 WHERE id = $id');
 
       query =
-          await _this.rawQuery('UPDATE Emails SET deleted = 0 WHERE id = $id');
+          await _this!.rawQuery('UPDATE Emails SET deleted = 0 WHERE id = $id');
     }
     return rec;
   }

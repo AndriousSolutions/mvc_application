@@ -23,9 +23,9 @@ import 'package:flutter_string_encryption/flutter_string_encryption.dart'
 /// Encryption os String values.
 class StringCrypt {
   StringCrypt({
-    String key,
-    String password,
-    String salt,
+    String? key,
+    String? password,
+    String? salt,
   }) {
     if (key != null && key.trim().isNotEmpty) {
       _key = key;
@@ -35,12 +35,12 @@ class StringCrypt {
       });
     }
   }
-  String _key;
+  String? _key;
   static final PlatformStringCryptor _crypto = PlatformStringCryptor();
 
-  Future<String> en(String data, [String key]) => encrypt(data, key);
+  Future<String> en(String data, [String? key]) => encrypt(data, key);
 
-  Future<String> encrypt(String data, [String key]) async {
+  Future<String> encrypt(String data, [String? key]) async {
     if (key != null) {
       key = key.trim();
       if (key.isEmpty) {
@@ -49,7 +49,7 @@ class StringCrypt {
     }
     String encrypt;
     try {
-      encrypt = await _crypto.encrypt(data, key ??= _key);
+      encrypt = await _crypto.encrypt(data, (key ??= _key)!);
     } catch (ex) {
       encrypt = '';
       getError(ex);
@@ -57,9 +57,9 @@ class StringCrypt {
     return encrypt;
   }
 
-  Future<String> de(String data, [String key]) => decrypt(data, key);
+  Future<String> de(String data, [String? key]) => decrypt(data, key);
 
-  Future<String> decrypt(String data, [String key]) async {
+  Future<String> decrypt(String data, [String? key]) async {
     if (key != null) {
       key = key.trim();
       if (key.isEmpty) {
@@ -68,7 +68,7 @@ class StringCrypt {
     }
     String decrypt;
     try {
-      decrypt = await _crypto.decrypt(data, key ??= _key);
+      decrypt = await _crypto.decrypt(data, (key ??= _key)!);
     } catch (ex) {
       decrypt = '';
       getError(ex);
@@ -86,7 +86,7 @@ class StringCrypt {
   static Future<String> generateKeyFromPassword(String password, String salt) =>
       _crypto.generateKeyFromPassword(password, salt);
 
-  Future<String> _keyFromPassword(String password, String salt) async {
+  Future<String> _keyFromPassword(String? password, String? salt) async {
     if (password == null || password.trim().isEmpty) {
       return '';
     }
@@ -102,11 +102,11 @@ class StringCrypt {
   bool get hasError => _error != null;
 
   bool get inError => _error != null;
-  Object _error;
+  Object? _error;
 
-  Exception getError([Object error]) {
+  Exception? getError([Object? error]) {
     // Return the stored exception
-    Exception ex = _error;
+    Exception? ex = _error as Exception?;
     // Empty the stored exception
     if (error == null) {
       _error = null;
@@ -117,6 +117,6 @@ class StringCrypt {
       _error = error;
     }
     // Return the exception just past if any.
-    return ex ??= error;
+    return ex ??= error as Exception?;
   }
 }

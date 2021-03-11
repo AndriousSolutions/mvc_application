@@ -23,22 +23,20 @@ import 'package:flutter/material.dart'
         BuildContext,
         Container,
         DefaultTextStyle,
-        EdgeInsets,
         EdgeInsetsDirectional,
-        FlatButton,
         IconTheme,
         Key,
         MediaQuery,
         MergeSemantics,
         StatelessWidget,
         Text,
+        TextButton,
         TextOverflow,
         TextSpan,
         TextStyle,
         Theme,
         VoidCallback,
         Widget,
-        required,
         showAboutDialog;
 
 import 'package:flutter/gestures.dart' show TapGestureRecognizer;
@@ -54,22 +52,22 @@ class AppSettings {
   static p.TargetPlatform get defaultTargetPlatform => p.defaultTargetPlatform;
 
   static StatelessWidget tapText(String text, VoidCallback onTap,
-      {TextStyle style}) {
+      {TextStyle? style}) {
     return _TapText(text, onTap, style: style);
   }
 
   static _LinkTextSpan linkTextSpan(
-      {TextStyle style, String url, String text}) {
+      {TextStyle? style, String? url, String? text}) {
     return _LinkTextSpan(style: style, url: url, text: text);
   }
 
   static void showAbout({
-    @required BuildContext context,
-    String applicationName,
-    String applicationVersion,
-    Widget applicationIcon,
-    String applicationLegalese,
-    List<Widget> children,
+    required BuildContext context,
+    String? applicationName,
+    String? applicationVersion,
+    Widget? applicationIcon,
+    String? applicationLegalese,
+    List<Widget>? children,
   }) {
     showAboutDialog(
       context: context,
@@ -87,7 +85,7 @@ class _TapText extends StatelessWidget {
 
   final String text;
   final VoidCallback onTap;
-  final TextStyle style;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -102,9 +100,9 @@ class _TapText extends StatelessWidget {
 }
 
 class _OptionsItem extends StatelessWidget {
-  const _OptionsItem({Key key, this.child}) : super(key: key);
+  const _OptionsItem({Key? key, this.child}) : super(key: key);
 
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +118,7 @@ class _OptionsItem extends StatelessWidget {
           overflow: TextOverflow.fade,
           child: IconTheme(
             data: Theme.of(context).primaryIconTheme,
-            child: child,
+            child: child!,
           ),
         ),
       ),
@@ -130,26 +128,25 @@ class _OptionsItem extends StatelessWidget {
 
 class _FlatButton extends StatelessWidget {
   const _FlatButton({
-    Key key,
+    Key? key,
     this.onPressed,
     this.child,
     this.style,
   }) : super(key: key);
 
-  final VoidCallback onPressed;
-  final Widget child;
-  final TextStyle style;
+  final VoidCallback? onPressed;
+  final Widget? child;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
     final child = style == null
-        ? this.child
+        ? this.child!
         : DefaultTextStyle(
-            style: style,
-            child: this.child,
+            style: style!,
+            child: this.child!,
           );
-    return FlatButton(
-      padding: EdgeInsets.zero,
+    return TextButton(
       onPressed: onPressed,
       child: child,
     );
@@ -170,12 +167,12 @@ class _LinkTextSpan extends TextSpan {
   // manage the recognizer from outside the TextSpan, e.g. in the State of a
   // stateful widget that then hands the recognizer to the TextSpan.
 
-  _LinkTextSpan({TextStyle style, String url, String text})
+  _LinkTextSpan({TextStyle? style, String? url, String? text})
       : super(
             style: style,
             text: text ?? url,
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                launch(url, forceSafariVC: false);
+                launch(url!, forceSafariVC: false);
               });
 }

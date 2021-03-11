@@ -26,19 +26,18 @@ import 'package:flutter/material.dart'
         ScrollPosition,
         ScrollSpringSimulation,
         Simulation,
-        Tolerance,
-        required;
+        Tolerance;
 
 class SnappingListScrollPhysics extends ScrollPhysics {
   const SnappingListScrollPhysics({
-    @required this.itemWidth,
-    ScrollPhysics parent,
+    required this.itemWidth,
+    ScrollPhysics? parent,
   }) : super(parent: parent);
 
   final double itemWidth;
 
   @override
-  SnappingListScrollPhysics applyTo(ScrollPhysics ancestor) =>
+  SnappingListScrollPhysics applyTo(ScrollPhysics? ancestor) =>
       SnappingListScrollPhysics(
         parent: buildParent(ancestor),
         itemWidth: itemWidth,
@@ -61,7 +60,7 @@ class SnappingListScrollPhysics extends ScrollPhysics {
   }
 
   @override
-  Simulation createBallisticSimulation(
+  Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
     // If we're out of range and not headed back in range, defer to the parent
     // ballistics, which should put us back in range at a page boundary.
@@ -70,7 +69,7 @@ class SnappingListScrollPhysics extends ScrollPhysics {
       return super.createBallisticSimulation(position, velocity);
     }
     final tolerance = this.tolerance;
-    final target = _getTargetPixels(position, tolerance, velocity);
+    final target = _getTargetPixels(position as ScrollPosition, tolerance, velocity);
     if (target != position.pixels) {
       return ScrollSpringSimulation(spring, position.pixels, target, velocity,
           tolerance: tolerance);

@@ -29,14 +29,14 @@ import '../../view.dart'
         Key;
 
 class MyApp extends AppStatefulWidget {
-  MyApp({Key key, this.rootKey}) : super(key: key);
-  final Key rootKey;
+  MyApp({Key? key, this.rootKey}) : super(key: key);
+  final Key? rootKey;
   @override
   AppState createView() => ContactsExampleApp(key: rootKey);
 }
 
 class ContactsExampleApp extends AppState {
-  ContactsExampleApp({Key key})
+  ContactsExampleApp({Key? key})
       : super(
             key: key,
             con: Controller(),

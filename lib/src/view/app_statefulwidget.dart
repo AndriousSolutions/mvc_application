@@ -59,12 +59,12 @@ typedef ErrorWidgetBuilder = Widget Function(
 abstract class AppStatefulWidget extends v.AppMVC {
   // You must supply a 'View.'
   AppStatefulWidget({
-    AppConMVC con,
-    Key key,
+    AppConMVC? con,
+    Key? key,
     this.loadingScreen,
-    FlutterExceptionHandler errorHandler,
-    ErrorWidgetBuilder errorScreen,
-    v.ReportErrorHandler errorReport,
+    FlutterExceptionHandler? errorHandler,
+    ErrorWidgetBuilder? errorScreen,
+    v.ReportErrorHandler? errorReport,
     bool allowNewHandlers = true,
   })  : _app = v.App(
           errorHandler: errorHandler,
@@ -83,8 +83,8 @@ abstract class AppStatefulWidget extends v.AppMVC {
   v.AppState createView();
 
   /// Gives access to the App's View. The 'MyView' you first work with.
-  static v.AppState get vw => _vw;
-  static v.AppState _vw;
+  static v.AppState? get vw => _vw;
+  static v.AppState? _vw;
 
   // /// The context used by the App's view.
   // static BuildContext get context => _context;
@@ -92,10 +92,10 @@ abstract class AppStatefulWidget extends v.AppMVC {
 
   /// The snapshot used by the App's View.
   @Deprecated('getter, snapshot, will be removed.')
-  static AsyncSnapshot<bool> get snapshot => _snapshot;
-  static AsyncSnapshot<bool> _snapshot;
+  static AsyncSnapshot<bool>? get snapshot => _snapshot;
+  static AsyncSnapshot<bool>? _snapshot;
 
-  final Widget loadingScreen;
+  final Widget? loadingScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +139,7 @@ abstract class AppStatefulWidget extends v.AppMVC {
         // Supply the state object to the App object.
         init = _app.setAppState(_vw);
         if (init) {
-          init = await _vw?.initAsync();
+          init = (await _vw?.initAsync())!;
         }
         if (init) {
           _vw?.con?.initApp();
@@ -163,7 +163,7 @@ abstract class AppStatefulWidget extends v.AppMVC {
 
   /// Run the CircularProgressIndicator() until asynchronous operations are
   /// completed before the app proceeds.
-  Widget _asyncBuilder(AsyncSnapshot<bool> snapshot, Widget loading) {
+  Widget _asyncBuilder(AsyncSnapshot<bool> snapshot, Widget? loading) {
     if (snapshot.hasError) {
       final dynamic exception = snapshot.error;
       final details = FlutterErrorDetails(
@@ -174,12 +174,12 @@ abstract class AppStatefulWidget extends v.AppMVC {
       );
       var handled = false;
       if (_vw != null) {
-        handled = _vw.onAsyncError(details);
+        handled = _vw!.onAsyncError(details);
       }
       if (!handled) {
         _app.onAsyncError(snapshot);
       }
-      return v.App.errorHandler.displayError(details);
+      return v.App.errorHandler!.displayError(details);
     } else if (snapshot.connectionState == ConnectionState.done) {
       // If snapshot doesn't have data or is false, let the developer's app handle it.
 //        && snapshot.hasData && snapshot.data) {
@@ -204,18 +204,18 @@ abstract class AppStatefulWidget extends v.AppMVC {
 ///
 class ConConsumer<T extends ControllerMVC> extends StatelessWidget {
   const ConConsumer({
-    Key key,
-    @required this.builder,
+    Key? key,
+    required this.builder,
     this.child,
   })  : assert(builder != null),
         super(key: key);
 
   /// The builder
-  final Widget Function(BuildContext context, T controller, Widget child)
+  final Widget Function(BuildContext context, T? controller, Widget? child)
       builder;
 
   /// The child widget to pass to [builder].
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) => v.SetState(

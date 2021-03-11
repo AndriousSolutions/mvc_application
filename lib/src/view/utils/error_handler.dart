@@ -57,9 +57,9 @@ typedef ReportErrorHandler = Future<void> Function(
 /// Your App's error handler.
 class AppErrorHandler {
   factory AppErrorHandler({
-    FlutterExceptionHandler handler,
-    ErrorWidgetBuilder builder,
-    ReportErrorHandler report,
+    FlutterExceptionHandler? handler,
+    ErrorWidgetBuilder? builder,
+    ReportErrorHandler? report,
     bool allowNewHandlers = true,
   }) {
     _this ??= AppErrorHandler._(builder);
@@ -70,10 +70,10 @@ class AppErrorHandler {
     if (!allowNewHandlers) {
       _allowNewHandlers = false;
     }
-    return _this;
+    return _this!;
   }
 
-  AppErrorHandler._(ErrorWidgetBuilder builder) {
+  AppErrorHandler._(ErrorWidgetBuilder? builder) {
     // Record the current error handler.
     _oldOnError = FlutterError.onError;
 
@@ -92,7 +92,7 @@ class AppErrorHandler {
         if (_onError != null && _oldOnError != null) {
           _onError = null;
           try {
-            _oldOnError(details);
+            _oldOnError!(details);
           } catch (ex) {
             // intentionally left empty.
           }
@@ -113,33 +113,33 @@ class AppErrorHandler {
     // Record the 'current' error handler.
     _flutterExceptionHandler = FlutterError.onError;
   }
-  static AppErrorHandler _this;
+  static AppErrorHandler? _this;
   static bool _allowNewHandlers = true;
 
   // FlutterExceptionHandler get oldOnError => _oldOnError;
-  static FlutterExceptionHandler _oldOnError;
+  static FlutterExceptionHandler? _oldOnError;
   //
   // ErrorWidgetBuilder get oldBuilder => _oldBuilder;
-  ErrorWidgetBuilder _oldBuilder;
+  ErrorWidgetBuilder? _oldBuilder;
 
-  static ReportErrorHandler _errorReport;
+  static ReportErrorHandler? _errorReport;
 
   static bool _inHandler = false;
 
   static bool ranApp = false;
 
-  FlutterExceptionHandler get flutterExceptionHandler =>
+  FlutterExceptionHandler? get flutterExceptionHandler =>
       _flutterExceptionHandler;
-  static FlutterExceptionHandler _flutterExceptionHandler;
+  static FlutterExceptionHandler? _flutterExceptionHandler;
 
-  FlutterExceptionHandler get onError => _onError ?? _oldOnError;
-  static FlutterExceptionHandler _onError;
+  FlutterExceptionHandler? get onError => _onError ?? _oldOnError;
+  static FlutterExceptionHandler? _onError;
 
   /// Set a handler and the report
   static bool set({
-    @required FlutterExceptionHandler handler,
-    ErrorWidgetBuilder builder,
-    ReportErrorHandler report,
+    required FlutterExceptionHandler? handler,
+    ErrorWidgetBuilder? builder,
+    ReportErrorHandler? report,
   }) {
     // Once you're not allowed to reset the handlers, it can't be reversed.
     if (!_allowNewHandlers) {
@@ -186,7 +186,7 @@ class AppErrorHandler {
   void dispose() {
     // Restore the error widget routine.
     if (_oldBuilder != null) {
-      ErrorWidget.builder = _oldBuilder;
+      ErrorWidget.builder = _oldBuilder!;
     }
     // Return the original error routine.
     if (_oldOnError != null) {
@@ -206,9 +206,9 @@ class AppErrorHandler {
   Future<void> reportError(
     dynamic ex,
     StackTrace stack, {
-    String message,
-    String library,
-    InformationCollector informationCollector,
+    String? message,
+    String? library,
+    InformationCollector? informationCollector,
   }) async {
     if (_errorReport == null) {
       message ??= 'while attempting to execute your app';
@@ -221,7 +221,7 @@ class AppErrorHandler {
         informationCollector: informationCollector,
       );
     } else {
-      await _errorReport(ex, stack);
+      await _errorReport!(ex, stack);
     }
   }
 
@@ -252,7 +252,7 @@ class AppErrorHandler {
     dynamic exception,
     StackTrace stack, {
     String library = 'Flutter framework',
-    InformationCollector informationCollector,
+    InformationCollector? informationCollector,
   }) {
     final details = FlutterErrorDetails(
       exception: exception,
@@ -295,13 +295,13 @@ class AppErrorHandler {
 
 /// A low-level widget to present instead of the failed widget.
 class DisplayErrorWidget extends LeafRenderObjectWidget {
-  DisplayErrorWidget({this.message = '', Error error})
+  DisplayErrorWidget({this.message = '', Error? error})
       : _error = error,
         super(key: UniqueKey());
 
   /// The message to display.
   final String message;
-  final Error _error;
+  final Error? _error;
 
   @override
   RenderBox createRenderObject(BuildContext context) =>
@@ -313,7 +313,7 @@ class DisplayErrorWidget extends LeafRenderObjectWidget {
     if (_error == null || _error is! FlutterError) {
       properties.add(StringProperty('message', _errorMessage(), quoted: false));
     } else {
-      final FlutterError _flutterError = _error;
+      final FlutterError _flutterError = _error as FlutterError;
       properties.add(_flutterError.toDiagnosticsNode(
           style: DiagnosticsTreeStyle.whitespace));
     }
@@ -360,7 +360,7 @@ class _ErrorBox extends RenderBox {
   /// The message to attempt to display at paint time.
   final String message;
 
-  ui.Paragraph _paragraph;
+  ui.Paragraph? _paragraph;
 
   @override
   double computeMaxIntrinsicWidth(double height) {
@@ -458,11 +458,11 @@ class _ErrorBox extends RenderBox {
           width -= padding.left + padding.right;
           left += padding.left;
         }
-        _paragraph.layout(ui.ParagraphConstraints(width: width));
-        if (size.height > padding.top + _paragraph.height + padding.bottom) {
+        _paragraph!.layout(ui.ParagraphConstraints(width: width));
+        if (size.height > padding.top + _paragraph!.height + padding.bottom) {
           top += padding.top;
         }
-        context.canvas.drawParagraph(_paragraph, offset + Offset(left, top));
+        context.canvas.drawParagraph(_paragraph!, offset + Offset(left, top));
       }
     } catch (ex) {
       // Intentionally left empty.
@@ -473,9 +473,9 @@ class _ErrorBox extends RenderBox {
 @Deprecated('Use the AppErrorHandler class now.')
 class ErrorHandler {
   ErrorHandler({
-    FlutterExceptionHandler handler,
-    ErrorWidgetBuilder builder,
-    ReportErrorHandler report,
+    FlutterExceptionHandler? handler,
+    ErrorWidgetBuilder? builder,
+    ReportErrorHandler? report,
   }) {
     errorHandler = AppErrorHandler(
       handler: handler,
@@ -483,7 +483,7 @@ class ErrorHandler {
       report: report,
     );
   }
-  AppErrorHandler errorHandler;
+  late AppErrorHandler errorHandler;
 
   void dispose() => errorHandler.dispose();
 
@@ -492,9 +492,9 @@ class ErrorHandler {
   Future<void> reportError(
     dynamic ex,
     StackTrace stack, {
-    String message,
-    String library,
-    InformationCollector informationCollector,
+    String? message,
+    String? library,
+    InformationCollector? informationCollector,
   }) =>
       errorHandler.reportError(
         ex,

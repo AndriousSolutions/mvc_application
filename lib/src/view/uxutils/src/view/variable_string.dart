@@ -31,16 +31,16 @@ class VariableString {
     regExp = RegExp("'(.*?)'");
   }
 
-  RegExp regExp;
+  late RegExp regExp;
 
   String _value = '';
 
-  set value(String str) {
+  set value(String? str) {
     _value = '';
     if (str != null && str.isNotEmpty) {
       final match = regExp.firstMatch(str);
       if (match != null) {
-        _value = match.group(0).replaceAll("'", '');
+        _value = match.group(0)!.replaceAll("'", '');
       }
     }
   }

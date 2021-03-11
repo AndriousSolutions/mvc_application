@@ -22,48 +22,48 @@ import 'package:mvc_application/view.dart';
 /// Displays a String passing specific one to two button options
 /// and their corresponding fucntion calls.
 /// Displays a particular dialogue box depending on platform.
-Future<bool> showBox({
-  @required BuildContext context,
-  String text,
-  Option button01,
-  Option button02,
-  VoidCallback press01,
-  VoidCallback press02,
+Future<bool?> showBox({
+  required BuildContext context,
+  String? text,
+  Option? button01,
+  Option? button02,
+  VoidCallback? press01,
+  VoidCallback? press02,
 }) {
   button01 ??= OKOption();
   button02 ??= CancelOption();
   final theme = Theme.of(context);
-  final dialogTextStyle =
-      theme.textTheme.subtitle1.copyWith(color: theme.textTheme.caption.color);
+  final dialogTextStyle = theme.textTheme.subtitle1!
+      .copyWith(color: theme.textTheme.caption!.color);
   if (App.useMaterial) {
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
           content: Text(text ?? ' ', style: dialogTextStyle),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () {
                 if (press02 != null) {
                   press02();
                 }
-                if (button02.onPressed != null) {
-                  button02.onPressed();
+                if (button02!.onPressed != null) {
+                  button02.onPressed!();
                 }
                 Navigator.pop(context, button02.result);
               },
-              child: Text(button02.text ?? 'Cancel'),
+              child: Text(button02!.text ?? 'Cancel'),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () {
                 if (press01 != null) {
                   press01();
                 }
-                if (button01.onPressed != null) {
-                  button01.onPressed();
+                if (button01!.onPressed != null) {
+                  button01.onPressed!();
                 }
                 Navigator.pop(context, button01.result);
               },
-              child: Text(button01.text ?? 'OK'),
+              child: Text(button01!.text ?? 'OK'),
             ),
           ]),
     );
@@ -78,24 +78,24 @@ Future<bool> showBox({
                 if (press02 != null) {
                   press02();
                 }
-                if (button02.onPressed != null) {
-                  button02.onPressed();
+                if (button02!.onPressed != null) {
+                  button02.onPressed!();
                 }
                 Navigator.pop(context, button02.result);
               },
-              child: Text(button02.text ?? 'Cancel'),
+              child: Text(button02!.text ?? 'Cancel'),
             ),
             CupertinoDialogAction(
               onPressed: () {
                 if (press01 != null) {
                   press01();
                 }
-                if (button01.onPressed != null) {
-                  button01.onPressed();
+                if (button01!.onPressed != null) {
+                  button01.onPressed!();
                 }
                 Navigator.pop(context, button01.result);
               },
-              child: Text(button01.text ?? 'OK'),
+              child: Text(button01!.text ?? 'OK'),
             ),
           ]),
     );
@@ -106,12 +106,12 @@ Future<bool> showBox({
 /// Displays a String passing specific one to two button options
 /// and their corresponding fucntion calls.
 void dialogBox({
-  @required BuildContext context,
-  String title,
-  Option button01,
-  Option button02,
-  VoidCallback press01,
-  VoidCallback press02,
+  required BuildContext context,
+  String? title,
+  Option? button01,
+  Option? button02,
+  VoidCallback? press01,
+  VoidCallback? press02,
   bool barrierDismissible = false,
   bool switchButtons = false,
 }) {
@@ -133,13 +133,13 @@ void dialogBox({
 
 class _DialogWindow with DialogOptions {
   _DialogWindow({
-    @required BuildContext context,
+    required BuildContext context,
     this.title,
-    Option button01,
-    Option button02,
-    VoidCallback press01,
-    VoidCallback press02,
-    bool switchButtons,
+    Option? button01,
+    Option? button02,
+    VoidCallback? press01,
+    VoidCallback? press02,
+    bool? switchButtons,
   }) {
     this.context = context;
     this.button01 = button01;
@@ -148,7 +148,7 @@ class _DialogWindow with DialogOptions {
     this.press02 = press02;
     this.switchButtons = switchButtons;
   }
-  final String title;
+  final String? title;
 
   SimpleDialog show() {
     return SimpleDialog(
@@ -159,12 +159,12 @@ class _DialogWindow with DialogOptions {
 }
 
 mixin DialogOptions {
-  BuildContext context;
-  Option button01;
-  Option button02;
-  VoidCallback press01;
-  VoidCallback press02;
-  bool switchButtons;
+  BuildContext? context;
+  Option? button01;
+  Option? button02;
+  VoidCallback? press01;
+  VoidCallback? press02;
+  bool? switchButtons;
 
   List<Widget> _listOptions() {
     final opList = <Widget>[];
@@ -173,7 +173,7 @@ mixin DialogOptions {
     if (button01 != null || press01 != null) {
       option01 = Option(
           text: button01?.text ?? 'Cancel',
-          onPressed: press01 ?? button01.onPressed,
+          onPressed: press01 ?? button01!.onPressed,
           result: true);
     } else {
       option01 = CancelOption();
@@ -181,15 +181,17 @@ mixin DialogOptions {
     if (button02 != null || press02 != null) {
       option02 = Option(
           text: button02?.text ?? 'OK',
-          onPressed: press02 ?? button02.onPressed,
+          onPressed: press02 ?? button02!.onPressed,
           result: false);
     } else {
       if (option01 is! OKOption) {
         option02 = OKOption();
         opList.add(_simpleOption(option02));
+      } else {
+        option02 = CancelOption();
       }
     }
-    if (switchButtons != null && switchButtons) {
+    if (switchButtons != null && switchButtons!) {
       opList.add(_simpleOption(option02));
       opList.add(_simpleOption(option01));
     } else {
@@ -202,24 +204,24 @@ mixin DialogOptions {
   Widget _simpleOption(Option option) => SimpleDialogOption(
         onPressed: () {
           if (option.onPressed != null) {
-            option.onPressed();
+            option.onPressed!();
           }
-          Navigator.pop(context, option.result);
+          Navigator.pop(context!, option.result);
         },
-        child: Text(option.text),
+        child: Text(option.text!),
       );
 }
 
 class Option {
-  Option({this.text, this.onPressed, @required this.result})
+  Option({this.text, this.onPressed, required this.result})
       : assert(result != null, 'Must provide a option result!');
-  final String text;
-  final VoidCallback onPressed;
+  final String? text;
+  final VoidCallback? onPressed;
   final dynamic result;
 }
 
 class OKOption extends Option {
-  OKOption({VoidCallback onPressed})
+  OKOption({VoidCallback? onPressed})
       : super(
           text: 'OK',
           onPressed: () {
@@ -232,7 +234,7 @@ class OKOption extends Option {
 }
 
 class CancelOption extends Option {
-  CancelOption({VoidCallback onPressed})
+  CancelOption({VoidCallback? onPressed})
       : super(
           text: 'Cancel',
           onPressed: () {
@@ -246,24 +248,24 @@ class CancelOption extends Option {
 
 class MsgBox {
   const MsgBox({
-    @required this.context,
+    required this.context,
     this.title,
     this.msg,
     this.body,
     this.actions,
   });
   final BuildContext context;
-  final String title;
-  final String msg;
-  final List<Widget> body;
-  final List<Widget> actions;
+  final String? title;
+  final String? msg;
+  final List<Widget>? body;
+  final List<Widget>? actions;
 
   Future<void> show({
-    BuildContext context,
-    String title,
-    String msg,
-    List<Widget> body,
-    List<Widget> actions,
+    BuildContext? context,
+    String? title,
+    String? msg,
+    List<Widget>? body,
+    List<Widget>? actions,
   }) {
     context = context ?? this.context;
     title = title ?? this.title;
@@ -278,9 +280,9 @@ class MsgBox {
     }
     actions = actions ?? this.actions;
     actions ??= <Widget>[
-      FlatButton(
+      TextButton(
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.pop(context!);
         },
         child: const Text('OK'),
       ),
@@ -292,7 +294,7 @@ class MsgBox {
               title: Text(title ?? ''),
               content: SingleChildScrollView(
                 child: ListBody(
-                  children: body,
+                  children: body!,
                 ),
               ),
               actions: actions,
@@ -304,13 +306,13 @@ class MsgBox {
 ///
 class DialogBox with DialogOptions {
   DialogBox({
-    @required BuildContext context,
+    required BuildContext context,
     this.title,
-    Option button01,
-    Option button02,
-    VoidCallback press01,
-    VoidCallback press02,
-    bool switchButtons,
+    Option? button01,
+    Option? button02,
+    VoidCallback? press01,
+    VoidCallback? press02,
+    bool? switchButtons,
     this.body,
     this.actions,
     this.barrierDismissible = false,
@@ -322,23 +324,23 @@ class DialogBox with DialogOptions {
     this.press02 = press02;
     this.switchButtons = switchButtons;
   }
-  final String title;
-  final List<Widget> body;
-  final List<Widget> actions;
-  final bool barrierDismissible;
+  final String? title;
+  final List<Widget>? body;
+  final List<Widget>? actions;
+  final bool? barrierDismissible;
 
   Future<void> show({
-    BuildContext context,
-    String title,
-    Option button01,
-    Option button02,
-    VoidCallback press01,
-    VoidCallback press02,
-    bool switchButtons,
-    String msg,
-    List<Widget> body,
-    List<Widget> actions,
-    bool barrierDismissible,
+    BuildContext? context,
+    String? title,
+    Option? button01,
+    Option? button02,
+    VoidCallback? press01,
+    VoidCallback? press02,
+    bool? switchButtons,
+    String? msg,
+    List<Widget>? body,
+    List<Widget>? actions,
+    bool? barrierDismissible,
   }) {
     context = context ?? this.context;
     title = title ?? this.title;
@@ -354,13 +356,13 @@ class DialogBox with DialogOptions {
     actions ??= _listOptions();
     barrierDismissible ??= this.barrierDismissible ?? false;
     return showDialog<void>(
-        context: context,
+        context: context!,
         barrierDismissible: barrierDismissible,
         builder: (BuildContext context) => AlertDialog(
-              title: Text(title),
+              title: Text(title!),
               content: SingleChildScrollView(
                 child: ListBody(
-                  children: body,
+                  children: body!,
                 ),
               ),
               actions: actions,

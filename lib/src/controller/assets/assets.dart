@@ -26,7 +26,7 @@ import 'package:flutter/services.dart' show AssetBundle, ByteData;
 
 /// The Assets manager.
 class Assets {
-  static Future<bool> init(BuildContext context, {String dir}) {
+  static Future<bool> init(BuildContext context, {String? dir}) {
     if (_assets == null) {
       _assets = DefaultAssetBundle.of(context);
       _dir = dir ?? 'assets';
@@ -34,8 +34,8 @@ class Assets {
     return Future.value(true);
   }
 
-  static AssetBundle _assets;
-  static String _dir;
+  static AssetBundle? _assets;
+  static String? _dir;
 
   static void dispose() {
     _assets = null;
@@ -45,7 +45,7 @@ class Assets {
     assert(Assets._assets != null, 'Assets.init() must be called first.');
     ByteData data;
     try {
-      data = await Assets._assets.load('$setPath(key)$key');
+      data = await Assets._assets!.load('$setPath(key)$key');
     } catch (ex) {
       data = ByteData(0);
     }
@@ -57,32 +57,32 @@ class Assets {
     String asset;
     try {
       asset =
-          await Assets._assets.loadString('$setPath(key)$key', cache: cache);
+          await Assets._assets!.loadString('$setPath(key)$key', cache: cache);
     } catch (ex) {
       asset = '';
     }
     return asset;
   }
 
-  Future<T> getData<T>(
+  Future<T>? getData<T>(
       String key, Future<T> Function(String value) parser) async {
     assert(Assets._assets != null, 'Assets.init() must be called first.');
-    Future<T> data;
+    Future<T>? data;
     try {
-      data = Assets._assets.loadStructuredData('$setPath(key)$key', parser);
+      data = Assets._assets!.loadStructuredData('$setPath(key)$key', parser);
     } catch (ex) {
       data = null;
     }
-    return data;
+    return data!;
   }
 
-  Future<String> getStringData(
+  Future<String?> getStringData(
       String key, Future<String> Function(String value) parser) async {
     assert(Assets._assets != null, 'Assets.init() must be called first.');
-    String data;
+    String? data;
     try {
       data =
-          await Assets._assets.loadStructuredData('$setPath(key)$key', parser);
+          await Assets._assets!.loadStructuredData('$setPath(key)$key', parser);
     } catch (ex) {
       data = null;
     }
@@ -95,21 +95,21 @@ class Assets {
     bool data;
     try {
       data =
-          await Assets._assets.loadStructuredData('$setPath(key)$key', parser);
+          await Assets._assets!.loadStructuredData('$setPath(key)$key', parser);
     } catch (ex) {
       data = false;
     }
     return data;
   }
 
-  AssetImage getImage(String key, {AssetBundle bundle, String package}) {
+  AssetImage getImage(String key, {AssetBundle? bundle, String? package}) {
     return AssetImage(key, bundle: bundle, package: package);
   }
 
   /// Determine the appropriate path for the asset.
-  static String setPath(String key) {
+  static String? setPath(String key) {
     /// In case 'assets' begins the key or if '/' begins the key.
-    final path = key.indexOf(_dir) == 0
+    final path = key.indexOf(_dir!) == 0
         ? ''
         : key.substring(0, 0) == '/'
             ? _dir

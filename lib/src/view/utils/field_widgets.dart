@@ -24,6 +24,7 @@ import 'package:flutter/material.dart' as m; //show TextFormField;
 import 'package:flutter/services.dart'
     show
         Brightness,
+        MaxLengthEnforcement,
         TextCapitalization,
         TextInputAction,
         TextInputFormatter,
@@ -49,7 +50,7 @@ class DataFields<T> extends _AddFields<T> {
   @override
   Future<bool> undo(Map<String, dynamic> rec) async => false;
 
-  FormState _formState;
+  FormState? _formState;
 
   Widget linkForm(Widget child) => _ChildForm<T>(parent: this, child: child);
 
@@ -77,8 +78,8 @@ class DataFields<T> extends _AddFields<T> {
   }
 
   /// A collection of errors returned by the [FormField.validator]
-  String get errorText => _errorText;
-  String _errorText = ' ';
+  String? get errorText => _errorText;
+  String? _errorText = ' ';
 
   /// True if this field has any validation errors.
   bool get hasError => _errorText != null;
@@ -88,7 +89,7 @@ class DataFields<T> extends _AddFields<T> {
     var errors = '';
     for (final field in _fields) {
       if (field.hasError) {
-        errors = errors + field.errorText;
+        errors = errors + field.errorText!;
       }
     }
     return errors;
@@ -97,14 +98,14 @@ class DataFields<T> extends _AddFields<T> {
 
 /// This class intercepts and retrieves the FormState
 class _ChildForm<T> extends StatelessWidget {
-  const _ChildForm({this.parent, this.child, Key key}) : super(key: key);
-  final DataFields<T> parent;
-  final Widget child;
+  const _ChildForm({this.parent, this.child, Key? key}) : super(key: key);
+  final DataFields<T>? parent;
+  final Widget? child;
   @override
   Widget build(BuildContext context) {
     // Retrieve the Form's State object.
-    parent._formState = Form.of(context);
-    return child;
+    parent!._formState = Form.of(context);
+    return child!;
   }
 }
 
@@ -166,7 +167,7 @@ abstract class _ListFields<T> {
     final dynamic value = dataField.values.first;
 
     //
-    final Map<String, dynamic> map = field[id];
+    final Map<String, dynamic> map = field[id]!;
 
     if (map[name] == null) {
       map[name] = FieldWidgets<T>();
@@ -176,15 +177,15 @@ abstract class _ListFields<T> {
 
     map[name].value = value;
 
-    field[id] = map;
+    field[id] = map as Map<String, FieldWidgets<T>>;
   }
 }
 
 class FieldWidgets<T> extends DataFieldItem {
   FieldWidgets({
-    Object key,
+    Object? key,
     this.object,
-    String label,
+    String? label,
     dynamic value,
     dynamic type,
 // TextFormField
@@ -202,7 +203,8 @@ class FieldWidgets<T> extends DataFieldItem {
     this.obscureText,
     this.autocorrect,
 //    this.autovalidate,
-    this.maxLengthEnforced,
+//    this.maxLengthEnforced,
+    this.maxLengthEnforcement,
     this.maxLines,
     this.maxLength,
     this.changed,
@@ -301,7 +303,8 @@ class FieldWidgets<T> extends DataFieldItem {
     obscureText ??= false;
     autocorrect ??= true;
 //    autovalidate ??= false;
-    maxLengthEnforced ??= true;
+//    maxLengthEnforced ??= true;
+    maxLengthEnforcement ??= MaxLengthEnforcement.enforced;
     maxLines ??= 1;
     scrollPadding ??= const EdgeInsets.all(20);
 
@@ -316,118 +319,119 @@ class FieldWidgets<T> extends DataFieldItem {
     crossAxisEndOffset ??= 0.0;
   }
 
-  final T object;
+  final T? object;
   dynamic _initValue;
 
   bool _valueChanged = false;
 
-  Iterable<DataFieldItem> items;
+  Iterable<DataFieldItem>? items;
 
-  final ThemeData _theme = App.themeData;
+  final ThemeData? _theme = App.themeData;
 
-  String get key => _key;
-  String _key;
+  String? get key => _key;
+  String? _key;
 
   /// TextFormField
-  TextEditingController controller;
-  String initialValue;
-  FocusNode focusNode;
-  InputDecoration inputDecoration;
-  TextInputType keyboardType;
-  TextCapitalization textCapitalization;
-  TextInputAction textInputAction;
-  TextStyle style;
-  TextAlign textAlign;
-  bool autofocus;
-  bool obscureText;
-  bool autocorrect;
+  TextEditingController? controller;
+  String? initialValue;
+  FocusNode? focusNode;
+  InputDecoration? inputDecoration;
+  TextInputType? keyboardType;
+  TextCapitalization? textCapitalization;
+  TextInputAction? textInputAction;
+  TextStyle? style;
+  TextAlign? textAlign;
+  bool? autofocus;
+  bool? obscureText;
+  bool? autocorrect;
 //  bool autovalidate;
-  bool maxLengthEnforced;
-  int maxLines;
-  int maxLength;
-  ValueChanged<String> changed;
-  VoidCallback editingComplete;
-  ValueChanged<String> fieldSubmitted;
-  FormFieldSetter<String> saved;
-  FormFieldValidator<String> validator;
-  List<TextInputFormatter> inputFormatters;
-  bool enabled;
-  Brightness keyboardAppearance;
-  EdgeInsets scrollPadding;
-  InputCounterWidgetBuilder buildCounter;
-  ScrollPhysics scrollPhysics;
-  Iterable<String> autofillHints;
-  AutovalidateMode autovalidateMode;
+//  bool? maxLengthEnforced;
+  MaxLengthEnforcement? maxLengthEnforcement;
+  int? maxLines;
+  int? maxLength;
+  ValueChanged<String>? changed;
+  VoidCallback? editingComplete;
+  ValueChanged<String>? fieldSubmitted;
+  FormFieldSetter<String>? saved;
+  FormFieldValidator<String>? validator;
+  List<TextInputFormatter>? inputFormatters;
+  bool? enabled;
+  Brightness? keyboardAppearance;
+  EdgeInsets? scrollPadding;
+  InputCounterWidgetBuilder? buildCounter;
+  ScrollPhysics? scrollPhysics;
+  Iterable<String>? autofillHints;
+  AutovalidateMode? autovalidateMode;
 
   /// Text
 //  final String data;
-  TextSpan textSpan;
+  TextSpan? textSpan;
 
   // final TextStyle style;
   // final TextAlign textAlign;
-  TextDirection textDirection;
-  Locale locale;
-  bool softWrap;
-  TextOverflow overflow;
-  double textScaleFactor;
+  TextDirection? textDirection;
+  Locale? locale;
+  bool? softWrap;
+  TextOverflow? overflow;
+  double? textScaleFactor;
 
 //final int maxLines;
-  String semanticsLabel;
-  TextWidthBasis textWidthBasis;
-  ui.TextHeightBehavior textHeightBehavior;
+  String? semanticsLabel;
+  TextWidthBasis? textWidthBasis;
+  ui.TextHeightBehavior? textHeightBehavior;
 
   /// ListTile
-  Widget leading;
-  Widget title;
-  Widget subtitle;
-  Widget trailing;
-  bool isThreeLine;
-  bool dense;
-  EdgeInsetsGeometry contentPadding;
+  Widget? leading;
+  Widget? title;
+  Widget? subtitle;
+  Widget? trailing;
+  bool? isThreeLine;
+  bool? dense;
+  EdgeInsetsGeometry? contentPadding;
 
 //  final bool enabled;
-  GestureTapCallback tap;
-  GestureLongPressCallback longPress;
-  bool selected;
-  Color focusColor;
-  Color hoverColor;
-  Color tileColor;
-  Color selectedTileColor;
+  GestureTapCallback? tap;
+  GestureLongPressCallback? longPress;
+  bool? selected;
+  Color? focusColor;
+  Color? hoverColor;
+  Color? tileColor;
+  Color? selectedTileColor;
 
   /// CheckboxListTile
-  Widget secondary;
-  ListTileControlAffinity controlAffinity;
+  Widget? secondary;
+  ListTileControlAffinity? controlAffinity;
 
   /// CircleAvatar
-  Color backgroundColor;
-  Color foregroundColor;
-  ImageProvider backgroundImage;
-  double radius;
-  double minRadius;
-  double maxRadius;
+  Color? backgroundColor;
+  Color? foregroundColor;
+  ImageProvider? backgroundImage;
+  double? radius;
+  double? minRadius;
+  double? maxRadius;
 
   /// Dismissible
-  Widget child;
-  Widget background;
-  Widget secondaryBackground;
-  VoidCallback resize;
-  DismissDirectionCallback dismissed;
-  DismissDirection direction;
-  Duration resizeDuration;
-  Map<DismissDirection, double> dismissThresholds;
-  Duration movementDuration;
-  double crossAxisEndOffset;
+  Widget? child;
+  Widget? background;
+  Widget? secondaryBackground;
+  VoidCallback? resize;
+  DismissDirectionCallback? dismissed;
+  DismissDirection? direction;
+  Duration? resizeDuration;
+  Map<DismissDirection, double>? dismissThresholds;
+  Duration? movementDuration;
+  double? crossAxisEndOffset;
 
   /// CheckBox
-  bool _checkValue;
-  ValueChanged<bool> toggle;
-  Color activeColor;
-  bool tristate;
-  MaterialTapTargetSize materialTapTargetSize;
+  bool? _checkValue;
+  ValueChanged<bool>? toggle;
+  Color? activeColor;
+  bool? tristate;
+  MaterialTapTargetSize? materialTapTargetSize;
 
-  m.Widget _textFormField;
-  Dismissible _dismissible;
-  Checkbox _checkbox;
+  m.Widget? _textFormField;
+  Dismissible? _dismissible;
+  Checkbox? _checkbox;
 
   m.Widget get textFormField {
     if (items == null && value != null && value is! String) {
@@ -438,20 +442,21 @@ class FieldWidgets<T> extends DataFieldItem {
         child: m.TextFormField(
       key: Key('TextFormField$_key'),
       controller:
-          controller ?? value == null ? null : FieldController(text: value),
+          controller ?? (value == null ? null : FieldController(text: value)),
       initialValue: controller == null && value == null ? initialValue : null,
       focusNode: focusNode,
       decoration: inputDecoration ?? InputDecoration(labelText: label),
       keyboardType: keyboardType,
-      textCapitalization: textCapitalization,
+      textCapitalization: textCapitalization!,
       textInputAction: textInputAction,
       style: style,
-      textAlign: textAlign,
-      autofocus: autofocus,
-      obscureText: obscureText,
-      autocorrect: autocorrect,
+      textAlign: textAlign!,
+      autofocus: autofocus!,
+      obscureText: obscureText!,
+      autocorrect: autocorrect!,
 //      autovalidate: autovalidate,
-      maxLengthEnforced: maxLengthEnforced,
+//      maxLengthEnforced: maxLengthEnforced!,
+      maxLengthEnforcement: maxLengthEnforcement!,
       maxLines: maxLines,
       onChanged: changed ?? onChanged,
       maxLength: maxLength,
@@ -462,7 +467,7 @@ class FieldWidgets<T> extends DataFieldItem {
       inputFormatters: inputFormatters,
       enabled: enabled,
       keyboardAppearance: keyboardAppearance,
-      scrollPadding: scrollPadding,
+      scrollPadding: scrollPadding!,
       buildCounter: buildCounter,
       scrollPhysics: scrollPhysics,
       autofillHints: autofillHints,
@@ -471,34 +476,35 @@ class FieldWidgets<T> extends DataFieldItem {
   }
 
   m.TextFormField onTextFormField({
-    TextEditingController controller,
-    String initialValue,
-    FocusNode focusNode,
-    InputDecoration inputDecoration,
-    TextInputType keyboardType,
-    TextCapitalization textCapitalization,
-    TextInputAction textInputAction,
-    TextStyle style,
-    TextAlign textAlign,
-    bool autofocus,
-    bool obscureText,
-    bool autocorrect,
-    bool autovalidate,
-    bool maxLengthEnforced,
-    int maxLines,
-    int maxLength,
-    VoidCallback editingComplete,
-    ValueChanged<String> fieldSubmitted,
-    FormFieldSetter<String> saved,
-    FormFieldValidator<String> validator,
-    List<TextInputFormatter> inputFormatters,
-    bool enabled,
-    Brightness keyboardAppearance,
-    EdgeInsets scrollPadding,
-    InputCounterWidgetBuilder buildCounter,
-    ScrollPhysics scrollPhysics,
-    Iterable<String> autofillHints,
-    AutovalidateMode autovalidateMode,
+    TextEditingController? controller,
+    String? initialValue,
+    FocusNode? focusNode,
+    InputDecoration? inputDecoration,
+    TextInputType? keyboardType,
+    TextCapitalization? textCapitalization,
+    TextInputAction? textInputAction,
+    TextStyle? style,
+    TextAlign? textAlign,
+    bool? autofocus,
+    bool? obscureText,
+    bool? autocorrect,
+    bool? autovalidate,
+//    bool? maxLengthEnforced,
+    MaxLengthEnforcement? maxLengthEnforcement,
+    int? maxLines,
+    int? maxLength,
+    VoidCallback? editingComplete,
+    ValueChanged<String>? fieldSubmitted,
+    FormFieldSetter<String>? saved,
+    FormFieldValidator<String>? validator,
+    List<TextInputFormatter>? inputFormatters,
+    bool? enabled,
+    Brightness? keyboardAppearance,
+    EdgeInsets? scrollPadding,
+    InputCounterWidgetBuilder? buildCounter,
+    ScrollPhysics? scrollPhysics,
+    Iterable<String>? autofillHints,
+    AutovalidateMode? autovalidateMode,
     bool create = false,
   }) {
     this.controller = controller ?? this.controller;
@@ -514,7 +520,8 @@ class FieldWidgets<T> extends DataFieldItem {
     this.obscureText = obscureText ?? this.obscureText;
     this.autocorrect = autocorrect ?? this.autocorrect;
 //    this.autovalidate = autovalidate ?? this.autovalidate;
-    this.maxLengthEnforced = maxLengthEnforced ?? this.maxLengthEnforced;
+//    this.maxLengthEnforced = maxLengthEnforced ?? this.maxLengthEnforced;
+    this.maxLengthEnforcement = maxLengthEnforcement ?? this.maxLengthEnforcement;
     this.maxLines = maxLines ?? this.maxLines;
     this.maxLength = maxLength ?? this.maxLength;
     this.editingComplete = editingComplete ?? this.editingComplete;
@@ -534,61 +541,64 @@ class FieldWidgets<T> extends DataFieldItem {
     _textFormField = null;
     final newWidget = textFormField;
     _textFormField = oldWidget;
-    return newWidget;
+    return newWidget as m.TextFormField;
   }
 
   // ignore: non_constant_identifier_names
   m.Widget TextFormField({
-    TextEditingController controller,
-    String initialValue,
-    FocusNode focusNode,
-    InputDecoration inputDecoration,
-    TextInputType keyboardType,
-    TextCapitalization textCapitalization,
-    TextInputAction textInputAction,
-    TextStyle style,
-    TextAlign textAlign,
-    bool autofocus,
-    bool obscureText,
-    bool autocorrect,
-    bool autovalidate,
-    bool maxLengthEnforced,
-    int maxLines,
-    int maxLength,
-    ValueChanged<String> changed,
-    VoidCallback editingComplete,
-    ValueChanged<String> fieldSubmitted,
-    FormFieldSetter<String> saved,
-    FormFieldValidator<String> validator,
-    List<TextInputFormatter> inputFormatters,
-    bool enabled,
-    Brightness keyboardAppearance,
-    EdgeInsets scrollPadding,
-    InputCounterWidgetBuilder buildCounter,
-    ScrollPhysics scrollPhysics,
-    Iterable<String> autofillHints,
-    AutovalidateMode autovalidateMode,
+    TextEditingController? controller,
+    String? initialValue,
+    FocusNode? focusNode,
+    InputDecoration? inputDecoration,
+    TextInputType? keyboardType,
+    TextCapitalization? textCapitalization,
+    TextInputAction? textInputAction,
+    TextStyle? style,
+    TextAlign? textAlign,
+    bool? autofocus,
+    bool? obscureText,
+    bool? autocorrect,
+    bool? autovalidate,
+//    bool? maxLengthEnforced,
+    MaxLengthEnforcement? maxLengthEnforcement,
+    int? maxLines,
+    int? maxLength,
+    ValueChanged<String>? changed,
+    VoidCallback? editingComplete,
+    ValueChanged<String>? fieldSubmitted,
+    FormFieldSetter<String>? saved,
+    FormFieldValidator<String>? validator,
+    List<TextInputFormatter>? inputFormatters,
+    bool? enabled,
+    Brightness? keyboardAppearance,
+    EdgeInsets? scrollPadding,
+    InputCounterWidgetBuilder? buildCounter,
+    ScrollPhysics? scrollPhysics,
+    Iterable<String>? autofillHints,
+    AutovalidateMode? autovalidateMode,
   }) =>
       m.Material(
         child: m.TextFormField(
           key: Key('TextFormField$_key'),
           // just accept the parameter values and not this object's values.
-          controller: controller ?? initialValue == null
-              ? null
-              : FieldController(text: initialValue),
+          controller: controller ??
+              (initialValue == null
+                  ? null
+                  : FieldController(text: initialValue)),
           // ignore the initValue parameter: initialValue: null,
           focusNode: focusNode ?? focusNode,
           decoration: inputDecoration ?? this.inputDecoration,
           keyboardType: keyboardType ?? this.keyboardType,
-          textCapitalization: textCapitalization ?? this.textCapitalization,
+          textCapitalization: textCapitalization ?? this.textCapitalization!,
           textInputAction: textInputAction ?? this.textInputAction,
           style: style ?? this.style,
-          textAlign: textAlign ?? this.textAlign,
-          autofocus: autofocus ?? this.autofocus,
-          obscureText: obscureText ?? this.obscureText,
-          autocorrect: autocorrect ?? this.autocorrect,
+          textAlign: textAlign ?? this.textAlign!,
+          autofocus: autofocus ?? this.autofocus!,
+          obscureText: obscureText ?? this.obscureText!,
+          autocorrect: autocorrect ?? this.autocorrect!,
 //        autovalidate: autovalidate ?? this.autovalidate,
-          maxLengthEnforced: maxLengthEnforced ?? this.maxLengthEnforced,
+//          maxLengthEnforced: maxLengthEnforced ?? this.maxLengthEnforced!,
+          maxLengthEnforcement: maxLengthEnforcement ?? this.maxLengthEnforcement!,
           maxLines: maxLines ?? this.maxLines,
           maxLength: maxLength ?? this.maxLength,
           onChanged: changed ?? this.changed ?? onChanged,
@@ -601,7 +611,7 @@ class FieldWidgets<T> extends DataFieldItem {
           inputFormatters: inputFormatters ?? this.inputFormatters,
           enabled: enabled ?? this.enabled,
           keyboardAppearance: keyboardAppearance ?? this.keyboardAppearance,
-          scrollPadding: scrollPadding ?? this.scrollPadding,
+          scrollPadding: scrollPadding ?? this.scrollPadding!,
           buildCounter: buildCounter ?? this.buildCounter,
           scrollPhysics: scrollPhysics ?? this.scrollPhysics,
           autofillHints: autofillHints ?? this.autofillHints,
@@ -627,8 +637,8 @@ class FieldWidgets<T> extends DataFieldItem {
   // Return null if validated. Error message if not.
   @mustCallSuper
   @protected
-  String onValidator(String v) {
-    const String valid = null;
+  String? onValidator(String? v) {
+    const String? valid = null;
     return valid;
   }
 
@@ -655,18 +665,18 @@ class FieldWidgets<T> extends DataFieldItem {
   }
 
   Text onText({
-    TextSpan textSpan,
-    TextStyle style,
-    TextAlign textAlign,
-    TextDirection textDirection,
-    Locale locale,
-    bool softWrap,
-    TextOverflow overflow,
-    double textScaleFactor,
-    int maxLines,
-    String semanticsLabel,
-    TextWidthBasis textWidthBasis,
-    ui.TextHeightBehavior textHeightBehavior,
+    TextSpan? textSpan,
+    TextStyle? style,
+    TextAlign? textAlign,
+    TextDirection? textDirection,
+    Locale? locale,
+    bool? softWrap,
+    TextOverflow? overflow,
+    double? textScaleFactor,
+    int? maxLines,
+    String? semanticsLabel,
+    TextWidthBasis? textWidthBasis,
+    ui.TextHeightBehavior? textHeightBehavior,
   }) {
     this.style = style ?? this.style;
     this.textAlign = textAlign ?? this.textAlign;
@@ -696,7 +706,7 @@ class FieldWidgets<T> extends DataFieldItem {
       return text;
     } else {
       return Text.rich(
-        textSpan,
+        textSpan!,
         key: Key('Text.rich$_key'),
         style: style,
         textAlign: textAlign,
@@ -714,18 +724,18 @@ class FieldWidgets<T> extends DataFieldItem {
   }
 
   Text onRichText({
-    TextSpan textSpan,
-    TextStyle style,
-    TextAlign textAlign,
-    TextDirection textDirection,
-    Locale locale,
-    bool softWrap,
-    TextOverflow overflow,
-    double textScaleFactor,
-    int maxLines,
-    String semanticsLabel,
-    TextWidthBasis textWidthBasis,
-    ui.TextHeightBehavior textHeightBehavior,
+    TextSpan? textSpan,
+    TextStyle? style,
+    TextAlign? textAlign,
+    TextDirection? textDirection,
+    Locale? locale,
+    bool? softWrap,
+    TextOverflow? overflow,
+    double? textScaleFactor,
+    int? maxLines,
+    String? semanticsLabel,
+    TextWidthBasis? textWidthBasis,
+    ui.TextHeightBehavior? textHeightBehavior,
   }) {
     this.style = style ?? this.style;
     this.textAlign = textAlign ?? this.textAlign;
@@ -752,25 +762,25 @@ class FieldWidgets<T> extends DataFieldItem {
 
   DefaultTextStyle get defaultTextStyle => DefaultTextStyle(
         key: Key('DefaultTextStyle$_key'),
-        style: style,
+        style: style!,
         textAlign: textAlign,
-        softWrap: softWrap,
-        overflow: overflow,
+        softWrap: softWrap!,
+        overflow: overflow!,
         maxLines: maxLines,
-        textWidthBasis: textWidthBasis,
+        textWidthBasis: textWidthBasis!,
         textHeightBehavior: textHeightBehavior,
         child: child ?? text,
       );
 
   DefaultTextStyle onDefaultTextStyle({
-    TextStyle style,
-    TextAlign textAlign,
-    bool softWrap,
-    TextOverflow overflow,
-    int maxLines,
-    TextWidthBasis textWidthBasis,
-    ui.TextHeightBehavior textHeightBehavior,
-    Widget child,
+    TextStyle? style,
+    TextAlign? textAlign,
+    bool? softWrap,
+    TextOverflow? overflow,
+    int? maxLines,
+    TextWidthBasis? textWidthBasis,
+    ui.TextHeightBehavior? textHeightBehavior,
+    Widget? child,
   }) {
     this.style = style ?? this.style;
     this.textAlign = textAlign ?? this.textAlign;
@@ -813,17 +823,17 @@ class FieldWidgets<T> extends DataFieldItem {
         );
 
   Widget onListTile({
-    Widget leading,
-    Widget title,
-    Widget subtitle,
-    Widget trailing,
-    bool isThreeLine,
-    bool dense,
-    EdgeInsetsGeometry contentPadding,
-    bool enabled,
-    GestureTapCallback tap,
-    GestureLongPressCallback longPress,
-    bool selected,
+    Widget? leading,
+    Widget? title,
+    Widget? subtitle,
+    Widget? trailing,
+    bool? isThreeLine,
+    bool? dense,
+    EdgeInsetsGeometry? contentPadding,
+    bool? enabled,
+    GestureTapCallback? tap,
+    GestureLongPressCallback? longPress,
+    bool? selected,
   }) {
     this.leading = leading ?? this.leading;
     this.title = title ?? this.title;
@@ -840,14 +850,14 @@ class FieldWidgets<T> extends DataFieldItem {
   }
 
   //for LisTile
-  Widget onLeading() => null;
+  Widget? onLeading() => null;
 
   Widget onTitle() => text;
 
   // Override to produce a subtitle.
-  Widget onSubtitle() => Text(label);
+  Widget onSubtitle() => Text(label!);
 
-  Widget onTrailing() => null;
+  Widget? onTrailing() => null;
 
   // Override to place what happens when the field is tapped.
   void onTap() {}
@@ -858,7 +868,8 @@ class FieldWidgets<T> extends DataFieldItem {
   CheckboxListTile get checkboxListTile => CheckboxListTile(
         key: Key('CheckboxListTile$_key'),
         value: _checkValue,
-        onChanged: toggle ?? onToggle,
+        onChanged: toggle as void Function(bool?)? ??
+            onToggle as void Function(bool?)?,
         activeColor: activeColor,
         title: title ?? onTitle(),
         subtitle: subtitle ?? onSubtitle(),
@@ -866,20 +877,20 @@ class FieldWidgets<T> extends DataFieldItem {
         dense: dense,
         secondary: secondary ?? onSecondary(),
         selected: selected ?? false,
-        controlAffinity: controlAffinity,
+        controlAffinity: controlAffinity!,
       );
 
   CheckboxListTile onCheckboxListTile({
-    @required bool value,
-    ValueChanged<bool> onChanged,
-    Color activeColor,
-    Widget title,
-    Widget subtitle,
-    bool isThreeLine,
-    bool dense,
-    Widget secondary,
-    bool selected,
-    ListTileControlAffinity controlAffinity,
+    bool? value,
+    ValueChanged<bool>? onChanged,
+    Color? activeColor,
+    Widget? title,
+    Widget? subtitle,
+    bool? isThreeLine,
+    bool? dense,
+    Widget? secondary,
+    bool? selected,
+    ListTileControlAffinity? controlAffinity,
   }) {
     _checkValue = value ?? _checkValue;
     toggle = onChanged ?? toggle;
@@ -895,11 +906,11 @@ class FieldWidgets<T> extends DataFieldItem {
   }
 
   // A widget to display on the opposite side of the tile from the checkbox.
-  Widget onSecondary() => null;
+  Widget? onSecondary() => null;
 
   CircleAvatar get circleAvatar => CircleAvatar(
         key: Key('CircleAvatar$_key'),
-        backgroundColor: backgroundColor ?? App.themeData.primaryColor,
+        backgroundColor: backgroundColor ?? App.themeData!.primaryColor,
         backgroundImage: backgroundImage,
         foregroundColor: foregroundColor,
         radius: radius,
@@ -909,12 +920,12 @@ class FieldWidgets<T> extends DataFieldItem {
       );
 
   CircleAvatar onCircleAvatar({
-    Color backgroundColor,
-    Color foregroundColor,
-    ImageProvider backgroundImage,
-    double radius,
-    double minRadius,
-    double maxRadius,
+    Color? backgroundColor,
+    Color? foregroundColor,
+    ImageProvider? backgroundImage,
+    double? radius,
+    double? minRadius,
+    double? maxRadius,
   }) {
     this.backgroundColor = backgroundColor ?? this.backgroundColor;
     this.backgroundImage = backgroundImage ?? this.backgroundImage;
@@ -931,26 +942,26 @@ class FieldWidgets<T> extends DataFieldItem {
         secondaryBackground: secondaryBackground ?? onSecondaryBackground(),
         onResize: resize ?? onResize,
         onDismissed: (DismissDirection direction) =>
-            dismissed == null ? onDismissed(direction) : dismissed(direction),
-        direction: direction,
+            dismissed == null ? onDismissed(direction) : dismissed!(direction),
+        direction: direction!,
         resizeDuration: resizeDuration,
-        dismissThresholds: dismissThresholds,
-        movementDuration: movementDuration,
-        crossAxisEndOffset: crossAxisEndOffset,
+        dismissThresholds: dismissThresholds!,
+        movementDuration: movementDuration!,
+        crossAxisEndOffset: crossAxisEndOffset!,
         child: child ?? onChild(),
       );
 
   Dismissible onDismissible({
-    Widget child,
-    Widget background,
-    Widget secondaryBackground,
-    VoidCallback resize,
-    DismissDirectionCallback dismissed,
-    DismissDirection direction,
-    Duration resizeDuration,
-    Map<DismissDirection, double> dismissThresholds,
-    Duration movementDuration,
-    double crossAxisEndOffset,
+    Widget? child,
+    Widget? background,
+    Widget? secondaryBackground,
+    VoidCallback? resize,
+    DismissDirectionCallback? dismissed,
+    DismissDirection? direction,
+    Duration? resizeDuration,
+    Map<DismissDirection, double>? dismissThresholds,
+    Duration? movementDuration,
+    double? crossAxisEndOffset,
   }) {
     this.child = child ?? this.child;
     this.background = background ?? this.background;
@@ -969,8 +980,8 @@ class FieldWidgets<T> extends DataFieldItem {
   Widget onChild() {
     return Container(
         decoration: BoxDecoration(
-            color: _theme.canvasColor,
-            border: Border(bottom: BorderSide(color: _theme.dividerColor))),
+            color: _theme!.canvasColor,
+            border: Border(bottom: BorderSide(color: _theme!.dividerColor))),
         child: listTile);
   }
 
@@ -991,7 +1002,7 @@ class FieldWidgets<T> extends DataFieldItem {
   }
 
   // Override to provide a secondary background.
-  Widget onSecondaryBackground() => null;
+  Widget? onSecondaryBackground() => null;
 
   // Override to place what happens when the field is resized.
   void onResize() {}
@@ -1002,18 +1013,19 @@ class FieldWidgets<T> extends DataFieldItem {
   Checkbox get checkbox => _checkbox ??= Checkbox(
         key: Key('Checkbox$_key'),
         value: _checkValue,
-        tristate: tristate,
-        onChanged: toggle ?? onToggle,
+        tristate: tristate!,
+        onChanged: toggle as void Function(bool?)? ??
+            onToggle as void Function(bool?)?,
         activeColor: activeColor,
         materialTapTargetSize: materialTapTargetSize,
       );
 
   Checkbox onCheckBox({
-    @required bool value,
-    ValueChanged<bool> onChanged,
-    Color activeColor,
-    bool tristate,
-    MaterialTapTargetSize materialTapTargetSize,
+    bool? value,
+    ValueChanged<bool>? onChanged,
+    Color? activeColor,
+    bool? tristate,
+    MaterialTapTargetSize? materialTapTargetSize,
   }) {
     _checkValue = value ?? _checkValue;
     toggle = onChanged ?? toggle;
@@ -1030,7 +1042,7 @@ class FieldWidgets<T> extends DataFieldItem {
 
   @mustCallSuper
   @protected
-  void onChanged(String value) {
+  void onChanged(String? value) {
     if (_initValue == null) {
       _valueChanged = value != null;
     } else {
@@ -1039,7 +1051,7 @@ class FieldWidgets<T> extends DataFieldItem {
   }
 
   @protected
-  bool isChanged({bool changed}) {
+  bool isChanged({bool? changed}) {
     // Only record a change
     if (changed != null && changed) {
       _valueChanged = changed;
@@ -1047,27 +1059,27 @@ class FieldWidgets<T> extends DataFieldItem {
     return _valueChanged;
   }
 
-  void onToggle({bool value}) {}
+  void onToggle({bool? value}) {}
 
   ListItems<T> get listItems => ListItems<T>(
         this,
         title: label,
-        items: items ?? [this],
+        items: items as List<DataFieldItem>? ?? [this],
         dropItems: onDropItems() ?? [''],
       );
 
   ListItems<T> onListItems({
-    String title,
-    List<FieldWidgets<T>> items,
-    MapItemFunction mapItem,
-    GestureTapCallback onTap,
-    ValueChanged<String> onChanged,
-    List<String> dropItems,
+    String? title,
+    List<FieldWidgets<T>>? items,
+    MapItemFunction? mapItem,
+    GestureTapCallback? onTap,
+    ValueChanged<String?>? onChanged,
+    List<String>? dropItems,
   }) {
     return ListItems<T>(
       this,
       title: title ?? label,
-      items: items ?? this.items,
+      items: items ?? this.items as List<DataFieldItem>?,
       mapItem: mapItem,
       onTap: onTap,
       onChanged: onChanged,
@@ -1076,7 +1088,7 @@ class FieldWidgets<T> extends DataFieldItem {
   }
 
   /// Allow a subclass supply the drop items.
-  List<String> onDropItems() => [''];
+  List<String>? onDropItems() => [''];
 
   /// Convert a list item into separate Email objects.
   void one2Many<U extends FieldWidgets<T>>(
@@ -1102,15 +1114,15 @@ class FieldWidgets<T> extends DataFieldItem {
     items = fields;
   }
 
-  List<Map<String, dynamic>> mapItems<U extends FieldWidgets<T>>(String key,
+  List<Map<String, dynamic>?> mapItems<U extends FieldWidgets<T>>(String key,
       List<DataFieldItem> items, U Function(DataFieldItem dataItem) create,
-      [U itemsObj]) {
+      [U? itemsObj]) {
     //
     items = [];
 
-    itemsObj ??= this;
+    itemsObj ??= this as U?;
 
-    itemsObj.items ??= <U>[];
+    itemsObj!.items ??= <U>[];
 
     // A new value must be added to the 'items' iterable.
     if (itemsObj.value is String) {
@@ -1121,13 +1133,13 @@ class FieldWidgets<T> extends DataFieldItem {
           value: itemsObj.value,
           type: itemsObj.type,
         ));
-        itemsObj.items = itemsObj.items.toList()..add(newItem);
+        itemsObj.items = itemsObj.items!.toList()..add(newItem);
       }
     }
 
-    final list = <Map<String, dynamic>>[];
+    final list = <Map<String, dynamic>?>[];
 
-    for (final item in itemsObj.items ?? []) {
+    for (final item in (itemsObj.items ?? []) as Iterable) {
       // Assign the appropriate map key value.
       item.keys(value: key);
       list.add(item.toMap);
@@ -1156,18 +1168,18 @@ class FieldWidgets<T> extends DataFieldItem {
 /// https://github.com/flutter/flutter/issues/50668
 class CupertinoListTile extends StatefulWidget {
   const CupertinoListTile({
-    Key key,
+    Key? key,
     this.leading,
     this.title,
     this.subtitle,
     this.trailing,
     this.onTap,
   }) : super(key: key);
-  final Widget leading;
-  final Widget title;
-  final Widget subtitle;
-  final Widget trailing;
-  final Function onTap;
+  final Widget? leading;
+  final Widget? title;
+  final Widget? subtitle;
+  final Widget? trailing;
+  final Function? onTap;
   @override
   _StatefulStateCupertino createState() => _StatefulStateCupertino();
 }
@@ -1175,22 +1187,22 @@ class CupertinoListTile extends StatefulWidget {
 class _StatefulStateCupertino extends State<CupertinoListTile> {
   @override
   Widget build(BuildContext context) {
-    Widget leading;
+    late Widget leading;
     if (widget.leading == null) {
       leading = const SizedBox();
     } else {
-      leading = widget.leading;
+      leading = widget.leading!;
     }
     Widget trailing;
     if (widget.trailing == null) {
       trailing = const SizedBox();
     } else {
-      trailing = widget.trailing;
+      trailing = widget.trailing!;
     }
     return GestureDetector(
       onTap: () {
         if (widget.onTap != null) {
-          widget.onTap();
+          widget.onTap!();
         }
       },
       child: Row(
@@ -1202,7 +1214,7 @@ class _StatefulStateCupertino extends State<CupertinoListTile> {
               const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: columnChildren(context),
+                children: columnChildren(context) as List<Widget>,
               ),
             ],
           ),
@@ -1212,8 +1224,8 @@ class _StatefulStateCupertino extends State<CupertinoListTile> {
     );
   }
 
-  List<Widget> columnChildren(BuildContext context) {
-    final children = <Widget>[];
+  List<Widget?> columnChildren(BuildContext context) {
+    final children = <Widget?>[];
     children.add(widget.title ?? const SizedBox());
     if (widget.subtitle != null) {
       children.add(widget.subtitle);
@@ -1227,7 +1239,7 @@ class DataFieldItem {
   DataFieldItem({this.id, this.label, this.value, this.type});
 
   DataFieldItem.fromMap(Map<dynamic, dynamic> m,
-      {String id, String label, String value, String type}) {
+      {String? id, String? label, String? value, String? type}) {
     //
     keys(id: id, label: label, value: value, type: type);
 
@@ -1237,7 +1249,7 @@ class DataFieldItem {
     this.type = m[_type];
   }
   dynamic id;
-  String label;
+  String? label;
   dynamic value;
   dynamic type;
 
@@ -1247,7 +1259,7 @@ class DataFieldItem {
   String _type = 'type';
 
   /// Assigns the names for the 'label' field and the 'value' field.
-  void keys({String id, String label, String value, String type}) {
+  void keys({String? id, String? label, String? value, String? type}) {
     if (id != null && id.isNotEmpty) {
       _id = id;
     }
@@ -1270,16 +1282,16 @@ class DataFieldItem {
 /// Supplies the 'current' State object.
 mixin StateGetter {
   bool _init = false;
-  State _state;
+  State? _state;
   final Set<State> _stateSet = {};
 
-  State get state => _state;
+  State? get state => _state;
 
   /// Call this in the State object's initState() function.
   void initState(State state) => pushState(state);
 
   /// Add the optional State object to the Set
-  bool pushState([State state]) {
+  bool pushState([State? state]) {
     if (state == null) {
       return false;
     }
@@ -1316,7 +1328,7 @@ mixin StateGetter {
     final set = _state != null;
     if (set) {
       // ignore: invalid_use_of_protected_member
-      _state.setState(fn);
+      _state!.setState(fn);
     }
     return set;
   }
@@ -1329,7 +1341,7 @@ mixin StateGetter {
 class ListItems<T> extends StatefulWidget {
   const ListItems(
     this.field, {
-    Key key,
+    Key? key,
     this.title,
     this.items,
     this.mapItem,
@@ -1339,20 +1351,20 @@ class ListItems<T> extends StatefulWidget {
   }) : super(key: key);
 
   final FieldWidgets<T> field;
-  final String title;
-  final List<DataFieldItem> items;
-  final MapItemFunction mapItem;
-  final GestureTapCallback onTap;
-  final ValueChanged<String> onChanged;
-  final List<String> dropItems;
+  final String? title;
+  final List<DataFieldItem>? items;
+  final MapItemFunction? mapItem;
+  final GestureTapCallback? onTap;
+  final ValueChanged<String?>? onChanged;
+  final List<String>? dropItems;
   @override
   State createState() => _LIstItemsState<T>();
 }
 
 class _LIstItemsState<T> extends State<ListItems<T>> {
-  FormState formState;
-  MapItemFunction _map;
-  List<DataFieldItem> items;
+  FormState? formState;
+  MapItemFunction? _map;
+  List<DataFieldItem>? items;
 
   @override
   void initState() {
@@ -1360,7 +1372,7 @@ class _LIstItemsState<T> extends State<ListItems<T>> {
     items = widget.items;
     if (widget.mapItem == null) {
       if (widget.onTap == null) {
-        _map = editIt;
+        _map = editIt as Widget Function(DataFieldItem)?;
       } else {
         _map = mapIt;
       }
@@ -1386,12 +1398,12 @@ class _LIstItemsState<T> extends State<ListItems<T>> {
       var tile;
       if (App.useMaterial) {
         tile = ListTile(
-          subtitle: Text(widget.title),
+          subtitle: Text(widget.title!),
           onTap: widget.onTap,
         );
       } else {
         tile = CupertinoListTile(
-          subtitle: Text(widget.title),
+          subtitle: Text(widget.title!),
           onTap: widget.onTap,
         );
       }
@@ -1401,10 +1413,10 @@ class _LIstItemsState<T> extends State<ListItems<T>> {
     }
     if (items != null) {
       children.add(Column(
-          children: widget.items
+          children: widget.items!
               .map((i) => Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: _map(i)))
+                  child: _map!(i)))
               .toList()));
     }
     return Column(
@@ -1458,9 +1470,9 @@ class _LIstItemsState<T> extends State<ListItems<T>> {
           onTap: widget.onTap,
         );
 
-  Widget dropDown({FieldWidgets<T> field, ValueChanged<String> onChanged}) {
+  Widget dropDown({FieldWidgets<T>? field, ValueChanged<String?>? onChanged}) {
     final dropItems = widget.dropItems ?? [''];
-    String value = field?.type;
+    String? value = field?.type;
     if (dropItems.where((String item) {
       return item == value;
     }).isEmpty) {
@@ -1474,8 +1486,8 @@ class _LIstItemsState<T> extends State<ListItems<T>> {
         items: dropItems.map((String v) {
           return DropdownMenuItem<String>(value: v, child: Text(v));
         }).toList(),
-        onChanged: (String v) {
-          field.type = v;
+        onChanged: (String? v) {
+          field!.type = v;
           field.onChanged(v);
           if (onChanged != null) {
             onChanged(v);
@@ -1491,22 +1503,22 @@ typedef MapItemFunction = Widget Function(DataFieldItem i);
 /// Overcome ListView bug.
 class FieldController extends TextEditingController {
   //
-  FieldController({String text}) : super(text: text);
+  FieldController({String? text}) : super(text: text);
 }
 
 /// Used to test for a Map object before attempting to access it.
 class MapClass {
   MapClass(this.map);
 
-  final Map<String, dynamic> map;
+  final Map<String, dynamic>? map;
 
-  dynamic p(String key) {
+  dynamic p(String? key) {
     if (key == null || key.isEmpty) {
       return null;
     }
     if (map == null) {
       return null;
     }
-    return map[key];
+    return map![key];
   }
 }

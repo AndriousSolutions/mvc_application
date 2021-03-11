@@ -50,7 +50,7 @@ class Contact extends ContactEdit
 
   @override
   int compareTo(Contact other) =>
-      _givenName.value.toString().compareTo(other._givenName.value.toString());
+      _givenName!.value.toString().compareTo(other._givenName!.value.toString());
 }
 
 class ContactEdit extends ContactList {
@@ -58,7 +58,7 @@ class ContactEdit extends ContactList {
   ContactEdit() {
     model = ContactsDB();
   }
-  ContactsDB model;
+  late ContactsDB model;
 
   GlobalKey<FormState> get formKey {
     if (!_inForm) {
@@ -71,35 +71,35 @@ class ContactEdit extends ContactList {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Future<bool> onPressed([BuildContext context]) async {
-    if (!_formKey.currentState.validate()) {
+  Future<bool> onPressed([BuildContext? context]) async {
+    if (!_formKey.currentState!.validate()) {
       return false;
     }
-    _formKey.currentState.save();
+    _formKey.currentState!.save();
     _inForm = false;
     return add();
   }
 
-  Future<bool> add() => model.addContact(this);
+  Future<bool> add() => model.addContact(this as Contact);
 
-  Future<bool> delete() => model.deleteContact(this);
+  Future<bool> delete() => model.deleteContact(this as Contact);
 
-  Future<int> undelete() => model.undeleteContact(this);
+  Future<int> undelete() => model.undeleteContact(this as Contact);
 
-  bool isChanged() => _givenName.changedFields
+  bool isChanged() => _givenName!.changedFields
       .where((field) => field is! Phone && field is! Email)
       .isNotEmpty;
 
-  bool phoneChange() => _givenName.changeIn<Phone>();
+  bool phoneChange() => _givenName!.changeIn<Phone>();
 
-  bool emailChange() => _givenName.changeIn<Email>();
+  bool emailChange() => _givenName!.changeIn<Email>();
 }
 
 class ContactList extends ContactFields {
   //
-  List<DataFieldItem> _emails, _phones;
+  List<DataFieldItem>? _emails, _phones;
 
-  void populate([Map<String, dynamic> map]) {
+  void populate([Map<String, dynamic>? map]) {
     //
     final ma = MapClass(map);
 
@@ -108,7 +108,7 @@ class ContactList extends ContactFields {
     _middleName = MiddleName(ma.p('middleName'));
     _familyName = FamilyName(ma.p('familyName'));
 
-    _displayName = DisplayName(this);
+    _displayName = DisplayName(this as Contact);
     _company = Company(ma.p('company'));
     _jobTitle = JobTitle(ma.p('jobTitle'));
     _phone = Phone(ma.p('phones'));
@@ -117,35 +117,35 @@ class ContactList extends ContactFields {
 
   Map<String, dynamic> get toMap {
     //
-    final emailList = email.mapItems<Email>(
+    final emailList = email!.mapItems<Email>(
       'email',
-      _emails,
+      _emails!,
       (data) => Email.init(data),
     );
 
-    final phoneList = phone.mapItems<Phone>(
+    final phoneList = phone!.mapItems<Phone>(
       'phone',
-      _phones,
+      _phones!,
       (data) => Phone.init(data),
     );
 
     return {
-      'id': _id.value,
-      'displayName': _displayName.value,
-      'givenName': _givenName.value,
-      'middleName': _middleName.value,
-      'familyName': _familyName.value,
+      'id': _id!.value,
+      'displayName': _displayName!.value,
+      'givenName': _givenName!.value,
+      'middleName': _middleName!.value,
+      'familyName': _familyName!.value,
       'emails': emailList,
       'phones': phoneList,
-      'company': _company.value,
-      'jobTitle': _jobTitle.value,
+      'company': _company!.value,
+      'jobTitle': _jobTitle!.value,
     };
   }
 }
 
 class ContactFields {
   //
-  FormFields _id,
+  FormFields? _id,
       _displayName,
       _givenName,
       _middleName,
@@ -155,30 +155,30 @@ class ContactFields {
       _company,
       _jobTitle;
 
-  Id get id => _id;
-  set id(Id id) => _id = id;
+  Id? get id => _id as Id?;
+  set id(Id? id) => _id = id;
 
-  DisplayName get displayName => _displayName;
-  set displayName(DisplayName name) => _displayName = name;
+  DisplayName? get displayName => _displayName as DisplayName?;
+  set displayName(DisplayName? name) => _displayName = name;
 
-  GivenName get givenName => _givenName;
-  set givenName(GivenName name) => _givenName = name;
+  GivenName? get givenName => _givenName as GivenName?;
+  set givenName(GivenName? name) => _givenName = name;
 
-  MiddleName get middleName => _middleName;
-  set middleName(MiddleName name) => _middleName = name;
+  MiddleName? get middleName => _middleName as MiddleName?;
+  set middleName(MiddleName? name) => _middleName = name;
 
-  FamilyName get familyName => _familyName;
-  set familyName(FamilyName name) => _familyName = name;
+  FamilyName? get familyName => _familyName as FamilyName?;
+  set familyName(FamilyName? name) => _familyName = name;
 
-  Company get company => _company;
-  set company(Company company) => _company = company;
+  Company? get company => _company as Company?;
+  set company(Company? company) => _company = company;
 
-  JobTitle get jobTitle => _jobTitle;
-  set jobTitle(JobTitle job) => _jobTitle = job;
+  JobTitle? get jobTitle => _jobTitle as JobTitle?;
+  set jobTitle(JobTitle? job) => _jobTitle = job;
 
-  Phone get phone => _phone;
-  set phone(Phone phone) => _phone = phone;
+  Phone? get phone => _phone as Phone?;
+  set phone(Phone? phone) => _phone = phone;
 
-  Email get email => _email;
-  set email(Email email) => _email = email;
+  Email? get email => _email as Email?;
+  set email(Email? email) => _email = email;
 }

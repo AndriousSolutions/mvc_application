@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class TabButtons extends StatefulWidget {
   TabButtons({
-    Key key,
+    Key? key,
     this.foregroundOn = Colors.white,
     this.foregroundOff = Colors.black,
     this.backgroundOn = Colors.blue,
@@ -19,21 +19,21 @@ class TabButtons extends StatefulWidget {
   final Color foregroundOn;
   final Color foregroundOff;
   // active button's background color
-  final Color backgroundOn;
-  final Color backgroundOff;
+  final Color? backgroundOn;
+  final Color? backgroundOff;
 
-  final double height;
-  final ScrollPhysics physics;
-  final double padding;
+  final double? height;
+  final ScrollPhysics? physics;
+  final double? padding;
   final double borderRadius;
-  final int durationOff;
-  final int durationOn;
+  final int? durationOff;
+  final int? durationOn;
 
   /// The Tabs and Views displayed on the screen.
   Map<Widget, Widget> get tabView => _tabViews;
 
   /// Assign what's displayed on the screen.
-  set tabView(Map<Widget, Widget> tabViews) {
+  set tabView(Map<Widget, Widget>? tabViews) {
     if (tabViews == null) {
       return;
     }
@@ -50,17 +50,18 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
   // TickerProviderStateMixin allows the fade out/fade in animation when changing the active button
 
   // this will control the button clicks and tab changing
-  TabController _controller;
+  TabController? _controller;
 
   // this will control the animation when a button changes from an off state to an ON state
-  AnimationController _animationControllerOn;
+  late AnimationController _animationControllerOn;
 
   // this will control the animation when a button changes from an on state to an OFF state
-  AnimationController _animationControllerOff;
+  late AnimationController _animationControllerOff;
 
   // this will give the background color values of a button when it changes to an ON state
-  Animation<Color> _colorTweenBackgroundOn;
-  Animation<Color> _colorTweenBackgroundOff;
+  late Animation<Color?> _colorTweenBackgroundOn;
+
+  late Animation<Color?>? _colorTweenBackgroundOff;
 
   // this will give the foreground color values of a button when it changes to an ON state
   // Animation<Color> _colorTweenForegroundOn;
@@ -92,7 +93,7 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
     //
     super.initState();
 
-    if (widget._tabViews == null) {
+    if (widget._tabViews.isEmpty) {
       _tabKeys = [];
       _tabValues = [];
     } else {
@@ -106,21 +107,21 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
     _backgroundOff = widget.backgroundOff ?? Colors.grey[300];
     _height = widget.height ?? 49;
     _padding = widget.padding ?? 6;
-    _borderRadius = widget.borderRadius ?? 7;
+//    _borderRadius = widget.borderRadius ?? 7;
     _durationOff = widget.durationOff ?? 75;
     _durationOn = widget.durationOn ?? 150;
 
-    for (var index = 0; index < _tabKeys.length; index++) {
+    for (var index = 0; index < _tabKeys!.length; index++) {
       // create a GlobalKey for each Tab
       _keys.add(GlobalKey());
     }
 
     // this creates the controller with 6 tabs (in our case)
-    _controller = TabController(vsync: this, length: _tabKeys.length);
+    _controller = TabController(vsync: this, length: _tabKeys!.length);
     // this will execute the function every time there's a swipe animation
-    _controller.animation.addListener(_handleTabAnimation);
+    _controller!.animation!.addListener(_handleTabAnimation);
     // this will execute the function every time the _controller.index value changes
-    _controller.addListener(_handleTabChange);
+    _controller!.addListener(_handleTabChange);
 
     _animationControllerOff = AnimationController(
         vsync: this, duration: Duration(milliseconds: _durationOff));
@@ -146,27 +147,27 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
   }
 
   //
-  List<Widget> _tabKeys;
-  List<Widget> _tabValues;
+  List<Widget>? _tabKeys;
+  List<Widget>? _tabValues;
 
   // // active button's foreground color
   // Color _foregroundOn;
   // Color _foregroundOff;
   // active button's background color
-  Color _backgroundOn;
-  Color _backgroundOff;
+  Color? _backgroundOn;
+  Color? _backgroundOff;
 
-  double _height;
-  double _padding;
-  double _borderRadius;
-  int _durationOff;
-  int _durationOn;
+  double? _height;
+  late double _padding;
+//  double _borderRadius;
+  late int _durationOff;
+  late int _durationOn;
 
   @override
   void dispose() {
     _tabKeys = null;
     _tabValues = null;
-    _controller.dispose();
+    _controller!.dispose();
     super.dispose();
   }
 
@@ -174,7 +175,7 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
   Widget build(BuildContext context) => Column(children: <Widget>[
         // this is the TabBar
         Container(
-            height: _height > 0 ? _height : 49,
+            height: _height! > 0 ? _height : 49,
             // this generates our tabs buttons
             child: ListView.builder(
               // this gives the TabBar a bounce effect when scrolling farther than it's size
@@ -183,7 +184,7 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
               // make the list horizontal
               scrollDirection: Axis.horizontal,
               // number of tabs
-              itemCount: _tabKeys.length,
+              itemCount: _tabKeys!.length,
               itemBuilder: (BuildContext context, int index) => Padding(
                 // each button's key
                 key: _keys[index],
@@ -192,25 +193,25 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
                 child: ButtonTheme(
                   child: AnimatedBuilder(
                     animation: _colorTweenBackgroundOn,
-                    builder: (context, child) => FlatButton(
+                    builder: (context, child) => TextButton(
                       // get the color of the button's background (dependent of its state)
-                      color: _getBackgroundColor(index),
+//                      color: _getBackgroundColor(index),
                       // make the button a rectangle with round corners
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              _borderRadius > 0 ? _borderRadius : 7)),
+//                      shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.circular(
+//                              _borderRadius > 0 ? _borderRadius : 7)),
                       onPressed: () {
                         setState(() {
                           _buttonTap = true;
                           // trigger the controller to change between Tab Views
-                          _controller.animateTo(index);
+                          _controller!.animateTo(index);
                           // set the current index
                           _setCurrentIndex(index);
                           // scroll to the tapped button (needed if we tap the active button and it's not on its position)
                           _scrollTo(index);
                         });
                       },
-                      child: _tabKeys[index],
+                      child: _tabKeys![index],
                     ),
                   ),
                 ),
@@ -221,14 +222,14 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
             child: TabBarView(
           // and it is controlled by the controller
           controller: _controller,
-          children: _tabValues,
+          children: _tabValues!,
         )),
       ]);
 
   // runs during the switching tabs animation
   void _handleTabAnimation() {
     // gets the value of the animation. For example, if one is between the 1st and the 2nd tab, this value will be 0.5
-    _aniValue = _controller.animation.value;
+    _aniValue = _controller!.animation!.value;
 
     // if the button wasn't pressed, which means the user is swiping, and the amount swipped is less than 1 (this means that we're swiping through neighbor Tab Views)
     if (!_buttonTap && ((_aniValue - _prevAniValue).abs() < 1)) {
@@ -244,17 +245,17 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
   void _handleTabChange() {
     // if a button was tapped, change the current index
     if (_buttonTap) {
-      _setCurrentIndex(_controller.index);
+      _setCurrentIndex(_controller!.index);
     }
 
     // this resets the button tap
-    if ((_controller.index == _prevControllerIndex) ||
-        (_controller.index == _aniValue.round())) {
+    if ((_controller!.index == _prevControllerIndex) ||
+        (_controller!.index == _aniValue.round())) {
       _buttonTap = false;
     }
 
     // save the previous controller index
-    _prevControllerIndex = _controller.index;
+    _prevControllerIndex = _controller!.index;
   }
 
   void _setCurrentIndex(int index) {
@@ -286,7 +287,7 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
     var screenWidth = MediaQuery.of(context).size.width;
 
     // get the button we want to scroll to
-    RenderBox renderBox = _keys[index].currentContext.findRenderObject();
+    var renderBox = _keys[index].currentContext!.findRenderObject() as RenderBox;
     // get its size
     var size = renderBox.size.width;
     // and position
@@ -298,7 +299,7 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
     // if the button is to the left of the middle
     if (offset < 0) {
       // get the first button
-      renderBox = _keys[0].currentContext.findRenderObject();
+      renderBox = _keys[0].currentContext!.findRenderObject() as RenderBox;
       // get the position of the first button of the TabBar
       position = renderBox.localToGlobal(Offset.zero).dx;
 
@@ -310,7 +311,7 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
       // if the button is to the right of the middle
 
       // get the last button
-      renderBox = _keys[_tabKeys.length - 1].currentContext.findRenderObject();
+      renderBox = _keys[_tabKeys!.length - 1].currentContext!.findRenderObject() as RenderBox;
       // get its position
       position = renderBox.localToGlobal(Offset.zero).dx;
       // and size
@@ -332,18 +333,18 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
         duration: const Duration(milliseconds: 150), curve: Curves.easeInOut);
   }
 
-  Color _getBackgroundColor(int index) {
-    if (index == _currentIndex) {
-      // if it's active button
-      return _colorTweenBackgroundOn.value;
-    } else if (index == _prevControllerIndex) {
-      // if it's the previous active button
-      return _colorTweenBackgroundOff.value;
-    } else {
-      // if the button is inactive
-      return _backgroundOff;
-    }
-  }
+  // Color _getBackgroundColor(int index) {
+  //   if (index == _currentIndex) {
+  //     // if it's active button
+  //     return _colorTweenBackgroundOn.value;
+  //   } else if (index == _prevControllerIndex) {
+  //     // if it's the previous active button
+  //     return _colorTweenBackgroundOff.value;
+  //   } else {
+  //     // if the button is inactive
+  //     return _backgroundOff;
+  //   }
+  // }
 
 /*
   Color _getForegroundColor(int index) {

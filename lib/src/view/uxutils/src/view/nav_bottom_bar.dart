@@ -52,57 +52,57 @@ class NavBottomBar {
     this.hide = false,
   });
 
-  Key key;
-  List<BottomNavigationBarItem> items;
-  ValueChanged<int> onTap;
-  int currentIndex;
-  double elevation;
-  BottomNavigationBarType type;
-  Color fixedColor;
-  Color backgroundColor;
-  double iconSize;
-  Color selectedItemColor;
-  Color unselectedItemColor;
-  IconThemeData selectedIconTheme;
-  IconThemeData unselectedIconTheme;
-  double selectedFontSize;
-  double unselectedFontSize;
-  TextStyle selectedLabelStyle;
-  TextStyle unselectedLabelStyle;
-  bool showSelectedLabels;
-  bool showUnselectedLabels;
-  bool hide;
+  Key? key;
+  List<BottomNavigationBarItem>? items;
+  ValueChanged<int>? onTap;
+  int? currentIndex;
+  double? elevation;
+  BottomNavigationBarType? type;
+  Color? fixedColor;
+  Color? backgroundColor;
+  double? iconSize;
+  Color? selectedItemColor;
+  Color? unselectedItemColor;
+  IconThemeData? selectedIconTheme;
+  IconThemeData? unselectedIconTheme;
+  double? selectedFontSize;
+  double? unselectedFontSize;
+  TextStyle? selectedLabelStyle;
+  TextStyle? unselectedLabelStyle;
+  bool? showSelectedLabels;
+  bool? showUnselectedLabels;
+  bool? hide;
 
   int _lastIndex = 0;
 
   @Deprecated('Use show() instead.')
-  BottomNavigationBar get bar => show();
+  BottomNavigationBar? get bar => show();
 
   /// Supply the defined BottomNavigationBar
-  BottomNavigationBar show(
-      {List<BottomNavigationBarItem> items,
-      ValueChanged<int> onTap,
-      int currentIndex,
-      double elevation,
-      BottomNavigationBarType type,
-      Color fixedColor,
-      Color backgroundColor,
-      double iconSize,
-      Color selectedItemColor,
-      Color unselectedItemColor,
-      IconThemeData selectedIconTheme,
-      IconThemeData unselectedIconTheme,
-      double selectedFontSize,
-      double unselectedFontSize,
-      TextStyle selectedLabelStyle,
-      TextStyle unselectedLabelStyle,
-      bool showSelectedLabels,
-      bool showUnselectedLabels,
-      bool hide}) {
+  BottomNavigationBar? show(
+      {List<BottomNavigationBarItem>? items,
+      ValueChanged<int>? onTap,
+      int? currentIndex,
+      double? elevation,
+      BottomNavigationBarType? type,
+      Color? fixedColor,
+      Color? backgroundColor,
+      double? iconSize,
+      Color? selectedItemColor,
+      Color? unselectedItemColor,
+      IconThemeData? selectedIconTheme,
+      IconThemeData? unselectedIconTheme,
+      double? selectedFontSize,
+      double? unselectedFontSize,
+      TextStyle? selectedLabelStyle,
+      TextStyle? unselectedLabelStyle,
+      bool? showSelectedLabels,
+      bool? showUnselectedLabels,
+      bool? hide}) {
     // In case null was directly assigned.
     this.hide ??= false;
     hide ??= this.hide;
-    if (hide) {
+    if (hide!){
       return null;
     }
 
@@ -121,7 +121,7 @@ class NavBottomBar {
 
     return BottomNavigationBar(
       key: key,
-      items: items ?? this.items,
+      items: items ?? this.items!,
       onTap: (int index) {
         this.currentIndex = index;
         _lastIndex = index;

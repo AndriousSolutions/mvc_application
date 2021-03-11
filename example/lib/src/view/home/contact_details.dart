@@ -23,7 +23,7 @@ import 'package:flutter/material.dart'
         BuildContext,
         Colors,
         CustomScrollView,
-        FlatButton,
+        TextButton,
         Icon,
         Icons,
         Key,
@@ -48,8 +48,8 @@ import '../../view.dart' show AddContact;
 enum AppBarBehavior { normal, pinned, floating, snapping }
 
 class ContactDetails extends StatefulWidget {
-  const ContactDetails({this.contact, Key key}) : super(key: key);
-  final Contact contact;
+  const ContactDetails({this.contact, Key? key}) : super(key: key);
+  final Contact? contact;
   @override
   State createState() => _DetailsState();
 }
@@ -61,8 +61,8 @@ class _DetailsState extends State<ContactDetails> {
     contact = widget.contact;
   }
 
-  VoidCallback onTap;
-  Contact contact;
+  VoidCallback? onTap;
+  Contact? contact;
 
   @override
   Widget build(BuildContext context) {
@@ -70,15 +70,15 @@ class _DetailsState extends State<ContactDetails> {
       editContact(contact, context);
     };
     return Theme(
-        data: App.themeData,
+        data: App.themeData!,
         child: Scaffold(
-            appBar: AppBar(title: contact.displayName.text, actions: [
-              FlatButton(
+            appBar: AppBar(title: contact!.displayName!.text, actions: [
+              TextButton(
                 onPressed: () {
                   showBox(text: 'Delete this contact?', context: context)
-                      .then((bool delete) {
-                    if (delete) {
-                      contact.delete().then((_) {
+                      .then((bool? delete) {
+                    if (delete!) {
+                      contact!.delete().then((_) {
                         Navigator.of(context).pop();
                       });
                     }
@@ -96,19 +96,19 @@ class _DetailsState extends State<ContactDetails> {
             body: CustomScrollView(slivers: <Widget>[
               SliverList(
                 delegate: SliverChildListDelegate(<Widget>[
-                  contact.givenName.onListTile(tap: onTap),
-                  contact.middleName.onListTile(tap: onTap),
-                  contact.familyName.onListTile(tap: onTap),
-                  contact.phone.onListItems(onTap: onTap),
-                  contact.email.onListItems(onTap: onTap),
-                  contact.company.onListTile(tap: onTap),
-                  contact.jobTitle.onListTile(tap: onTap),
+                  contact!.givenName!.onListTile(tap: onTap),
+                  contact!.middleName!.onListTile(tap: onTap),
+                  contact!.familyName!.onListTile(tap: onTap),
+                  contact!.phone!.onListItems(onTap: onTap),
+                  contact!.email!.onListItems(onTap: onTap),
+                  contact!.company!.onListTile(tap: onTap),
+                  contact!.jobTitle!.onListTile(tap: onTap),
                 ]),
               )
             ])));
   }
 
-  Future<void> editContact(Contact contact, BuildContext context) async {
+  Future<void> editContact(Contact? contact, BuildContext context) async {
     await Navigator.of(context).push(MaterialPageRoute<void>(
         builder: (BuildContext context) =>
             AddContact(contact: contact, title: 'Edit a contact')));

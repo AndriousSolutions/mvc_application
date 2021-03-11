@@ -78,59 +78,59 @@ class ScheduleNotifications with HandleError {
     this.channelId,
     this.channelName,
     this.channelDescription, {
-    String appIcon,
-    TZDateTime schedule,
-    String title,
-    String body,
-    String payload,
-    bool androidAllowWhileIdle,
-    String icon,
-    Importance importance,
-    Priority priority,
-    StyleInformation styleInformation,
-    bool playSound,
-    AndroidNotificationSound sound,
-    bool enableVibration,
-    List<int> vibrationPattern,
-    String groupKey,
-    bool setAsGroupSummary,
-    GroupAlertBehavior groupAlertBehavior,
-    bool autoCancel,
-    bool ongoing,
-    Color color,
-    AndroidBitmap largeIcon,
-    bool onlyAlertOnce,
-    bool showWhen,
-    bool channelShowBadge,
-    bool showProgress,
-    int maxProgress,
-    int progress,
-    bool indeterminate,
-    AndroidNotificationChannelAction channelAction,
-    bool enableLights,
-    Color ledColor,
-    int ledOnMs,
-    int ledOffMs,
-    String ticker,
-    NotificationVisibility visibility,
-    int timeoutAfter,
-    String category,
-    RepeatInterval repeatInterval,
-    Day day,
-    SelectNotificationCallback onSelectNotification,
-    bool requestAlertPermission,
-    bool requestSoundPermission,
-    bool requestBadgePermission,
-    bool defaultPresentAlert,
-    bool defaultPresentSound,
-    bool defaultPresentBadge,
-    DidReceiveLocalNotificationCallback onDidReceiveLocalNotification,
-    bool presentAlert,
-    bool presentSound,
-    bool presentBadge,
-    String soundFile,
-    int badgeNumber,
-    List<IOSNotificationAttachment> attachments,
+    String? appIcon,
+    TZDateTime? schedule,
+    String? title,
+    String? body,
+    String? payload,
+    bool? androidAllowWhileIdle,
+    String? icon,
+    Importance? importance,
+    Priority? priority,
+    StyleInformation? styleInformation,
+    bool? playSound,
+    AndroidNotificationSound? sound,
+    bool? enableVibration,
+    List<int>? vibrationPattern,
+    String? groupKey,
+    bool? setAsGroupSummary,
+    GroupAlertBehavior? groupAlertBehavior,
+    bool? autoCancel,
+    bool? ongoing,
+    Color? color,
+    AndroidBitmap? largeIcon,
+    bool? onlyAlertOnce,
+    bool? showWhen,
+    bool? channelShowBadge,
+    bool? showProgress,
+    int? maxProgress,
+    int? progress,
+    bool? indeterminate,
+    AndroidNotificationChannelAction? channelAction,
+    bool? enableLights,
+    Color? ledColor,
+    int? ledOnMs,
+    int? ledOffMs,
+    String? ticker,
+    NotificationVisibility? visibility,
+    int? timeoutAfter,
+    String? category,
+    RepeatInterval? repeatInterval,
+    Day? day,
+    SelectNotificationCallback? onSelectNotification,
+    bool? requestAlertPermission,
+    bool? requestSoundPermission,
+    bool? requestBadgePermission,
+    bool? defaultPresentAlert,
+    bool? defaultPresentSound,
+    bool? defaultPresentBadge,
+    DidReceiveLocalNotificationCallback? onDidReceiveLocalNotification,
+    bool? presentAlert,
+    bool? presentSound,
+    bool? presentBadge,
+    String? soundFile,
+    int? badgeNumber,
+    List<IOSNotificationAttachment>? attachments,
   }) {
     if (appIcon == null || appIcon.trim().isEmpty) {
       // Assign the app's icon.
@@ -195,7 +195,7 @@ class ScheduleNotifications with HandleError {
   }
 
   /// The icon representing the app implementing the notifications.
-  String _appIcon;
+  String? _appIcon;
 
   /// The channel's id.
   /// Required for Android 8.0+.
@@ -209,119 +209,119 @@ class ScheduleNotifications with HandleError {
   /// Required for Android 8.0+.
   final String channelDescription;
 
-  DateTime _schedule;
-  String _title;
-  String _body;
-  String _payload;
-  bool _androidAllowWhileIdle;
-  String _icon;
-  Importance _importance;
-  Priority _priority;
-  StyleInformation _styleInformation;
-  bool _playSound;
-  AndroidNotificationSound _sound;
-  bool _enableVibration;
-  List<int> _vibrationPattern;
-  String _groupKey;
-  bool _setAsGroupSummary;
-  GroupAlertBehavior _groupAlertBehavior;
-  bool _autoCancel;
-  bool _ongoing;
-  Color _color;
-  AndroidBitmap _largeIcon;
-  bool _onlyAlertOnce;
-  bool _showWhen;
-  bool _channelShowBadge;
-  bool _showProgress;
-  int _maxProgress;
-  int _progress;
-  bool _indeterminate;
-  AndroidNotificationChannelAction _channelAction;
-  bool _enableLights;
-  Color _ledColor;
-  int _ledOnMs;
-  int _ledOffMs;
-  String _ticker;
-  NotificationVisibility _visibility;
-  int _timeoutAfter;
-  String _category;
-  RepeatInterval _repeatInterval;
-  Day _day;
+  DateTime? _schedule;
+  String? _title;
+  String? _body;
+  String? _payload;
+  bool? _androidAllowWhileIdle;
+  String? _icon;
+  Importance? _importance;
+  Priority? _priority;
+  StyleInformation? _styleInformation;
+  bool? _playSound;
+  AndroidNotificationSound? _sound;
+  bool? _enableVibration;
+  List<int>? _vibrationPattern;
+  String? _groupKey;
+  bool? _setAsGroupSummary;
+  GroupAlertBehavior? _groupAlertBehavior;
+  bool? _autoCancel;
+  bool? _ongoing;
+  Color? _color;
+  AndroidBitmap? _largeIcon;
+  bool? _onlyAlertOnce;
+  bool? _showWhen;
+  bool? _channelShowBadge;
+  bool? _showProgress;
+  int? _maxProgress;
+  int? _progress;
+  bool? _indeterminate;
+  AndroidNotificationChannelAction? _channelAction;
+  bool? _enableLights;
+  Color? _ledColor;
+  int? _ledOnMs;
+  int? _ledOffMs;
+  String? _ticker;
+  NotificationVisibility? _visibility;
+  int? _timeoutAfter;
+  String? _category;
+  RepeatInterval? _repeatInterval;
+  Day? _day;
 //  Time _notificationTime;
-  SelectNotificationCallback _selectNotificationCallback;
-  bool _requestAlertPermission;
-  bool _requestSoundPermission;
-  bool _requestBadgePermission;
-  bool _defaultPresentAlert;
-  bool _defaultPresentSound;
-  bool _defaultPresentBadge;
-  DidReceiveLocalNotificationCallback _onDidReceiveLocalNotification;
-  bool _presentAlert;
-  bool _presentSound;
-  bool _presentBadge;
-  String _soundFile;
-  int _badgeNumber;
-  List<IOSNotificationAttachment> _attachments;
+  SelectNotificationCallback? _selectNotificationCallback;
+  bool? _requestAlertPermission;
+  bool? _requestSoundPermission;
+  bool? _requestBadgePermission;
+  bool? _defaultPresentAlert;
+  bool? _defaultPresentSound;
+  bool? _defaultPresentBadge;
+  DidReceiveLocalNotificationCallback? _onDidReceiveLocalNotification;
+  bool? _presentAlert;
+  bool? _presentSound;
+  bool? _presentBadge;
+  String? _soundFile;
+  int? _badgeNumber;
+  List<IOSNotificationAttachment>? _attachments;
 
   @mustCallSuper
-  Future<bool> init({
-    String appIcon,
-    DateTime schedule,
-    String title,
-    String body,
-    String payload,
-    bool androidAllowWhileIdle,
-    String icon,
-    Importance importance,
-    Priority priority,
-    StyleInformation styleInformation,
-    bool playSound,
-    AndroidNotificationSound sound,
-    bool enableVibration,
-    List<int> vibrationPattern,
-    String groupKey,
-    bool setAsGroupSummary,
-    GroupAlertBehavior groupAlertBehavior,
-    bool autoCancel,
-    bool ongoing,
-    Color color,
-    AndroidBitmap largeIcon,
-    bool onlyAlertOnce,
-    bool showWhen,
-    bool channelShowBadge,
-    bool showProgress,
-    int maxProgress,
-    int progress,
-    bool indeterminate,
-    AndroidNotificationChannelAction channelAction,
-    bool enableLights,
-    Color ledColor,
-    int ledOnMs,
-    int ledOffMs,
-    String ticker,
-    NotificationVisibility visibility,
-    int timeoutAfter,
-    String category,
-    RepeatInterval repeatInterval,
-    Day day,
-    Time notificationTime,
-    SelectNotificationCallback onSelectNotification,
-    bool requestAlertPermission,
-    bool requestSoundPermission,
-    bool requestBadgePermission,
-    bool defaultPresentAlert,
-    bool defaultPresentSound,
-    bool defaultPresentBadge,
-    DidReceiveLocalNotificationCallback onDidReceiveLocalNotification,
-    bool presentAlert,
-    bool presentSound,
-    bool presentBadge,
-    String soundFile,
-    int badgeNumber,
-    List<IOSNotificationAttachment> attachments,
+  Future<bool?> init({
+    String? appIcon,
+    DateTime? schedule,
+    String? title,
+    String? body,
+    String? payload,
+    bool? androidAllowWhileIdle,
+    String? icon,
+    Importance? importance,
+    Priority? priority,
+    StyleInformation? styleInformation,
+    bool? playSound,
+    AndroidNotificationSound? sound,
+    bool? enableVibration,
+    List<int>? vibrationPattern,
+    String? groupKey,
+    bool? setAsGroupSummary,
+    GroupAlertBehavior? groupAlertBehavior,
+    bool? autoCancel,
+    bool? ongoing,
+    Color? color,
+    AndroidBitmap? largeIcon,
+    bool? onlyAlertOnce,
+    bool? showWhen,
+    bool? channelShowBadge,
+    bool? showProgress,
+    int? maxProgress,
+    int? progress,
+    bool? indeterminate,
+    AndroidNotificationChannelAction? channelAction,
+    bool? enableLights,
+    Color? ledColor,
+    int? ledOnMs,
+    int? ledOffMs,
+    String? ticker,
+    NotificationVisibility? visibility,
+    int? timeoutAfter,
+    String? category,
+    RepeatInterval? repeatInterval,
+    Day? day,
+    Time? notificationTime,
+    SelectNotificationCallback? onSelectNotification,
+    bool? requestAlertPermission,
+    bool? requestSoundPermission,
+    bool? requestBadgePermission,
+    bool? defaultPresentAlert,
+    bool? defaultPresentSound,
+    bool? defaultPresentBadge,
+    DidReceiveLocalNotificationCallback? onDidReceiveLocalNotification,
+    bool? presentAlert,
+    bool? presentSound,
+    bool? presentBadge,
+    String? soundFile,
+    int? badgeNumber,
+    List<IOSNotificationAttachment>? attachments,
   }) async {
     // No need to continue.
-    if (_init) {
+    if (_init!) {
       return _init;
     }
 
@@ -445,7 +445,7 @@ class ScheduleNotifications with HandleError {
       _day = day;
     }
     onSelectNotification ??=
-        _selectNotificationCallback ?? _onSelectNotification;
+        _selectNotificationCallback ?? _onSelectNotification as Future<dynamic> Function(String?)?;
     requestAlertPermission ??= _requestAlertPermission;
     requestSoundPermission ??= _requestSoundPermission;
     requestBadgePermission ??= _requestBadgePermission;
@@ -475,27 +475,27 @@ class ScheduleNotifications with HandleError {
     //
     try {
       final initializationSettingsIOS = IOSInitializationSettings(
-        requestAlertPermission: requestAlertPermission,
-        requestBadgePermission: requestSoundPermission,
-        requestSoundPermission: requestBadgePermission,
-        defaultPresentAlert: defaultPresentAlert,
-        defaultPresentSound: defaultPresentSound,
-        defaultPresentBadge: defaultPresentBadge,
+        requestAlertPermission: requestAlertPermission!,
+        requestBadgePermission: requestSoundPermission!,
+        requestSoundPermission: requestBadgePermission!,
+        defaultPresentAlert: defaultPresentAlert!,
+        defaultPresentSound: defaultPresentSound!,
+        defaultPresentBadge: defaultPresentBadge!,
         onDidReceiveLocalNotification: onDidReceiveLocalNotification ??
-            (int id, String title, String body, String payload) =>
-                onSelectNotification(payload),
+            ((int id, String? title, String? body, String? payload) =>
+                onSelectNotification!(payload)),
       );
 
       WidgetsFlutterBinding.ensureInitialized();
 
       final initializationSettings = InitializationSettings(
-        android: AndroidInitializationSettings(_appIcon),
+        android: AndroidInitializationSettings(_appIcon!),
         iOS: initializationSettingsIOS,
       );
 
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-      _init = await _flutterLocalNotificationsPlugin.initialize(
+      _init = await _flutterLocalNotificationsPlugin!.initialize(
           initializationSettings,
           onSelectNotification: onSelectNotification);
     } catch (ex) {
@@ -518,12 +518,12 @@ class ScheduleNotifications with HandleError {
     bool badge = true,
     bool sound = true,
   }) async {
-    assert(_init, 'ScheduleNotifications: Failed to call init() first!');
+    assert(_init!, 'ScheduleNotifications: Failed to call init() first!');
 
-    if (!_init) {
+    if (!_init!) {
       return false;
     }
-    IOSFlutterLocalNotificationsPlugin implementation;
+    IOSFlutterLocalNotificationsPlugin? implementation;
     try {
       implementation = _flutterLocalNotificationsPlugin
           ?.resolvePlatformSpecificImplementation<
@@ -533,65 +533,65 @@ class ScheduleNotifications with HandleError {
     }
     var request = implementation != null;
     if (request) {
-      request = await implementation.requestPermissions(
+      request = await (implementation!.requestPermissions(
         alert: alert,
         badge: badge,
         sound: sound,
-      );
+      ) as Future<bool>);
     }
     return request;
   }
 
   // plugin
-  FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
+  FlutterLocalNotificationsPlugin? _flutterLocalNotificationsPlugin;
 
   // Flag indicating it's initialized.
-  bool _init = false;
-  bool get initialized => _init;
+  bool? _init = false;
+  bool? get initialized => _init;
 
   int show({
-    int id,
-    String title,
-    String body,
-    String payload,
-    bool androidAllowWhileIdle,
-    String icon,
-    Importance importance,
-    Priority priority,
-    StyleInformation styleInformation,
-    bool playSound,
-    AndroidNotificationSound sound,
-    bool enableVibration,
-    List<int> vibrationPattern,
-    String groupKey,
-    bool setAsGroupSummary,
-    GroupAlertBehavior groupAlertBehavior,
-    bool autoCancel,
-    bool ongoing,
-    Color color,
-    AndroidBitmap largeIcon,
-    bool onlyAlertOnce,
-    bool showWhen,
-    bool channelShowBadge,
-    bool showProgress,
-    int maxProgress,
-    int progress,
-    bool indeterminate,
-    AndroidNotificationChannelAction channelAction,
-    bool enableLights,
-    Color ledColor,
-    int ledOnMs,
-    int ledOffMs,
-    String ticker,
-    NotificationVisibility visibility,
-    int timeoutAfter,
-    String category,
-    bool presentAlert,
-    bool presentSound,
-    bool presentBadge,
-    String soundFile,
-    int badgeNumber,
-    List<IOSNotificationAttachment> attachments,
+    int? id,
+    String? title,
+    String? body,
+    String? payload,
+    bool? androidAllowWhileIdle,
+    String? icon,
+    Importance? importance,
+    Priority? priority,
+    StyleInformation? styleInformation,
+    bool? playSound,
+    AndroidNotificationSound? sound,
+    bool? enableVibration,
+    List<int>? vibrationPattern,
+    String? groupKey,
+    bool? setAsGroupSummary,
+    GroupAlertBehavior? groupAlertBehavior,
+    bool? autoCancel,
+    bool? ongoing,
+    Color? color,
+    AndroidBitmap? largeIcon,
+    bool? onlyAlertOnce,
+    bool? showWhen,
+    bool? channelShowBadge,
+    bool? showProgress,
+    int? maxProgress,
+    int? progress,
+    bool? indeterminate,
+    AndroidNotificationChannelAction? channelAction,
+    bool? enableLights,
+    Color? ledColor,
+    int? ledOnMs,
+    int? ledOffMs,
+    String? ticker,
+    NotificationVisibility? visibility,
+    int? timeoutAfter,
+    String? category,
+    bool? presentAlert,
+    bool? presentSound,
+    bool? presentBadge,
+    String? soundFile,
+    int? badgeNumber,
+    List<IOSNotificationAttachment>? attachments,
   }) {
     //
     final notificationSpecifics = _notificationDetails(
@@ -648,7 +648,7 @@ class ScheduleNotifications with HandleError {
           id = Random().nextInt(999);
         }
 
-        _flutterLocalNotificationsPlugin.show(
+        _flutterLocalNotificationsPlugin!.show(
           id,
           title,
           body,
@@ -664,54 +664,54 @@ class ScheduleNotifications with HandleError {
   }
 
   int schedule(
-    TZDateTime schedule, {
-    int id,
-    String title,
-    String body,
-    String payload,
-    bool androidAllowWhileIdle,
-    UILocalNotificationDateInterpretation uiLocalNotificationDateInterpretation,
-    DateTimeComponents matchDateTimeComponents,
-    String icon,
-    Importance importance,
-    Priority priority,
-    StyleInformation styleInformation,
-    bool playSound,
-    AndroidNotificationSound sound,
-    bool enableVibration,
-    List<int> vibrationPattern,
-    String groupKey,
-    bool setAsGroupSummary,
-    GroupAlertBehavior groupAlertBehavior,
-    bool autoCancel,
-    bool ongoing,
-    Color color,
-    AndroidBitmap largeIcon,
-    bool onlyAlertOnce,
-    bool showWhen,
-    bool channelShowBadge,
-    bool showProgress,
-    int maxProgress,
-    int progress,
-    bool indeterminate,
-    AndroidNotificationChannelAction channelAction,
-    bool enableLights,
-    Color ledColor,
-    int ledOnMs,
-    int ledOffMs,
-    String ticker,
-    NotificationVisibility visibility,
-    int timeoutAfter,
-    String category,
-    bool presentAlert,
-    bool presentSound,
-    bool presentBadge,
-    String soundFile,
-    int badgeNumber,
-    List<IOSNotificationAttachment> attachments,
+    TZDateTime? schedule, {
+    int? id,
+    String? title,
+    String? body,
+    String? payload,
+    bool? androidAllowWhileIdle,
+    UILocalNotificationDateInterpretation? uiLocalNotificationDateInterpretation,
+    DateTimeComponents? matchDateTimeComponents,
+    String? icon,
+    Importance? importance,
+    Priority? priority,
+    StyleInformation? styleInformation,
+    bool? playSound,
+    AndroidNotificationSound? sound,
+    bool? enableVibration,
+    List<int>? vibrationPattern,
+    String? groupKey,
+    bool? setAsGroupSummary,
+    GroupAlertBehavior? groupAlertBehavior,
+    bool? autoCancel,
+    bool? ongoing,
+    Color? color,
+    AndroidBitmap? largeIcon,
+    bool? onlyAlertOnce,
+    bool? showWhen,
+    bool? channelShowBadge,
+    bool? showProgress,
+    int? maxProgress,
+    int? progress,
+    bool? indeterminate,
+    AndroidNotificationChannelAction? channelAction,
+    bool? enableLights,
+    Color? ledColor,
+    int? ledOnMs,
+    int? ledOffMs,
+    String? ticker,
+    NotificationVisibility? visibility,
+    int? timeoutAfter,
+    String? category,
+    bool? presentAlert,
+    bool? presentSound,
+    bool? presentBadge,
+    String? soundFile,
+    int? badgeNumber,
+    List<IOSNotificationAttachment>? attachments,
   }) {
     // May have already been supplied.
-    schedule ??= _schedule;
+    schedule ??= _schedule as TZDateTime;
 
     // Too late!
     if (schedule == null || DateTime.now().isAfter(schedule)) {
@@ -772,15 +772,15 @@ class ScheduleNotifications with HandleError {
 
       try {
         //
-        _flutterLocalNotificationsPlugin.zonedSchedule(
+        _flutterLocalNotificationsPlugin!.zonedSchedule(
           id,
           title,
           body,
           schedule,
           notificationSpecifics,
           uiLocalNotificationDateInterpretation:
-              uiLocalNotificationDateInterpretation,
-          androidAllowWhileIdle: androidAllowWhileIdle,
+              uiLocalNotificationDateInterpretation!,
+          androidAllowWhileIdle: androidAllowWhileIdle!,
           payload: payload,
           matchDateTimeComponents: matchDateTimeComponents,
         );
@@ -793,49 +793,49 @@ class ScheduleNotifications with HandleError {
   }
 
   int periodicallyShow(
-    RepeatInterval repeatInterval, {
-    int id,
-    String title,
-    String body,
-    String payload,
-    bool androidAllowWhileIdle,
-    String icon,
-    Importance importance,
-    Priority priority,
-    StyleInformation styleInformation,
-    bool playSound,
-    AndroidNotificationSound sound,
-    bool enableVibration,
-    List<int> vibrationPattern,
-    String groupKey,
-    bool setAsGroupSummary,
-    GroupAlertBehavior groupAlertBehavior,
-    bool autoCancel,
-    bool ongoing,
-    Color color,
-    AndroidBitmap largeIcon,
-    bool onlyAlertOnce,
-    bool showWhen,
-    bool channelShowBadge,
-    bool showProgress,
-    int maxProgress,
-    int progress,
-    bool indeterminate,
-    AndroidNotificationChannelAction channelAction,
-    bool enableLights,
-    Color ledColor,
-    int ledOnMs,
-    int ledOffMs,
-    String ticker,
-    NotificationVisibility visibility,
-    int timeoutAfter,
-    String category,
-    bool presentAlert,
-    bool presentSound,
-    bool presentBadge,
-    String soundFile,
-    int badgeNumber,
-    List<IOSNotificationAttachment> attachments,
+    RepeatInterval? repeatInterval, {
+    int? id,
+    String? title,
+    String? body,
+    String? payload,
+    bool? androidAllowWhileIdle,
+    String? icon,
+    Importance? importance,
+    Priority? priority,
+    StyleInformation? styleInformation,
+    bool? playSound,
+    AndroidNotificationSound? sound,
+    bool? enableVibration,
+    List<int>? vibrationPattern,
+    String? groupKey,
+    bool? setAsGroupSummary,
+    GroupAlertBehavior? groupAlertBehavior,
+    bool? autoCancel,
+    bool? ongoing,
+    Color? color,
+    AndroidBitmap? largeIcon,
+    bool? onlyAlertOnce,
+    bool? showWhen,
+    bool? channelShowBadge,
+    bool? showProgress,
+    int? maxProgress,
+    int? progress,
+    bool? indeterminate,
+    AndroidNotificationChannelAction? channelAction,
+    bool? enableLights,
+    Color? ledColor,
+    int? ledOnMs,
+    int? ledOffMs,
+    String? ticker,
+    NotificationVisibility? visibility,
+    int? timeoutAfter,
+    String? category,
+    bool? presentAlert,
+    bool? presentSound,
+    bool? presentBadge,
+    String? soundFile,
+    int? badgeNumber,
+    List<IOSNotificationAttachment>? attachments,
   }) {
     repeatInterval ??= _repeatInterval;
 
@@ -898,7 +898,7 @@ class ScheduleNotifications with HandleError {
           id = Random().nextInt(999);
         }
 
-        _flutterLocalNotificationsPlugin.periodicallyShow(
+        _flutterLocalNotificationsPlugin!.periodicallyShow(
           id,
           title,
           body,
@@ -915,53 +915,53 @@ class ScheduleNotifications with HandleError {
   }
 
   int showDailyAtTime(
-    TZDateTime schedule, {
-    int id,
-    String title,
-    String body,
-    String payload,
-    bool androidAllowWhileIdle,
-    UILocalNotificationDateInterpretation uiLocalNotificationDateInterpretation,
-    DateTimeComponents matchDateTimeComponents,
-    String icon,
-    Importance importance,
-    Priority priority,
-    StyleInformation styleInformation,
-    bool playSound,
-    AndroidNotificationSound sound,
-    bool enableVibration,
-    List<int> vibrationPattern,
-    String groupKey,
-    bool setAsGroupSummary,
-    GroupAlertBehavior groupAlertBehavior,
-    bool autoCancel,
-    bool ongoing,
-    Color color,
-    AndroidBitmap largeIcon,
-    bool onlyAlertOnce,
-    bool showWhen,
-    bool channelShowBadge,
-    bool showProgress,
-    int maxProgress,
-    int progress,
-    bool indeterminate,
-    AndroidNotificationChannelAction channelAction,
-    bool enableLights,
-    Color ledColor,
-    int ledOnMs,
-    int ledOffMs,
-    String ticker,
-    NotificationVisibility visibility,
-    int timeoutAfter,
-    String category,
-    bool presentAlert,
-    bool presentSound,
-    bool presentBadge,
-    String soundFile,
-    int badgeNumber,
-    List<IOSNotificationAttachment> attachments,
+    TZDateTime? schedule, {
+    int? id,
+    String? title,
+    String? body,
+    String? payload,
+    bool? androidAllowWhileIdle,
+    UILocalNotificationDateInterpretation? uiLocalNotificationDateInterpretation,
+    DateTimeComponents? matchDateTimeComponents,
+    String? icon,
+    Importance? importance,
+    Priority? priority,
+    StyleInformation? styleInformation,
+    bool? playSound,
+    AndroidNotificationSound? sound,
+    bool? enableVibration,
+    List<int>? vibrationPattern,
+    String? groupKey,
+    bool? setAsGroupSummary,
+    GroupAlertBehavior? groupAlertBehavior,
+    bool? autoCancel,
+    bool? ongoing,
+    Color? color,
+    AndroidBitmap? largeIcon,
+    bool? onlyAlertOnce,
+    bool? showWhen,
+    bool? channelShowBadge,
+    bool? showProgress,
+    int? maxProgress,
+    int? progress,
+    bool? indeterminate,
+    AndroidNotificationChannelAction? channelAction,
+    bool? enableLights,
+    Color? ledColor,
+    int? ledOnMs,
+    int? ledOffMs,
+    String? ticker,
+    NotificationVisibility? visibility,
+    int? timeoutAfter,
+    String? category,
+    bool? presentAlert,
+    bool? presentSound,
+    bool? presentBadge,
+    String? soundFile,
+    int? badgeNumber,
+    List<IOSNotificationAttachment>? attachments,
   }) {
-    schedule ??= _schedule;
+    schedule ??= _schedule as TZDateTime;
 
     if (schedule == null) {
       return -1;
@@ -1022,7 +1022,7 @@ class ScheduleNotifications with HandleError {
           id = Random().nextInt(999);
         }
 
-        _flutterLocalNotificationsPlugin.zonedSchedule(
+        _flutterLocalNotificationsPlugin!.zonedSchedule(
           id,
           title,
           body,
@@ -1030,8 +1030,8 @@ class ScheduleNotifications with HandleError {
           notificationSpecifics,
           payload: payload,
           uiLocalNotificationDateInterpretation:
-              uiLocalNotificationDateInterpretation,
-          androidAllowWhileIdle: androidAllowWhileIdle,
+              uiLocalNotificationDateInterpretation!,
+          androidAllowWhileIdle: androidAllowWhileIdle!,
           matchDateTimeComponents: matchDateTimeComponents,
         );
       } catch (ex) {
@@ -1043,57 +1043,57 @@ class ScheduleNotifications with HandleError {
   }
 
   int showWeeklyAtDayAndTime(
-    Day day,
-    TZDateTime schedule, {
-    int id,
-    String title,
-    String body,
-    String payload,
-    bool androidAllowWhileIdle,
-    NotificationDetails notificationDetails,
-    UILocalNotificationDateInterpretation uiLocalNotificationDateInterpretation,
-    DateTimeComponents matchDateTimeComponents,
-    String icon,
-    Importance importance,
-    Priority priority,
-    StyleInformation styleInformation,
-    bool playSound,
-    AndroidNotificationSound sound,
-    bool enableVibration,
-    List<int> vibrationPattern,
-    String groupKey,
-    bool setAsGroupSummary,
-    GroupAlertBehavior groupAlertBehavior,
-    bool autoCancel,
-    bool ongoing,
-    Color color,
-    AndroidBitmap largeIcon,
-    bool onlyAlertOnce,
-    bool showWhen,
-    bool channelShowBadge,
-    bool showProgress,
-    int maxProgress,
-    int progress,
-    bool indeterminate,
-    AndroidNotificationChannelAction channelAction,
-    bool enableLights,
-    Color ledColor,
-    int ledOnMs,
-    int ledOffMs,
-    String ticker,
-    NotificationVisibility visibility,
-    int timeoutAfter,
-    String category,
-    bool presentAlert,
-    bool presentSound,
-    bool presentBadge,
-    String soundFile,
-    int badgeNumber,
-    List<IOSNotificationAttachment> attachments,
+    Day? day,
+    TZDateTime? schedule, {
+    int? id,
+    String? title,
+    String? body,
+    String? payload,
+    bool? androidAllowWhileIdle,
+    NotificationDetails? notificationDetails,
+    UILocalNotificationDateInterpretation? uiLocalNotificationDateInterpretation,
+    DateTimeComponents? matchDateTimeComponents,
+    String? icon,
+    Importance? importance,
+    Priority? priority,
+    StyleInformation? styleInformation,
+    bool? playSound,
+    AndroidNotificationSound? sound,
+    bool? enableVibration,
+    List<int>? vibrationPattern,
+    String? groupKey,
+    bool? setAsGroupSummary,
+    GroupAlertBehavior? groupAlertBehavior,
+    bool? autoCancel,
+    bool? ongoing,
+    Color? color,
+    AndroidBitmap? largeIcon,
+    bool? onlyAlertOnce,
+    bool? showWhen,
+    bool? channelShowBadge,
+    bool? showProgress,
+    int? maxProgress,
+    int? progress,
+    bool? indeterminate,
+    AndroidNotificationChannelAction? channelAction,
+    bool? enableLights,
+    Color? ledColor,
+    int? ledOnMs,
+    int? ledOffMs,
+    String? ticker,
+    NotificationVisibility? visibility,
+    int? timeoutAfter,
+    String? category,
+    bool? presentAlert,
+    bool? presentSound,
+    bool? presentBadge,
+    String? soundFile,
+    int? badgeNumber,
+    List<IOSNotificationAttachment>? attachments,
   }) {
     day ??= _day;
 
-    schedule ??= _schedule;
+    schedule ??= _schedule as TZDateTime;
 
     if (day == null || schedule == null) {
       return -1;
@@ -1154,15 +1154,15 @@ class ScheduleNotifications with HandleError {
           id = Random().nextInt(999);
         }
 
-        _flutterLocalNotificationsPlugin.zonedSchedule(
+        _flutterLocalNotificationsPlugin!.zonedSchedule(
           id,
           title,
           body,
           schedule,
-          notificationDetails,
+          notificationDetails!,
           uiLocalNotificationDateInterpretation:
-              uiLocalNotificationDateInterpretation,
-          androidAllowWhileIdle: androidAllowWhileIdle,
+              uiLocalNotificationDateInterpretation!,
+          androidAllowWhileIdle: androidAllowWhileIdle!,
           payload: payload,
           matchDateTimeComponents: matchDateTimeComponents,
         );
@@ -1174,54 +1174,54 @@ class ScheduleNotifications with HandleError {
     return id;
   }
 
-  NotificationDetails _notificationDetails(
-    String title,
-    String body,
-    String payload,
-    bool androidAllowWhileIdle,
-    String icon,
-    Importance importance,
-    Priority priority,
-    StyleInformation styleInformation,
-    bool playSound,
-    AndroidNotificationSound sound,
-    bool enableVibration,
-    List<int> vibrationPattern,
-    String groupKey,
-    bool setAsGroupSummary,
-    GroupAlertBehavior groupAlertBehavior,
-    bool autoCancel,
-    bool ongoing,
-    Color color,
-    AndroidBitmap largeIcon,
-    bool onlyAlertOnce,
-    bool showWhen,
-    bool channelShowBadge,
-    bool showProgress,
-    int maxProgress,
-    int progress,
-    bool indeterminate,
-    AndroidNotificationChannelAction channelAction,
-    bool enableLights,
-    Color ledColor,
-    int ledOnMs,
-    int ledOffMs,
-    String ticker,
-    NotificationVisibility visibility,
-    int timeoutAfter,
-    String category,
-    bool presentAlert,
-    bool presentSound,
-    bool presentBadge,
-    String soundFile,
-    int badgeNumber,
-    List<IOSNotificationAttachment> attachments,
+  NotificationDetails? _notificationDetails(
+    String? title,
+    String? body,
+    String? payload,
+    bool? androidAllowWhileIdle,
+    String? icon,
+    Importance? importance,
+    Priority? priority,
+    StyleInformation? styleInformation,
+    bool? playSound,
+    AndroidNotificationSound? sound,
+    bool? enableVibration,
+    List<int>? vibrationPattern,
+    String? groupKey,
+    bool? setAsGroupSummary,
+    GroupAlertBehavior? groupAlertBehavior,
+    bool? autoCancel,
+    bool? ongoing,
+    Color? color,
+    AndroidBitmap? largeIcon,
+    bool? onlyAlertOnce,
+    bool? showWhen,
+    bool? channelShowBadge,
+    bool? showProgress,
+    int? maxProgress,
+    int? progress,
+    bool? indeterminate,
+    AndroidNotificationChannelAction? channelAction,
+    bool? enableLights,
+    Color? ledColor,
+    int? ledOnMs,
+    int? ledOffMs,
+    String? ticker,
+    NotificationVisibility? visibility,
+    int? timeoutAfter,
+    String? category,
+    bool? presentAlert,
+    bool? presentSound,
+    bool? presentBadge,
+    String? soundFile,
+    int? badgeNumber,
+    List<IOSNotificationAttachment>? attachments,
   ) {
     //
-    NotificationDetails notificationSpecifics;
+    NotificationDetails? notificationSpecifics;
 
     // Failed to initialized.
-    if (!_init) {
+    if (!_init!) {
       if (hasError) {
         assert(false, errorMsg);
       } else {
@@ -1282,7 +1282,7 @@ class ScheduleNotifications with HandleError {
     }
 
     // If to vibrate then do so.
-    if (enableVibration &&
+    if (enableVibration! &&
         (vibrationPattern == null || vibrationPattern.isEmpty)) {
       vibrationPattern = Int64List(4);
       vibrationPattern[0] = 0;
@@ -1300,29 +1300,29 @@ class ScheduleNotifications with HandleError {
         channelName,
         channelDescription,
         icon: icon,
-        importance: importance,
-        priority: priority,
+        importance: importance!,
+        priority: priority!,
         styleInformation: styleInformation,
         playSound: playSound,
         sound: sound,
         enableVibration: enableVibration,
-        vibrationPattern: vibrationPattern,
+        vibrationPattern: vibrationPattern as Int64List?,
         groupKey: groupKey,
-        setAsGroupSummary: setAsGroupSummary,
-        groupAlertBehavior: groupAlertBehavior,
-        autoCancel: autoCancel,
-        ongoing: ongoing,
+        setAsGroupSummary: setAsGroupSummary!,
+        groupAlertBehavior: groupAlertBehavior!,
+        autoCancel: autoCancel!,
+        ongoing: ongoing!,
         color: color,
         largeIcon: largeIcon,
-        onlyAlertOnce: onlyAlertOnce,
-        showWhen: showWhen,
-        channelShowBadge: channelShowBadge,
-        showProgress: showProgress,
-        maxProgress: maxProgress,
-        progress: progress,
-        indeterminate: indeterminate,
-        channelAction: channelAction,
-        enableLights: enableLights,
+        onlyAlertOnce: onlyAlertOnce!,
+        showWhen: showWhen!,
+        channelShowBadge: channelShowBadge!,
+        showProgress: showProgress!,
+        maxProgress: maxProgress!,
+        progress: progress!,
+        indeterminate: indeterminate!,
+        channelAction: channelAction!,
+        enableLights: enableLights!,
         ledColor: ledColor,
         ledOnMs: ledOnMs,
         ledOffMs: ledOffMs,
@@ -1362,25 +1362,25 @@ class ScheduleNotifications with HandleError {
     if (id == null || id < 0) {
       return;
     }
-    await _flutterLocalNotificationsPlugin.cancel(id);
+    await _flutterLocalNotificationsPlugin!.cancel(id);
     return;
   }
 
   /// Cancel all Notifications.
-  Future<void> cancelAll() => _flutterLocalNotificationsPlugin.cancelAll();
+  Future<void> cancelAll() => _flutterLocalNotificationsPlugin!.cancelAll();
 
   /// Returns info on if a notification created from this plugin had been used to launch the application.
-  Future<NotificationAppLaunchDetails> getNotificationAppLaunchDetails() =>
-      _flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  Future<NotificationAppLaunchDetails?> getNotificationAppLaunchDetails() =>
+      _flutterLocalNotificationsPlugin!.getNotificationAppLaunchDetails();
 
   /// Returns a list of notifications pending to be delivered/shown.
   Future<List<PendingNotificationRequest>> pendingNotificationRequests() =>
-      _flutterLocalNotificationsPlugin.pendingNotificationRequests();
+      _flutterLocalNotificationsPlugin!.pendingNotificationRequests();
 
   void _onSelectNotification(String payload) {
     if (payload != null || payload.trim().isNotEmpty) {
       showDialog(
-        context: App.context,
+        context: App.context!,
         builder: (BuildContext context) {
           return AlertDialog(
             shape: const RoundedRectangleBorder(

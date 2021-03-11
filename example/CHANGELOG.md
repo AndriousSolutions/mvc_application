@@ -1,3 +1,8 @@
+
+## 3.0.0
+ March 10, 2021
+- Null safety 2.12.0
+
 ## 2.0.0
  September 18, 2020
 - Example App rewrite.

@@ -45,15 +45,15 @@ import 'package:flutter/material.dart'
 /// It's copied from the `flutter_gallery` example project in flutter/flutter
 ///
 class LoadingScreen extends StatefulWidget {
-  const LoadingScreen({Key key}) : super(key: key);
+  const LoadingScreen({Key? key}) : super(key: key);
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
 }
 
 class _LoadingScreenState extends State<LoadingScreen>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _animation;
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
@@ -87,7 +87,7 @@ class _LoadingScreenState extends State<LoadingScreen>
             appBar: AppBar(title: const Text('Loading...')),
             body: AnimatedBuilder(
                 animation: _animation,
-                builder: (BuildContext context, Widget child) {
+                builder: (BuildContext context, Widget? child) {
                   return const Center(child: CircularProgressIndicator());
                 })));
   }

@@ -29,7 +29,7 @@ import 'package:flutter/material.dart'
         Colors,
         Container,
         DismissDirection,
-        FlatButton,
+        TextButton,
         FloatingActionButton,
         Icon,
         Icons,
@@ -41,6 +41,7 @@ import 'package:flutter/material.dart'
         Navigator,
         SafeArea,
         Scaffold,
+        ScaffoldMessenger,
         SnackBar,
         SnackBarAction,
         State,
@@ -56,28 +57,28 @@ import '../../controller.dart' show Controller;
 import '../../view.dart' show AppMenu, ContactDetails, StateMVC, unawaited;
 
 class ContactsList extends StatefulWidget {
-  const ContactsList({Key key}) : super(key: key);
+  const ContactsList({Key? key}) : super(key: key);
   @override
   State createState() => _ContactListState();
 }
 
 class _ContactListState extends StateMVC<ContactsList> {
   _ContactListState() : super(Controller()) {
-    con = controller;
+    con = controller as Controller;
   }
-  Controller con;
+  late Controller con;
 
   @override
   Widget build(BuildContext context) {
-    final _theme = App.themeData;
+    final _theme = App.themeData!;
     return Theme(
       data: _theme,
       child: Scaffold(
         key: con.scaffoldKey,
         appBar: AppBar(
-          title: Text(App.vw.title),
+          title: Text(App.vw!.title!),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () {
                 con.sort();
               },
@@ -100,8 +101,8 @@ class _ContactListState extends StateMVC<ContactsList> {
               : ListView.builder(
                   itemCount: con.items?.length ?? 0,
                   itemBuilder: (BuildContext context, int index) {
-                    final contact = con.itemAt(index);
-                    return contact.displayName.onDismissible(
+                    final contact = con.itemAt(index)!;
+                    return contact.displayName!.onDismissible(
                       child: Container(
                         decoration: BoxDecoration(
                             color: _theme.canvasColor,
@@ -120,8 +121,8 @@ class _ContactListState extends StateMVC<ContactsList> {
                               con.refresh();
                             });
                           },
-                          leading: contact.displayName.circleAvatar,
-                          title: contact.displayName.text,
+                          leading: contact.displayName!.circleAvatar,
+                          title: contact.displayName!.text,
                         ),
                       ),
                       dismissed: (DismissDirection direction) {
@@ -130,7 +131,7 @@ class _ContactListState extends StateMVC<ContactsList> {
                             (direction == DismissDirection.endToStart)
                                 ? 'deleted'
                                 : 'archived';
-                        con.scaffoldKey.currentState?.showSnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             duration: const Duration(milliseconds: 8000),
                             content: Text('You $action an item.'),

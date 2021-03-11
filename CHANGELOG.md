@@ -1,4 +1,8 @@
 
+## 7.0.0
+ March 10, 2021
+- Null safety 2.12.0
+
 ## 6.12.0
  March 05, 2021
 - Localizations.maybeLocaleOf(context);
