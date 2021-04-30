@@ -258,9 +258,7 @@ class AppState extends AppViewState<AppStateWidget> {
       v.App.themeData = theme;
     } else {
       final theme = onTheme();
-      if (theme != null) {
-        v.App.themeData = theme;
-      }
+      v.App.themeData = theme ?? ThemeData.light();
     }
 
     if (iOSTheme != null) {

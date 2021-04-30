@@ -104,7 +104,7 @@ Future<bool?> showBox({
 
 /// A high-level function
 /// Displays a String passing specific one to two button options
-/// and their corresponding fucntion calls.
+/// and their corresponding function calls.
 void dialogBox({
   required BuildContext context,
   String? title,

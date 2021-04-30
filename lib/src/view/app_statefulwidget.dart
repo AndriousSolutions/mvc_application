@@ -36,6 +36,7 @@ import 'package:mvc_application/view.dart' as v
     show
         App,
         AppMVC,
+        AppMenu,
         AppState,
         AppStateWidget,
         I10n,
@@ -86,65 +87,59 @@ abstract class AppStatefulWidget extends v.AppMVC {
   static v.AppState? get vw => _vw;
   static v.AppState? _vw;
 
-  // /// The context used by the App's view.
-  // static BuildContext get context => _context;
-  // static BuildContext _context;
-
-  /// The snapshot used by the App's View.
-  @Deprecated('getter, snapshot, will be removed.')
-  static AsyncSnapshot<bool>? get snapshot => _snapshot;
-  static AsyncSnapshot<bool>? _snapshot;
-
+  /// Supply on onboarding screen.
   final Widget? loadingScreen;
 
   @override
   Widget build(BuildContext context) {
     Assets.init(context);
-//    _context = context;
     return FutureBuilder<bool>(
-      future: initAsync(),
-      initialData: false,
-      builder: (_, snapshot) {
-        _snapshot = snapshot;
-        return _asyncBuilder(snapshot, loadingScreen);
-      },
-    );
+        future: initAsync(),
+        initialData: false,
+        builder: (_, snapshot) => _asyncBuilder(snapshot, loadingScreen));
   }
 
   /// Runs all the asynchronous operations necessary before the app can proceed.
   @override
   Future<bool> initAsync() async {
     var init = true;
-    if (v.App.hotReload) {
-      _vw = createView();
-      _vw?.con?.initApp();
-    } else {
-      // Initialize System Preferences
-      await Prefs.init();
-      // Collect installation & connectivity information
-      await _app.initInternal();
-      // If not running on the Web.
-      if (!kIsWeb) {
-        await v.App.getDeviceInfo();
-      }
-      // Initiate multi-language translations.
-      await v.I10n.initAsync();
-      // Set the App's theme.
-      v.App.setThemeData();
-
-      init = await super.initAsync();
-
-      if (init) {
+    try {
+      if (v.App.hotReload) {
         _vw = createView();
-        // Supply the state object to the App object.
-        init = _app.setAppState(_vw);
-        if (init) {
-          init = (await _vw?.initAsync())!;
+        _vw?.con?.initApp();
+      } else {
+        // Initialize System Preferences
+        await Prefs.init();
+        // Collect installation & connectivity information
+        await _app.initInternal();
+        // If not running on the Web.
+        if (!kIsWeb) {
+          await v.App.getDeviceInfo();
         }
+        // Initiate multi-language translations.
+        await v.I10n.initAsync();
+
+        // Set theme using App's menu system if any theme was saved.
+        v.AppMenu.setThemeData();
+
+        init = await super.initAsync();
+
         if (init) {
-          _vw?.con?.initApp();
+          _vw = createView();
+          // Supply the state object to the App object.
+          init = _app.setAppState(_vw);
+          if (init) {
+            init = await _vw!.initAsync();
+          }
+          if (init) {
+            _vw?.con?.initApp();
+          }
         }
       }
+    } catch (e) {
+      init = false;
+      v.App.isInit = false;
+      rethrow;
     }
     return v.App.isInit = init;
   }
@@ -207,8 +202,7 @@ class ConConsumer<T extends ControllerMVC> extends StatelessWidget {
     Key? key,
     required this.builder,
     this.child,
-  })  : assert(builder != null),
-        super(key: key);
+  }) : super(key: key);
 
   /// The builder
   final Widget Function(BuildContext context, T? controller, Widget? child)

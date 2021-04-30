@@ -1,4 +1,14 @@
 
+## 7.1.0
+ March 28, 2021
+- Removed deprecated snapshot getter
+- Introduced iso_spinner.dart
+- Remove getThemeData() & setThemeData() in app.dart
+- v.App.themeData = theme ?? ThemeData.light();
+- rethrow an App.initAsync() error
+- _fillRecords(); to fillRecords();
+- final T? object; to T? object; in FieldWidgets<T>
+
 ## 7.0.2-nullsafety
  March 10, 2021
 - i10n_translator: ^2.0.0

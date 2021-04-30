@@ -1,3 +1,22 @@
+///
+/// Copyright (C) 2019 Andrious Solutions
+///
+/// Licensed under the Apache License, Version 2.0 (the "License");
+/// you may not use this file except in compliance with the License.
+/// You may obtain a copy of the License at
+///
+///    http://www.apache.org/licenses/LICENSE-2.0
+///
+/// Unless required by applicable law or agreed to in writing, software
+/// distributed under the License is distributed on an "AS IS" BASIS,
+/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+/// See the License for the specific language governing permissions and
+/// limitations under the License.
+///
+///          Created  09 Feb 2019
+///
+///
+
 import 'dart:async' show Future, StreamSubscription;
 
 // Replace 'dart:io' for Web applications
@@ -507,35 +526,6 @@ class App {
   static ScaffoldState get scaffold => Scaffold.of(context!);
   // 'maybeOf' only in Beta channel
 //  static ScaffoldState get scaffold => Scaffold.maybeOf(context);
-
-  /// Return a pre-defined theme
-  static ThemeData? getThemeData() {
-    final theme = Prefs.getString('theme');
-    ThemeData? themeData;
-    switch (theme) {
-      case 'light':
-        themeData = ThemeData.light();
-        break;
-      case 'dark':
-        themeData = ThemeData.dark();
-        break;
-      default:
-        if (theme.isEmpty) {
-          themeData = ThemeData.fallback();
-        }
-    }
-    return themeData;
-  }
-
-  static void setThemeData() {
-    // Supply a theme
-    v.App.themeData = v.App.getThemeData();
-    // iOS theme
-    v.App.iOSTheme =
-        MaterialBasedCupertinoThemeData(materialTheme: v.App.themeData!);
-    // App's menu system
-    v.AppMenu.setThemeData();
-  }
 
   /// The Physical width of the screen
   static double get screenPhysicalWidth {

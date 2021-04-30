@@ -133,11 +133,11 @@ abstract class _ListFields<T> {
   /// Retrieve the to-do items from the database
   Future<List<Map<String, dynamic>>> query() async {
     _items = await retrieve();
-    _fillRecords(_items);
+    fillRecords(_items);
     return _items;
   }
 
-  void _fillRecords(List<Map<String, dynamic>> fieldData) {
+  void fillRecords(List<Map<String, dynamic>> fieldData) {
     if (fieldData.isNotEmpty) {
       field.clear();
     }
@@ -179,6 +179,31 @@ abstract class _ListFields<T> {
 
     field[id] = map as Map<String, FieldWidgets<T>>;
   }
+
+  // Not working yet.
+  // Map<String, dynamic>? toMap([Map? fields]) {
+  //   //
+  //   fields ??= field;
+  //
+  //   final record = fields.map((key, map) {
+  //     //
+  //     MapEntry? record;
+  //
+  //     MapEntry fld;
+  //
+  //     for (final rec in map.entries) {
+  //       //
+  //       if (rec.value is FieldWidgets<T>) {
+  //         fld = MapEntry(rec.key, rec.value.value);
+  //       } else {
+  //         fld = MapEntry(rec.key, rec.value);
+  //       }
+  //       record = MapEntry(key as String, fld);
+  //     }
+  //     return record;
+  //   });
+  //   return record;
+  // }
 }
 
 class FieldWidgets<T> extends DataFieldItem {
@@ -319,7 +344,7 @@ class FieldWidgets<T> extends DataFieldItem {
     crossAxisEndOffset ??= 0.0;
   }
 
-  final T? object;
+  T? object;
   dynamic _initValue;
 
   bool _valueChanged = false;
