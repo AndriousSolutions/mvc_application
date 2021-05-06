@@ -30,7 +30,7 @@ export 'package:mvc_application/src/model/fileutils/files.dart';
 export 'package:mvc_application/src/model/fileutils/installfile.dart';
 
 /// String Encryption
-export 'package:mvc_application/src/model/utils/string_encryption.dart';
+//export 'package:mvc_application/src/model/utils/string_encryption.dart';
 
 /// Preferences
 export 'package:prefs/prefs.dart' show Prefs;

@@ -1,4 +1,11 @@
 
+## 7.2.0
+ May 05, 2021
+- Commented out flutter_string_encryption (too old)
+- this.useMaterial,
+  this.useCupertino,
+  this.switchUI,
+
 ## 7.1.0
  March 28, 2021
 - Removed deprecated snapshot getter

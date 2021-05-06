@@ -176,20 +176,33 @@ class AppState extends AppViewState<AppStateWidget> {
     useCupertino ??= false;
     switchUI ??= false;
 
-    // if both useMaterial & useCupertino are set then rely on the Platform.
-    switchUI = switchUI! && !useCupertino! && !useMaterial!;
+    if (UniversalPlatform.isAndroid) {
+      if (switchUI!) {
+        useMaterial = false;
+        useCupertino = true;
+      } else if (useCupertino!) {
+        useMaterial = false;
+      } else {
+        useMaterial = true;
+        useCupertino = false;
+      }
+    } else if (UniversalPlatform.isIOS) {
+      if (switchUI!) {
+        useMaterial = true;
+        useCupertino = false;
+      } else if (useMaterial!) {
+        useCupertino = false;
+      } else {
+        useMaterial = false;
+        useCupertino = true;
+      }
+    } else {
+      useMaterial = true;
+      useCupertino = false;
+    }
 
-    useMaterial = kIsWeb ||
-        (useMaterial! && !useCupertino!) ||
-        (UniversalPlatform.isAndroid && !switchUI!) ||
-        (UniversalPlatform.isIOS && switchUI!);
-
+    // These ones can't be changed.
     _isMaterial = useMaterial;
-
-    useCupertino = (useCupertino! && !useMaterial!) ||
-        (UniversalPlatform.isIOS && !switchUI!) ||
-        (UniversalPlatform.isAndroid && switchUI!);
-
     _isCupertino = useCupertino;
   }
 
