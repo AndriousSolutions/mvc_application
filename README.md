@@ -52,46 +52,50 @@ Implementing the MVC framework using two common example apps:
 ```dart
 import 'package:flutter/material.dart';
 
-import 'package:mvc_application/view.dart' show App, AppView, Colors, StateMVC;
+import 'package:mvc_application/view.dart'
+    show AppStatefulWidget, AppState, StateMVC;
 
 import 'package:mvc_application/controller.dart' show ControllerMVC;
 
 void main() => runApp(MyApp());
 
-class  MyApp extends App{
+class MyApp extends AppStatefulWidget {
+  MyApp({Key? key}) : super(key: key);
   // Allow for hot reloads.
   @override
-  createView() => View();
+  AppState createView() => View();
 }
 
-class View extends AppView {
+class View extends AppState {
   factory View() => _this ??= View._();
   View._()
       : super(
     title: 'Flutter Demo',
-    home: MyHomePage(),
+    home: const MyHomePage(),
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
       primarySwatch: Colors.blue,
     ),
   );
-  static View _this;
+  static View? _this;
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+  const MyHomePage({Key? key, this.title = 'Flutter Demo Home Page'})
+      : super(key: key);
   // Fields in a StatefulWidget should always be "final".
-  final String title = 'Flutter Demo Home Page';
+  final String title;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends StateMVC<MyHomePage> {
-  _MyHomePageState(): super(Controller()){
-  // Acquire a reference to the particular Controller.
-  con = controller;
+  _MyHomePageState() : super(Controller()) {
+    // Acquire a reference to the particular Controller.
+    // ignore: avoid_as
+    con = controller as Controller;
   }
-  Controller con;
+  late Controller con;
 
   @override
   Widget build(BuildContext context) {
@@ -108,19 +112,17 @@ class _MyHomePageState extends StateMVC<MyHomePage> {
             ),
             Text(
               '${con.counter}',
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.headline4,
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          setState(
-              con.incrementCounter
-          );
+          setState(con.incrementCounter);
         },
         tooltip: 'Increment',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -128,19 +130,22 @@ class _MyHomePageState extends StateMVC<MyHomePage> {
 
 class Controller extends ControllerMVC {
   factory Controller() => _this ??= Controller._();
-  static Controller _this;
   Controller._();
+  static Controller? _this;
 
   int get counter => _Model.counter;
   // The Controller knows how to 'talk to' the Model.
   void incrementCounter() => _Model._incrementCounter();
 }
 
+// ignore: avoid_classes_with_only_static_members
+/// Not good form to use a 'static class.'
 class _Model {
   static int get counter => _counter;
   static int _counter = 0;
   static int _incrementCounter() => ++_counter;
 }
+
 ```
 #### Name Generator App
 ```dart
@@ -148,19 +153,20 @@ import 'package:english_words/english_words.dart' show generateWordPairs;
 
 import 'package:flutter/material.dart';
 
-import 'package:mvc_application/view.dart' show App, AppView, Colors, StateMVC;
+import 'package:mvc_application/view.dart'
+    show AppStatefulWidget, AppState, Colors, StateMVC;
 
 import 'package:mvc_application/controller.dart' show ControllerMVC;
 
 void main() => runApp(NameApp());
 
-class NameApp extends App {
+class NameApp extends AppStatefulWidget {
   // Allows for hot reloads.
   @override
-  createView() => MyApp();
+  AppState createView() => MyApp();
 }
 
-class MyApp extends AppView {
+class MyApp extends AppState {
   factory MyApp() => _this ??= MyApp._();
   MyApp._()
       : super(
@@ -171,7 +177,7 @@ class MyApp extends AppView {
           ),
           debugShowCheckedModeBanner: false,
         );
-  static MyApp _this;
+  static MyApp? _this;
 }
 
 class RandomWords extends StatefulWidget {
@@ -181,9 +187,9 @@ class RandomWords extends StatefulWidget {
 
 class _RandomWordsState extends StateMVC<RandomWords> {
   _RandomWordsState() : super(Con()) {
-    con = controller;
+    con = controller as Con;
   }
-  Con con;
+  late Con con;
 
   final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
 
@@ -227,10 +233,16 @@ class _RandomWordsState extends StateMVC<RandomWords> {
         builder: (BuildContext context) {
           final Iterable<ListTile> tiles = this.tiles;
 
-          final List<Widget> divided = ListTile.divideTiles(
-            context: context,
-            tiles: tiles,
-          ).toList();
+          List<Widget> divided;
+
+          if (tiles.isEmpty) {
+            divided = [];
+          } else {
+            divided = ListTile.divideTiles(
+              context: context,
+              tiles: tiles,
+            ).toList();
+          }
 
           return Scaffold(
             appBar: AppBar(
@@ -243,8 +255,8 @@ class _RandomWordsState extends StateMVC<RandomWords> {
     );
   }
 
-  Widget buildRow(int index) {
-    if (index == null && index < 0) index = 0;
+  Widget buildRow(int? index) {
+    if (index == null || index < 0) index = 0;
 
     String something = con.something(index);
 
@@ -283,13 +295,13 @@ class Con extends ControllerMVC {
   // Supply only one instance of this Controller class.
   factory Con() => _this ??= Con._();
 
-  static Con _this;
+  static Con? _this;
 
   Con._() {
     model = _Model();
   }
 
-  _Model model;
+  late _Model model;
 
   int get length => model.length;
 
@@ -301,7 +313,8 @@ class Con extends ControllerMVC {
 
   void somethingHappens(String something) => model.save(something);
 
-  Iterable<ListTile> mapHappens<ListTile>(Function f) => model.saved(f);
+  Iterable<ListTile> mapHappens<ListTile>(ListTile Function(String v) f) =>
+      model.saved(f);
 }
 
 class _Model {
@@ -309,19 +322,19 @@ class _Model {
 
   int get length => _suggestions.length;
 
-  String wordPair(int index) {
+  String wordPair(int? index) {
     if (index == null || index < 0) index = 0;
     return _suggestions[index];
   }
 
-  bool contains(String pair) {
+  bool contains(String? pair) {
     if (pair == null || pair.isEmpty) return false;
     return _saved.contains(pair);
   }
 
   final Set<String> _saved = Set();
 
-  void save(String pair) {
+  void save(String? pair) {
     if (pair == null || pair.isEmpty) return;
     final alreadySaved = contains(pair);
     if (alreadySaved) {
@@ -331,7 +344,8 @@ class _Model {
     }
   }
 
-  Iterable<ListTile> saved<ListTile>(Function f) => _saved.map(f);
+  Iterable<ListTile> saved<ListTile>(ListTile Function(String v) f) =>
+      _saved.map(f);
 
   Iterable<String> wordPairs([int count = 10]) => _makeWordPairs(count);
 
@@ -340,7 +354,6 @@ class _Model {
 
 Iterable<String> _makeWordPairs(int count) =>
     generateWordPairs().take(count).map((pair) => pair.asPascalCase);
-
 ```
 ## Additional Documentation
 Please begin with the article, [‘Flutter + MVC at Last!’](https://medium.com/follow-flutter/flutter-mvc-at-last-275a0dc1e730)

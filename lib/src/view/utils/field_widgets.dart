@@ -132,8 +132,8 @@ abstract class _ListFields<T> {
 
   /// Retrieve the to-do items from the database
   Future<List<Map<String, dynamic>>> query() async {
-    _items = await retrieve();
-    fillRecords(_items);
+      _items = await retrieve();
+      fillRecords(_items);
     return _items;
   }
 
@@ -148,8 +148,20 @@ abstract class _ListFields<T> {
   Map<dynamic, Map<String, FieldWidgets<T>>> field = {};
 
   void _fillFields(Map<String, dynamic> dataFields) {
-    //
-    final dynamic id = dataFields.values.first;
+
+    final _fields = dataFields.values;
+
+    // Nothing to process.
+    if(_fields.isEmpty){
+      return;
+    }
+
+    // The data field's key value is the 'key' to this map!
+    dynamic id = _fields.first;
+
+    if(id is int){
+      id = id.toString();
+    }
 
     if (field[id] == null) {
       field[id] = {};
@@ -459,15 +471,25 @@ class FieldWidgets<T> extends DataFieldItem {
   Checkbox? _checkbox;
 
   m.Widget get textFormField {
-    if (items == null && value != null && value is! String) {
-      items = value;
-      value = null;
+    // if (items == null && value != null && value is! String) {
+    //   items = value;
+    //   value = null;
+    // }
+    String text;
+    if (value == null) {
+      text = '';
+    } else if (value is bool) {
+      text = value ? 'true' : 'false';
+    } else if (value is String) {
+      text = value.trim();
+    } else {
+      text = value.toString().trim();
     }
     return _textFormField ??= m.Material(
         child: m.TextFormField(
       key: Key('TextFormField$_key'),
       controller:
-          controller ?? (value == null ? null : FieldController(text: value)),
+          controller ?? (value == null ? null : FieldController(text: text)),
       initialValue: controller == null && value == null ? initialValue : null,
       focusNode: focusNode,
       decoration: inputDecoration ?? InputDecoration(labelText: label),
@@ -670,12 +692,22 @@ class FieldWidgets<T> extends DataFieldItem {
   }
 
   Text get text {
-    if (items == null && value != null && value is! String) {
-      items = value;
-      value = null;
+    // if (items == null && value != null && value is! String) {
+    //   items = value;
+    //   value = null;
+    // }
+    String text;
+    if (value == null) {
+      text = '';
+    } else if (value is bool) {
+      text = value ? 'true' : 'false';
+    } else if (value is String) {
+      text = value.trim();
+    } else {
+      text = value.toString().trim();
     }
     return Text(
-      value ?? '',
+      text,
       key: Key('Text$_key'),
       style: style,
       textAlign: textAlign,
@@ -1117,7 +1149,7 @@ class FieldWidgets<T> extends DataFieldItem {
   /// Allow a subclass supply the drop items.
   List<String>? onDropItems() => [''];
 
-  /// Convert a list item into separate Email objects.
+  /// Convert a list item into separate objects.
   void one2Many<U extends FieldWidgets<T>>(
     U Function() create,
   ) {

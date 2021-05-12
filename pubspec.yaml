@@ -3,7 +3,7 @@ description: Flutter Framework for Applications using the MVC Design Pattern
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
 
-version: 7.2.0
+version: 7.3.0
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -25,31 +25,31 @@ dependencies:
 #    path: ../i10n_translator
 
   # https://pub.dartlang.org/packages/connectivity
-  connectivity: ^3.0.2 #^3.0.0-nullsafety.1
+  connectivity: ^3.0.0
 
   # https://pub.dartlang.org/packages/url_launcher
   # used in AppSettings.dart
-  url_launcher: ^6.0.2
+  url_launcher: ^6.0.0
   url_launcher_web: ^2.0.0
 
   # https://pub.dartlang.org/packages/package_info
   package_info: ^2.0.0
 
   # https://pub.dev/packages/path_provider
-  path_provider: ^2.0.1
+  path_provider: ^2.0.0
 
   # https://pub.dartlang.org/packages/device_info
-  device_info: ^2.0.0 #^2.0.0-nullsafety.1
+  device_info: ^2.0.0
 
   # https://pub.dev/packages/flutter_material_color_picker
-  flutter_material_color_picker: '>=1.0.0 <2.0.0'
+#  flutter_material_color_picker: ^1.0.0
 
   # https://pub.dartlang.org/packages/prefs
   prefs: ^3.3.0
   #  path: ../../packages/prefs
 
   # https://pub.dartlang.org/packages/uuid
-  uuid: ^3.0.1
+  uuid: ^3.0.0
 
   # https://pub.dev/packages/flutter_string_encryption
 #  flutter_string_encryption: ^0.3.0
@@ -61,7 +61,7 @@ dependencies:
   timezone: ^0.7.0
 
   # https://pub.dev/packages/flutter_native_timezone/
-  flutter_native_timezone: ^1.0.10
+  flutter_native_timezone: ^1.0.0
 
   # https://pub.dev/packages/universal_platform
   universal_platform: ^1.0.0-nullsafety
@@ -71,8 +71,6 @@ dependencies:
   # https://dart.dev/guides/language/effective-dart
   # https://pub.dev/packages/pedantic
   pedantic: ^1.11.0
-
-
 
 dev_dependencies:
   flutter_test:

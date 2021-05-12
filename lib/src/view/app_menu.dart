@@ -102,7 +102,7 @@ class AppMenu {
     _children = children;
 
     var menuItems = <PopupMenuEntry<dynamic>>[
-      PopupMenuItem<dynamic>(value: 'Color', child: I10n.t('Colour Theme')),
+//      PopupMenuItem<dynamic>(value: 'Color', child: I10n.t('Colour Theme')),
       PopupMenuItem<dynamic>(value: 'About', child: I10n.t('About'))
     ];
 
@@ -134,14 +134,14 @@ class AppMenu {
       return;
     }
     // Set the current colour.
-    ColorPicker.color = App.themeData!.primaryColor;
+    // ColorPicker.color = App.themeData!.primaryColor;
     switch (value) {
       case 'Color':
-        ColorPicker.showColorPicker(
-            context: _state!.context,
-            onColorChange: AppMenu.onColorChange,
-            onChange: AppMenu.onChange,
-            shrinkWrap: true);
+        // ColorPicker.showColorPicker(
+        //     context: _state!.context,
+        //     onColorChange: AppMenu.onColorChange,
+        //     onChange: AppMenu.onChange,
+        //     shrinkWrap: true);
         break;
       case 'About':
         showAboutDialog(
@@ -166,11 +166,11 @@ class AppMenu {
       final swatch = Prefs.getInt('colorTheme', -1);
       // If never set in the first place, ignore
       if (swatch > -1) {
-        value = ColorPicker.colors[swatch];
-        ColorPicker.colorSwatch = value;
+        // value = ColorPicker.colors[swatch];
+        // ColorPicker.colorSwatch = value;
       }
     } else {
-      Prefs.setInt('colorTheme', ColorPicker.colors.indexOf(value));
+      // Prefs.setInt('colorTheme', ColorPicker.colors.indexOf(value));
     }
 
     if (value == null) {

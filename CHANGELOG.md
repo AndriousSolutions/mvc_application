@@ -1,4 +1,9 @@
 
+## 7.3.0
+ May 12, 2021
+- flutter_material_color_picker incompatible to null safety
+- Corrected the README.md examples
+
 ## 7.2.0
  May 05, 2021
 - Commented out flutter_string_encryption (too old)
