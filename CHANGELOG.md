@@ -1,4 +1,13 @@
 
+## 7.4.0
+ May 24, 2021
+- connectivity 3.0.4 (was 3.0.3)
+- device_info 2.0.1 (was 2.0.0)
+- file 6.1.1 (was 6.1.0)
+- flutter_local_notifications 6.0.0 (was 5.0.0)
+- url_launcher 6.0.4 (was 6.0.3)
+- win32 2.1.1 (was 2.0.5)
+
 ## 7.3.0
  May 12, 2021
 - flutter_material_color_picker incompatible to null safety

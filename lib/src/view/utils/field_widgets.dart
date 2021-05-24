@@ -132,8 +132,8 @@ abstract class _ListFields<T> {
 
   /// Retrieve the to-do items from the database
   Future<List<Map<String, dynamic>>> query() async {
-      _items = await retrieve();
-      fillRecords(_items);
+    _items = await retrieve();
+    fillRecords(_items);
     return _items;
   }
 
@@ -148,18 +148,17 @@ abstract class _ListFields<T> {
   Map<dynamic, Map<String, FieldWidgets<T>>> field = {};
 
   void _fillFields(Map<String, dynamic> dataFields) {
-
     final _fields = dataFields.values;
 
     // Nothing to process.
-    if(_fields.isEmpty){
+    if (_fields.isEmpty) {
       return;
     }
 
     // The data field's key value is the 'key' to this map!
     dynamic id = _fields.first;
 
-    if(id is int){
+    if (id is int) {
       id = id.toString();
     }
 
@@ -485,8 +484,9 @@ class FieldWidgets<T> extends DataFieldItem {
     } else {
       text = value.toString().trim();
     }
-    return _textFormField ??= m.Material(
-        child: m.TextFormField(
+//    return _textFormField ??= m.Material(
+    return m.Material(
+    child: m.TextFormField(
       key: Key('TextFormField$_key'),
       controller:
           controller ?? (value == null ? null : FieldController(text: text)),
