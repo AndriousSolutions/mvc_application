@@ -1,4 +1,19 @@
 
+
+## 7.5.0
+ June 12, 2021
+- connectivity 3.0.6 (was 3.0.4)
+- device_info 2.0.2 (was 2.0.1)
+- ffi 1.1.2 (was 1.0.0)
+- flutter_native_timezone 1.1.0 (2.0.0 available)
+- mvc_pattern 7.3.0+2 (was 7.2.0)
+- package_info 2.0.2 (was 2.0.0)
+- path_provider 2.0.2 (was 2.0.1)
+- shared_preferences 2.0.6 (was 2.0.5)
+- url_launcher 6.0.6 (was 6.0.4)
+- url_launcher_web 2.0.1 (was 2.0.0)
+- win32 2.1.5 (was 2.1.1)
+
 ## 7.4.0
  May 24, 2021
 - connectivity 3.0.4 (was 3.0.3)
