@@ -28,7 +28,7 @@ jobs:
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
 
-      # Run Tianhao Zhou's workflow for updates.
+      # Run Tianhao Zhou's workflow for updates dependencies.
       - name: Flutter Package Updater
         uses: tianhaoz95/update-flutter-packages@v0.0.5
 
