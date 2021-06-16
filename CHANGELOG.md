@@ -1,4 +1,7 @@
 
+## 7.6.0
+ June 16, 2021
+- restorationScopeId & scrollBehavior for MaterialApp and CupertinoApp
 
 ## 7.5.0
  June 12, 2021

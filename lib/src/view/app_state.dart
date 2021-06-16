@@ -92,6 +92,8 @@ class AppState extends AppViewState<AppStateWidget> {
     bool? debugShowCheckedModeBanner,
     Map<LogicalKeySet, Intent>? shortcuts,
     Map<Type, Action<Intent>>? actions,
+    String? restorationScopeId,
+    ScrollBehavior? scrollBehavior,
     bool? debugShowWidgetInspector,
     bool? debugPaintSizeEnabled,
     bool? debugPaintBaselinesEnabled,
@@ -128,6 +130,8 @@ class AppState extends AppViewState<AppStateWidget> {
     this.inDebugShowCheckedModeBanner,
     this.inShortcuts,
     this.inActions,
+    this.inRestorationScopeId,
+    this.inScrollBehavior,
     this.inError,
     this.inAsyncError,
   }) : super(
@@ -161,6 +165,8 @@ class AppState extends AppViewState<AppStateWidget> {
           debugShowCheckedModeBanner: debugShowCheckedModeBanner,
           shortcuts: shortcuts,
           actions: actions,
+          restorationScopeId: restorationScopeId,
+          scrollBehavior: scrollBehavior,
           debugShowWidgetInspector: debugShowWidgetInspector,
           debugPaintSizeEnabled: debugPaintSizeEnabled,
           debugPaintBaselinesEnabled: debugPaintBaselinesEnabled,
@@ -251,6 +257,8 @@ class AppState extends AppViewState<AppStateWidget> {
   final bool Function()? inDebugShowCheckedModeBanner;
   final Map<LogicalKeySet, Intent> Function()? inShortcuts;
   final Map<Type, Action<Intent>> Function()? inActions;
+  final String Function()? inRestorationScopeId;
+  final ScrollBehavior Function()? inScrollBehavior;
   final void Function(FlutterErrorDetails details)? inError;
   final bool Function(FlutterErrorDetails details)? inAsyncError;
 
@@ -325,6 +333,8 @@ class AppState extends AppViewState<AppStateWidget> {
             debugShowCheckedModeBanner ?? onDebugShowCheckedModeBanner(),
         shortcuts: shortcuts ?? onShortcuts(),
         actions: actions ?? onActions(),
+        restorationScopeId: restorationScopeId ?? onRestorationScopeId(),
+        scrollBehavior: scrollBehavior ?? onScrollBehavior(),
       );
     } else {
       return MaterialApp(
@@ -366,6 +376,8 @@ class AppState extends AppViewState<AppStateWidget> {
             debugShowCheckedModeBanner ?? onDebugShowCheckedModeBanner(),
         shortcuts: shortcuts ?? onShortcuts(),
         actions: actions ?? onActions(),
+        restorationScopeId: restorationScopeId ?? onRestorationScopeId(),
+        scrollBehavior: scrollBehavior ?? onScrollBehavior(),
       );
     }
   }
@@ -499,6 +511,10 @@ class AppState extends AppViewState<AppStateWidget> {
       inShortcuts != null ? inShortcuts!() : null;
   Map<Type, Action<Intent>>? onActions() =>
       inActions != null ? inActions!() : null;
+  String? onRestorationScopeId() =>
+      inRestorationScopeId != null ? inRestorationScopeId!() : null;
+  ScrollBehavior? onScrollBehavior() =>
+      inScrollBehavior != null ? inScrollBehavior!() : null;
   // An error handler for any async operations.
   @override
   bool onAsyncError(FlutterErrorDetails details) {
@@ -551,6 +567,8 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
     this.debugShowCheckedModeBanner,
     this.shortcuts,
     this.actions,
+    this.restorationScopeId,
+    this.scrollBehavior,
     this.debugPaintSizeEnabled,
     this.debugPaintBaselinesEnabled,
     this.debugPaintPointersEnabled,
@@ -633,6 +651,8 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   bool? debugShowCheckedModeBanner;
   Map<LogicalKeySet, Intent>? shortcuts;
   Map<Type, Action<Intent>>? actions;
+  String? restorationScopeId;
+  ScrollBehavior? scrollBehavior;
 
   /// Highlights UI while debugging.
   bool? debugPaintSizeEnabled;
