@@ -128,7 +128,7 @@ abstract class _ListFields<T> {
 
   /// List of the actual data fields.
   List<Map<String, dynamic>> get items => _items;
-  List<Map<String, dynamic>> _items = [{}];
+  List<Map<String, dynamic>> _items = [];
 
   /// Retrieve the to-do items from the database
   Future<List<Map<String, dynamic>>> query() async {

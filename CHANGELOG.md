@@ -1,4 +1,8 @@
 
+## 7.6.1
+ June 21, 2021
+- Empty _items = [{}];
+
 ## 7.6.0
  June 16, 2021
 - restorationScopeId & scrollBehavior for MaterialApp and CupertinoApp
