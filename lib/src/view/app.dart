@@ -646,6 +646,10 @@ abstract class StateMVC<T extends StatefulWidget> extends mvc.StateMVC<T>
   //
   StateMVC([ControllerMVC? controller]) : super(controller);
 
+  /// Allow access to the static 'of' function
+  static T? of<T extends StateMVC>(BuildContext context) =>
+      mvc.StateMVC.of<T>(context);
+
   @override
   void refresh() {
     if (mounted) {

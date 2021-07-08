@@ -1,7 +1,13 @@
 
+
+## 7.7.0
+ July 08, 2021
+- StateMVC.of<T>(context);
+
 ## 7.6.1
  June 21, 2021
 - Empty _items = [{}];
+- universal_platform: ^1.0.0+1
 
 ## 7.6.0
  June 16, 2021

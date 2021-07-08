@@ -3,7 +3,7 @@ description: Flutter Framework for Applications using the MVC Design Pattern
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
 
-version: 7.6.1
+version: 7.7.0
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -64,7 +64,7 @@ dependencies:
   flutter_native_timezone: ^2.0.0
 
   # https://pub.dev/packages/universal_platform
-  universal_platform: ^1.0.0-nullsafety
+  universal_platform: ^1.0.0
 
   # Setting up Lint Rules
   # Most of the recommended lints directly implement the guidelines set out in Effective Dart:
