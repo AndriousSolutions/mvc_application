@@ -3,7 +3,7 @@ description: Flutter Framework for Applications using the MVC Design Pattern
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
 
-version: 7.7.0
+version: 7.7.1
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -24,8 +24,8 @@ dependencies:
   i10n_translator:  ^2.0.0
 #    path: ../i10n_translator
 
-  # https://pub.dartlang.org/packages/connectivity
-  connectivity: ^3.0.0
+  # https://pub.dartlang.org/packages/connectivity_plus
+  connectivity_plus: ^1.0.0
 
   # https://pub.dartlang.org/packages/url_launcher
   # used in AppSettings.dart

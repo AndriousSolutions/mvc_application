@@ -26,7 +26,7 @@ import 'package:flutter/foundation.dart' show FlutterExceptionHandler, kIsWeb;
 
 import 'package:package_info/package_info.dart' show PackageInfo;
 
-import 'package:connectivity/connectivity.dart'
+import 'package:connectivity_plus/connectivity_plus.dart'
     show Connectivity, ConnectivityResult;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
