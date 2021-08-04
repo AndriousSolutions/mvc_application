@@ -48,7 +48,7 @@ import 'package:mvc_application/controller.dart' show Assets;
 import 'package:prefs/prefs.dart' show Prefs;
 
 // Export the classes needed to use this file.
-export 'package:connectivity/connectivity.dart'
+export 'package:connectivity_plus/connectivity_plus.dart'
     show Connectivity, ConnectivityResult;
 
 /// Error Screen Builder if an error occurs.

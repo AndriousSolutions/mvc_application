@@ -1,5 +1,8 @@
 
 
+## 7.7.1
+- Migrate from the `connectivity` plugin to `connectivity_plus`.
+
 ## 7.7.0
  July 08, 2021
 - StateMVC.of<T>(context);
