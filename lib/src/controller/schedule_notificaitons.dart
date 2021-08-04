@@ -115,6 +115,7 @@ class ScheduleNotifications with HandleError {
     NotificationVisibility? visibility,
     int? timeoutAfter,
     String? category,
+    bool? fullScreenIntent,
     RepeatInterval? repeatInterval,
     Day? day,
     SelectNotificationCallback? onSelectNotification,
@@ -153,13 +154,13 @@ class ScheduleNotifications with HandleError {
     _enableVibration = enableVibration ?? false;
     _vibrationPattern = vibrationPattern;
     _groupKey = groupKey;
-    _setAsGroupSummary = setAsGroupSummary;
+    _setAsGroupSummary = setAsGroupSummary ?? false;
     _groupAlertBehavior = groupAlertBehavior ?? GroupAlertBehavior.all;
     _autoCancel = autoCancel ?? true;
-    _ongoing = ongoing;
+    _ongoing = ongoing ?? false;
     _color = color;
     _largeIcon = largeIcon;
-    _onlyAlertOnce = onlyAlertOnce;
+    _onlyAlertOnce = onlyAlertOnce ?? false;
     _showWhen = showWhen ?? true;
     _channelShowBadge = channelShowBadge ?? true;
     _showProgress = showProgress ?? false;
@@ -176,6 +177,7 @@ class ScheduleNotifications with HandleError {
     _visibility = visibility ?? NotificationVisibility.private;
     _timeoutAfter = timeoutAfter;
     _category = category;
+    _fullScreenIntent = fullScreenIntent ?? false;
     _repeatInterval = repeatInterval;
     _day = day;
     _selectNotificationCallback = onSelectNotification;
@@ -231,6 +233,8 @@ class ScheduleNotifications with HandleError {
   AndroidBitmap? _largeIcon;
   bool? _onlyAlertOnce;
   bool? _showWhen;
+  int? _when;
+  bool? usesChronometer;
   bool? _channelShowBadge;
   bool? _showProgress;
   int? _maxProgress;
@@ -245,6 +249,7 @@ class ScheduleNotifications with HandleError {
   NotificationVisibility? _visibility;
   int? _timeoutAfter;
   String? _category;
+  bool? _fullScreenIntent;
   RepeatInterval? _repeatInterval;
   Day? _day;
 //  Time _notificationTime;
@@ -302,6 +307,7 @@ class ScheduleNotifications with HandleError {
     NotificationVisibility? visibility,
     int? timeoutAfter,
     String? category,
+    bool? fullScreenIntent,
     RepeatInterval? repeatInterval,
     Day? day,
     Time? notificationTime,
@@ -437,6 +443,9 @@ class ScheduleNotifications with HandleError {
     }
     if (category != null) {
       _category = category;
+    }
+    if (fullScreenIntent != null) {
+      _fullScreenIntent = fullScreenIntent;
     }
     if (repeatInterval != null) {
       _repeatInterval = repeatInterval;
@@ -586,6 +595,7 @@ class ScheduleNotifications with HandleError {
     NotificationVisibility? visibility,
     int? timeoutAfter,
     String? category,
+    bool? fullScreenIntent,
     bool? presentAlert,
     bool? presentSound,
     bool? presentBadge,
@@ -630,6 +640,7 @@ class ScheduleNotifications with HandleError {
       visibility,
       timeoutAfter,
       category,
+      fullScreenIntent,
       presentAlert,
       presentSound,
       presentBadge,
@@ -704,6 +715,7 @@ class ScheduleNotifications with HandleError {
     NotificationVisibility? visibility,
     int? timeoutAfter,
     String? category,
+    bool? fullScreenIntent,
     bool? presentAlert,
     bool? presentSound,
     bool? presentBadge,
@@ -755,6 +767,7 @@ class ScheduleNotifications with HandleError {
       visibility,
       timeoutAfter,
       category,
+      fullScreenIntent,
       presentAlert,
       presentSound,
       presentBadge,
@@ -780,8 +793,9 @@ class ScheduleNotifications with HandleError {
           schedule,
           notificationSpecifics,
           uiLocalNotificationDateInterpretation:
-              uiLocalNotificationDateInterpretation!,
-          androidAllowWhileIdle: androidAllowWhileIdle!,
+              uiLocalNotificationDateInterpretation ??
+                  UILocalNotificationDateInterpretation.absoluteTime,
+          androidAllowWhileIdle: androidAllowWhileIdle ?? true,
           payload: payload,
           matchDateTimeComponents: matchDateTimeComponents,
         );
@@ -831,6 +845,7 @@ class ScheduleNotifications with HandleError {
     NotificationVisibility? visibility,
     int? timeoutAfter,
     String? category,
+    bool? fullScreenIntent,
     bool? presentAlert,
     bool? presentSound,
     bool? presentBadge,
@@ -881,6 +896,7 @@ class ScheduleNotifications with HandleError {
       visibility,
       timeoutAfter,
       category,
+      fullScreenIntent,
       presentAlert,
       presentSound,
       presentBadge,
@@ -956,6 +972,7 @@ class ScheduleNotifications with HandleError {
     NotificationVisibility? visibility,
     int? timeoutAfter,
     String? category,
+    bool? fullScreenIntent,
     bool? presentAlert,
     bool? presentSound,
     bool? presentBadge,
@@ -1006,6 +1023,7 @@ class ScheduleNotifications with HandleError {
       visibility,
       timeoutAfter,
       category,
+      fullScreenIntent,
       presentAlert,
       presentSound,
       presentBadge,
@@ -1087,6 +1105,7 @@ class ScheduleNotifications with HandleError {
     NotificationVisibility? visibility,
     int? timeoutAfter,
     String? category,
+    bool? fullScreenIntent,
     bool? presentAlert,
     bool? presentSound,
     bool? presentBadge,
@@ -1139,6 +1158,7 @@ class ScheduleNotifications with HandleError {
       visibility,
       timeoutAfter,
       category,
+      fullScreenIntent,
       presentAlert,
       presentSound,
       presentBadge,
@@ -1213,6 +1233,7 @@ class ScheduleNotifications with HandleError {
     NotificationVisibility? visibility,
     int? timeoutAfter,
     String? category,
+    bool? fullScreenIntent,
     bool? presentAlert,
     bool? presentSound,
     bool? presentBadge,
@@ -1268,6 +1289,7 @@ class ScheduleNotifications with HandleError {
     visibility ??= _visibility;
     timeoutAfter ??= _timeoutAfter;
     category ??= _category;
+    fullScreenIntent ??= _fullScreenIntent;
     presentAlert ??= _presentAlert;
     presentSound ??= _presentSound;
     presentBadge ??= _presentBadge;
