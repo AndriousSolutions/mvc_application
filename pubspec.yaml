@@ -3,7 +3,7 @@ description: Flutter Framework for Applications using the MVC Design Pattern
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
 
-version: 7.7.1+2
+version: 7.8.0
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -38,8 +38,8 @@ dependencies:
   # https://pub.dev/packages/path_provider
   path_provider: ^2.0.0
 
-  # https://pub.dartlang.org/packages/device_info
-  device_info: ^2.0.0
+  # https://pub.dev/packages/device_info_plus
+  device_info_plus: ^2.0.0
 
   # https://pub.dev/packages/flutter_material_color_picker
 #  flutter_material_color_picker: ^1.0.0
@@ -55,7 +55,7 @@ dependencies:
 #  flutter_string_encryption: ^0.3.0
 
   # https://pub.dev/packages/flutter_local_notifications
-  flutter_local_notifications: ^6.0.0
+  flutter_local_notifications: ^8.0.0
 
   # https://pub.dev/packages/timezone
   timezone: ^0.7.0

@@ -22,7 +22,7 @@
 // Replace 'dart:io' for Web applications
 import 'package:universal_platform/universal_platform.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:device_info/device_info.dart'
+import 'package:device_info_plus/device_info_plus.dart'
     show AndroidDeviceInfo, DeviceInfoPlugin, IosDeviceInfo;
 
 // ignore: avoid_classes_with_only_static_members

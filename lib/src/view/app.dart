@@ -187,6 +187,15 @@ class App {
     }
   }
 
+  /// Return the navigator key used by the App's View.
+  static GlobalKey<ScaffoldMessengerState>? get scaffoldMessengerKey =>
+      _appState?.scaffoldMessengerKey;
+  static set scaffoldMessengerKey(GlobalKey<ScaffoldMessengerState>? v) {
+    if (v != null) {
+      _appState?.scaffoldMessengerKey = v;
+    }
+  }
+
   /// Returns the routes used by the App's View.
   static Map<String, WidgetBuilder>? get routes => _appState?.routes;
   static set routes(Map<String, WidgetBuilder>? v) {

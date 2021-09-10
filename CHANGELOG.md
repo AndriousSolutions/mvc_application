@@ -1,5 +1,13 @@
 
+## 7.8.0
+ September 09, 2021
+- RouterDelegate `New Route Navigation`
+- Migrating from `device_info` plugin to `device_info_plus`
+- flutter_local_notifications from ^6.0.0 to ^8.0.0
+- List<Map<String, dynamic>?> mapItems to List<Map<String, dynamic>> mapItems
+
 ## 7.7.1+2
+ August 03, 2021
 - Migrate from the `connectivity` plugin to `connectivity_plus`.
 - Corrected schedule_notifications.dart
 

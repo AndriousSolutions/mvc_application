@@ -63,6 +63,11 @@ class AppState extends AppViewState<AppStateWidget> {
     List<ControllerMVC>? controllers,
     Object? object,
     GlobalKey<NavigatorState>? navigatorKey,
+    RouteInformationProvider? routeInformationProvider,
+    RouteInformationParser<Object>? routeInformationParser,
+    RouterDelegate<Object>? routerDelegate,
+    BackButtonDispatcher? backButtonDispatcher,
+    GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey,
     Map<String, WidgetBuilder>? routes,
     String? initialRoute,
     RouteFactory? onGenerateRoute,
@@ -104,6 +109,10 @@ class AppState extends AppViewState<AppStateWidget> {
     ErrorWidgetBuilder? errorScreen,
     v.ReportErrorHandler? errorReport,
     this.inHome,
+    this.inRouteInformationProvider,
+    this.inRouteInformationParser,
+    this.inRouterDelegate,
+    this.inBackButtonDispatcher,
     this.inRoutes,
     this.inInitialRoute,
     this.inOnGenerateRoute,
@@ -139,6 +148,11 @@ class AppState extends AppViewState<AppStateWidget> {
           controllers: controllers,
           object: object,
           navigatorKey: navigatorKey,
+          routeInformationProvider: routeInformationProvider,
+          routeInformationParser: routeInformationParser,
+          routerDelegate: routerDelegate,
+          backButtonDispatcher: backButtonDispatcher,
+          scaffoldMessengerKey: scaffoldMessengerKey,
           routes: routes,
           initialRoute: initialRoute,
           onGenerateRoute: onGenerateRoute,
@@ -230,6 +244,10 @@ class AppState extends AppViewState<AppStateWidget> {
   bool? _isCupertino;
 
   final Widget Function()? inHome;
+  final RouteInformationProvider Function()? inRouteInformationProvider;
+  final RouteInformationParser<Object> Function()? inRouteInformationParser;
+  final RouterDelegate<Object> Function()? inRouterDelegate;
+  final BackButtonDispatcher Function()? inBackButtonDispatcher;
   final Map<String, WidgetBuilder> Function()? inRoutes;
   final String Function()? inInitialRoute;
   final RouteFactory Function()? inOnGenerateRoute;
@@ -337,48 +355,97 @@ class AppState extends AppViewState<AppStateWidget> {
         scrollBehavior: scrollBehavior ?? onScrollBehavior(),
       );
     } else {
-      return MaterialApp(
-        key: key ?? v.App.widgetsAppKey,
-        navigatorKey: navigatorKey ?? onNavigatorKey(),
-        home: home ?? onHome(),
-        routes: routes ?? onRoutes() ?? const <String, WidgetBuilder>{},
-        initialRoute: initialRoute ?? onInitialRoute(),
-        onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
-        onUnknownRoute: onUnknownRoute ?? onOnUnknownRoute(),
-        navigatorObservers: navigatorObservers ??
-            onNavigatorObservers() ??
-            const <NavigatorObserver>[],
-        builder: builder ?? onBuilder(),
-        title: title ?? onTitle(),
-        onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
-        color: color ?? onColor() ?? Colors.white,
-        theme: theme ?? onTheme() ?? v.App.themeData,
-        darkTheme: darkTheme ?? onDarkTheme(),
-        themeMode: themeMode ?? onThemeMode(),
-        locale: locale ?? onLocale(),
-        localizationsDelegates: onLocalizationsDelegates(),
-        localeListResolutionCallback:
-            localeListResolutionCallback ?? onLocaleListResolutionCallback(),
-        localeResolutionCallback:
-            localeResolutionCallback ?? onLocaleResolutionCallback(),
-        supportedLocales: supportedLocales ?? onSupportedLocales(),
-        debugShowMaterialGrid:
-            debugShowMaterialGrid ?? onDebugShowMaterialGrid(),
-        showPerformanceOverlay:
-            showPerformanceOverlay ?? onShowPerformanceOverlay(),
-        checkerboardRasterCacheImages:
-            checkerboardRasterCacheImages ?? onCheckerboardRasterCacheImages(),
-        checkerboardOffscreenLayers:
-            checkerboardOffscreenLayers ?? onCheckerboardOffscreenLayers(),
-        showSemanticsDebugger:
-            showSemanticsDebugger ?? onShowSemanticsDebugger(),
-        debugShowCheckedModeBanner:
-            debugShowCheckedModeBanner ?? onDebugShowCheckedModeBanner(),
-        shortcuts: shortcuts ?? onShortcuts(),
-        actions: actions ?? onActions(),
-        restorationScopeId: restorationScopeId ?? onRestorationScopeId(),
-        scrollBehavior: scrollBehavior ?? onScrollBehavior(),
-      );
+      _routerDelegate = routerDelegate ?? onRouterDelegate();
+      _routeInformationParser =
+          routeInformationParser ?? onRouteInformationParser();
+      if (_routerDelegate == null || _routeInformationParser == null) {
+        return MaterialApp(
+          key: key ?? v.App.widgetsAppKey,
+          navigatorKey: navigatorKey ?? onNavigatorKey(),
+          scaffoldMessengerKey:
+              scaffoldMessengerKey ?? onScaffoldMessengerKey(),
+          home: home ?? onHome(),
+          routes: routes ?? onRoutes() ?? const <String, WidgetBuilder>{},
+          initialRoute: initialRoute ?? onInitialRoute(),
+          onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
+          onUnknownRoute: onUnknownRoute ?? onOnUnknownRoute(),
+          navigatorObservers: navigatorObservers ??
+              onNavigatorObservers() ??
+              const <NavigatorObserver>[],
+          builder: builder ?? onBuilder(),
+          title: title ?? onTitle(),
+          onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
+          color: color ?? onColor() ?? Colors.white,
+          theme: theme ?? onTheme() ?? v.App.themeData,
+          darkTheme: darkTheme ?? onDarkTheme(),
+          themeMode: themeMode ?? onThemeMode(),
+          locale: locale ?? onLocale(),
+          localizationsDelegates: onLocalizationsDelegates(),
+          localeListResolutionCallback:
+              localeListResolutionCallback ?? onLocaleListResolutionCallback(),
+          localeResolutionCallback:
+              localeResolutionCallback ?? onLocaleResolutionCallback(),
+          supportedLocales: supportedLocales ?? onSupportedLocales(),
+          debugShowMaterialGrid:
+              debugShowMaterialGrid ?? onDebugShowMaterialGrid(),
+          showPerformanceOverlay:
+              showPerformanceOverlay ?? onShowPerformanceOverlay(),
+          checkerboardRasterCacheImages: checkerboardRasterCacheImages ??
+              onCheckerboardRasterCacheImages(),
+          checkerboardOffscreenLayers:
+              checkerboardOffscreenLayers ?? onCheckerboardOffscreenLayers(),
+          showSemanticsDebugger:
+              showSemanticsDebugger ?? onShowSemanticsDebugger(),
+          debugShowCheckedModeBanner:
+              debugShowCheckedModeBanner ?? onDebugShowCheckedModeBanner(),
+          shortcuts: shortcuts ?? onShortcuts(),
+          actions: actions ?? onActions(),
+          restorationScopeId: restorationScopeId ?? onRestorationScopeId(),
+          scrollBehavior: scrollBehavior ?? onScrollBehavior(),
+        );
+      } else {
+        return MaterialApp.router(
+          key: key ?? v.App.widgetsAppKey,
+          routeInformationProvider:
+              routeInformationProvider ?? onRouteInformationProvider(),
+          routeInformationParser: _routeInformationParser!,
+          routerDelegate: _routerDelegate!,
+          backButtonDispatcher:
+              backButtonDispatcher ?? onBackButtonDispatcher(),
+          scaffoldMessengerKey:
+              scaffoldMessengerKey ?? onScaffoldMessengerKey(),
+          builder: builder ?? onBuilder(),
+          title: title ?? onTitle(),
+          onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
+          color: color ?? onColor() ?? Colors.white,
+          theme: theme ?? onTheme() ?? v.App.themeData,
+          darkTheme: darkTheme ?? onDarkTheme(),
+          themeMode: themeMode ?? onThemeMode(),
+          locale: locale ?? onLocale(),
+          localizationsDelegates: onLocalizationsDelegates(),
+          localeListResolutionCallback:
+              localeListResolutionCallback ?? onLocaleListResolutionCallback(),
+          localeResolutionCallback:
+              localeResolutionCallback ?? onLocaleResolutionCallback(),
+          supportedLocales: supportedLocales ?? onSupportedLocales(),
+          debugShowMaterialGrid:
+              debugShowMaterialGrid ?? onDebugShowMaterialGrid(),
+          showPerformanceOverlay:
+              showPerformanceOverlay ?? onShowPerformanceOverlay(),
+          checkerboardRasterCacheImages: checkerboardRasterCacheImages ??
+              onCheckerboardRasterCacheImages(),
+          checkerboardOffscreenLayers:
+              checkerboardOffscreenLayers ?? onCheckerboardOffscreenLayers(),
+          showSemanticsDebugger:
+              showSemanticsDebugger ?? onShowSemanticsDebugger(),
+          debugShowCheckedModeBanner:
+              debugShowCheckedModeBanner ?? onDebugShowCheckedModeBanner(),
+          shortcuts: shortcuts ?? onShortcuts(),
+          actions: actions ?? onActions(),
+          restorationScopeId: restorationScopeId ?? onRestorationScopeId(),
+          scrollBehavior: scrollBehavior ?? onScrollBehavior(),
+        );
+      }
     }
   }
 
@@ -439,6 +506,19 @@ class AppState extends AppViewState<AppStateWidget> {
   GlobalKey<NavigatorState> onNavigatorKey() =>
       _navigatorKey ??= GlobalKey<NavigatorState>();
   GlobalKey<NavigatorState>? _navigatorKey;
+  RouteInformationProvider? onRouteInformationProvider() =>
+      inRouteInformationProvider != null ? inRouteInformationProvider!() : null;
+  RouteInformationParser<Object>? onRouteInformationParser() =>
+      inRouteInformationParser != null ? inRouteInformationParser!() : null;
+  RouteInformationParser<Object>? _routeInformationParser;
+  RouterDelegate<Object>? onRouterDelegate() =>
+      inRouterDelegate != null ? inRouterDelegate!() : null;
+  RouterDelegate<Object>? _routerDelegate;
+  BackButtonDispatcher? onBackButtonDispatcher() =>
+      inBackButtonDispatcher != null ? inBackButtonDispatcher!() : null;
+  GlobalKey<ScaffoldMessengerState> onScaffoldMessengerKey() =>
+      _scaffoldMessengerKey ??= GlobalKey<ScaffoldMessengerState>();
+  GlobalKey<ScaffoldMessengerState>? _scaffoldMessengerKey;
   Widget? onHome() => inHome != null ? inHome!() : null;
   Map<String, WidgetBuilder>? onRoutes() =>
       inRoutes != null ? inRoutes!() : const <String, WidgetBuilder>{};
@@ -540,6 +620,11 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
     List<ControllerMVC>? controllers,
     Object? object,
     this.navigatorKey,
+    this.routeInformationProvider,
+    this.routeInformationParser,
+    this.routerDelegate,
+    this.backButtonDispatcher,
+    this.scaffoldMessengerKey,
     this.routes,
     this.initialRoute,
     this.onGenerateRoute,
@@ -624,6 +709,11 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
 
   /// All the fields found in the widgets, MaterialApp and CupertinoApp
   GlobalKey<NavigatorState>? navigatorKey;
+  RouteInformationProvider? routeInformationProvider;
+  RouteInformationParser<Object>? routeInformationParser;
+  RouterDelegate<Object>? routerDelegate;
+  BackButtonDispatcher? backButtonDispatcher;
+  GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey;
   Map<String, WidgetBuilder>? routes;
   String? initialRoute;
   RouteFactory? onGenerateRoute;

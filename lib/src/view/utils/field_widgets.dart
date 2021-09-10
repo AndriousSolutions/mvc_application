@@ -1173,7 +1173,7 @@ class FieldWidgets<T> extends DataFieldItem {
     items = fields;
   }
 
-  List<Map<String, dynamic>?> mapItems<U extends FieldWidgets<T>>(String key,
+  List<Map<String, dynamic>> mapItems<U extends FieldWidgets<T>>(String key,
       List<DataFieldItem> items, U Function(DataFieldItem dataItem) create,
       [U? itemsObj]) {
     //
@@ -1196,8 +1196,9 @@ class FieldWidgets<T> extends DataFieldItem {
       }
     }
 
-    final list = <Map<String, dynamic>?>[];
+    final list = <Map<String, dynamic>>[];
 
+    //ignore: unnecessary_cast
     for (final item in (itemsObj.items ?? []) as Iterable) {
       // Assign the appropriate map key value.
       item.keys(value: key);
