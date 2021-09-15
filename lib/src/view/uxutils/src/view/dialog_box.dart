@@ -22,24 +22,70 @@ import 'package:mvc_application/view.dart';
 /// Displays a String passing specific one to two button options
 /// and their corresponding fucntion calls.
 /// Displays a particular dialogue box depending on platform.
-Future<bool?> showBox({
+Future<bool> showBox({
   required BuildContext context,
   String? text,
   Option? button01,
   Option? button02,
   VoidCallback? press01,
   VoidCallback? press02,
-}) {
+  Widget? title,
+  EdgeInsetsGeometry? titlePadding,
+  TextStyle? titleTextStyle,
+  Widget? content,
+  EdgeInsetsGeometry? contentPadding,
+  TextStyle? contentTextStyle,
+  List<Widget>? actions,
+  EdgeInsetsGeometry? actionsPadding,
+  VerticalDirection? actionsOverflowDirection,
+  double? actionsOverflowButtonSpacing,
+  EdgeInsetsGeometry? buttonPadding,
+  Color? backgroundColor,
+  double? elevation,
+  String? semanticLabel,
+  EdgeInsets? insetPadding,
+  Clip? clipBehavior,
+  ShapeBorder? shape,
+  bool? scrollable,
+  bool? barrierDismissible,
+  Color? barrierColor,
+  String? barrierLabel,
+  bool? useSafeArea,
+  bool? useRootNavigator,
+  RouteSettings? routeSettings,
+}) async {
   button01 ??= OKOption();
   button02 ??= CancelOption();
-  final theme = Theme.of(context);
-  final dialogTextStyle = theme.textTheme.subtitle1!
-      .copyWith(color: theme.textTheme.caption!.color);
+  bool? result;
   if (App.useMaterial) {
-    return showDialog<bool>(
+    result = await showDialog<bool>(
       context: context,
+      barrierDismissible: barrierDismissible ?? true,
+      barrierColor: barrierColor ?? Colors.black54,
+      barrierLabel: barrierLabel,
+      useSafeArea: useSafeArea ?? true,
+      useRootNavigator: useRootNavigator ?? true,
+      routeSettings: routeSettings,
       builder: (BuildContext context) => AlertDialog(
-          content: Text(text ?? ' ', style: dialogTextStyle),
+          title: title,
+          titlePadding: titlePadding,
+          titleTextStyle: titleTextStyle,
+          content: content ?? Text(text ?? ' '),
+          contentPadding:
+              contentPadding ?? const EdgeInsets.fromLTRB(24, 20, 24, 24),
+          contentTextStyle: contentTextStyle,
+          actionsPadding: actionsPadding ?? EdgeInsets.zero,
+          actionsOverflowDirection: actionsOverflowDirection,
+          actionsOverflowButtonSpacing: actionsOverflowButtonSpacing,
+          buttonPadding: buttonPadding,
+          backgroundColor: backgroundColor,
+          elevation: elevation,
+          semanticLabel: semanticLabel,
+          insetPadding: insetPadding ??
+              const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
+          clipBehavior: clipBehavior ?? Clip.none,
+          shape: shape,
+          scrollable: scrollable ?? false,
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -49,7 +95,7 @@ Future<bool?> showBox({
                 if (button02!.onPressed != null) {
                   button02.onPressed!();
                 }
-                Navigator.pop(context, button02.result);
+                Navigator.pop(context, button02.result ?? false);
               },
               child: Text(button02!.text ?? 'Cancel'),
             ),
@@ -61,45 +107,45 @@ Future<bool?> showBox({
                 if (button01!.onPressed != null) {
                   button01.onPressed!();
                 }
-                Navigator.pop(context, button01.result);
+                Navigator.pop(context, button01.result ?? true);
               },
               child: Text(button01!.text ?? 'OK'),
             ),
           ]),
     );
   } else {
-    return showCupertinoDialog<bool>(
+    result = await showCupertinoDialog<bool>(
       context: context,
-      builder: (BuildContext context) => CupertinoAlertDialog(
-          content: Text(text ?? ' ', style: dialogTextStyle),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              onPressed: () {
-                if (press02 != null) {
-                  press02();
-                }
-                if (button02!.onPressed != null) {
-                  button02.onPressed!();
-                }
-                Navigator.pop(context, button02.result);
-              },
-              child: Text(button02!.text ?? 'Cancel'),
-            ),
-            CupertinoDialogAction(
-              onPressed: () {
-                if (press01 != null) {
-                  press01();
-                }
-                if (button01!.onPressed != null) {
-                  button01.onPressed!();
-                }
-                Navigator.pop(context, button01.result);
-              },
-              child: Text(button01!.text ?? 'OK'),
-            ),
-          ]),
+      builder: (BuildContext context) =>
+          CupertinoAlertDialog(content: Text(text ?? ' '), actions: <Widget>[
+        CupertinoDialogAction(
+          onPressed: () {
+            if (press02 != null) {
+              press02();
+            }
+            if (button02!.onPressed != null) {
+              button02.onPressed!();
+            }
+            Navigator.pop(context, button02.result ?? false);
+          },
+          child: Text(button02!.text ?? 'Cancel'),
+        ),
+        CupertinoDialogAction(
+          onPressed: () {
+            if (press01 != null) {
+              press01();
+            }
+            if (button01!.onPressed != null) {
+              button01.onPressed!();
+            }
+            Navigator.pop(context, button01.result ?? true);
+          },
+          child: Text(button01!.text ?? 'OK'),
+        ),
+      ]),
     );
   }
+  return result ?? false;
 }
 
 /// A high-level function
@@ -213,7 +259,7 @@ mixin DialogOptions {
 }
 
 class Option {
-  Option({this.text, this.onPressed, required this.result})
+  Option({this.text, this.onPressed, this.result})
       : assert(result != null, 'Must provide a option result!');
   final String? text;
   final VoidCallback? onPressed;

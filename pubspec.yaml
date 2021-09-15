@@ -3,7 +3,7 @@ description: Flutter Framework for Applications using the MVC Design Pattern
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
 
-version: 7.8.0
+version: 7.8.1
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -45,7 +45,7 @@ dependencies:
 #  flutter_material_color_picker: ^1.0.0
 
   # https://pub.dartlang.org/packages/prefs
-  prefs: ^3.3.0
+  prefs: ^3.0.0
   #  path: ../../packages/prefs
 
   # https://pub.dartlang.org/packages/uuid
