@@ -64,6 +64,7 @@ class AppErrorHandler {
   }) {
     _this ??= AppErrorHandler._(builder);
 
+    /// Allows you to set an error handler more than once.
     set(handler: handler, builder: builder, report: report);
 
     // Once set to false, you can't assign different handlers anymore.

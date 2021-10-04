@@ -25,8 +25,8 @@ export 'package:flutter/cupertino.dart' hide RefreshCallback, runApp;
 
 /// Supply the custom runApp function
 export 'package:mvc_application/src/conditional_export.dart'
-    if (dart.library.html) 'package:flutter/material.dart'
-    if (dart.library.io) 'package:mvc_application/src/controller/app.dart'
+    if (dart.library.html) 'package:mvc_application/src/view/platforms/run_webapp.dart'
+    if (dart.library.io) 'package:mvc_application/src/view/platforms/run_app.dart'
     show runApp;
 
 /// Futures are intentionally not awaited

@@ -15,23 +15,14 @@
 ///
 ///          Created  24 Dec 2018
 ///
-
-//import 'dart:io' show Platform;
-
 import 'dart:async' show Future;
 
-// Replace 'dart:io' for Web applications
-import 'package:universal_platform/universal_platform.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart'
     show FlutterExceptionHandler, Key, kIsWeb, mustCallSuper, protected;
-
 import 'package:flutter/material.dart';
-
-import 'package:flutter/cupertino.dart';
-
 import 'package:mvc_application/controller.dart' show AppConMVC, ControllerMVC;
-
+import 'package:mvc_application/controller.dart' show Assets;
 import 'package:mvc_application/view.dart' as v
     show
         App,
@@ -42,10 +33,9 @@ import 'package:mvc_application/view.dart' as v
         I10n,
         ReportErrorHandler,
         SetState;
-
-import 'package:mvc_application/controller.dart' show Assets;
-
 import 'package:prefs/prefs.dart' show Prefs;
+// Replace 'dart:io' for Web applications
+import 'package:universal_platform/universal_platform.dart';
 
 // Export the classes needed to use this file.
 export 'package:connectivity_plus/connectivity_plus.dart'

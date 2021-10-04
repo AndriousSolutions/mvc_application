@@ -16,60 +16,14 @@
 ///          Created  24 Dec 2018
 ///
 
-import 'dart:async' show runZonedGuarded;
-
-import 'dart:isolate' show Isolate, RawReceivePort;
-
-import 'package:flutter/material.dart' as m
-    show ErrorWidgetBuilder, Widget, runApp;
-
-import 'package:flutter/foundation.dart'
-    show FlutterExceptionHandler, FlutterErrorDetails;
+import 'package:flutter/foundation.dart' show FlutterErrorDetails;
 
 import 'package:mvc_application/controller.dart' show HandleError;
 
-import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
-
 import 'package:mvc_application/view.dart' as v
-    show
-        App,
-        ConnectivityListener,
-        ConnectivityResult,
-        AppErrorHandler,
-        ReportErrorHandler,
-        StateMVC;
+    show App, ConnectivityListener, ConnectivityResult, StateMVC;
 
-/// Add an Error Handler right at the start.
-void runApp(
-  m.Widget app, {
-  FlutterExceptionHandler? errorHandler,
-  m.ErrorWidgetBuilder? errorScreen,
-  v.ReportErrorHandler? errorReport,
-  bool allowNewHandlers = false,
-}) {
-  // Instantiate the app's error handler.
-  final handler = v.AppErrorHandler(
-      handler: errorHandler,
-      builder: errorScreen,
-      report: errorReport,
-      allowNewHandlers: allowNewHandlers);
-
-  Isolate.current.addErrorListener(RawReceivePort((dynamic pair) {
-    //
-    if (pair is List<dynamic>) {
-      final isolateError = pair;
-      handler.isolateError(
-        isolateError.first.toString(),
-        StackTrace.fromString(isolateError.last.toString()),
-      );
-    }
-  }).sendPort);
-
-  // Catch any errors attempting to execute runApp();
-  runZonedGuarded(() {
-    m.runApp(app);
-  }, handler.runZonedError);
-}
+import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
 /// A Controller for the 'app level'.
 class AppController extends ControllerMVC implements mvc.AppConMVC {

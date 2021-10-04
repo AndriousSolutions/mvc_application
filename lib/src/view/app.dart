@@ -339,7 +339,7 @@ class App {
   ) {
     // Attempt to use localeListResolutionCallback.
     if (_appState?.localeListResolutionCallback != null) {
-      var locales = _appState?.supportedLocales;
+      final locales = _appState?.supportedLocales;
       final locale =
           _appState?.localeListResolutionCallback!(preferredLocales, locales!);
       if (locale != null) {
@@ -353,7 +353,7 @@ class App {
 
     // localeListResolutionCallback failed, falling back to localeResolutionCallback.
     if (_appState?.localeResolutionCallback != null) {
-      var locales = _appState?.supportedLocales;
+      final locales = _appState?.supportedLocales;
       final locale = _appState?.localeResolutionCallback!(
         preferred,
         locales!,

@@ -38,4 +38,5 @@ void runApp(
   FlutterExceptionHandler? errorHandler,
   ErrorWidgetBuilder? errorScreen,
   ReportErrorHandler? errorReport,
+  bool allowNewHandlers = false,
 }) {}
