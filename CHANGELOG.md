@@ -1,4 +1,8 @@
 
+## 7.9.1
+ October 08, 2021
+- (v.App.isInit != null && v.App.isInit!)
+
 ## 7.9.0
  September 28, 2021
 - run_app.dart and run_webapp.dart

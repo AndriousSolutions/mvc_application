@@ -756,11 +756,6 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   Widget build(BuildContext context);
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     object = null;
     _errorHandler?.dispose();

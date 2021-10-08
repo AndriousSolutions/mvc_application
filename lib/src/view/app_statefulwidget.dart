@@ -165,7 +165,8 @@ abstract class AppStatefulWidget extends v.AppMVC {
         _app.onAsyncError(snapshot);
       }
       return v.App.errorHandler!.displayError(details);
-    } else if (snapshot.connectionState == ConnectionState.done) {
+    } else if (snapshot.connectionState == ConnectionState.done ||
+        (v.App.isInit != null && v.App.isInit!)) {
       // If snapshot doesn't have data or is false, let the developer's app handle it.
 //        && snapshot.hasData && snapshot.data) {
       return const v.AppStateWidget();
@@ -174,7 +175,7 @@ abstract class AppStatefulWidget extends v.AppMVC {
       if (loading != null) {
         widget = loading;
       } else {
-        if (UniversalPlatform.isAndroid) {
+        if (UniversalPlatform.isAndroid || UniversalPlatform.isWeb) {
           widget = const Center(child: CircularProgressIndicator());
         } else {
           widget = const Center(child: CupertinoActivityIndicator());
