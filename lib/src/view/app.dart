@@ -24,7 +24,8 @@ import 'package:universal_platform/universal_platform.dart';
 
 import 'package:flutter/foundation.dart' show FlutterExceptionHandler, kIsWeb;
 
-import 'package:package_info/package_info.dart' show PackageInfo;
+//import 'package:package_info/package_info.dart' show PackageInfo;
+import 'package:package_info_plus/package_info_plus.dart' show PackageInfo;
 
 import 'package:connectivity_plus/connectivity_plus.dart'
     show Connectivity, ConnectivityResult;

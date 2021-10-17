@@ -20,24 +20,22 @@
 ///  NOTE: Add the following permission to your AndroidManifest.xml
 ///      <uses-permission android:name="android.permission.VIBRATE" />
 ///      <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
-import 'dart:typed_data';
 import 'dart:async' show Future;
 import 'dart:math' show Random;
+import 'dart:typed_data';
 import 'dart:typed_data' show Int64List;
 import 'dart:ui' show Color;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:mvc_application/controller.dart' show HandleError;
+import 'package:mvc_application/view.dart' show App;
 import 'package:timezone/timezone.dart';
 
-import 'package:mvc_application/view.dart' show App;
-import 'package:mvc_application/controller.dart' show HandleError;
-
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 export 'dart:typed_data' show Int64List;
+
+export 'package:flutter/material.dart' show Color;
 
 /// Export those classes the user is likely to use and pass in.
 export 'package:flutter_local_notifications/flutter_local_notifications.dart'
@@ -71,8 +69,6 @@ export 'package:flutter_local_notifications/flutter_local_notifications.dart'
         RepeatInterval,
         SelectNotificationCallback,
         Time;
-
-export 'package:flutter/material.dart' show Color;
 
 /// The Notification feature for the phone.
 class ScheduleNotifications with HandleError {
@@ -1639,7 +1635,7 @@ class ScheduleNotifications with HandleError {
       androidSettings = AndroidNotificationDetails(
         channelId,
         channelName,
-        channelDescription,
+        channelDescription: channelDescription,
         icon: icon,
         importance: importance!,
         priority: priority!,

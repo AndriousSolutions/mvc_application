@@ -19,8 +19,7 @@
 // Replace 'dart:io' for Web applications
 import 'package:universal_platform/universal_platform.dart';
 
-import 'package:flutter/foundation.dart'
-    show FlutterExceptionHandler, Key, kIsWeb;
+import 'package:flutter/foundation.dart' show FlutterExceptionHandler, Key;
 
 import 'package:flutter/rendering.dart';
 
@@ -296,8 +295,7 @@ class AppState extends AppViewState<AppStateWidget> {
     if (theme != null) {
       v.App.themeData = theme;
     } else {
-      final theme = onTheme();
-      v.App.themeData = theme ?? ThemeData.light();
+      v.App.themeData = onTheme() ?? ThemeData.light();
     }
 
     if (iOSTheme != null) {

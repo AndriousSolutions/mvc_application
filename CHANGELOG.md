@@ -1,4 +1,13 @@
 
+
+## 7.10.0
+ October 17, 2021
+- package_info_plus: ^1.0.0
+
+## 7.9.2
+ October 08, 2021
+- if (snapshot.hasError || (v.App.isInit != null && !v.App.isInit!)) {
+
 ## 7.9.1
  October 08, 2021
 - (v.App.isInit != null && v.App.isInit!)

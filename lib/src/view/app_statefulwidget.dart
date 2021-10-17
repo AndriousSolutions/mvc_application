@@ -19,7 +19,7 @@ import 'dart:async' show Future;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart'
-    show FlutterExceptionHandler, Key, kIsWeb, mustCallSuper, protected;
+    show FlutterExceptionHandler, Key, mustCallSuper, protected;
 import 'package:flutter/material.dart';
 import 'package:mvc_application/controller.dart' show AppConMVC, ControllerMVC;
 import 'package:mvc_application/controller.dart' show Assets;
@@ -102,10 +102,10 @@ abstract class AppStatefulWidget extends v.AppMVC {
         await Prefs.init();
         // Collect installation & connectivity information
         await _app.initInternal();
-        // If not running on the Web.
-        if (!kIsWeb) {
-          await v.App.getDeviceInfo();
-        }
+//        // If not running on the Web.
+//        if (!kIsWeb) {
+        await v.App.getDeviceInfo();
+//        }
         // Initiate multi-language translations.
         await v.I10n.initAsync();
 
@@ -149,35 +149,67 @@ abstract class AppStatefulWidget extends v.AppMVC {
   /// Run the CircularProgressIndicator() until asynchronous operations are
   /// completed before the app proceeds.
   Widget _asyncBuilder(AsyncSnapshot<bool> snapshot, Widget? loading) {
-    if (snapshot.hasError) {
+    if (snapshot.hasData &&
+        snapshot.data! &&
+        (v.App.isInit != null && v.App.isInit!)) {
+      //
+      return const v.AppStateWidget();
+      //
+    } else if (snapshot.hasError) {
+      //
       final dynamic exception = snapshot.error;
+
       final details = FlutterErrorDetails(
         exception: exception,
         stack: exception is Error ? exception.stackTrace : null,
-        library: 'app_statefulwidget',
+        library: 'app_statefulwidget.dart',
         context: ErrorDescription('While getting ready in FutureBuilder Async'),
       );
+
       var handled = false;
+
       if (_vw != null) {
+        //
         handled = _vw!.onAsyncError(details);
       }
+
       if (!handled) {
+        //
         _app.onAsyncError(snapshot);
       }
       return v.App.errorHandler!.displayError(details);
-    } else if (snapshot.connectionState == ConnectionState.done ||
-        (v.App.isInit != null && v.App.isInit!)) {
-      // If snapshot doesn't have data or is false, let the developer's app handle it.
-//        && snapshot.hasData && snapshot.data) {
-      return const v.AppStateWidget();
+      //
+    } else if (snapshot.connectionState == ConnectionState.done &&
+        snapshot.hasData &&
+        !snapshot.data!) {
+      //
+      final FlutterErrorDetails details = FlutterErrorDetails(
+        exception: Exception('App failed to initialize'),
+        library: 'app_statefulwidget.dart',
+        context: ErrorDescription('Please, notify admin.'),
+      );
+
+      FlutterError.reportError(details);
+
+      return ErrorWidget.builder(details);
+
+      // } else if (snapshot.connectionState == ConnectionState.done ||
+      //     (v.App.isInit != null && v.App.isInit!)) {
+      //   return const v.AppStateWidget();
     } else {
+      //
       Widget widget;
+
       if (loading != null) {
+        //
         widget = loading;
       } else {
+        //
         if (UniversalPlatform.isAndroid || UniversalPlatform.isWeb) {
+          //
           widget = const Center(child: CircularProgressIndicator());
         } else {
+          //
           widget = const Center(child: CupertinoActivityIndicator());
         }
       }
