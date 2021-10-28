@@ -2,30 +2,21 @@
 // Use of this source code is governed by a Apache License, Version 2.0.
 // The main directory contains that LICENSE file.
 
-import 'package:i10n_translator/i10n.dart';
-
 import 'package:mvc_application/view.dart';
 
 /// A Spinner listing the available Locales.
 class ISOSpinner extends StatefulWidget {
   const ISOSpinner({
     Key? key,
-    required this.initialItem,
+    this.initialItem,
+    this.locale,
+    required this.supportedLocales,
+    required this.onSelectedItemChanged,
   }) : super(key: key);
-  final int initialItem;
-
-  /// Retrieve the available locales.
-  List<Locale> locales() => I10n.supportedLocales!;
-
-  /// Assign the specified Locale.
-  Future<void> onSelectedItemChanged(int index) async {
-    final localesList = locales();
-    if (localesList != null) {
-      App.locale = localesList[index];
-      await Prefs.setString('locale', localesList[index].toLanguageTag());
-      App.refresh();
-    }
-  }
+  final Locale? locale;
+  final int? initialItem;
+  final List<Locale> supportedLocales;
+  final Future<void> Function(int index) onSelectedItemChanged;
 
   @override
   State createState() => _SpinnerState();
@@ -35,15 +26,19 @@ class _SpinnerState extends State<ISOSpinner> {
   @override
   void initState() {
     super.initState();
-    locales = widget.locales();
+
+    locales = widget.supportedLocales;
+
     int? index;
-    if (widget.initialItem > -1) {
-      index = widget.initialItem;
-    } else {
-      index = locales.indexOf(App.locale!);
-      if (index == null || index < 0) {
-        index = 0;
-      }
+
+    if (widget.initialItem != null && widget.initialItem! > -1) {
+      index = widget.initialItem!;
+    } else if (widget.locale != null) {
+      index = locales.indexOf(widget.locale!);
+    }
+
+    if (index == null || index < 0) {
+      index = 0;
     }
     controller = FixedExtentScrollController(initialItem: index);
   }

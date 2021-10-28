@@ -43,8 +43,7 @@ import 'package:flutter/material.dart'
         Widget,
         showAboutDialog;
 
-import 'package:mvc_application/view.dart'
-    show App, ColorPicker, I10n, StateMVC;
+import 'package:mvc_application/view.dart' show App, I10n, StateMVC;
 
 import 'package:mvc_application/controller.dart' show Prefs;
 
@@ -256,7 +255,7 @@ abstract class AppPopupMenu<T> {
   bool? enabled;
   ShapeBorder? shape;
   Color? color;
-  bool captureInheritedThemes;
+  bool? captureInheritedThemes;
 
   BuildContext? get context => _context;
 
@@ -271,7 +270,7 @@ abstract class AppPopupMenu<T> {
 
   PopupMenuItemBuilder<T> _onItems(List<T>? menuItems) {
     menuItems ??= items;
-    var popupMenuItems = menuItems!
+    final popupMenuItems = menuItems!
         .map((T? item) =>
             PopupMenuItem<T>(value: item, child: Text(item.toString())))
         .toList();
@@ -336,9 +335,9 @@ abstract class AppPopupMenu<T> {
   bool? onCaptureInheritedThemes() => true;
 
   void errorSnackBar() {
-    var state = ScaffoldMessenger.maybeOf(context!);
+    final state = ScaffoldMessenger.maybeOf(context!);
     state?.showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text('Error. No menu options defined.'),
       ),
     );

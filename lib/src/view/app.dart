@@ -312,6 +312,34 @@ class App {
     }
   }
 
+  static ColorSwatch<int?>? setThemeData([ColorSwatch<int?>? value]) {
+    //
+    if (value != null) {
+      Prefs.setInt(
+        'colorTheme',
+        Colors.primaries.indexOf(value as MaterialColor),
+      );
+    } else {
+      final swatch = Prefs.getInt('colorTheme', -1);
+      // If never set in the first place, ignore
+      if (swatch > -1) {
+        value = Colors.primaries[swatch];
+      }
+    }
+
+    if (value != null) {
+      /// Assign the colour to the floating button as well.
+      themeData = ThemeData(
+        primarySwatch: value as MaterialColor,
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: value,
+        ),
+      );
+      iOSTheme = value;
+    }
+    return value;
+  }
+
   /// Returns the Color passed to the App's View.
   static Color? get color => _appState?.color;
   static set color(Color? v) {
@@ -520,6 +548,44 @@ class App {
 
   /// Refresh the root State object, AppView.
   static void refresh() => _appState?.refresh();
+
+  /// Display the SnackBar
+  static void snackBar({
+    Key? key,
+    required Widget content,
+    Color? backgroundColor,
+    double? elevation,
+    EdgeInsetsGeometry? margin,
+    EdgeInsetsGeometry? padding,
+    double? width,
+    ShapeBorder? shape,
+    SnackBarBehavior? behavior,
+    SnackBarAction? action,
+    Duration? duration,
+    Animation<double>? animation,
+    VoidCallback? onVisible,
+    DismissDirection dismissDirection = DismissDirection.down,
+  }) {
+    final state = ScaffoldMessenger.maybeOf(context!);
+    state?.showSnackBar(
+      SnackBar(
+        key: key,
+        content: content,
+        backgroundColor: backgroundColor,
+        elevation: elevation,
+        margin: margin,
+        padding: padding,
+        width: width,
+        shape: shape,
+        behavior: behavior,
+        action: action,
+        duration: duration ?? const Duration(milliseconds: 4000),
+        animation: animation,
+        onVisible: onVisible,
+        dismissDirection: dismissDirection,
+      ),
+    );
+  }
 
   /// Catch and explicitly handle the error.
   static void catchError(Object ex) {

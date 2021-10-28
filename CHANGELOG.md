@@ -1,4 +1,19 @@
 
+## 7.11.0
+ October 24, 2021
+- static ColorSwatch<int?>? setThemeData([ColorSwatch<int?>? value]) {
+- bool? captureInheritedThemes;
+- final LocaleListResolutionCallback? inLocaleListResolutionCallback;
+- final LocaleResolutionCallback? inLocaleResolutionCallback;
+- v.App.themeData ??= ThemeData.light();
+- color: color ?? onColor() ?? Colors.blue,
+- inLocaleResolutionCallback ?? v.I10n.localeResolutionCallback;
+- //    title ??= '';
+- //    color ??= Colors.blue;
+- v.App.setThemeData();
+- class ISOSpinner extends StatefulWidget {
+- static void snackBar({
+- context: App.context!,
 
 ## 7.10.0
  October 17, 2021

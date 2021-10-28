@@ -152,7 +152,6 @@ Future<bool> showBox({
 /// Displays a String passing specific one to two button options
 /// and their corresponding function calls.
 void dialogBox({
-  required BuildContext context,
   String? title,
   Option? button01,
   Option? button02,
@@ -162,11 +161,10 @@ void dialogBox({
   bool switchButtons = false,
 }) {
   showDialog<bool>(
-      context: context,
+      context: App.context!,
       barrierDismissible: barrierDismissible,
       builder: (BuildContext context) {
         return _DialogWindow(
-          context: context,
           title: title,
           button01: button01,
           button02: button02,
@@ -179,7 +177,6 @@ void dialogBox({
 
 class _DialogWindow with DialogOptions {
   _DialogWindow({
-    required BuildContext context,
     this.title,
     Option? button01,
     Option? button02,
@@ -187,7 +184,6 @@ class _DialogWindow with DialogOptions {
     VoidCallback? press02,
     bool? switchButtons,
   }) {
-    this.context = context;
     this.button01 = button01;
     this.button02 = button02;
     this.press01 = press01;
@@ -205,7 +201,6 @@ class _DialogWindow with DialogOptions {
 }
 
 mixin DialogOptions {
-  BuildContext? context;
   Option? button01;
   Option? button02;
   VoidCallback? press01;
@@ -252,7 +247,7 @@ mixin DialogOptions {
           if (option.onPressed != null) {
             option.onPressed!();
           }
-          Navigator.pop(context!, option.result);
+          Navigator.pop(App.context!, option.result);
         },
         child: Text(option.text!),
       );
@@ -352,7 +347,6 @@ class MsgBox {
 ///
 class DialogBox with DialogOptions {
   DialogBox({
-    required BuildContext context,
     this.title,
     Option? button01,
     Option? button02,
@@ -363,7 +357,6 @@ class DialogBox with DialogOptions {
     this.actions,
     this.barrierDismissible = false,
   }) {
-    this.context = context;
     this.button01 = button01;
     this.button02 = button02;
     this.press01 = press01;
@@ -376,7 +369,6 @@ class DialogBox with DialogOptions {
   final bool? barrierDismissible;
 
   Future<void> show({
-    BuildContext? context,
     String? title,
     Option? button01,
     Option? button02,
@@ -388,7 +380,6 @@ class DialogBox with DialogOptions {
     List<Widget>? actions,
     bool? barrierDismissible,
   }) {
-    context = context ?? this.context;
     title = title ?? this.title;
     title ??= '';
     this.button01 ??= button01;
@@ -402,7 +393,7 @@ class DialogBox with DialogOptions {
     actions ??= _listOptions();
     barrierDismissible ??= this.barrierDismissible ?? false;
     return showDialog<void>(
-        context: context!,
+        context: App.context!,
         barrierDismissible: barrierDismissible,
         builder: (BuildContext context) => AlertDialog(
               title: Text(title!),

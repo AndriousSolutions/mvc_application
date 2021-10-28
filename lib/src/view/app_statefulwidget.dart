@@ -27,7 +27,6 @@ import 'package:mvc_application/view.dart' as v
     show
         App,
         AppMVC,
-        AppMenu,
         AppState,
         AppStateWidget,
         I10n,
@@ -110,7 +109,7 @@ abstract class AppStatefulWidget extends v.AppMVC {
         await v.I10n.initAsync();
 
         // Set theme using App's menu system if any theme was saved.
-        v.AppMenu.setThemeData();
+        v.App.setThemeData();
 
         init = await super.initAsync();
 
@@ -236,7 +235,7 @@ class ConConsumer<T extends ControllerMVC> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => v.SetState(
-      builder: (context, object) => builder(
+      builder: (context, [object]) => builder(
             context,
             AppStatefulWidget._vw?.controllerByType<T>(),
             child,

@@ -6,8 +6,6 @@ export 'package:mvc_application/src/view/uxutils/src/view/simple_bottom_appbar.d
 
 export 'package:mvc_application/src/view/uxutils/src/view/dialog_box.dart';
 
-export 'package:mvc_application/src/view/uxutils/src/view/color_picker.dart';
-
 export 'package:mvc_application/src/view/uxutils/src/view/custom_scroll_physics.dart';
 
 export 'package:mvc_application/src/view/uxutils/src/view/variable_string.dart';

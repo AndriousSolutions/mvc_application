@@ -362,7 +362,7 @@ class FieldWidgets<T> extends DataFieldItem {
 
   Iterable<DataFieldItem>? items;
 
-  final ThemeData? _theme = App.themeData;
+  static final ThemeData? _theme = App.themeData;
 
   String? get key => _key;
   String? _key;
@@ -969,7 +969,7 @@ class FieldWidgets<T> extends DataFieldItem {
 
   CircleAvatar get circleAvatar => CircleAvatar(
         key: Key('CircleAvatar$_key'),
-        backgroundColor: backgroundColor ?? App.themeData!.primaryColor,
+        backgroundColor: backgroundColor,
         backgroundImage: backgroundImage,
         foregroundColor: foregroundColor,
         radius: radius,
@@ -1174,7 +1174,7 @@ class FieldWidgets<T> extends DataFieldItem {
   }
 
   List<Map<String, dynamic>> mapItems<U extends FieldWidgets<T>>(String key,
-      List<DataFieldItem> items, U Function(DataFieldItem dataItem) create,
+      List<DataFieldItem>? items, U Function(DataFieldItem dataItem) create,
       [U? itemsObj]) {
     //
     items = [];
@@ -1274,7 +1274,7 @@ class _StatefulStateCupertino extends State<CupertinoListTile> {
               const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: columnChildren(context) as List<Widget>,
+                children: columnChildren(context),
               ),
             ],
           ),
@@ -1284,11 +1284,11 @@ class _StatefulStateCupertino extends State<CupertinoListTile> {
     );
   }
 
-  List<Widget?> columnChildren(BuildContext context) {
-    final children = <Widget?>[];
+  List<Widget> columnChildren(BuildContext context) {
+    final children = <Widget>[];
     children.add(widget.title ?? const SizedBox());
     if (widget.subtitle != null) {
-      children.add(widget.subtitle);
+      children.add(widget.subtitle!);
     }
     return children;
   }
@@ -1455,7 +1455,7 @@ class _LIstItemsState<T> extends State<ListItems<T>> {
         ])
       ];
     } else {
-      var tile;
+      m.Widget tile;
       if (App.useMaterial) {
         tile = ListTile(
           subtitle: Text(widget.title!),
