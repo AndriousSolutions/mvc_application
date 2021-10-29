@@ -1,4 +1,9 @@
 
+
+## 7.11.0+2
+ October 29, 2021
+- Padding(padding: const EdgeInsets.symmetric(horizontal: 30),child: trailing)
+
 ## 7.11.0
  October 24, 2021
 - static ColorSwatch<int?>? setThemeData([ColorSwatch<int?>? value]) {

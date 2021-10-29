@@ -296,17 +296,17 @@ class App {
       return;
     }
     if (value is CupertinoThemeData) {
-      App._iOSTheme = value;
+      _iOSTheme = value;
     } else if (value is ThemeData) {
       _iOSTheme = MaterialBasedCupertinoThemeData(materialTheme: value);
     } else if (value is! ColorSwatch) {
       // Ignore the value
-    } else if (App._iOSTheme == null) {
-      App._iOSTheme = CupertinoThemeData(
+    } else if (_iOSTheme == null) {
+      _iOSTheme = CupertinoThemeData(
         primaryColor: value,
       );
     } else {
-      App._iOSTheme = App._iOSTheme?.copyWith(
+      _iOSTheme = _iOSTheme?.copyWith(
         primaryColor: value,
       );
     }

@@ -1270,7 +1270,9 @@ class _StatefulStateCupertino extends State<CupertinoListTile> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              leading,
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: leading),
               const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1278,7 +1280,9 @@ class _StatefulStateCupertino extends State<CupertinoListTile> {
               ),
             ],
           ),
-          trailing,
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: trailing),
         ],
       ),
     );
