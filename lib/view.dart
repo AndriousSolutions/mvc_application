@@ -29,9 +29,6 @@ export 'package:mvc_application/src/conditional_export.dart'
     if (dart.library.io) 'package:mvc_application/src/view/platforms/run_app.dart'
     show runApp;
 
-/// Futures are intentionally not awaited
-export 'package:pedantic/pedantic.dart' show unawaited;
-
 /// Replace 'dart:io' for Web applications
 export 'package:universal_platform/universal_platform.dart';
 
