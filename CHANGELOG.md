@@ -1,5 +1,21 @@
 
 
+## 8.0.0
+ October 30, 2021
+- @Deprecated('No need to replace the initState() function. Use initState()')
+    void initApp() {}
+- class AppController extends ControllerMVC implements mvc.AppControllerMVC, v.ConnectivityListener {
+- class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
+-  // Listen to the device's connectivity.
+   v.App.addConnectivityListener(con);
+- /// The widget passed to runApp().
+  abstract class AppMVC extends StatelessWidget {
+- v.AppState createView(); to v.AppState createState();
+- class AppStatefulWidget extends v.AppStatefulWidgetMVC {
+- Removed string_encryption.dart;
+- pedantic 1.11.1 (discontinued replaced by lints)
+- class FieldWidgets<T> extends DataFieldItem with StateGetter {
+
 ## 7.11.0+2
  October 29, 2021
 - Padding(padding: const EdgeInsets.symmetric(horizontal: 30),child: trailing)

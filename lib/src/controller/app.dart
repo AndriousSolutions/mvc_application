@@ -26,14 +26,32 @@ import 'package:mvc_application/view.dart' as v
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
 /// A Controller for the 'app level'.
-class AppController extends ControllerMVC implements mvc.AppConMVC {
+class AppController extends ControllerMVC
+    implements mvc.AppControllerMVC, v.ConnectivityListener {
   //
   AppController([v.StateMVC? state]) : super(state);
 
   /// Initialize any immediate 'none time-consuming' operations
   /// at the very beginning.
   @override
+  @Deprecated('No need to replace the initState() function. Use initState()')
   void initApp() {}
+
+  @override
+  Future<bool> initAsync() async {
+    /// Initialize any 'time-consuming' operations at the beginning.
+    /// Initialize items essential to the Mobile Applications.
+    /// Implement any asynchronous operations needed done at start up.
+    return true;
+  }
+
+  @override
+  bool onAsyncError(FlutterErrorDetails details) {
+    /// Supply an 'error handler' routine if something goes wrong
+    /// in the corresponding initAsync() routine.
+    /// Returns true if the error was properly handled.
+    return false;
+  }
 
   /// Override if you like to customize your error handling.
   @override
@@ -41,12 +59,6 @@ class AppController extends ControllerMVC implements mvc.AppConMVC {
     // Call the App's 'current' error handler.
     v.App?.onError(details);
   }
-}
-
-/// A Controller for the 'app level' to influence the whole app.
-class AppConMVC extends mvc.AppConMVC with v.ConnectivityListener, HandleError {
-  //
-  AppConMVC([v.StateMVC? state]) : super(state);
 
   /// If the device's connectivity changes.
   @override
@@ -58,4 +70,9 @@ class AppConMVC extends mvc.AppConMVC with v.ConnectivityListener, HandleError {
 class ControllerMVC extends mvc.ControllerMVC with HandleError {
   //
   ControllerMVC([v.StateMVC? state]) : super(state);
+
+  /// The current StateMVC object from mvc_application/view.dart
+  v.StateMVC? get stateMVC => state as v.StateMVC?;
+
+  // String addState(v.StateMVC? state) => super.addState(state as mvc.StateMVC);
 }

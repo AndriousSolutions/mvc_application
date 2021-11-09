@@ -24,14 +24,14 @@ export 'package:flutter/material.dart' hide runApp;
 export 'package:flutter/cupertino.dart' hide RefreshCallback, runApp;
 
 // App
-export 'package:mvc_pattern/mvc_pattern.dart' show AppMVC, StateListener;
+export 'package:mvc_pattern/mvc_pattern.dart' show StateListener;
 
 // App's View
 export 'package:mvc_application/src/view/app.dart' show App, AppDrawer;
 
 //App's Controller
 export 'package:mvc_application/src/controller/app.dart'
-    show AppConMVC, AppController, ControllerMVC, runApp;
+    show AppController, ControllerMVC;
 
 // Error Handler
 export 'package:mvc_application/src/controller/util/handle_error.dart'

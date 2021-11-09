@@ -21,6 +21,7 @@ import 'package:flutter/material.dart'
     show
         Widget,
         Color,
+        FlutterErrorDetails,
         GenerateAppTitle,
         GlobalKey,
         Locale,
@@ -88,4 +89,10 @@ class ViewMVC extends AppState {
           showSemanticsDebugger: showSemanticsDebugger,
           debugShowCheckedModeBanner: debugShowCheckedModeBanner,
         );
+
+  @override
+  Future<bool> initAsync() => super.initAsync();
+
+  @override
+  bool onAsyncError(FlutterErrorDetails details) => super.onAsyncError(details);
 }

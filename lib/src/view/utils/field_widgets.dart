@@ -217,7 +217,7 @@ abstract class _ListFields<T> {
   // }
 }
 
-class FieldWidgets<T> extends DataFieldItem {
+class FieldWidgets<T> extends DataFieldItem with StateGetter {
   FieldWidgets({
     Object? key,
     this.object,
@@ -1048,7 +1048,7 @@ class FieldWidgets<T> extends DataFieldItem {
   Widget onBackground() {
     return Container(
       color: Colors.red,
-      child: m.Material(
+      child: const m.Material(
         child: ListTile(
           trailing: Icon(
             Icons.delete,
@@ -1300,10 +1300,20 @@ class _StatefulStateCupertino extends State<CupertinoListTile> {
 
 /// Item class used for fields which have a [label], a [value] and a maybe a [type] of value.
 class DataFieldItem {
-  DataFieldItem({this.id, this.label, this.value, this.type});
+  DataFieldItem({
+    this.id,
+    this.label,
+    this.value,
+    this.type,
+  });
 
-  DataFieldItem.fromMap(Map<dynamic, dynamic> m,
-      {String? id, String? label, String? value, String? type}) {
+  DataFieldItem.fromMap(
+    Map<dynamic, dynamic> m, {
+    String? id,
+    String? label,
+    String? value,
+    String? type,
+  }) {
     //
     keys(id: id, label: label, value: value, type: type);
 
@@ -1346,16 +1356,16 @@ class DataFieldItem {
 /// Supplies the 'current' State object.
 mixin StateGetter {
   bool _init = false;
-  State? _state;
-  final Set<State> _stateSet = {};
+  StateMVC? _state;
+  final Set<StateMVC> _stateSet = {};
 
-  State? get state => _state;
+  StateMVC? get state => _state;
 
   /// Call this in the State object's initState() function.
-  void initState(State state) => pushState(state);
+  void initState(StateMVC? state) => pushState(state);
 
   /// Add the optional State object to the Set
-  bool pushState([State? state]) {
+  bool pushState([StateMVC? state]) {
     if (state == null) {
       return false;
     }

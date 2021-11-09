@@ -40,8 +40,7 @@ export 'package:flutter/foundation.dart' show kIsWeb, mustCallSuper, protected;
 
 /// MVC
 export 'package:mvc_pattern/mvc_pattern.dart'
-    show AppMVC, SetState, ViewMVC
-    hide AppConMVC;
+    show AppStatefulWidgetMVC, SetState;
 
 /// App
 export 'package:mvc_application/src/view/app.dart';

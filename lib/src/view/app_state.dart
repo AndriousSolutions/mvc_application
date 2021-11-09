@@ -33,28 +33,15 @@ import 'package:mvc_application/controller.dart'
     show AppController, ControllerMVC;
 
 import 'package:mvc_application/view.dart' as v
-    show
-        App,
-        AppStatefulWidget,
-        AppErrorHandler,
-        I10n,
-        I10nDelegate,
-        ReportErrorHandler;
+    show App, AppErrorHandler, I10n, I10nDelegate, ReportErrorHandler;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
 /// Highlights UI while debugging.
 import 'package:flutter/rendering.dart' as debug;
 
-class AppStateWidget extends StatefulWidget {
-  const AppStateWidget({Key? key}) : super(key: key);
-  @override
-  // ignore: no_logic_in_create_state
-  State createState() => v.AppStatefulWidget.vw!;
-}
-
 /// The View for the app. The 'look and feel' for the whole app.
-class AppState extends AppViewState<AppStateWidget> {
+class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
   //
   AppState({
     this.key,
@@ -290,9 +277,6 @@ class AppState extends AppViewState<AppStateWidget> {
   /// The App State's initialization function.
   @override
   void initState() {
-    //
-    super.initState();
-
     /// If not already, have the app assign the theme in the Material platform.
     final themeData = theme ?? onTheme();
 
@@ -312,6 +296,9 @@ class AppState extends AppViewState<AppStateWidget> {
 
     v.App.iOSTheme ??=
         MaterialBasedCupertinoThemeData(materialTheme: v.App.themeData!);
+
+    /// Called last. A Controller may want to change the 'theme.'
+    super.initState();
   }
 
   /// Override to impose your own WidgetsApp (like CupertinoApp or MaterialApp)
@@ -322,7 +309,6 @@ class AppState extends AppViewState<AppStateWidget> {
       return CupertinoApp(
         key: key ?? v.App.widgetsAppKey,
         navigatorKey: navigatorKey ?? onNavigatorKey(),
-        home: home ?? onHome(),
         routes: routes ?? onRoutes() ?? const <String, WidgetBuilder>{},
         initialRoute: initialRoute ?? onInitialRoute(),
         onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
@@ -357,6 +343,8 @@ class AppState extends AppViewState<AppStateWidget> {
         actions: actions ?? onActions(),
         restorationScopeId: restorationScopeId ?? onRestorationScopeId(),
         scrollBehavior: scrollBehavior ?? onScrollBehavior(),
+        // Let the parameters run before the home parameter.
+        home: home ?? onHome(),
       );
     } else {
       _routerDelegate = routerDelegate ?? onRouterDelegate();
@@ -368,7 +356,6 @@ class AppState extends AppViewState<AppStateWidget> {
           navigatorKey: navigatorKey ?? onNavigatorKey(),
           scaffoldMessengerKey:
               scaffoldMessengerKey ?? onScaffoldMessengerKey(),
-          home: home ?? onHome(),
           routes: routes ?? onRoutes() ?? const <String, WidgetBuilder>{},
           initialRoute: initialRoute ?? onInitialRoute(),
           onGenerateRoute: onGenerateRoute ?? onOnGenerateRoute(),
@@ -406,14 +393,12 @@ class AppState extends AppViewState<AppStateWidget> {
           actions: actions ?? onActions(),
           restorationScopeId: restorationScopeId ?? onRestorationScopeId(),
           scrollBehavior: scrollBehavior ?? onScrollBehavior(),
+          // Let the parameters run before the home parameter.
+          home: home ?? onHome(),
         );
       } else {
         return MaterialApp.router(
           key: key ?? v.App.widgetsAppKey,
-          routeInformationProvider:
-              routeInformationProvider ?? onRouteInformationProvider(),
-          routeInformationParser: _routeInformationParser!,
-          routerDelegate: _routerDelegate!,
           backButtonDispatcher:
               backButtonDispatcher ?? onBackButtonDispatcher(),
           scaffoldMessengerKey:
@@ -448,6 +433,10 @@ class AppState extends AppViewState<AppStateWidget> {
           actions: actions ?? onActions(),
           restorationScopeId: restorationScopeId ?? onRestorationScopeId(),
           scrollBehavior: scrollBehavior ?? onScrollBehavior(),
+          routeInformationProvider:
+              routeInformationProvider ?? onRouteInformationProvider(),
+          routeInformationParser: _routeInformationParser!,
+          routerDelegate: _routerDelegate!,
         );
       }
     }
@@ -634,28 +623,14 @@ class AppState extends AppViewState<AppStateWidget> {
 
   ScrollBehavior? onScrollBehavior() =>
       inScrollBehavior != null ? inScrollBehavior!() : null;
-
-  // An error handler for any async operations.
-  @override
-  bool onAsyncError(FlutterErrorDetails details) {
-    bool handled;
-    try {
-      handled = con?.onAsyncError(details) ?? false;
-      if (!handled && inAsyncError != null) {
-        handled = inAsyncError!(details);
-      }
-    } catch (ex) {
-      handled = false;
-    }
-    return handled;
-  }
 }
 
 /// The underlying State object representing the App's View in the MVC pattern.
 /// Allows for setting debug settings and defining the App's error routine.
-abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
+abstract class _AppState<T extends mvc.AppStatefulWidgetMVC>
+    extends mvc.AppStateMVC<T> {
   //
-  AppViewState({
+  _AppState({
     this.con,
     List<ControllerMVC>? controllers,
     Object? object,
@@ -707,6 +682,8 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
           controllers: controllers,
           object: object,
         ) {
+    // Listen to the device's connectivity.
+    v.App.addConnectivityListener(con);
     // In case null was explicitly passed in.
     routes ??= const <String, WidgetBuilder>{};
     navigatorObservers ??= const <NavigatorObserver>[];
@@ -791,13 +768,8 @@ abstract class AppViewState<T extends StatefulWidget> extends mvc.ViewMVC<T> {
   bool? debugPaintLayerBordersEnabled;
   bool? debugRepaintRainbowEnabled;
 
-  /// Provide 'the view'
-  @override
-  Widget build(BuildContext context);
-
   @override
   void dispose() {
-    object = null;
     _errorHandler?.dispose();
     super.dispose();
   }

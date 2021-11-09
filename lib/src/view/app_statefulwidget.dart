@@ -18,25 +18,30 @@
 import 'dart:async' show Future;
 
 import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/foundation.dart'
     show FlutterExceptionHandler, Key, mustCallSuper, protected;
+
 import 'package:flutter/material.dart';
-import 'package:mvc_application/controller.dart' show AppConMVC, ControllerMVC;
-import 'package:mvc_application/controller.dart' show Assets;
+
+import 'package:mvc_application/controller.dart'
+    show Assets, AppController, ControllerMVC;
+
 import 'package:mvc_application/view.dart' as v
     show
         App,
-        AppMVC,
+        AppStatefulWidgetMVC,
         AppState,
-        AppStateWidget,
         I10n,
         ReportErrorHandler,
         SetState;
+
 import 'package:prefs/prefs.dart' show Prefs;
-// Replace 'dart:io' for Web applications
+
+/// Replace 'dart:io' for Web applications
 import 'package:universal_platform/universal_platform.dart';
 
-// Export the classes needed to use this file.
+/// Export the classes needed to use this file.
 export 'package:connectivity_plus/connectivity_plus.dart'
     show Connectivity, ConnectivityResult;
 
@@ -44,12 +49,10 @@ export 'package:connectivity_plus/connectivity_plus.dart'
 typedef ErrorWidgetBuilder = Widget Function(
     FlutterErrorDetails flutterErrorDetails);
 
-/// The app-level StatefulWidget
 /// The widget passed to runApp().
-abstract class AppStatefulWidget extends v.AppMVC {
-  // You must supply a 'View.'
-  AppStatefulWidget({
-    AppConMVC? con,
+abstract class AppMVC extends StatelessWidget {
+  AppMVC({
+    this.con,
     Key? key,
     this.loadingScreen,
     FlutterExceptionHandler? errorHandler,
@@ -62,23 +65,25 @@ abstract class AppStatefulWidget extends v.AppMVC {
           errorReport: errorReport,
           allowNewHandlers: allowNewHandlers,
         ),
-        super(con: con, key: key) {
+        super(key: key) {
     // Listen to the device's connectivity.
-    _app.addConnectivityListener(con);
-    _app.setAppStatefulWidget(this);
+    v.App.addConnectivityListener(con);
   }
   final v.App _app;
+  final AppController? con;
 
+  // Create the app-level State object
   @protected
-  v.AppState createView();
+  v.AppState createState();
 
-  /// Gives access to the App's View. The 'MyView' you first work with.
+  /// Gives access to the App's View.
   static v.AppState? get vw => _vw;
   static v.AppState? _vw;
 
   /// Supply on onboarding screen.
   final Widget? loadingScreen;
 
+  /// Implement from the abstract v.AppStatefulWidgetMVC to create the View!
   @override
   Widget build(BuildContext context) {
     Assets.init(context);
@@ -89,37 +94,46 @@ abstract class AppStatefulWidget extends v.AppMVC {
   }
 
   /// Runs all the asynchronous operations necessary before the app can proceed.
-  @override
   Future<bool> initAsync() async {
     var init = true;
     try {
       if (v.App.hotReload) {
-        _vw = createView();
+        _vw = createState();
+        //todo: No need. Replaced with the initState() function.
         _vw?.con?.initApp();
       } else {
         // Initialize System Preferences
         await Prefs.init();
+
         // Collect installation & connectivity information
         await _app.initInternal();
-//        // If not running on the Web.
-//        if (!kIsWeb) {
+
+        // Collect the device's information
         await v.App.getDeviceInfo();
-//        }
+
         // Initiate multi-language translations.
         await v.I10n.initAsync();
 
         // Set theme using App's menu system if any theme was saved.
         v.App.setThemeData();
 
-        init = await super.initAsync();
+        // Calls AppController passed in through the runApp() function
+        if (con != null) {
+          init = await con!.initAsync();
+        }
 
         if (init) {
-          _vw = createView();
+          // Create 'the View' for this MVC app.
+          _vw = createState();
+
           // Supply the state object to the App object.
           init = _app.setAppState(_vw);
+
           if (init) {
             init = await _vw!.initAsync();
           }
+
+          //todo: No need. Replaced with the controller's initState() function.
           if (init) {
             _vw?.con?.initApp();
           }
@@ -133,16 +147,15 @@ abstract class AppStatefulWidget extends v.AppMVC {
     return v.App.isInit = init;
   }
 
+  //todo: Add this somewhere to clean up memory.
   /// Clean up resources before the app is finally terminated.
   @mustCallSuper
-  @override
   void dispose() {
     Prefs.dispose();
     // Assets.init(context); called in App.build() -gp
     Assets.dispose();
     //
     _app.dispose();
-    super.dispose();
   }
 
   /// Run the CircularProgressIndicator() until asynchronous operations are
@@ -152,7 +165,9 @@ abstract class AppStatefulWidget extends v.AppMVC {
         snapshot.data! &&
         (v.App.isInit != null && v.App.isInit!)) {
       //
-      return const v.AppStateWidget();
+      final appWidget = AppStatefulWidget(appState: _vw!, con: con);
+      _app.setAppStatefulWidget(appWidget);
+      return appWidget;
       //
     } else if (snapshot.hasError) {
       //
@@ -217,6 +232,24 @@ abstract class AppStatefulWidget extends v.AppMVC {
   }
 }
 
+class AppStatefulWidget extends v.AppStatefulWidgetMVC {
+  const AppStatefulWidget({
+    Key? key,
+    required this.appState,
+    AppController? con,
+  }) : super(key: key, con: con);
+
+  final v.AppState appState;
+
+  /// Display the 'app State object' the developer has defined.
+  Widget build(BuildContext context) => appState.build(context);
+
+  /// Programmatically creates the App's State object.
+  @override
+  //ignore: no_logic_in_create_state
+  v.AppState createState() => appState;
+}
+
 /// Obtains [Controllers<T>] from its ancestors and passes its value to [builder].
 ///
 class ConConsumer<T extends ControllerMVC> extends StatelessWidget {
@@ -237,7 +270,7 @@ class ConConsumer<T extends ControllerMVC> extends StatelessWidget {
   Widget build(BuildContext context) => v.SetState(
       builder: (context, [object]) => builder(
             context,
-            AppStatefulWidget._vw?.controllerByType<T>(),
+            AppMVC._vw?.controllerByType<T>(),
             child,
           ));
 }

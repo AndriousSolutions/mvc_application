@@ -24,7 +24,6 @@ import 'package:universal_platform/universal_platform.dart';
 
 import 'package:flutter/foundation.dart' show FlutterExceptionHandler, kIsWeb;
 
-//import 'package:package_info/package_info.dart' show PackageInfo;
 import 'package:package_info_plus/package_info_plus.dart' show PackageInfo;
 
 import 'package:connectivity_plus/connectivity_plus.dart'
@@ -78,9 +77,9 @@ class App {
   }
 
   /// Assign the AppStateful object
-  bool setAppStatefulWidget(v.AppStatefulWidget appWidget) {
-    // Only assigned once with the first call.
-    _appWidget ??= appWidget;
+  bool setAppStatefulWidget(v.AppStatefulWidget? appWidget) {
+    // Reassign with every StatefulWidget re-created.
+    _appWidget = appWidget;
     return appWidget != null;
   }
 
@@ -99,12 +98,12 @@ class App {
 
   /// App-level error handling.
   static void onError(FlutterErrorDetails details) {
-    // Call the App's 'current'error handler.
+    // Call the App's 'current' error handler.
     final handler = errorHandler?.flutterExceptionHandler;
     if (handler != null) {
       handler(details);
     } else {
-      // Call Flutter's error handler default behaviour.
+      // Call Flutter's default error handler.
       FlutterError.presentError(details);
     }
   }
@@ -544,7 +543,7 @@ class App {
   static String? get buildNumber => _packageInfo?.buildNumber;
 
   /// Determines if running in an IDE or in production.
-  static bool get inDebugger => v.AppMVC.inDebugger;
+  static bool get inDebugger => v.AppStatefulWidgetMVC.inDebugger;
 
   /// Refresh the root State object, AppView.
   static void refresh() => _appState?.refresh();
@@ -644,7 +643,7 @@ class App {
   static final Set<ConnectivityListener> _listeners = {};
 
   /// Add a Connectivity listener.
-  bool addConnectivityListener(ConnectivityListener? listener) {
+  static bool addConnectivityListener(ConnectivityListener? listener) {
     var add = false;
     if (listener != null) {
       add = _listeners.add(listener);

@@ -17,10 +17,17 @@
 ///
 ///
 
+import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
+
+import 'package:mvc_application/view.dart' as v show StateMVC;
+
+import 'package:mvc_application/controller.dart' show HandleError;
+
 /// The Model for a simple app.
-class ModelMVC {
-  factory ModelMVC() => _firstMod ??= ModelMVC._();
-  ModelMVC._();
+/// Incorporates an Error Handler.
+class ModelMVC extends mvc.ModelMVC with HandleError {
+  factory ModelMVC([v.StateMVC? state]) => _firstMod ??= ModelMVC._(state);
+  ModelMVC._(v.StateMVC? state) : super(state);
   static ModelMVC? _firstMod;
 
   /// Allow for easy access to 'the first Model' throughout the application.

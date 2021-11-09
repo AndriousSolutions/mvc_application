@@ -17,6 +17,9 @@
 ///
 ///
 
+/// Model classes
+export 'package:mvc_application/src/model/mvc.dart';
+
 /// Material
 export 'package:flutter/material.dart' hide runApp;
 
@@ -28,9 +31,6 @@ export 'package:mvc_application/src/model/fileutils/files.dart';
 
 /// Install file
 export 'package:mvc_application/src/model/fileutils/installfile.dart';
-
-/// String Encryption
-//export 'package:mvc_application/src/model/utils/string_encryption.dart';
 
 /// Preferences
 export 'package:prefs/prefs.dart' show Prefs;
