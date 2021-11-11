@@ -19,25 +19,22 @@ import 'dart:async' show runZonedGuarded;
 
 import 'dart:isolate' show Isolate, RawReceivePort;
 
-import 'package:flutter/foundation.dart'
-    show FlutterExceptionHandler;
+import 'package:flutter/foundation.dart' show FlutterExceptionHandler;
 
 import 'package:flutter/material.dart' as m
     show ErrorWidgetBuilder, Widget, runApp;
 
 import 'package:mvc_application/view.dart' as v
-    show
-    AppErrorHandler,
-    ReportErrorHandler;
+    show AppErrorHandler, ReportErrorHandler;
 
 /// Add an Error Handler right at the start.
 void runApp(
-    m.Widget app, {
-      FlutterExceptionHandler? errorHandler,
-      m.ErrorWidgetBuilder? errorScreen,
-      v.ReportErrorHandler? errorReport,
-      bool allowNewHandlers = false,
-    }) {
+  m.Widget app, {
+  FlutterExceptionHandler? errorHandler,
+  m.ErrorWidgetBuilder? errorScreen,
+  v.ReportErrorHandler? errorReport,
+  bool allowNewHandlers = false,
+}) {
   // Instantiate the app's error handler.
   final handler = v.AppErrorHandler(
       handler: errorHandler,

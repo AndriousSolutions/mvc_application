@@ -1194,6 +1194,9 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
         ));
         itemsObj.items = itemsObj.items!.toList()..add(newItem);
       }
+      // Clear them just to be safe.
+      itemsObj.value = '';
+      itemsObj.type = '';
     }
 
     final list = <Map<String, dynamic>>[];

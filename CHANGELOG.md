@@ -1,4 +1,7 @@
 
+## 8.0.1
+ November 10, 2021
+- itemsObj.value = '';
 
 ## 8.0.0
  October 30, 2021
