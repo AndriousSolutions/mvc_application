@@ -1164,6 +1164,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     for (final item in dataItems) {
       final field = create()
         ..value = item.value
+        ..initialValue = item.value
         ..type = item.type
         ..label = item.label
         ..id = item.id;

@@ -1,4 +1,9 @@
 
+## 8.1.0
+ November 11, 2021
+- Supplied an example app
+- ..initialValue = item.value
+
 ## 8.0.1
  November 10, 2021
 - itemsObj.value = '';
