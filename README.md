@@ -5,33 +5,35 @@
 
 ### A Flutter Framework using the MVC Design Pattern
 ![mvc_application](https://user-images.githubusercontent.com/32497443/104035360-a845f280-5197-11eb-88bf-210b464de078.jpg)
-Allows for easier and, dare I say, faster development and better maintenability. No 're-inventing of the wheel' with already built-in capabilities and features.
-Accommodating and Integrated features:
+Allows for easier and, dare I say, faster development and better maintenability. No 're-inventing of the wheel' using already built-in capabilities and features offered by Flutter itself.
+Accommodating and Intergrated features:
 * Error Handling
 * System Preferences
 * App Notifications
+* A Bettern Menu Bar
+* Device Event Handling
 * Date picker
 * App Color picker
-* Dialog Box
+* Dialog Boxes
 * Customizable Bottom Bar
 * Loading Screen
 * Time Zones
 
 **Installing**
-I don't always like the version number suggested in the '[Installing](https://pub.dev/packages/mvc_application#-installing-tab-)' page.
-Instead, always go up to the '**minor**' semantic version number when installing this library package. This means always trailing with one zero, '**.0**'. This allows you to take in any '**minor**' versions introducing new features as well as any '**patch**' versions that involves bugfixes. Semantic version numbers are always in this format: **major.minor.patch**.
-I know I should be changing the '**major**' instead, but since I chose to release this to production with a lot of changes to come, I don't want to be up to version '**27.0.0**' before I know it!
+I don't like the version number suggested in the '[Installing](https://pub.dev/packages/mvc_application#-installing-tab-)' page.
+Instead, always go up to the '**major**' semantic version number when installing this library package. This means always trailing with two zero, '**.0.0**'. This allows you to take in any '**minor**' versions introducing new features as well as any '**patch**' versions that involves bugfixes. Example, to install version 7.9.2, use 7.0.0. Thus, the bug fix, 7.9.2, will be installled the next time you 'upgrade' the dependences.
+1. **patch** - bugfixes
+2. **minor** - Introduced new features
+3. **major** - Essentially made a new app. It's broken backwards-compatibility and has a completely new user experience. You won't get this version until you increment the **major** number in the pubspec.yaml file.
 
-1. **patch** - I've made bugfixes
-2. **minor** - I've introduced new features
-3. **major** - I've essentially made a new app. It's broken backwards-compatibility and has a completely new user experience. You won't get this version until you increment the **major** number in the pubspec.yaml file.
-
-And so, in this case, add this to your package's pubspec.yaml file instead:
+And so, in this case, add this to your package's pubspec.yaml file:
 ```javascript
 dependencies:
-   mvc_application:^7.0.0-nullsafety
+   mvc_application:^8.0.0
 ```
-##### Note, in fact, this package serves as a 'wrapper' to the core MVC package:
+For more information on version numbers: [The importance of semantic versioning](https://medium.com/@xabaras/the-importance-of-semantic-versioning-9b78e8e59bba).
+
+##### Note, in fact, this package serves as a 'wrapper' for the core MVC package:
 # MVC Pattern
 [![Pub.dev](https://img.shields.io/pub/v/mvc_pattern.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAeGVYSWZNTQAqAAAACAAFARIAAwAAAAEAAQAAARoABQAAAAEAAABKARsABQAAAAEAAABSASgAAwAAAAEAAgAAh2kABAAAAAEAAABaAAAAAAAAAEgAAAABAAAASAAAAAEAAqACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAAAQdIdCAAAACXBIWXMAAAsTAAALEwEAmpwYAAACZmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICAgICA8dGlmZjpSZXNvbHV0aW9uVW5pdD4yPC90aWZmOlJlc29sdXRpb25Vbml0PgogICAgICAgICA8ZXhpZjpDb2xvclNwYWNlPjE8L2V4aWY6Q29sb3JTcGFjZT4KICAgICAgICAgPGV4aWY6UGl4ZWxYRGltZW5zaW9uPjY0PC9leGlmOlBpeGVsWERpbWVuc2lvbj4KICAgICAgICAgPGV4aWY6UGl4ZWxZRGltZW5zaW9uPjY0PC9leGlmOlBpeGVsWURpbWVuc2lvbj4KICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+Ck0aSxoAAAaTSURBVFgJrVdbbBRVGP7OzOzsbmsXChIIiEQFRaIRhEKi0VRDjI++LIoPeHkhgRgeBCUCYY3iHTWGVHnxFhNpy6MXkMtCfLAENAGEAMGEgEBSLu1u2+3u7Mw5fv/MbrsFeiOeZHfOnMv/f//3X84ZYLytrc0e2HImOx8n9/yFv/d4OHtg08B4JmMN9P+3jjEK2axTkadwav8mnNxbxpmswbFdGv92GJzObgvnDRTGCEKNCaBYvWxZEK49/tsiOFYL6pJNyPUABgHVWTAmQOMEByWvBXOaV0dACFopM5KOkamqWi3K29I2Tu/LUHkHHKcJ3XmfgsVWcYkoctCV8xF3V+HM/pZQaaR8RCOHnzTGolAdCjqxbzFV0OrEwshqWqvUYCyEiyp/2viYMslBf+l9zHnyLTJjc23EXu26Sv/WDFSVm+0xnM++AxcdSNoL0dfjI8adrmWHzxjxy3v4rPTjBNab46C3Crldk0Ll24/Iqlu2mxmoKv/p93th+ndicnwBevp8aKOHtfpm0T7q3ThKzutY2vxpOJ0ho5vFZUNj4kYA8h4FTfsfHWj0luCHXBETVZwuAMQhN+4Ipd/4x0V+WWHGFI3ZDx5m/zMsn9YarhIgmYprOTDUBZls5Nf1f25AsW4JZhU8pB0nXFVP1Q38yXPUH6M/xYztyRl4pSWoS+1A+7WvIgBULiAqbaCDNFMt85SPrYceQUxvRpF+LKkY7rEcPG0H6CUzwoDwI8/RfkJV2bNw/YqHvm4fbnIlWju/C/UKAxUQVQAK7WkRydhhjjsxCRpGLi3x2LuPIJYSRKHinjG5gfuUUsh3CasW8td8JOpXoPXqt3xH6AaCiACE1DM43j2yHrHkYygVmOOVNBNltwPCkCqbunt7FEpFA8t2kL9OEMmX0Hb1myoIa4D6LYcfgjIZ9Oc5R+WqYq2svF0QJIABaKGnW9gQSQ56CCKefJlMfB0NtJH6cE61wHbiCLyoyJgaALKyFgTFYm9go46jMh7ljawa2oQFlgzkCGDyVElBWR2BaJj8ClqvBVLtDLYcXodY4gmUmO/DVTgRXQtirDEhXu7ttVDs1wg9LmilWBGUCZ6z8F7HPI68jSIPFpkYzhrOhm28IMRoHTAYuymZ/ar8CAyRaftLWE4SRku9FvGjt/GACN1AFvJdikCkmtbKJwylpkHLwTZkgkirUGvX1/THA0Kyoa9gob/AbJDEG5RNBswGOK7o58xgiaxRNXx3PCCMjtwwcBZEBlvY1LQT5dJquHUcCS8QUUFiToYBOrz6aGYsIKo1IUc3+L7I5V5hwWJNlhK8cXEL8/U1xOuZ/UQqtxsBIxeSsbSxgBDqi/0WCr0EIG6ImoV2ue3w0rCxaRtBrEEipeAmJBsCh2FjjQ1CFEKjVUwxKNdFzYNHcgRlGX0fMrHoCxjvVWh9CiZm+cxcTfqkmMttdFQsIzFRdUO+m+dLKWJBrhgREZX/wbNazfz+0DPTm4qtlwMvdV7Tb4xf8Z2AkU2Ss4OxXNlffcgE4xr/ML2qFVPmwg3UOmeeRj3Pa2PODTpDFsgxyRtwhlRdWLFk9+zUxJ8fnzJdPZtIeU2xRDCVd8SAu3xaI7KElSog2T7QbsVEVJCAVKNGvM7Q3VyueELd2HgDPlH5+Ogvl7fGguDFCY6bmOi4ehYV5wNPX/E9nAs81RUFKdWp8GpYvSKEhtaC4Nlh79O2dowxd051UNcQnRGlQl6W3bKleZtt5232+QtH19jJ+OdeLs/0IGQeKFRgPB2YfFA2nQRzNiirfsma0DsRmKqLbC4OXCbU6WKA4422un9uJ3FnEehfWJT2DgtAUNEVVoa0L7947A3lxj4kiDCHBYhstPhPqwWM7vbL5nJQUmcCXxmjGS8V70rwMa0XpBps51L9B4dXLtiCE6pX5EsbEQAdrTK0LARx+eg6Zcc+8vI9JjpVo1wSAfIu6jRDo2h83UVWLgYeOnkIPWC5epqbtFNuonfy3WbuNvXopeascQ4cPABsbuYpNVojXxnqEBAvXDy+1orZH9eCqG6XsJTLgbAiQgPS4DPgXcsyTn297Xvl3a0z5z+bZs1pXzb4oTI0C6rSap90eYYkphmYO2Y8/InxvLVuwx3yKVYBz4corbxK3ZAsYbNilm0Fmk7iYaS1/6sMXplyYIjRowOQXQTRnk5rAfHjXfO3+p73pgpPNbkt8lOMOvmTj1SJPQnWMCEY81opyy73FQqOxm4R1XzwoMwNtP8ArtQKBPNf6YAAAAAASUVORK5CYII=)](https://pub.dev/packages/mvc_pattern)
 [![GitHub stars](https://img.shields.io/github/stars/AndriousSolutions/mvc_pattern.svg?style=social&amp;logo=github)](https://github.com/AndriousSolutions/mvc_pattern/stargazers)
@@ -39,9 +41,9 @@ dependencies:
 
 
 ## Usage
-Like many other design patterns and architectures, MVC separates three common 'areas of concern' found in computer programs. Specifically, there's the separation of the program's logic from its inteface and from its data. The many design patterns that have come into vogue since MVC's inception in the early 1970's are, in fact, decendants of MVC.
+Like many other design patterns, MVC separates three common 'areas of concern' found in computer programs. Specifically, there's the separation of the program's logic from its inteface and from its data. The many design patterns that have come into vogue since MVC's inception in the early 1970's are decendants of MVC.
 
-Note, computer platforms themselves have come full circle in the last 40 years. From mainframes to desktop computers in the first twenty years, and then website applications to mobile apps in the last twenty years. A computer now fits in the palm of your hand, and because of this, MVC again fits as the software architecture for the apps it runs.
+Note, computer platforms themselves have come full circle in the last 40 years. From mainframes to desktop computers in the first twenty years, and then website applications to mobile apps in the last twenty years. A computer now fits in the palm of your hand, and because of this, MVC again fits as the design pattern and framework for the apps it runs.
 ![mvcTypes](https://user-images.githubusercontent.com/32497443/104035805-2d310c00-5198-11eb-8a4a-99f02115ff82.jpg)
 
 Implementing the MVC framework using two common example apps:
@@ -50,31 +52,30 @@ Implementing the MVC framework using two common example apps:
 ```dart
 import 'package:flutter/material.dart';
 
-import 'package:mvc_application/view.dart'
-    show AppStatefulWidget, AppState, StateMVC;
+import 'package:mvc_application/view.dart' show AppMVC, AppState, StateMVC;
 
 import 'package:mvc_application/controller.dart' show ControllerMVC;
 
 void main() => runApp(MyApp());
 
-class MyApp extends AppStatefulWidget {
+class MyApp extends AppMVC {
   MyApp({Key? key}) : super(key: key);
-  // Allow for hot reloads.
+
   @override
-  AppState createView() => View();
+  AppState createState() => View();
 }
 
 class View extends AppState {
   factory View() => _this ??= View._();
   View._()
       : super(
-    title: 'Flutter Demo',
-    home: const MyHomePage(),
-    debugShowCheckedModeBanner: false,
-    theme: ThemeData(
-      primarySwatch: Colors.blue,
-    ),
-  );
+          title: 'Flutter Demo',
+          home: const MyHomePage(),
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+        );
   static View? _this;
 }
 
@@ -84,64 +85,66 @@ class MyHomePage extends StatefulWidget {
   // Fields in a StatefulWidget should always be "final".
   final String title;
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends StateMVC<MyHomePage> {
   _MyHomePageState() : super(Controller()) {
-    // Acquire a reference to the particular Controller.
-    // ignore: avoid_as
     con = controller as Controller;
   }
   late Controller con;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              widget.title,
-            ),
-            Text(
-              '${con.counter}',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(con.incrementCounter);
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text('You have pushed the button this many times:'),
+              Text(
+                '${con.counter}',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          /// Try this alternative approach.
+          /// The Controller merely mimics the Flutter's API
+          //         onPressed: con.onPressed,
+          onPressed: () => setState(con.incrementCounter),
+          tooltip: 'Increment',
+          child: const Icon(Icons.add),
+        ),
+      );
 }
 
 class Controller extends ControllerMVC {
   factory Controller() => _this ??= Controller._();
-  Controller._();
-  static Controller? _this;
+  Controller._()
+      : model = _Model(),
+        super();
 
-  int get counter => _Model.counter;
-  // The Controller knows how to 'talk to' the Model.
-  void incrementCounter() => _Model._incrementCounter();
+  static Controller? _this;
+  final _Model model;
+
+  /// You're free to mimic Flutter's own API
+  /// The Controller is able to talk to the View (the State object)
+  void onPressed() => setState(() => model._incrementCounter());
+
+  int get counter => model.integer;
+
+  /// The Controller knows how to 'talk to' the Model.
+  void incrementCounter() => model._incrementCounter();
 }
 
-// ignore: avoid_classes_with_only_static_members
-/// Not good form to use a 'static class.'
 class _Model {
-  static int get counter => _counter;
-  static int _counter = 0;
-  static int _incrementCounter() => ++_counter;
+  int get integer => _integer;
+  int _integer = 0;
+  int _incrementCounter() => ++_integer;
 }
 
 ```
@@ -149,19 +152,20 @@ class _Model {
 ```dart
 import 'package:english_words/english_words.dart' show generateWordPairs;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide runApp;
 
 import 'package:mvc_application/view.dart'
-    show AppStatefulWidget, AppState, Colors, StateMVC;
+    show AppMVC, AppState, Colors, runApp, StateMVC;
 
 import 'package:mvc_application/controller.dart' show ControllerMVC;
 
 void main() => runApp(NameApp());
 
-class NameApp extends AppStatefulWidget {
-  // Allows for hot reloads.
+class NameApp extends AppMVC {
+  NameApp({Key? key}) : super(key: key);
+
   @override
-  AppState createView() => MyApp();
+  AppState createState() => MyApp();
 }
 
 class MyApp extends AppState {
@@ -169,7 +173,7 @@ class MyApp extends AppState {
   MyApp._()
       : super(
           title: 'Startup Name Generator',
-          home: RandomWords(),
+          home: const RandomWords(),
           theme: ThemeData(
             primaryColor: Colors.white,
           ),
@@ -179,15 +183,17 @@ class MyApp extends AppState {
 }
 
 class RandomWords extends StatefulWidget {
+  const RandomWords({Key? key}) : super(key: key);
+
   @override
   State createState() => _RandomWordsState();
 }
 
 class _RandomWordsState extends StateMVC<RandomWords> {
-  _RandomWordsState() : super(Con()) {
-    con = controller as Con;
+  _RandomWordsState() : super(_Controller()) {
+    con = controller as _Controller;
   }
-  late Con con;
+  late _Controller con;
 
   final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
 
@@ -213,7 +219,7 @@ class _RandomWordsState extends StateMVC<RandomWords> {
       padding: const EdgeInsets.all(16.0),
       itemBuilder: (context, i) {
         // Add a one-pixel-high divider widget before each row in theListView.
-        if (i.isOdd) return Divider();
+        if (i.isOdd) return const Divider();
         final index = i ~/ 2;
         // If you've reached the end of the available word pairings...
         if (index >= con.length) {
@@ -289,13 +295,13 @@ class _RandomWordsState extends StateMVC<RandomWords> {
       );
 }
 
-class Con extends ControllerMVC {
+class _Controller extends ControllerMVC {
   // Supply only one instance of this Controller class.
-  factory Con() => _this ??= Con._();
+  factory _Controller() => _this ??= _Controller._();
 
-  static Con? _this;
+  static _Controller? _this;
 
-  Con._() {
+  _Controller._() {
     model = _Model();
   }
 
@@ -330,7 +336,7 @@ class _Model {
     return _saved.contains(pair);
   }
 
-  final Set<String> _saved = Set();
+  final Set<String> _saved = {};
 
   void save(String? pair) {
     if (pair == null || pair.isEmpty) return;
