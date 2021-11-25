@@ -1,5 +1,9 @@
 
 
+## 8.2.0
+ November 24, 2021
+- void inheritWidget(BuildContext context) => mvc.AppStateMVC.inheritWidget(context);
+
 ## 8.1.0+02
  November 11, 2021
 - Updated README.md

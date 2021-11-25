@@ -10,7 +10,7 @@ Accommodating and Intergrated features:
 * Error Handling
 * System Preferences
 * App Notifications
-* A Bettern Menu Bar
+* A Better Menu Bar
 * Device Event Handling
 * Date picker
 * App Color picker

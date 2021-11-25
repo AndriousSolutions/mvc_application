@@ -773,6 +773,11 @@ abstract class _AppState<T extends mvc.AppStatefulWidgetMVC>
     _errorHandler?.dispose();
     super.dispose();
   }
+
+  /// Supply the function as a instance member and not a static member in this framework
+  /// In such a framework touched by many hands, it's best to keep this function confinded.
+  void inheritWidget(BuildContext context) =>
+      mvc.AppStateMVC.inheritWidget(context);
 }
 
 /// The Error Screen if something happens at start up.
