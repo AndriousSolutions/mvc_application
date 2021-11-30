@@ -147,15 +147,17 @@ abstract class AppMVC extends StatelessWidget {
     return v.App.isInit = init;
   }
 
-  //todo: Add this somewhere to clean up memory.
   /// Clean up resources before the app is finally terminated.
   @mustCallSuper
   void dispose() {
+    //
     Prefs.dispose();
     // Assets.init(context); called in App.build() -gp
     Assets.dispose();
     //
     _app.dispose();
+    // Remove the reference to the app's view
+    _vw = null;
   }
 
   /// Run the CircularProgressIndicator() until asynchronous operations are

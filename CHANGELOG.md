@@ -1,4 +1,10 @@
 
+## 8.2.1
+ November 28, 2021
+- Properly clean up memory
+- _app?.dispose();
+- _appState = null;
+- _vw = null;
 
 ## 8.2.0
  November 24, 2021

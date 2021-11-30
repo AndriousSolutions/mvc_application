@@ -72,8 +72,13 @@ class App {
   void dispose() {
     _connectivitySubscription?.cancel();
     _connectivitySubscription = null;
+    _packageInfo = null;
+    _themeData = null;
+    _appWidget = null;
+    _appState = null;
     // Restore the original error handling.
     _errorHandler!.dispose();
+    _errorHandler = null;
   }
 
   /// Assign the AppStateful object
@@ -87,9 +92,14 @@ class App {
 
   /// Assign the class with the AppState object.
   bool setAppState(v.AppState? vw) {
-    // Only assigned once with the first call.
-    _appState ??= vw;
-    return vw != null;
+    final set = _appState == null && vw != null;
+    if (set) {
+      // Only assigned once with the first call.
+      _appState ??= vw;
+      // Assign the 'app' object to the app's view
+      vw!.app = this;
+    }
+    return set;
   }
 
   /// The App State object.
@@ -736,29 +746,62 @@ abstract class StateMVC<T extends StatefulWidget> extends mvc.StateMVC<T>
 
 /// A standard Drawer object for your Flutter app.
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({Key? key}) : super(key: key);
+  AppDrawer({
+    Key? key,
+    this.elevation,
+    this.semanticLabel,
+    this.header,
+    this.items,
+  }) : super(key: key) {
+    // Take any defined items.
+    if (items != null) {
+      _items.addAll(items!);
+    }
+  }
+
+  final double? elevation;
+  final String? semanticLabel;
+  final DrawerHeader? header;
+  final List<ListTile>? items;
+  final List<ListTile> _items = [];
+
+  /// one item
+  void add(ListTile? item) {
+    if (item != null) {
+      _items.add(item);
+    }
+  }
+
+  /// Add a List
+  void addAll(List<ListTile>? items) {
+    if (items != null) {
+      _items.addAll(items);
+    }
+  }
+
+  /// Remove an item
+  bool remove(ListTile? item) {
+    bool remove = item != null;
+    if (remove) {
+      remove = _items.remove(item);
+    }
+    return remove;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final widgets = <Widget>[];
+    if (header != null) {
+      widgets.add(header!);
+    }
+    if (_items.isNotEmpty) {
+      widgets.addAll(_items);
+    }
     return Drawer(
+        elevation: elevation ?? 16,
+        semanticLabel: semanticLabel,
         child: ListView(
-      children: <Widget>[
-        const DrawerHeader(
-          child: Text('DRAWER HEADER..'),
-        ),
-        ListTile(
-          title: const Text('Item => 1'),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          title: const Text('Item => 2'),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-      ],
-    ));
+          children: widgets,
+        ));
   }
 }

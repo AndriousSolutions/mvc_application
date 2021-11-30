@@ -768,9 +768,25 @@ abstract class _AppState<T extends mvc.AppStatefulWidgetMVC>
   bool? debugPaintLayerBordersEnabled;
   bool? debugRepaintRainbowEnabled;
 
+  /// Reference to the 'app' object.
+  v.App? get app => _app;
+
+  /// Set the 'app' object but only once!
+  set app(v.App? app) {
+    if (app != null) {
+      _app ??= app;
+    }
+  }
+
+  /// The app's representation
+  v.App? _app;
+
   @override
   void dispose() {
+    _app?.dispose();
+    _app = null;
     _errorHandler?.dispose();
+    _errorHandler = null;
     super.dispose();
   }
 
