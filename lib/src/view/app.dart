@@ -104,6 +104,7 @@ class App {
 
   /// The App State object.
   static v.AppState? get vw => _appState;
+  //todo: Change to 'late' instead and redo everything reference.
   static v.AppState? _appState;
 
   /// App-level error handling.

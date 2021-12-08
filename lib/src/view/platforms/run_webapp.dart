@@ -26,6 +26,10 @@ import 'package:flutter/material.dart' as m
 import 'package:mvc_application/view.dart' as v
     show AppErrorHandler, ReportErrorHandler;
 
+/// To change the URL strategy from hash to path
+/// and remove that annoying # sign from the website's url.
+import 'package:url_strategy/url_strategy.dart';
+
 /// Add an Error Handler right at the start.
 void runApp(
   m.Widget app, {
@@ -40,6 +44,10 @@ void runApp(
       builder: errorScreen,
       report: errorReport,
       allowNewHandlers: allowNewHandlers);
+
+  // Here we set the URL strategy for our web app.
+  // It is safe to call this function when running on mobile or desktop as well.
+  setPathUrlStrategy();
 
   // Catch any errors attempting to execute runApp();
   runZonedGuarded(() {

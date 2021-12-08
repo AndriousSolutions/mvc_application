@@ -1,4 +1,8 @@
 
+## 8.3.0
+ December 08, 2021
+- url_strategy: ^0.2.0  to remove # sign in url
+
 ## 8.2.1
  November 28, 2021
 - Properly clean up memory
