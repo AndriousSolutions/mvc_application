@@ -19,7 +19,7 @@ Accommodating and Intergrated features:
 * Loading Screen
 * Time Zones
 
-**Installing**
+### Installing
 I don't like the version number suggested in the '[Installing](https://pub.dev/packages/mvc_application#-installing-tab-)' page.
 Instead, always go up to the '**major**' semantic version number when installing this library package. This means always trailing with two zero, '**.0.0**'. This allows you to take in any '**minor**' versions introducing new features as well as any '**patch**' versions that involves bugfixes. Example, to install version 7.9.2, use 7.0.0. Thus, the bug fix, 7.9.2, will be installled the next time you 'upgrade' the dependences.
 1. **patch** - bugfixes

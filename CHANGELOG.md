@@ -1,4 +1,11 @@
 
+## 8.4.0
+ December 13, 2021
+- get screenSize
+- get asSmallScreen
+- get inSmallScreen
+- class InheritedStates
+
 ## 8.3.0
  December 08, 2021
 - url_strategy: ^0.2.0  to remove # sign in url

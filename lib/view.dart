@@ -72,6 +72,10 @@ export 'package:flutter_localizations/flutter_localizations.dart'
 /// TimeZone
 export 'package:mvc_application/src/view/utils/timezone.dart';
 
+/// InheritedWidget Widget
+export 'package:mvc_application/src/view/utils/inherited_state.dart'
+    show InheritedStates;
+
 /// Menus
 export 'package:mvc_application/src/view/app_menu.dart'
     show AppMenu, AppPopupMenu, Menu;

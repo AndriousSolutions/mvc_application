@@ -634,6 +634,26 @@ class App {
         kBottomNavigationBarHeight;
   }
 
+  /// Screen Size
+  static Size get screenSize => MediaQuery.of(context!).size;
+
+  /// Set whether the app is to use a 'small screen' or not.
+  /// Determine if running on a desktop or on a phone or tablet
+  static bool get asSmallScreen => App.inDebugger && false;
+
+  /// Return the bool value indicating if running in a small screen or not.
+  static bool get inSmallScreen {
+    bool smallScreen;
+
+    // May be manually assigned.
+    smallScreen = asSmallScreen;
+
+    if (!smallScreen) {
+      smallScreen = screenSize.width < 800;
+    }
+    return smallScreen;
+  }
+
   /// Determine the connectivity.
   static final Connectivity _connectivity = Connectivity();
 
