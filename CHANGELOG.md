@@ -1,4 +1,9 @@
 
+## 8.4.1
+ December 15, 2021
+- Once assigned at runApp(), you can't assign error handlers if allowNewHandlers is false.
+- if (!allowNewHandlers && reassigned) {
+
 ## 8.4.0
  December 13, 2021
 - get screenSize

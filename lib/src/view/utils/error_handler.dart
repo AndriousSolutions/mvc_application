@@ -60,15 +60,19 @@ class AppErrorHandler {
     FlutterExceptionHandler? handler,
     ErrorWidgetBuilder? builder,
     ReportErrorHandler? report,
-    bool allowNewHandlers = true,
+    bool? allowNewHandlers,
   }) {
     _this ??= AppErrorHandler._(builder);
 
     /// Allows you to set an error handler more than once.
-    set(handler: handler, builder: builder, report: report);
+    final reassigned = set(handler: handler, builder: builder, report: report);
+
+    // Allow for null. Simply allow new handles by default
+    allowNewHandlers ??= true;
 
     // Once set to false, you can't assign different handlers anymore.
-    if (!allowNewHandlers) {
+    // However, it's set to false only if one of the handlers was reassigned.
+    if (!allowNewHandlers && reassigned) {
       _allowNewHandlers = false;
     }
     return _this!;
@@ -138,7 +142,7 @@ class AppErrorHandler {
 
   /// Set a handler and the report
   static bool set({
-    required FlutterExceptionHandler? handler,
+    FlutterExceptionHandler? handler,
     ErrorWidgetBuilder? builder,
     ReportErrorHandler? report,
   }) {
