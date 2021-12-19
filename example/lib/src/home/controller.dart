@@ -10,3 +10,6 @@ export 'package:mvc_application_example/src/home/controller/contacts_controller.
 
 // The Counter app
 export 'package:mvc_application_example/src/home/controller/counter_controller.dart';
+
+// The Word Pairs app
+export 'package:mvc_application_example/src/home/controller/wordpairs_controller.dart';

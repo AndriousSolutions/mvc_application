@@ -1,0 +1,42 @@
+en-CA,en-US,fr,es,de,zh,ru,he
+INTERFACE PREFERENCES, INTERFACE PREFERENCES, PRÉFÉRENCES D'INTERFACE, PREFERENCIAS DE INTERFAZ, SCHNITTSTELLENEINSTELLUNGEN,界面偏好,ПРЕДПОЧТЕНИЯ ИНТЕРФЕЙСА,העדפות ממשק
+You have pushed the button this many times:,You have pushed the button this many times:,Vous avez appuyé sur le bouton autant de fois:,Has presionado el botón tantas veces:,Sie haben den Knopf so oft gedrückt:,你已经按了很多次了,Вы нажимали кнопку так много раз,לחצתם על הכפתור פעמים רבות
+Switch around dialogue buttons,Switch around dialog buttons,Changer les boutons de dialogue,Cambiar los botones de diálogo,Dialogschaltflächen umschalten,切换对话按钮,Переключение кнопок диалога,החלף לחצני דיאלוג
+NOTIFICATIONS PREFERENCES,NOTIFICATIONS PREFERENCES,NOTIFICATIONS PRÉFÉRENCES,PREFERENCIAS DE NOTIFICACIONES,MITTEILUNGEN BEITRÄGE,通知首选项,УВЕДОМЛЕНИЯ ПРЕДПОЧТЕНИЯ,העדפות הודעות
+Notification Settings,Notification Settings,Paramètres de notification,Configuración de las notificaciones,Benachrichtigungseinstellungen,通知设置,Настройки уведомлений,הגדרות התראה
+Notification behaviour popup settings and LED Colour,Notification behavior popup settings and LED Colour,Paramètres contextuels du comportement de notification et couleur du voyant,Configuración emergente de comportamiento de notificación y color de LED,Popup-Einstellungen für das Benachrichtigungsverhalten und LED-Farbe,通知行为弹出设置和LED颜色,Настройки всплывающих окон поведения уведомлений и цвет светодиода,הגדרות קופצות להתנהגות התראות וצבע LED
+RECORD PREFERENCES,RECORD PREFERENCES,ENREGISTRER LES PRÉFÉRENCES,REGISTRO DE PREFERENCIAS,AUFZEICHNUNGSVORZUGUNGEN,记录偏好,ЗАПИСАТЬ ПРЕДПОЧТЕНИЯ,העדפות הקלטה
+Item Record Preferences,Item Record Preferences,Préférences d'enregistrement d'élément,Preferencias de registro de elementos,Einstellungen für Artikeldatensätze,项目记录首选项,Настройки записи предметов,העדפות שיא פריט
+How certain records are further handled,How certain records are further handled,Comment certains enregistrements sont traités ultérieurement,Cómo se manejan más ciertos registros,Wie bestimmte Datensätze weiter behandelt werden,如何进一步处理某些记录,Как в дальнейшем обрабатываются определенные записи,כיצד מטפלים עוד יותר ברשומות מסוימות
+My ToDos,My ToDos,Mes ToDos,Mis ToDos,Meine Aufgaben,我的待办事项,Мои задачи,ToDos שלי
+Add,Add,Ajouter,Añadir,Hinzufügen,加,добавлять,לְהוֹסִיף
+UNDO,UNDO,ANNULER,DESHACER,RÜCKGÄNGIG MACHEN,联合国开发计划署,ОТМЕНИТЬ,לבטל
+Resync,Resync,Resynchroniser,Resincronizar,Resync,重新同步,Повторная синхронизация,סנכרן מחדש
+Colour Theme,Color Theme,Thème de couleur,Tema de color,Farbthema,颜色主题,Цветовая тема,ערכת נושא צבעונית
+About,About,Sur,Acerca de,Über,关于,Около,על אודות
+Sign in...,Sign in…,Se connecter…,Registrarse,Anmelden,登入,войти в систему,להתחבר
+Logout,Logout,Se déconnecter,Cerrar sesión,Ausloggen,登出,Выйти,להתנתק
+Current Language,Current Language,Langue courante,Idioma actual,Aktuelle Sprache,当前语言,Текущий язык,שפה נוכחית
+Application:, Application:, Application:, Solicitud:, Anwendung:, 应用:, заявка:, יישום:
+Pick another:,Pick another:,Choisissez-en un autre:,Elige otro:,Wählen Sie eine andere:,选择另一个：,Выберите другой:,בחר אחר:
+Current Language:,Current Language:,Langue courante:,Idioma actual:,Aktuelle Sprache:,当前语言:,Текущий язык:,שפה נוכחית:
+Locale:,Locale:,Lieu:,Lugar:,Gebietsschema:,语言环境：,Локаль:,אזור:
+Working Memory,Working Memory,Mémoire de travail,Memoria de trabajo,Arbeitsgedächtnis,工作记忆,Рабочая память,זיכרון עובד
+Interface:,Interface:,Interface:,Interfaz:,Schnittstelle:,接口：,Интерфейс:,מִמְשָׁק:
+New,New,Neuf,Nuevo ,Neu,新,Новый,חָדָשׁ
+Settings,Settings,Réglages,Configuraciones,die Einstellungen,设定值,Настройки,הגדרות
+"This is an early-stage, open-source project demonstrating the use of the MVC design pattern with Flutter and produce a 'ToDo List' application that works in multiple platforms from a single codebase.","This is an early-stage, open-source project demonstrating the use of the MVC design pattern with Flutter and produce a 'ToDo List' application that works in multiple platforms from a single codebase.",Il s'agit d'un projet open-source de première étape qui démontre l'utilisation du modèle de conception MVC avec Fbattage et produit une application 'ToDo List' qui fonctionne sur plusieurs plates-formes à partir d'un seul code.,Se trata de un proyecto de código abierto en fase inicial que demuestra el uso del modelo de diseño MVC con Flutter y produce una aplicación 'ToDo List' que funciona en varias plataformas desde un solo código.,"Dies ist ein Open-Source-Projekt in der Frühphase, das die Verwendung des MVC-Designmusters mit Flutter demonstriert und eine 'ToDo List'-Anwendung erstellt, die auf mehreren Plattformen von einer einzigen Codebasis aus funktioniert.",这是一个早期的开源项目，演示了MVC设计模式与Flugt的使用，并产生了一个“ToDo List”应用程序，该应用程序可以从单个代码库在多个平台上工作。,"Это начальный проект с открытым исходным кодом, демонстрирующий использование шаблона проектирования MVC с Flutter и создающий приложение ""Список дел"", работающее на нескольких платформах из одной базы кода.","זהו פרוייקט של שלב מוקדם, קוד פתוח המדגים את השימוש בתבנית עיצוב MVC עם Flutter ויוצר יישום 'ToDo List' הפועל בפלטפורמות מרובות מבסיס קוד יחיד."
+The source code is available on Github:,The source code is available on Github:,Le code source est disponible sur Github :,El código fuente está disponible en Github:,Der Quellcode ist auf Github verfügbar:,源代码在Github上可用：,Исходный код доступен на Github:,קוד המקור זמין בגתון:
+Cancel,Cancel,Annuler,Cancelar,Abbrechen,取消,Отмена,בטל
+CLOSE,CLOSE,FERMER,CERRAR,SCHLIESSEN,关闭,БЛИЗКО,סגור
+Discard,Discard,Ignorer,Descartar,Diskette,放弃,Удалить,בטל
+Discard new event?,Discard new event?,Ignorer un nouvel événement ?,¿Descartar nuevo evento?,Verwerfen Sie neue Veranstaltung?,是否放弃新事件？,Удалить новое событие?,האם לבטל אירוע חדש?
+Cannot be empty.,Cannot be empty.,Impossible d'être vide.,No puede estar vacío.,Kann nicht leer sein.,不能为空。,Не может быть пустым.,לא יכול להיות ריק.
+Not saved.,Not saved.,Pas sauvé.,No guardado.,Nicht gespeichert.,未保存。,Не спасен.,לא ניצלתי.
+Save,Save,Enregistrer,Guardar,Speichern,保存,Сохранить,שמור
+You deleted an item.,You deleted an item.,Vous avez supprimé un élément.,Eliminaste un elemento.,Sie haben einen Artikel gelöscht.,您删除了一个项目。,Вы удалили элемент.,מחקת פריט.
+That time has past:,That time has past:,Cette époque est passée :,Ese tiempo ha pasado:,Diese Zeit ist vorbei:,那个时代已经过去：,Это время прошло:,הזמן הזה עבר:
+Current time:,Current time:,Heure actuelle :,Hora actual:,Aktueller Zeitpunkt:,当前时间：,Текущее время:,זמן נוכחי:
+Please correct time.,Please correct time.,Veuillez corriger l'heure.,"Por favor, corrija la hora.",Bitte korrigieren Sie die Zeit.,请改正时间。,"Пожалуйста, исправьте время.",אנא תקן את הזמן.
+
+name: app_template

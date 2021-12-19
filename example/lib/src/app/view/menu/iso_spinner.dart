@@ -1,7 +1,5 @@
 import 'package:mvc_application_example/src/view.dart';
 
-import 'package:i10n_translator/i10n.dart';
-
 import 'package:mvc_application/view.dart' as s;
 
 /// A Spinner listing the available Locales.

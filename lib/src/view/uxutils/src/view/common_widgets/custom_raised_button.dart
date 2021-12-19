@@ -51,9 +51,11 @@ class CustomRaisedButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   Widget buildSpinner(BuildContext context) {
-    final data = Theme.of(context);
+    var data = Theme.of(context);
+    data = data.copyWith(
+        colorScheme: data.colorScheme.copyWith(secondary: Colors.white70));
     return Theme(
-      data: data.copyWith(accentColor: Colors.white70),
+      data: data,
       child: const SizedBox(
         width: 28,
         height: 28,

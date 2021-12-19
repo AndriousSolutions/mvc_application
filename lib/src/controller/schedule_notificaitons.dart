@@ -22,11 +22,8 @@
 ///      <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 import 'dart:async' show Future;
 import 'dart:math' show Random;
-import 'dart:typed_data';
-import 'dart:typed_data' show Int64List;
-import 'dart:ui' show Color;
+import 'dart:typed_data' show Int32List, Int64List;
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mvc_application/controller.dart' show HandleError;
@@ -100,7 +97,7 @@ class ScheduleNotifications with HandleError {
     AndroidBitmap<Object>? largeIcon,
     bool? onlyAlertOnce,
     bool? showWhen,
-    int? when,
+//    int? when,
     bool? usesChronometer,
     bool? channelShowBadge,
     bool? showProgress,
@@ -592,7 +589,7 @@ class ScheduleNotifications with HandleError {
     }
     var request = implementation != null;
     if (request) {
-      request = await (implementation!.requestPermissions(
+      request = await (implementation.requestPermissions(
         alert: alert,
         badge: badge,
         sound: sound,
@@ -1743,7 +1740,7 @@ class ScheduleNotifications with HandleError {
 
   Future<dynamic> _onSelectNotification(String? payload) async {
     if (payload != null || payload!.trim().isNotEmpty) {
-      await showDialog(
+      await showDialog<void>(
         context: App.context!,
         builder: (BuildContext context) {
           return AlertDialog(

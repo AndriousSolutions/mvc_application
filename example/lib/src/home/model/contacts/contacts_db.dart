@@ -1,5 +1,3 @@
-import 'dart:async' show Future;
-
 import 'dart:core';
 
 import 'package:dbutils/sqlite_db.dart' show Database, SQLiteDB, Transaction;

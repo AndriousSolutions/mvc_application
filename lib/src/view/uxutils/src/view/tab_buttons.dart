@@ -61,7 +61,7 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
   // this will give the background color values of a button when it changes to an ON state
   late Animation<Color?> _colorTweenBackgroundOn;
 
-  late Animation<Color?>? _colorTweenBackgroundOff;
+//  late Animation<Color?>? _colorTweenBackgroundOff;
 
   // this will give the foreground color values of a button when it changes to an ON state
   // Animation<Color> _colorTweenForegroundOn;
@@ -127,9 +127,9 @@ class _TabButtonsState extends State<TabButtons> with TickerProviderStateMixin {
         vsync: this, duration: Duration(milliseconds: _durationOff));
     // so the inactive buttons start in their "final" state (color)
     _animationControllerOff.value = 1.0;
-    _colorTweenBackgroundOff =
-        ColorTween(begin: _backgroundOn, end: _backgroundOff)
-            .animate(_animationControllerOff);
+    // _colorTweenBackgroundOff =
+    //     ColorTween(begin: _backgroundOn, end: _backgroundOff)
+    //         .animate(_animationControllerOff);
     // _colorTweenForegroundOff =
     //     ColorTween(begin: _foregroundOn, end: _foregroundOff)
     //         .animate(_animationControllerOff);

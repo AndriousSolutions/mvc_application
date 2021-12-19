@@ -21,13 +21,9 @@ import 'package:universal_platform/universal_platform.dart';
 
 import 'package:flutter/foundation.dart' show FlutterExceptionHandler, Key;
 
-import 'package:flutter/rendering.dart';
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter/cupertino.dart';
-
-import 'package:flutter/widgets.dart';
 
 import 'package:mvc_application/controller.dart'
     show AppController, ControllerMVC;

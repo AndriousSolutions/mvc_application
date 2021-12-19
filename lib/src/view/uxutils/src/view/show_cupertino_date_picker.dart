@@ -122,7 +122,7 @@ void showCupertinoDatePicker(
   );
 
   //
-  showCupertinoModalPopup(
+  showCupertinoModalPopup<void>(
     context: context,
     builder: (context) => SizedBox(
       height: 240,

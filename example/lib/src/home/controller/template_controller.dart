@@ -2,32 +2,76 @@ import 'dart:async' show unawaited;
 
 import 'package:mvc_application_example/src/controller.dart';
 
-import 'package:mvc_application_example/src/model.dart';
-
 // You can see 'at a glance' this Controller also 'talks to' the interface (View).
 import 'package:mvc_application_example/src/view.dart';
 
 class TemplateController extends AppController {
   factory TemplateController() => _this ??= TemplateController._();
-  TemplateController._() : super();
+  TemplateController._()
+      : wordPairsTimer = WordPairsController(),
+        super();
   static TemplateController? _this;
 
+  final WordPairsController wordPairsTimer;
+
+  // Assign to the 'leading' widget on the interface.
+  void leading() => changeUI();
+
+  /// Switch to the other User Interface.
+  void changeUI() {
+    //
+    Navigator.popUntil(App.context!, ModalRoute.withName('/'));
+
+    App.changeUI(App.useMaterial ? 'Cupertino' : 'Material');
+
+    bool switchUI;
+    if (App.useMaterial) {
+      if (UniversalPlatform.isAndroid) {
+        switchUI = false;
+      } else {
+        switchUI = true;
+      }
+    } else {
+      if (UniversalPlatform.isAndroid) {
+        switchUI = true;
+      } else {
+        switchUI = false;
+      }
+    }
+    Prefs.setBool('switchUI', switchUI);
+  }
+
   /// Indicate if the Counter app is to run.
-  bool get counterApp => appNames[_appCount] == 'Counter';
+  bool get counterApp => _appNames[_appCount] == 'Counter';
+
+  /// Indicate if the Words app is to run.
+  bool get wordsApp => _appNames[_appCount] == 'Word Pairs';
 
   /// Indicate if the Contacts app is to run.
-  bool get contactsApp => appNames[_appCount] == 'Contacts';
+  bool get contactsApp => _appNames[_appCount] == 'Contacts';
 
   int _appCount = 0;
-  final appNames = ['Counter', 'Contacts'];
+  final _appNames = ['Counter', 'Word Pairs', 'Contacts'];
 
   Widget onHome() {
+    //
+    final con = state?.controllerByType<WordPairsTimer>();
+
+    // Turn off the timer
+    con?.timer.cancel();
+
     _appCount = Prefs.getInt('appRun');
+
     final Key key = UniqueKey();
+
     Widget? widget;
-    switch (appNames[_appCount]) {
+
+    switch (_appNames[_appCount]) {
+      case 'Word Pairs':
+        widget = WordPairs(key: AppState.homeKey, title: App.title!);
+        break;
       case 'Counter':
-        widget = CounterPage(key: key, title: App.title!);
+        widget = CounterPage(key: AppState.homeKey, title: App.title!);
         break;
       case 'Contacts':
         widget = ContactsList(key: key, title: App.title!);
@@ -39,32 +83,40 @@ class TemplateController extends AppController {
   }
 
   // Supply what the interface
-  String get application => appNames[_appCount];
+  String get application => _appNames[_appCount];
 
   /// Switch to the other application.
   void changeApp([String? appName = '']) {
     //
     if (appName == null ||
         appName.isEmpty ||
-        !appNames.contains(appName.trim())) {
+        !_appNames.contains(appName.trim())) {
       //
       _appCount++;
-      if (_appCount == appNames.length) {
+      if (_appCount == _appNames.length) {
         _appCount = 0;
       }
     } else {
-      _appCount = appNames.indexOf(appName.trim());
+      _appCount = _appNames.indexOf(appName.trim());
     }
+
+    unawaited(Prefs.setBool('words', _appNames[_appCount] == 'Word'));
 
     unawaited(Prefs.setInt('appRun', _appCount));
 
     App.refresh();
   }
 
-  /// Retrieve the app's own controller.
-  TemplateController get appController =>
-      _appController ??= App.vw!.con as TemplateController;
-  TemplateController? _appController;
+  /// Working with the ColorPicker to change the app's color theme
+  void onColorPicker([ColorSwatch<int?>? value]) {
+    App.setThemeData(value);
+    App.refresh();
+  }
+
+  // /// Retrieve the app's own controller.
+  // TemplateController get appController =>
+  //     _appController ??= App.vw!.con as TemplateController;
+  // TemplateController? _appController;
 
   /// Supply the app's popupmenu
   Widget popupMenu({
@@ -103,4 +155,10 @@ class TemplateController extends AppController {
         color: color,
         captureInheritedThemes: captureInheritedThemes,
       ).popupMenuButton;
+
+  /// Start up the timer
+  void initTimer() => wordPairsTimer.initTimer();
+
+  /// Cancel the timer
+  void cancelTimer() => wordPairsTimer.cancelTimer();
 }

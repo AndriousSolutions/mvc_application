@@ -1,4 +1,10 @@
 
+## 8.5.0
+ December 18, 2021
+- app_navigator.dart
+- sdk: '>=2.15.0 <3.0.0'
+- mvc_application/example & test/
+
 ## 8.4.1
  December 15, 2021
 - Once assigned at runApp(), you can't assign error handlers if allowNewHandlers is false.

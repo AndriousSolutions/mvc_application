@@ -19,47 +19,6 @@ class ContactsController extends AppController {
   final ContactsDB model;
   static ContactsController? _this;
 
-  /// Supply the app's popupmenu
-  Widget popupMenu({
-    Key? key,
-    List<String>? items,
-    PopupMenuItemBuilder<String>? itemBuilder,
-    String? initialValue,
-    PopupMenuItemSelected<String>? onSelected,
-    PopupMenuCanceled? onCanceled,
-    String? tooltip,
-    double? elevation,
-    EdgeInsetsGeometry? padding,
-    Widget? child,
-    Widget? icon,
-    Offset? offset,
-    bool? enabled,
-    ShapeBorder? shape,
-    Color? color,
-    bool? captureInheritedThemes,
-  }) =>
-      TemplateController().popupMenu(
-        key: key,
-        items: items,
-        itemBuilder: itemBuilder,
-        initialValue: initialValue,
-        onSelected: onSelected,
-        onCanceled: onCanceled,
-        tooltip: tooltip,
-        elevation: elevation,
-        padding: padding,
-        child: child,
-        icon: icon,
-        offset: offset,
-        enabled: enabled,
-        shape: shape,
-        color: color,
-        captureInheritedThemes: captureInheritedThemes,
-      );
-
-  static late bool _sortedAlpha;
-  static const String sortKEY = 'sort_by_alpha';
-
   @override
   Future<bool> initAsync() async {
     _sortedAlpha = Prefs.getBool(sortKEY, false);
@@ -70,12 +29,23 @@ class ContactsController extends AppController {
     return init;
   }
 
+  static late bool _sortedAlpha;
+  static const String sortKEY = 'sort_by_alpha';
+
   @override
   bool onAsyncError(FlutterErrorDetails details) {
     /// Supply an 'error handler' routine if something goes wrong
     /// in the corresponding initAsync() routine.
     /// Returns true if the error was properly handled.
     return false;
+  }
+
+  // Merely for demonstration purposes. Erase if not using.
+  /// The framework calls this method whenever it removes this [State] object
+  /// from the tree.
+  @override
+  void deactivate() {
+    super.deactivate();
   }
 
   @override
@@ -117,7 +87,7 @@ class ContactsController extends AppController {
     final Contact? contact = items?.elementAt(index);
     var delete = contact != null;
     if (delete) {
-      delete = await contact!.delete();
+      delete = await contact.delete();
     }
     await refresh();
     return delete;

@@ -56,15 +56,26 @@ class PopMenu extends AppPopupMenu<String> {
   @override
   List<PopupMenuItem<String>> get menuItems => [
         PopupMenuItem(
+          key: const Key('interfaceMenuItem'),
+          value: 'interface',
+          child: Text('${I10n.s('Interface:')} $interface'),
+        ),
+        PopupMenuItem(
           key: const Key('applicationMenuItem'),
           value: 'application',
           child: Text('${I10n.s('Application:')} $application'),
         ),
-        // PopupMenuItem(
-        //   key: const Key('localeMenuItem'),
-        //   value: 'locale',
-        //   child: Text('${I10n.s('Locale:')} ${App.locale!.toLanguageTag()}'),
-        // ),
+        PopupMenuItem(
+          key: const Key('localeMenuItem'),
+          value: 'locale',
+          child: Text('${I10n.s('Locale:')} ${App.locale!.toLanguageTag()}'),
+        ),
+        if (App.useMaterial)
+          PopupMenuItem(
+            key: const Key('colorMenuItem'),
+            value: 'color',
+            child: I10n.t('Colour Theme'),
+          ),
         PopupMenuItem(
           key: const Key('aboutMenuItem'),
           value: 'about',
@@ -76,37 +87,57 @@ class PopMenu extends AppPopupMenu<String> {
   Future<void> onSelection(String value) async {
     final appContext = App.context!;
     switch (value) {
+      case 'interface':
+        _con.changeUI();
+        break;
       case 'application':
         _con.changeApp();
         break;
-      // case 'locale':
-      //   final locales = I10n.supportedLocales!;
-      //
-      //   final initialItem = locales.indexOf(App.locale!);
-      //
-      //   final spinner = ISOSpinner(
-      //       initialItem: initialItem,
-      //       supportedLocales: locales,
-      //       onSelectedItemChanged: (int index) async {
-      //         // Retrieve the available locales.
-      //         final locale = I10n.getLocale(index);
-      //         if (locale != null) {
-      //           I10n.onSelectedItemChanged(index);
-      //           App.locale = locale;
-      //           App.refresh();
-      //         }
-      //       });
-      //
-      //   await DialogBox(
-      //     title: I10n.s('Current Language'),
-      //     body: [spinner],
-      //     press01: () {
-      //       spinner.onSelectedItemChanged(initialItem);
-      //     },
-      //     press02: () {},
-      //     switchButtons: Settings.getLeftHanded(),
-      //   ).show();
-      //   break;
+      case 'locale':
+        final locales = I10n.supportedLocales!;
+
+        final initialItem = locales.indexOf(App.locale!);
+
+        final spinner = ISOSpinner(
+            initialItem: initialItem,
+            supportedLocales: locales,
+            onSelectedItemChanged: (int index) async {
+              // Retrieve the available locales.
+              final locale = I10n.getLocale(index);
+              if (locale != null) {
+                I10n.onSelectedItemChanged(index);
+                App.locale = locale;
+                App.refresh();
+              }
+            });
+
+        await DialogBox(
+          title: I10n.s('Current Language'),
+          body: [spinner],
+          press01: () {
+            spinner.onSelectedItemChanged(initialItem);
+          },
+          press02: () {},
+          switchButtons: Settings.getLeftHanded(),
+        ).show();
+
+        // If the current app is the 'counter' app
+        if (_con.counterApp) {
+          // Has to be initialized again for some reason??
+          _con.initTimer();
+        }
+
+        break;
+      case 'color':
+        // Set the current colour.
+        ColorPicker.color = App.themeData!.primaryColor;
+
+        await ColorPicker.showColorPicker(
+            context: appContext,
+            onColorChange: _onColorChange,
+            onChange: _onChange,
+            shrinkWrap: true);
+        break;
       case 'about':
         showAboutDialog(
           context: appContext,
@@ -118,4 +149,11 @@ class PopMenu extends AppPopupMenu<String> {
       default:
     }
   }
+
+  void _onColorChange(Color value) {
+    /// Implement to take in a color change.
+  }
+
+  /// Of course, the controller is to response to such user events.
+  void _onChange([ColorSwatch<int?>? value]) => _con.onColorPicker(value);
 }

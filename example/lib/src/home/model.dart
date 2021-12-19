@@ -6,3 +6,6 @@
 export 'package:mvc_application_example/src/home/model/counter/counter_model.dart';
 
 export 'package:mvc_application_example/src/home/model/settings.dart';
+
+// Word pairs
+export 'package:mvc_application_example/src/home/model/words/wordpairs_model.dart';

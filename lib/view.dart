@@ -80,6 +80,9 @@ export 'package:mvc_application/src/view/utils/inherited_state.dart'
 export 'package:mvc_application/src/view/app_menu.dart'
     show AppMenu, AppPopupMenu, Menu;
 
+/// Router Navigation
+export 'package:mvc_application/src/view/app_navigator.dart';
+
 /// UX Utils
 export 'package:mvc_application/src/view/uxutils/view.dart';
 

@@ -3,20 +3,16 @@ import 'package:mvc_application_example/src/view.dart';
 import 'package:mvc_application_example/src/controller.dart';
 
 class CounterPage extends StatefulWidget {
-  CounterPage({Key? key, this.title = 'Counter Page'})
-      : con = CounterController(),
-        super(key: key);
+  const CounterPage({Key? key, this.title = 'Counter Page'}) : super(key: key);
   final String title;
-  final CounterController con;
   @override
-  //ignore: no_logic_in_create_state
-  State createState() => _CounterPageState(con);
+  State createState() => _CounterPageState();
 }
 
 /// Should always keep your State class 'hidden' with the leading underscore
 class _CounterPageState extends StateMVC<CounterPage> {
-  _CounterPageState(CounterController controller) : super(controller) {
-    con = this.controller as CounterController;
+  _CounterPageState() : super(CounterController()) {
+    con = controller as CounterController;
   }
   late CounterController con;
 
@@ -25,7 +21,10 @@ class _CounterPageState extends StateMVC<CounterPage> {
   @override
   void initState() {
     super.initState();
+    appCon = TemplateController();
   }
+
+  late TemplateController appCon;
 
   // Merely for demonstration purposes. Erase if not using.
   /// The framework calls this method whenever it removes this [State] object
@@ -58,6 +57,8 @@ class _CounterPageState extends StateMVC<CounterPage> {
   void onError(FlutterErrorDetails details) {
     super.onError(details);
   }
+
+  Widget get wordPair => con.wordPair;
 
   // Merely for demonstration purposes. Erase if not using.
   // ignore: comment_references
@@ -178,18 +179,22 @@ class _BuildAndroid extends StatelessWidget {
   Widget build(BuildContext context) {
     final widget = state.widget;
     final con = state.con;
+    final appCon = state.appCon;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          con.popupMenu(),
+          appCon.popupMenu(),
         ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            I10n.t('You have pushed the button this many times:'),
+            con.wordPair,
+            const SizedBox(height: 30),
+            I10n.t('You have pushed the button this many times:',
+                style: const TextStyle(fontSize: 15)),
             Text(
               con.data,
               style: Theme.of(context).textTheme.headline4,
@@ -220,10 +225,11 @@ class _BuildiOS extends StatelessWidget {
   Widget build(BuildContext context) {
     final widget = state.widget;
     final con = state.con;
+    final appCon = state.appCon;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(widget.title),
-        trailing: con.popupMenu(),
+        trailing: appCon.popupMenu(),
       ),
       child: SafeArea(
         child: Padding(
@@ -232,6 +238,8 @@ class _BuildiOS extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                con.wordPair,
+                const SizedBox(height: 30),
                 I10n.t('You have pushed the button this many times:'),
                 Text(con.data),
                 Expanded(

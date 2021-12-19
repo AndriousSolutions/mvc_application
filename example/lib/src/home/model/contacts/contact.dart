@@ -1,7 +1,5 @@
 import 'package:mvc_application_example/src/view.dart';
 
-import 'package:mvc_application_example/src/controller.dart';
-
 import 'contact_fields.dart';
 
 import 'contacts_db.dart';
@@ -83,7 +81,6 @@ class ContactList extends ContactFields {
     _email = Email(ma.p('emails'));
   }
 
-  ///
   Map<String, dynamic> get toMap {
     //
     final emailList = email.mapItems<Email>(

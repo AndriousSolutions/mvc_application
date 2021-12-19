@@ -3,10 +3,10 @@ description: Flutter Framework for Applications using the MVC Design Pattern
 homepage: https://github.com/AndriousSolutions/mvc_application
 repository: https://github.com/AndriousSolutions/mvc_application
 
-version: 8.4.1
+version: 8.5.0
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.15.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -67,6 +67,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  # Supply the example app for testing.
+  mvc_application_example:
+    path: example
+
 #  # Setting up Lint Rules
 #  # Most of the recommended lints directly implement the guidelines set out in Effective Dart:
 #  # https://dart.dev/guides/language/effective-dart
@@ -78,6 +82,12 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
   # To add assets to your package, add an assets section, like this:
 #  assets:
 #    - images/a_dot_burr.jpeg

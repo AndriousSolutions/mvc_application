@@ -97,7 +97,7 @@ class App {
       // Only assigned once with the first call.
       _appState ??= vw;
       // Assign the 'app' object to the app's view
-      vw!.app = this;
+      vw.app = this;
     }
     return set;
   }
