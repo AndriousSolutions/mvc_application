@@ -31,9 +31,9 @@ class InheritedStates {
   //
   static final Map<Type, _InheritedStateWidget> _states = {};
 
-  static InheritedStateWidget widget(InheritedWidget inheritedWidget,
+  static InheritedStateWidget add(InheritedWidget? Function() func,
           {Key? key}) =>
-      InheritedStateWidget(inheritedWidget, key: key);
+      InheritedStateWidget(func, key: key);
 
   /// Link a widget to an InheritedWidget of type T
   static bool inheritWidget<T extends InheritedWidget>(BuildContext context,
@@ -57,21 +57,18 @@ Type _type<U>() => U;
 
 /// Provides the build() function to be rebuilt
 class InheritedStateWidget extends StatefulWidget {
-  InheritedStateWidget(this._inheritedWidget, {Key? key}) : super(key: key);
-  final InheritedWidget? _inheritedWidget;
+  InheritedStateWidget(this._func, {Key? key}) : super(key: key);
+  final InheritedWidget? Function() _func;
 
   // Retains a reference to its State object
-  final Set<_InheritedStateWidget> _state = {};
+  final Set<_InheritedStateWidget> _state = {_InheritedStateWidget()};
 
   @override
-  State createState() => _InheritedStateWidget();
+  //ignore: no_logic_in_create_state
+  State createState() => _state.first;
 
   /// Calls the build() function in this Widget's State object.
-  void rebuild() {
-    if (_state.isNotEmpty) {
-      _state.first.setState(() {});
-    }
-  }
+  void rebuild() => _state.first.setState(() {});
 }
 
 class _InheritedStateWidget extends State<InheritedStateWidget> {
@@ -79,8 +76,9 @@ class _InheritedStateWidget extends State<InheritedStateWidget> {
   void initState() {
     super.initState();
     // Record this State object for later reference.
-    if (widget._inheritedWidget != null) {
-      _type = widget._inheritedWidget.runtimeType;
+    final InheritedWidget? inheritedWidget = widget._func();
+    if (inheritedWidget != null) {
+      _type = inheritedWidget.runtimeType;
       InheritedStates._states[_type] = this;
     }
   }
@@ -124,6 +122,5 @@ class _InheritedStateWidget extends State<InheritedStateWidget> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      widget._inheritedWidget ?? const SizedBox();
+  Widget build(BuildContext context) => widget._func() ?? const SizedBox();
 }

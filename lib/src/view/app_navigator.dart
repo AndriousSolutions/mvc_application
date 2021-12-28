@@ -23,8 +23,10 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
     this.add,
     this.remove,
   }) : _navigatorKey = GlobalKey<NavigatorState>() {
+    _currentConfiguration = AppRoutePath.home();
     _routes = _mapPages(routes);
   }
+
   //
   static AppRouterDelegate? _this;
 
@@ -34,77 +36,89 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
   final GlobalKey<NavigatorState>? _navigatorKey;
 
   Page<dynamic>? homePage;
+
   final List<Page<dynamic>> _pages = [];
 
   late WidgetBuilder home;
+
+  /// The current configuration
+  static late AppRoutePath _currentConfiguration;
+
   late Map<String, Page<dynamic>> _routes;
 
   /// Of course, You're free to override this function if you like
   @override
   GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;
 
+  /// Route assigned by NextRoute() function
+  static bool _calledNextRoute = false;
+
+  static bool _backButtonPushed(String path) =>
+      !_calledNextRoute && _currentConfiguration.path == path;
+
   /// Of course, You're free to override this function if you like
   /// This getter will update the current URL path
   @override
-  AppRoutePath get currentConfiguration {
-    AppRoutePath route;
-    final path = _pages.isEmpty ? '/' : _pages.last.name;
-
-    if (_foundRoute(path)) {
-      route = path == '/' ? AppRoutePath.home() : AppRoutePath.page(path);
-    } else {
-      route = AppRoutePath.unknown();
-    }
-    return route;
-  }
+  AppRoutePath get currentConfiguration => _currentConfiguration;
 
   /// Of course, You're free to override this function if you like
   @override
   Widget build(BuildContext context) => Navigator(
-        key: navigatorKey, // UniqueKey(),
+        key: navigatorKey,
         pages: [
           homePage ??= _materialPage(context, '/', home),
+          // Navigator 2.0 is declarative! Update _pages appropriately.
           if (_pages.isNotEmpty) _pages.last,
         ],
+        // Navigator 1.0
         onPopPage: (route, result) {
           //
           final pop = route.didPop(result);
 
           if (pop) {
             //
-            if (_pages.isNotEmpty) {
-              _pages.removeLast();
-            }
+            _currentConfiguration = _previousPath();
 
+            // Notify Navigator 2.0
             notifyListeners();
           }
           return pop;
         },
+        reportsRouteUpdateToEngine: true,
       );
 
   /// Of course, You're free to override this function if you like
   @override
   Future<void> setNewRoutePath(AppRoutePath configuration) async {
     //
-    if (configuration.isWebPage) {
-      // If not a recognized path
-      if (!_addPage(configuration.path)) {
-        _addUnknown(configuration.path);
-      }
-    } else if (!configuration.isHomePage) {
-      _addPage('/404');
+    if (configuration.isHomePage) {
+      _currentConfiguration = configuration;
+    } else
+    // If not a recognized path
+    if (!_addPage(configuration.path)) {
+      //
+      _addUnknown(configuration.path);
+
+      _currentConfiguration = AppRoutePath.unknown(configuration.path);
+      // This is a hack! There must be a better way.
+    } else if (_backButtonPushed(configuration.path!)) {
+      //
+      _currentConfiguration = _previousPath();
+    } else {
+      _currentConfiguration = AppRoutePath.page(configuration.path);
     }
   }
 
   /// Supply the next route
   static bool nextRoute(String? path) {
     //
-    bool next;
-
-    next = _this!._addPage(path);
+    final next = _this!._addPage(path);
 
     if (next) {
+      _calledNextRoute = true;
+      _currentConfiguration = AppRoutePath.page(path);
       _this!.notifyListeners();
+      _calledNextRoute = false;
     }
     return next;
   }
@@ -129,38 +143,27 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
 
     final pageBuilder = _this!._routes[path];
 
-    bool add = pageBuilder != null;
-
-    // Don't repeatedly add a page.
-    if (add) {
-      add = _pages.isEmpty || _pages.last != pageBuilder;
-    }
+    final add = pageBuilder != null;
 
     if (add) {
-      _pages.add(pageBuilder!);
+      // Don't repeatedly add a page. .last will error if empty.
+      if (_pages.isEmpty || _pages.last != pageBuilder) {
+        _pages.add(pageBuilder);
+      }
     }
     return add;
   }
 
-  /// Find the specified path in the 'routes' map.
-  bool _foundRoute(String? path) {
+  /// Retreat to the previous path.
+  AppRoutePath _previousPath() {
     //
-    if (path == null) {
-      return false;
+    if (_pages.isNotEmpty) {
+      _pages.removeLast();
     }
 
-    path = path.trim();
+    final path = _pages.isEmpty ? '/' : _pages.last.name;
 
-    if (path.isEmpty) {
-      return false;
-    }
-
-    // The 'root' should always be found.
-    if (path == '/') {
-      return true;
-    }
-
-    return _this!._routes[path] != null;
+    return path == '/' ? AppRoutePath.home() : AppRoutePath.page(path);
   }
 
   /// Explicitly add a route.
@@ -252,52 +255,63 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
 
   @override
   Future<AppRoutePath> parseRouteInformation(
-          RouteInformation routeInformation) async =>
-      _parseRoutePath(routeInformation.location);
+      RouteInformation routeInformation) async {
+    final path = routeInformation.location;
+
+    //
+    if (path == null) {
+      return AppRoutePath.home();
+    }
+
+    // It's the very same path??
+    if (path == AppRouterDelegate._currentConfiguration.path) {
+      return AppRouterDelegate._currentConfiguration;
+    }
+
+    final uri = Uri.parse(path);
+
+    if (uri.pathSegments.isEmpty) {
+      return AppRoutePath.home();
+    }
+
+    // Handle '/book/:id'
+    if (uri.pathSegments.length == 2) {
+      //
+      // if (!uri.pathSegments[0].startsWith('/')) {
+      //   return AppRoutePath.unknown();
+      // }
+
+      var remaining = uri.pathSegments[1];
+
+      if (remaining.isEmpty) {
+        return AppRoutePath.unknown();
+      }
+
+      if (!remaining.startsWith('/')) {
+        remaining = '/$remaining';
+      }
+
+      return AppRoutePath.page(remaining);
+    } else if (uri.pathSegments.length == 1) {
+      //
+      return AppRoutePath.page(uri.path);
+    }
+    // Handle unknown routes
+    return AppRoutePath.unknown(path);
+  }
 
   /// Restore to the current configuration
+  /// It is the responsibility of the delegate to restore its internal
+  /// state based on the provided configuration.
   @override
-  RouteInformation? restoreRouteInformation(AppRoutePath configuration) =>
-      RouteInformation(location: configuration.path, state: configuration);
-}
-
-/// Return the appropriate AppRoutePath object with it's specific URL
-AppRoutePath _parseRoutePath(String? path) {
-  //
-  if (path == null) {
-    return AppRoutePath.home();
-  }
-
-  final uri = Uri.parse(path);
-
-  if (uri.pathSegments.isEmpty) {
-    return AppRoutePath.home();
-  }
-
-  // Handle '/book/:id'
-  if (uri.pathSegments.length == 2) {
+  RouteInformation? restoreRouteInformation(AppRoutePath configuration) {
     //
-    // if (!uri.pathSegments[0].startsWith('/')) {
-    //   return AppRoutePath.unknown();
-    // }
-
-    var remaining = uri.pathSegments[1];
-
-    if (remaining.isEmpty) {
-      return AppRoutePath.unknown();
+    if (AppRouterDelegate._currentConfiguration.path != configuration.path) {
+      //
+      configuration = AppRouterDelegate._currentConfiguration;
     }
-
-    if (!remaining.startsWith('/')) {
-      remaining = '/$remaining';
-    }
-
-    return AppRoutePath.page(remaining);
-  } else if (uri.pathSegments.length == 1) {
-    //
-    return AppRoutePath.page(uri.path);
+    return RouteInformation(location: configuration.path, state: configuration);
   }
-  // Handle unknown routes
-  return AppRoutePath.unknown();
 }
 
 /// Of course, You're free to override this class if you like
@@ -306,31 +320,26 @@ class AppRoutePath {
   AppRoutePath.home()
       : path = '/',
         isUnknown = false,
-        isHomePage = true,
-        isWebPage = false;
+        isHomePage = true;
 
   AppRoutePath.page(this.path)
       : isUnknown = false,
-        isHomePage = false,
-        isWebPage = true;
+        isHomePage = false;
 
-  AppRoutePath.unknown()
-      : path = '/404',
+  AppRoutePath.unknown([String? _path])
+      : path = _path ?? '/404',
         isUnknown = true,
-        isHomePage = false,
-        isWebPage = false;
+        isHomePage = false;
 
 //  final AppRouteState? state;
   final String? path;
   final bool isUnknown;
   final bool isHomePage;
-  final bool isWebPage;
 
   Map<String, Object> toJson() => <String, Object>{
         'path': path ?? '',
         'isUnknown': isUnknown,
         'isHomePage': isHomePage,
-        'isWebPage': isWebPage
       };
 
   AppRoutePath fromJson(Map<String, dynamic> json) {

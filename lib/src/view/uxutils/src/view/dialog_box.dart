@@ -388,7 +388,7 @@ class DialogBox with DialogOptions {
     this.press02 ??= press02;
     this.switchButtons ??= switchButtons;
     body = body ?? this.body;
-    body ??= [Container()];
+    body ??= [const SizedBox()];
     actions ??= this.actions;
     actions ??= _listOptions();
     barrierDismissible ??= this.barrierDismissible ?? false;

@@ -29,7 +29,14 @@ import 'package:mvc_application/controller.dart'
     show AppController, ControllerMVC;
 
 import 'package:mvc_application/view.dart' as v
-    show App, AppErrorHandler, I10n, I10nDelegate, ReportErrorHandler;
+    show
+        App,
+        AppRouterDelegate,
+        AppErrorHandler,
+        AppRouteInformationParser,
+        I10n,
+        I10nDelegate,
+        ReportErrorHandler;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
@@ -346,6 +353,11 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
       _routerDelegate = routerDelegate ?? onRouterDelegate();
       _routeInformationParser =
           routeInformationParser ?? onRouteInformationParser();
+      // Supply the appropriate parser for the developer.
+      if (_routerDelegate is v.AppRouterDelegate &&
+          _routeInformationParser == null) {
+        _routeInformationParser = v.AppRouteInformationParser();
+      }
       if (_routerDelegate == null || _routeInformationParser == null) {
         return MaterialApp(
           key: key ?? v.App.widgetsAppKey,

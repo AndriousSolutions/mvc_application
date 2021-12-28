@@ -1,4 +1,13 @@
 
+## 8.6.0
+ December 28, 2021
+- _routeInformationParser = v.AppRouteInformationParser();
+- if (_backButtonPushed(configuration.path!)) {
+-  _currentConfiguration = _previousPath();
+- AppRoutePath.unknown([String? _path])
+- configuration = AppRouterDelegate._currentConfiguration;
+- PointerDeviceKind.touch,
+
 ## 8.5.0
  December 18, 2021
 - app_navigator.dart

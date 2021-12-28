@@ -74,7 +74,7 @@ export 'package:mvc_application/src/view/utils/timezone.dart';
 
 /// InheritedWidget Widget
 export 'package:mvc_application/src/view/utils/inherited_state.dart'
-    show InheritedStates;
+    show InheritedStates, InheritedStateWidget;
 
 /// Menus
 export 'package:mvc_application/src/view/app_menu.dart'

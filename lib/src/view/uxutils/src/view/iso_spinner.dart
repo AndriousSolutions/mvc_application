@@ -4,6 +4,8 @@
 
 import 'package:mvc_application/view.dart';
 
+import 'package:flutter/gestures.dart' show PointerDeviceKind;
+
 /// A Spinner listing the available Locales.
 class ISOSpinner extends StatefulWidget {
   const ISOSpinner({
@@ -47,18 +49,38 @@ class _SpinnerState extends State<ISOSpinner> {
   FixedExtentScrollController? controller;
 
   @override
-  Widget build(BuildContext context) => Container(
-      height: 100,
-      child: CupertinoPicker.builder(
-        itemExtent: 25, //height of each item
-        childCount: locales.length,
-        scrollController: controller,
-        onSelectedItemChanged: widget.onSelectedItemChanged,
-        itemBuilder: (BuildContext context, int index) => Text(
-          locales[index].countryCode == null
-              ? locales[index].languageCode
-              : '${locales[index].languageCode}-${locales[index].countryCode}',
-          style: const TextStyle(fontSize: 20),
+  Widget build(BuildContext context) {
+    //
+    Widget widget = CupertinoPicker.builder(
+      itemExtent: 25, //height of each item
+      childCount: locales.length,
+      scrollController: controller,
+      onSelectedItemChanged: this.widget.onSelectedItemChanged,
+      itemBuilder: (BuildContext context, int index) => Text(
+        locales[index].countryCode == null
+            ? locales[index].languageCode
+            : '${locales[index].languageCode}-${locales[index].countryCode}',
+        style: const TextStyle(fontSize: 20),
+      ),
+    );
+
+    // By design, gestures are turned off on browser screens
+    if (UniversalPlatform.isWeb && !App.inSmallScreen) {
+      //
+      widget = ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(
+          dragDevices: {
+            PointerDeviceKind.touch,
+            PointerDeviceKind.mouse,
+          },
         ),
-      ));
+        child: widget,
+      );
+    }
+
+    return SizedBox(
+      height: 100,
+      child: widget,
+    );
+  }
 }

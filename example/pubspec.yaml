@@ -36,9 +36,6 @@ dependencies:
   mvc_application: ^8.0.0
 #      path: ../../packages/mvc_application
 
-  # https://pub.dev/packages/i10n_translator/
-  # To prevent pub publish validation error.
-  i10n_translator: ^2.0.0
 
 dev_dependencies:
   flutter_test:
