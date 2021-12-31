@@ -1,7 +1,7 @@
 
-## 8.7.0+02
+## 8.7.0+03
  December 31, 2021
-- .github/workflows/ci.yml
+- Corrected .github/workflows/ci.yml
 
 ## 8.7.0
  December 30, 2021
