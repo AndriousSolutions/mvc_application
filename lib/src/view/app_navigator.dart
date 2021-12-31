@@ -5,6 +5,8 @@
 //import 'package:andrious/src/view.dart';
 import 'package:flutter/material.dart';
 
+import 'package:universal_html/html.dart' show window;
+
 class AppRouterDelegate extends RouterDelegate<AppRoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRoutePath> {
   factory AppRouterDelegate({
@@ -369,6 +371,48 @@ class AppRoutePath {
         route = AppRoutePath.page(path);
     }
     return route;
+  }
+}
+
+/// The Route Provider for the App
+class AppRouteInformationProvider extends PlatformRouteInformationProvider {
+  AppRouteInformationProvider()
+      : super(initialRouteInformation: _initialRouteInformation());
+
+  static RouteInformation _initialRouteInformation() {
+    String path = WidgetsBinding.instance!.window.defaultRouteName;
+    final String url = urlPath();
+    if (url.isNotEmpty && url != path) {
+      path = url;
+    }
+    return RouteInformation(location: path);
+  }
+
+  /// Returns a empty Map if an error occurs.
+  Map<String, String> params() {
+    Uri uri;
+    Map<String, String> params;
+    try {
+      uri = Uri.dataFromString(window.location.href);
+      params = uri.queryParameters;
+    } catch (ex) {
+      // Empty if there's a problem
+      params = {};
+    }
+    return params;
+  }
+
+  /// Returns the url path if any
+  /// Returns an empty string otherwise.
+  static String urlPath() {
+    String path;
+    try {
+      path = window.location.pathname!;
+    } catch (ex) {
+      // Empty if there's a problem
+      path = '';
+    }
+    return path;
   }
 }
 

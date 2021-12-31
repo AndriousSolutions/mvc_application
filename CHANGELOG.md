@@ -1,4 +1,8 @@
 
+## 8.7.0
+ December 30, 2021
+- class AppRouteInformationProvider extends PlatformRouteInformationProvider {
+
 ## 8.6.0
  December 28, 2021
 - _routeInformationParser = v.AppRouteInformationParser();
