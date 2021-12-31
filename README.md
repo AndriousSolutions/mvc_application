@@ -6,7 +6,7 @@
 ### A Flutter Framework using the MVC Design Pattern
 ![mvc_application](https://user-images.githubusercontent.com/32497443/104035360-a845f280-5197-11eb-88bf-210b464de078.jpg)
 Allows for easier and, dare I say, faster development and better maintenability. No 're-inventing of the wheel' using already built-in capabilities and features offered by Flutter itself.
-Accommodating and Intergrated features:
+Accommodating and Integrated features:
 * Error Handling
 * System Preferences
 * App Notifications
@@ -21,15 +21,15 @@ Accommodating and Intergrated features:
 
 ### Installing
 I don't like the version number suggested in the '[Installing](https://pub.dev/packages/mvc_application#-installing-tab-)' page.
-Instead, always go up to the '**major**' semantic version number when installing this library package. This means always trailing with two zero, '**.0.0**'. This allows you to take in any '**minor**' versions introducing new features as well as any '**patch**' versions that involves bugfixes. Example, to install version 7.9.2, use 7.0.0. Thus, the bug fix, 7.9.2, will be installled the next time you 'upgrade' the dependences.
+Instead, always go up to the '**major**' semantic version number when installing this library package. This means always trailing with two zero, '**.0.0**'. This allows you to take in any '**minor**' versions introducing new features as well as any '**patch**' versions that involves bugfixes. Example, to install version 7.9.2, use 7.0.0. Thus, the bug fix, 7.9.2, will be installed the next time you 'upgrade' the dependencies.
 1. **patch** - bugfixes
 2. **minor** - Introduced new features
 3. **major** - Essentially made a new app. It's broken backwards-compatibility and has a completely new user experience. You won't get this version until you increment the **major** number in the pubspec.yaml file.
 
 And so, in this case, add this to your package's pubspec.yaml file:
-```javascript
+```dart
 dependencies:
-   mvc_application:^8.0.0
+   mvc_application: ^8.0.0
 ```
 For more information on version numbers: [The importance of semantic versioning](https://medium.com/@xabaras/the-importance-of-semantic-versioning-9b78e8e59bba).
 

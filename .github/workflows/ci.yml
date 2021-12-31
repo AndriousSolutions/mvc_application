@@ -1,0 +1,55 @@
+## Github Action Workflow for Continuous Integration Testing
+# https://medium.com/mobile-development-group/github-actions-for-flutter-cf02923d7b5d
+#
+#
+#
+name: Flutter CI
+
+# Github Actions will execute the workflow following the events under on key.
+# This workflow is triggered on pushes to the repository.
+on:
+  push:
+    branches:
+      - master
+
+# A workflow run is made up of one or more jobs.
+jobs:
+  build:
+    # This job will run on ubuntu virtual machine
+    runs-on: ubuntu-latest
+
+    # A job contains a sequence of tasks called steps.
+    steps:
+      # Setup Java environment in order to build the Android app.
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      # Setup the flutter environment.
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable' # 'beta' 'dev', 'alpha', default to: 'stable'
+
+      # Write the command to get the Flutter dependencies.
+      - run: flutter pub get
+
+      # Check for any formatting issues in the code.
+      - run: flutter format --set-exit-if-changed .
+
+      # Statically analyze the Dart code for any errors.
+      - run: flutter analyze .
+
+      # Run widget tests for our flutter project.
+      - run: flutter test --coverage
+
+      # Build an Android APK.
+      - run: flutter build apk
+
+      # Finally, upload our generated app-release.apk for our workflow to the artifacts.
+      # For this, we will be using actions/upload-artifact.
+      - uses: actions/upload-artifact@v1
+        with:
+          # Name of the command/step.
+          name: release-apk
+          # Path to the release apk.
+          path: build/app/outputs/apk/release/app-release.apk
