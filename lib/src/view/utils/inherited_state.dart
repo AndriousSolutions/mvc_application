@@ -31,6 +31,7 @@ class InheritedStates {
   //
   static final Map<Type, _InheritedStateWidget> _states = {};
 
+  /// Returns an Object containing InheritedWidget and its build function
   static InheritedStateWidget add(InheritedWidget? Function() func,
           {Key? key}) =>
       InheritedStateWidget(func, key: key);
@@ -57,6 +58,7 @@ Type _type<U>() => U;
 
 /// Provides the build() function to be rebuilt
 class InheritedStateWidget extends StatefulWidget {
+  /// Supply a Callback function returning an InheritedWidget
   InheritedStateWidget(this._func, {Key? key}) : super(key: key);
   final InheritedWidget? Function() _func;
 

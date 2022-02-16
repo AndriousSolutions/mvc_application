@@ -11,6 +11,9 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
 
 # A workflow run is made up of one or more jobs.
 jobs:
@@ -34,22 +37,30 @@ jobs:
       - run: flutter pub get
 
       # Check for any formatting issues in the code.
-      - run: flutter format --set-exit-if-changed .
+      - run: flutter format .
 
-      # Statically analyze the Dart code for any errors.
+      # Statically analyze the Dart code for any errors, but don't fail if any.
       - run: flutter analyze . --preamble --no-fatal-infos --no-fatal-warnings
 
       # Run widget tests for our flutter project.
       - run: flutter test --coverage
 
-      # Build an Android APK.
-      - run: flutter build apk
+      # Parse a tag from the commit message
+      - id: get-tag
+        run: |
+          id=$(echo ${{github.event.head_commit.message}} | cut -d' ' -f1)
+          echo "::set-output name=tag::$id"
 
-      # Finally, upload our generated app-release.apk for our workflow to the artifacts.
-      # For this, we will be using actions/upload-artifact.
-      - uses: actions/upload-artifact@v1
+      # Create a Release up on Github
+      if: !contains('${{ steps.get-tag.outputs.TAG }}', '+')
+      - uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          # Name of the command/step.
-          name: release-apk
-          # Path to the release apk.
-          path: build/app/outputs/apk/release/app-release.apk
+          tag_name: ${{ steps.get-tag.outputs.tag }}
+          release_name: Release ${{ steps.get-tag.outputs.tag }}
+          #          body_path: CHANGELOG.md
+          body: |
+            See CHANGELOG.md
+          draft: false
+          prerelease: false

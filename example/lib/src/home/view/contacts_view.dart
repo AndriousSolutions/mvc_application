@@ -2,12 +2,11 @@ import 'package:mvc_application_example/src/view.dart';
 
 import 'package:mvc_application_example/src/controller.dart';
 
-import 'package:mvc_application_example/src/home/controller/contacts_controller.dart'
-    show ContactsController;
+import 'package:mvc_application_example/src/home/view/contacts/add_contact.dart'
+    show AddContact;
 
-import 'package:mvc_application_example/src/home/view/contacts/add_contact.dart';
-
-import 'package:mvc_application_example/src/home/view/contacts/contact_details.dart';
+import 'package:mvc_application_example/src/home/view/contacts/contact_details.dart'
+    show ContactDetails;
 
 class ContactsList extends StatefulWidget {
   const ContactsList({Key? key, this.title = 'Contacts App'}) : super(key: key);
@@ -99,7 +98,7 @@ Widget _buildAndroid(_ContactListState state) {
                         : 'archived';
                     App.snackBar(
                       duration: const Duration(milliseconds: 8000),
-                      content: Text('You $action an item.'),
+                      content: Text('You $action an item.'.tr),
                       action: SnackBarAction(
                           label: 'UNDO',
                           onPressed: () {

@@ -1,9 +1,8 @@
-import 'package:mvc_application_example/src/controller.dart';
+import 'package:mvc_application_example/src/controller.dart'
+    show App, AppController, State, TemplateController, Widget, WordPairsTimer;
 
-import 'package:mvc_application_example/src/model.dart';
-
-// You can see 'at a glance' this Controller also 'talks to' the interface (View).
-import 'package:mvc_application_example/src/view.dart';
+import 'package:mvc_application_example/src/model.dart'
+    show CounterModel, State, Widget;
 
 class CounterController extends AppController {
   factory CounterController() => _this ??= CounterController._();

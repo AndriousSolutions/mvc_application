@@ -15,42 +15,73 @@
 ///
 ///
 ///
-import 'package:flutter/material.dart'
-    show
-        BuildContext,
-        CircularProgressIndicator,
-        Color,
-        Colors,
-        ElevatedButton,
-        Key,
-        SizedBox,
-        StatelessWidget,
-        Theme,
-        VoidCallback,
-        Widget,
-        immutable;
+import 'package:flutter/material.dart';
 
+/// A Elevated button with a built-in spinner
+/// Used to convey an on-going process that completes with an enabled button.
 @immutable
 class CustomRaisedButton extends StatelessWidget {
+  /// A constructor that takes in Elevated buttons properties.
   const CustomRaisedButton({
     Key? key,
+    this.loading,
+    required this.onPressed,
+    this.onLongPress,
+    this.onHover,
+    this.onFocusChange,
+    this.style,
+    this.focusNode,
+    this.autofocus,
+    this.clipBehavior,
     required this.child,
-    this.color,
-    this.textColor,
-    this.height = 50.0,
-    this.borderRadius = 2.0,
-    this.loading = false,
-    this.onPressed,
   }) : super(key: key);
-  final Widget child;
-  final Color? color;
-  final Color? textColor;
-  final double height;
-  final double borderRadius;
-  final bool loading;
+
+  /// A flag when True will enable the button.
+  final bool? loading;
+
+  /// Optional Callback function
   final VoidCallback? onPressed;
 
-  Widget buildSpinner(BuildContext context) {
+  /// Optional 'Long Press' Callback function
+  final VoidCallback? onLongPress;
+
+  /// Optional. Called when a pointer enters or exits the button response area.
+  final ValueChanged<bool>? onHover;
+
+  /// Optional. Called when the focus changes.
+  final ValueChanged<bool>? onFocusChange;
+
+  /// Customizes this button's appearance.
+  final ButtonStyle? style;
+
+  /// To obtain the keyboard focus and to handle keyboard events.
+  final FocusNode? focusNode;
+
+  /// If True, this widget will be selected as the initial focus when no other
+  /// node in its scope is currently focused.
+  final bool? autofocus;
+
+  /// Different ways to clip a widget's content.
+  final Clip? clipBehavior;
+
+  /// Typically the button's label.
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) => ElevatedButton(
+        onPressed: loading ?? false ? null : onPressed,
+        onLongPress: onLongPress,
+        onHover: onHover,
+        onFocusChange: onFocusChange,
+        style: style,
+        focusNode: focusNode,
+        autofocus: autofocus ?? false,
+        clipBehavior: clipBehavior ?? Clip.none,
+        child: loading ?? false ? buttonSpinner(context) : child,
+      );
+
+  /// Displays a Processing Indicator.
+  Widget buttonSpinner(BuildContext context) {
     var data = Theme.of(context);
     data = data.copyWith(
         colorScheme: data.colorScheme.copyWith(secondary: Colors.white70));
@@ -63,29 +94,6 @@ class CustomRaisedButton extends StatelessWidget {
           strokeWidth: 3,
         ),
       ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        child: loading ? buildSpinner(context) : child,
-      ),
-      // RaisedButton(
-      //   shape: RoundedRectangleBorder(
-      //     borderRadius: BorderRadius.all(
-      //       Radius.circular(borderRadius),
-      //     ),
-      //   ), // height / 2
-      //   color: color,
-      //   disabledColor: color,
-      //   textColor: textColor,
-      //   onPressed: onPressed,
-      //   child: loading ? buildSpinner(context) : child,
-      // ),
     );
   }
 }

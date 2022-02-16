@@ -43,7 +43,7 @@ import 'package:flutter/material.dart'
         Widget,
         showAboutDialog;
 
-import 'package:mvc_application/view.dart' show App, I10n, StateMVC;
+import 'package:mvc_application/view.dart' show App, L10n, StateMVC;
 
 import 'package:mvc_application/controller.dart' show Prefs;
 
@@ -69,7 +69,9 @@ export 'package:flutter/material.dart'
         Text,
         Widget;
 
+/// A generic class to provide the App's popup menu.
 class AppMenu {
+  /// The App's popup is instantiated only once.
   factory AppMenu() => _this ??= AppMenu._();
   AppMenu._();
   static AppMenu? _this;
@@ -83,6 +85,7 @@ class AppMenu {
   String? _applicationLegalese;
   List<Widget>? _children;
 
+  /// Display the popup menu.
   PopupMenuButton<dynamic> show(
     StateMVC state, {
     String? applicationName,
@@ -102,7 +105,7 @@ class AppMenu {
 
     var menuItems = <PopupMenuEntry<dynamic>>[
 //      PopupMenuItem<dynamic>(value: 'Color', child: I10n.t('Colour Theme')),
-      PopupMenuItem<dynamic>(value: 'About', child: I10n.t('About'))
+      PopupMenuItem<dynamic>(value: 'About', child: L10n.t('About'))
     ];
 
     if (_menu != null) {
@@ -145,7 +148,7 @@ class AppMenu {
       case 'About':
         showAboutDialog(
             context: _state!.context,
-            applicationName: I10n.s(_applicationName ?? App.vw?.title ?? ''),
+            applicationName: L10n.s(_applicationName ?? App.vw?.title ?? ''),
             applicationVersion: _applicationVersion,
             applicationIcon: _applicationIcon,
             applicationLegalese: _applicationLegalese,
@@ -155,10 +158,11 @@ class AppMenu {
     }
   }
 
-  static void onColorChange(Color value) {
-    /// Implement to take in a color change.
-  }
+  /// Implement to take in a color change.
+  static void onColorChange(Color value) {}
 
+  /// In response to a color change
+  /// Pass in the new value.
   static void onChange([ColorSwatch<int?>? value]) {
     //
     if (value == null) {
@@ -194,32 +198,34 @@ class AppMenu {
   static void setThemeData() => onChange();
 }
 
+/// Abstract class to implement the App's popup menu.
 abstract class Menu {
+  /// Called to instantiate an App popup menu object.
   Menu() : _appMenu = AppMenu();
   final AppMenu _appMenu;
 
-  //
+  /// The List of defined Popup Menu Items at the tail end of the menu.
   List<PopupMenuItem<dynamic>> tailItems = [];
-  // abstract
+
+  /// The List of defined Popup Menu Items.
   List<PopupMenuItem<dynamic>> menuItems();
-  // abstract
+
+  /// Called when a menu item is selected.
   void onSelected(dynamic menuItem);
 
-  PopupMenuButton<dynamic> show(StateMVC state, {String? applicationName}) {
-    this.state = state;
-    return _appMenu.show(
-      state,
-      applicationName: applicationName,
-      menu: this,
-    );
-  }
-
-  StateMVC? state;
+  /// Display the popup menu.
+  /// Passed in a 'State' object and the Application's very name.
+  PopupMenuButton<dynamic> show(StateMVC state, {String? applicationName}) =>
+      _appMenu.show(
+        state,
+        applicationName: applicationName,
+        menu: this,
+      );
 }
 
-/// Abstract so to override fields
+/// Abstract class to create a customized [PopupMenuButton].
 abstract class AppPopupMenu<T> {
-  //
+  /// Supply all the properties to instantiate a custom [PopupMenuButton].
   AppPopupMenu({
     this.key,
     this.items,
@@ -241,22 +247,60 @@ abstract class AppPopupMenu<T> {
 
   ///
   final Key? key;
+
+  /// List of menu items to appear in the popup menu.
   final List<T>? items;
+
+  /// The item builder if no List is available.
   final PopupMenuItemBuilder<T>? itemBuilder;
+
+  /// The value of the menu item, if any, that should be highlighted when the menu opens.
   final T? initialValue;
+
+  /// Called when a menu item is selected.
   final PopupMenuItemSelected<T>? onSelected;
+
+  ///todo: Shouldn't these all be final?
+  /// Called when the user dismisses the popup menu without selecting an item.
   PopupMenuCanceled? onCanceled;
+
+  /// Text that describes the action that will occur when the button is pressed.
   String? tooltip;
+
+  /// The z-coordinate at which to place the menu when open. This controls the
+  /// size of the shadow below the menu.
   double? elevation;
+
+  /// Matches IconButton's 8 dps padding by default. In some cases, notably where
+  /// this button appears as the trailing element of a list item, it's useful to be able
+  /// to set the padding to zero.
   EdgeInsetsGeometry? padding;
+
+  /// If provided, [child] is the widget used for this button
   Widget? child;
+
+  /// If provided, the [icon] is used for this button
   Widget? icon;
+
+  /// The offset applied to the Popup Menu Button.
+  ///
+  /// When not set, the Popup Menu Button will be positioned directly next to
+  /// the button that was used to create it.
   Offset? offset;
+
+  /// Whether this popup menu button is interactive.
   bool? enabled;
+
+  /// If provided, the shape used for the menu.
   ShapeBorder? shape;
+
+  /// If provided, the background color used for the menu.
   Color? color;
+
+  /// Use inherited themes if set to true.
   bool? captureInheritedThemes;
 
+  /// The BuildContext to be used.
   BuildContext? get context => _context;
 
   set context(BuildContext? context) {
@@ -268,6 +312,7 @@ abstract class AppPopupMenu<T> {
 
   BuildContext? _context;
 
+  /// Produce the menu items for a List of items of type T.
   PopupMenuItemBuilder<T> _onItems(List<T>? menuItems) {
     menuItems ??= items;
     final popupMenuItems = menuItems!
@@ -334,6 +379,7 @@ abstract class AppPopupMenu<T> {
   /// override in subclass
   bool? onCaptureInheritedThemes() => true;
 
+  /// Provides an error message in a Android's Snack Bar panel.
   void errorSnackBar() {
     final state = ScaffoldMessenger.maybeOf(context!);
     state?.showSnackBar(

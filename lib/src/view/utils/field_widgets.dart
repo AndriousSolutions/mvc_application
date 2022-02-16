@@ -32,8 +32,10 @@ import 'package:flutter/services.dart'
 
 import 'package:mvc_application/view.dart' hide TextFormField;
 
+/// The 'On Save' Function
 typedef OnSavedFunc = void Function<E>(E v);
 
+/// Comprehensive Data Field Class
 class DataFields<T> extends _AddFields<T> {
   @override
   Future<List<Map<String, dynamic>>> retrieve() async => [{}];
@@ -217,7 +219,9 @@ abstract class _ListFields<T> {
   // }
 }
 
+/// The base 'Field' Widget class
 class FieldWidgets<T> extends DataFieldItem with StateGetter {
+  /// Constructor supplies all the options depending on the field Widget.
   FieldWidgets({
     Object? key,
     this.object,
@@ -272,9 +276,15 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     this.trailing,
     this.isThreeLine,
     this.dense,
+    this.visualDensity,
+    this.shape,
+    this.selectedColor,
+    this.iconColor,
+    this.textColor,
     this.contentPadding,
     this.tap,
     this.longPress,
+    this.mouseCursor,
     this.selected,
     this.focusColor,
     this.hoverColor,
@@ -286,6 +296,9 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
 // CircleAvatar
     this.backgroundColor,
     this.backgroundImage,
+    this.foregroundImage,
+    this.onBackgroundImageError,
+    this.onForegroundImageError,
     this.foregroundColor,
     this.radius,
     this.minRadius,
@@ -356,6 +369,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
   }
 
   T? object;
+
   dynamic _initValue;
 
   bool _valueChanged = false;
@@ -367,39 +381,84 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
   String? get key => _key;
   String? _key;
 
-  /// TextFormField
+  ///todo: TextFormField
   TextEditingController? controller;
+
+  /// The current text being edited.
   String? initialValue;
+
+  /// To obtain the keyboard focus and to handle keyboard events.
   FocusNode? focusNode;
+
+  /// The border, labels, icons, and styles used to decorate a Material
+  /// Design text field.
   InputDecoration? inputDecoration;
+
+  /// The type of information for which to optimize the text input control.
   TextInputType? keyboardType;
+
+  /// Configures how the platform keyboard will select an uppercase or
+  /// lowercase keyboard.
   TextCapitalization? textCapitalization;
+
+  /// An action the user has requested the text input control to perform.
   TextInputAction? textInputAction;
+
+  /// Describing how to format and paint text.
   TextStyle? style;
+
+  /// Whether and how to align text horizontally.
   TextAlign? textAlign;
+
+  /// Whether this text field should focus itself if nothing else is already
+  /// focused.
   bool? autofocus;
+
+  /// Whether to hide the text being edited (e.g., for passwords).
   bool? obscureText;
+
+  /// Whether to enable autocorrection.
   bool? autocorrect;
+
 //  bool autovalidate;
 //  bool? maxLengthEnforced;
+  /// Determines how the [maxLength] limit should be enforced.
   MaxLengthEnforcement? maxLengthEnforcement;
+
+  /// The maximum number of lines for the text to span, wrapping if necessary.
   int? maxLines;
+
+  /// The maximum string length that can be entered into the TextField.
   int? maxLength;
   ValueChanged<String>? changed;
   VoidCallback? editingComplete;
   ValueChanged<String>? fieldSubmitted;
   FormFieldSetter<String>? saved;
   FormFieldValidator<String>? validator;
+
+  /// Optional input validation and formatting overrides.
   List<TextInputFormatter>? inputFormatters;
+
+  /// If false the text field is "disabled": it ignores taps and its
+  /// [decoration] is rendered in grey.
   bool? enabled;
+
+  /// The appearance of the keyboard.
+  /// This setting is only honored on iOS devices.
   Brightness? keyboardAppearance;
   EdgeInsets? scrollPadding;
   InputCounterWidgetBuilder? buildCounter;
   ScrollPhysics? scrollPhysics;
+
+  /// A list of strings that helps the autofill service identify the type of this
+  /// text input.
   Iterable<String>? autofillHints;
+
+  /// Used to enable/disable this form field auto validation and update its
+  /// error text.
   AutovalidateMode? autovalidateMode;
 
-  /// Text
+  ///todo: Text
 //  final String data;
   TextSpan? textSpan;
 
@@ -407,46 +466,126 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
   // final TextAlign textAlign;
   TextDirection? textDirection;
   Locale? locale;
+
+  /// If the [softWrap] is true or null, the glyph causing overflow, and those that follow,
+  /// will not be rendered. Otherwise, it will be shown with the given overflow option.
   bool? softWrap;
+
+  /// How visual overflow should be handled.
   TextOverflow? overflow;
+
+  /// The number of font pixels for each logical pixel.
   double? textScaleFactor;
 
 //final int maxLines;
+  /// An alternative semantics label for this text.
   String? semanticsLabel;
+
+  /// Defines how to measure the width of the rendered text.
   TextWidthBasis? textWidthBasis;
+
+  /// Specifies how the `height` multiplier is
+  /// applied to ascent of the first line and the descent of the last line.
   ui.TextHeightBehavior? textHeightBehavior;
 
-  /// ListTile
+  ///todo: [ListTile]
+  /// A widget to display before the title.
   Widget? leading;
+
+  /// The primary content of the list tile.
   Widget? title;
+
+  /// Additional content displayed below the title.
   Widget? subtitle;
+
+  /// A widget to display after the title.
   Widget? trailing;
+
+  /// Whether this list tile is intended to display three lines of text.
   bool? isThreeLine;
+
+  /// Whether this list tile is part of a vertically dense list.
   bool? dense;
+
+  /// Defines how compact the list tile's layout will be.
+  VisualDensity? visualDensity;
+
+  /// Defines the tile's [InkWell.customBorder] and [Ink.decoration] shape.
+  ShapeBorder? shape;
+
+  /// Defines the color used for icons and text when the list tile is selected.
+  Color? selectedColor;
+
+  /// Defines the default color for [leading] and [trailing] icons.
+  Color? iconColor;
+
+  /// Defines the default color for the [title] and [subtitle].
+  Color? textColor;
+
+  /// The tile's internal padding.
   EdgeInsetsGeometry? contentPadding;
 
 //  final bool enabled;
+  /// Called when the user taps this list tile.
   GestureTapCallback? tap;
+
+  /// Called when the user long-presses on this list tile.
   GestureLongPressCallback? longPress;
+
+  /// The cursor for a mouse pointer when it enters or is hovering over the
+  /// widget.
+  MouseCursor? mouseCursor;
+
+  /// If this tile is also [enabled] then icons and text are rendered with the same color.
   bool? selected;
+
+  /// The color for the tile's [Material] when it has the input focus.
   Color? focusColor;
+
+  /// The color for the tile's [Material] when a pointer is hovering over it.
   Color? hoverColor;
+
+  /// Defines the background color of `ListTile` when [selected] is false.
   Color? tileColor;
+
+  /// Defines the background color of `ListTile` when [selected] is true.
   Color? selectedTileColor;
 
-  /// CheckboxListTile
+  ///todo: [CheckboxListTile]
+  /// A widget to display on the opposite side of the tile from the checkbox.
   Widget? secondary;
+
+  /// Where to place the control relative to the text.
   ListTileControlAffinity? controlAffinity;
 
-  /// CircleAvatar
+  ///todo: [CircleAvatar]
+  /// The color with which to fill the circle.
   Color? backgroundColor;
+
+  /// The default text color for text in the circle.
   Color? foregroundColor;
+
+  /// The background image of the circle. Changing the background
+  /// image will cause the avatar to animate to the new image.
   ImageProvider? backgroundImage;
+
+  /// The foreground image of the circle.
+  ImageProvider? foregroundImage;
+
+  /// An optional error callback for errors emitted when loading
+  ImageErrorListener? onBackgroundImageError;
+
+  /// An optional error callback for errors emitted when loading
+  ImageErrorListener? onForegroundImageError;
+
+  /// The size of the avatar, expressed as the radius (half the diameter).
   double? radius;
+
   double? minRadius;
+
   double? maxRadius;
 
-  /// Dismissible
+  ///todo: [Dismissible]
   Widget? child;
   Widget? background;
   Widget? secondaryBackground;
@@ -458,7 +597,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
   Duration? movementDuration;
   double? crossAxisEndOffset;
 
-  /// CheckBox
+  ///todo: [CheckBox]
   bool? _checkValue;
   ValueChanged<bool>? toggle;
   Color? activeColor;
@@ -668,13 +807,13 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
         ),
       );
 
-  // Override to perform what happens when finished editing the field.
+  /// Override to perform what happens when finished editing the field.
   void onEditingComplete() {}
 
-  // Override to perform what happens when the field value is submitted.
+  /// Override to perform what happens when the field value is submitted.
   void onFieldSubmitted(String v) {}
 
-  // What happens when the field is saved?
+  /// What happens when the field is saved?
   @mustCallSuper
   void onSaved(dynamic v) {
     if (isChanged()) {
@@ -682,8 +821,8 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     }
   }
 
-  // Override to return a different field value when validating.
-  // Return null if validated. Error message if not.
+  /// Override to return a different field value when validating.
+  /// Return null if validated. Error message if not.
   @mustCallSuper
   @protected
   String? onValidator(String? v) {
@@ -868,6 +1007,11 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
           trailing: trailing,
           isThreeLine: isThreeLine ?? false,
           dense: dense,
+          iconColor: iconColor,
+          textColor: textColor,
+          visualDensity: visualDensity,
+          shape: shape,
+          selectedColor: selectedColor,
           contentPadding: contentPadding,
           enabled: enabled ?? true,
           onTap: tap ?? onTap,
@@ -888,6 +1032,11 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     Widget? trailing,
     bool? isThreeLine,
     bool? dense,
+    VisualDensity? visualDensity,
+    ShapeBorder? shape,
+    Color? selectedColor,
+    Color? iconColor,
+    Color? textColor,
     EdgeInsetsGeometry? contentPadding,
     bool? enabled,
     GestureTapCallback? tap,
@@ -900,6 +1049,11 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     this.trailing = trailing ?? this.trailing;
     this.isThreeLine = isThreeLine ?? this.isThreeLine;
     this.dense = dense ?? this.dense;
+    this.iconColor = iconColor ?? this.iconColor;
+    this.textColor = textColor ?? this.textColor;
+    this.visualDensity = visualDensity ?? this.visualDensity;
+    this.shape = shape ?? this.shape;
+    this.selectedColor = selectedColor ?? this.selectedColor;
     this.contentPadding = contentPadding ?? this.contentPadding;
     this.enabled = enabled ?? this.enabled;
     this.tap = tap ?? this.tap;
@@ -913,15 +1067,15 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
 
   Widget onTitle() => text;
 
-  // Override to produce a subtitle.
+  /// Override to produce a subtitle.
   Widget onSubtitle() => Text(label!);
 
   Widget? onTrailing() => null;
 
-  // Override to place what happens when the field is tapped.
+  /// Override to place what happens when the field is tapped.
   void onTap() {}
 
-  // Override to place what happens when the field is 'long' pressed.
+  /// Override to place what happens when the field is 'long' pressed.
   void onLongPress() {}
 
   CheckboxListTile get checkboxListTile => CheckboxListTile(
@@ -964,7 +1118,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     return checkboxListTile;
   }
 
-  // A widget to display on the opposite side of the tile from the checkbox.
+  /// A widget to display on the opposite side of the tile from the checkbox.
   Widget? onSecondary() => null;
 
   CircleAvatar get circleAvatar => CircleAvatar(
@@ -1035,7 +1189,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     return dismissible;
   }
 
-  // Override to place a different child in the Dismissible.
+  /// Override to place a different child in the Dismissible.
   Widget onChild() {
     return Container(
         decoration: BoxDecoration(
@@ -1060,13 +1214,13 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     );
   }
 
-  // Override to provide a secondary background.
+  /// Override to provide a secondary background.
   Widget? onSecondaryBackground() => null;
 
-  // Override to place what happens when the field is resized.
+  /// Override to place what happens when the field is resized.
   void onResize() {}
 
-  // Override to place here what happens when the field is dismissed.
+  /// Override to place here what happens when the field is dismissed.
   void onDismissed(DismissDirection direction) {}
 
   Checkbox get checkbox => _checkbox ??= Checkbox(
@@ -1302,8 +1456,9 @@ class _StatefulStateCupertino extends State<CupertinoListTile> {
   }
 }
 
-/// Item class used for fields which have a [label], a [value] and a maybe a [type] of value.
+/// Item class used for fields
 class DataFieldItem {
+  /// Supply a identifier, a [label], a [value] and a maybe a [type] of value.
   DataFieldItem({
     this.id,
     this.label,
@@ -1311,6 +1466,8 @@ class DataFieldItem {
     this.type,
   });
 
+  /// Crate a Field Item object from a Map
+  /// supplying a identifier, a [label], a [value] and a maybe a [type] of value.
   DataFieldItem.fromMap(
     Map<dynamic, dynamic> m, {
     String? id,
@@ -1363,6 +1520,7 @@ mixin StateGetter {
   StateMVC? _state;
   final Set<StateMVC> _stateSet = {};
 
+  /// The 'current' State object.
   StateMVC? get state => _state;
 
   /// Call this in the State object's initState() function.
@@ -1402,6 +1560,7 @@ mixin StateGetter {
     return removed;
   }
 
+  /// Notify the framework of a rebuild in the next scheduled frame
   bool setState(VoidCallback fn) {
     final set = _state != null;
     if (set) {
@@ -1411,8 +1570,10 @@ mixin StateGetter {
     return set;
   }
 
+  /// Notify the framework of a rebuild in the next scheduled frame
   bool refresh() => setState(() {});
 
+  /// Notify the framework of a rebuild in the next scheduled frame
   bool rebuild() => refresh();
 }
 
@@ -1580,7 +1741,7 @@ typedef MapItemFunction = Widget Function(DataFieldItem i);
 
 /// Overcome ListView bug.
 class FieldController extends TextEditingController {
-  //
+  /// Supply the initial Text field value.
   FieldController({String? text}) : super(text: text);
 }
 

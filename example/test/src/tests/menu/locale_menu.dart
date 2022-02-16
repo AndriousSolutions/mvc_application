@@ -35,7 +35,7 @@ Future<void> selectLanguage(WidgetTester tester) async {
 
   // Scroll until the item to be found appears.
   await tester.scrollUntilVisible(
-    find.text('fr'),
+    find.text('fr-FR'),
     500.0,
     scrollable: listFinder.last,
   );

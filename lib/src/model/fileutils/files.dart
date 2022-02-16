@@ -22,9 +22,11 @@ import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory;
 
 // ignore: avoid_classes_with_only_static_members
+/// Utility class to manipulate all files.
 class Files {
   static String? _path;
 
+  /// Return the local path location.
   static Future<String?> get localPath async {
     if (_path == null) {
       final directory = await getApplicationDocumentsDirectory();
@@ -33,11 +35,15 @@ class Files {
     return _path;
   }
 
+  /// Return the contents of the specified file.
+  /// Pass the name of the file.
   static Future<String> read(String fileName) async {
     final file = await get(fileName);
     return readFile(file);
   }
 
+  /// Return the contents of the specified file.
+  /// Pass the [File] object
   static Future<String> readFile(File file) async {
     String contents;
     try {
@@ -60,12 +66,16 @@ class Files {
   static Future<File> writeFile(File file, String content) =>
       file.writeAsString(content, flush: true);
 
+  /// Return a boolean indicating if a file exists or not.
+  /// Pass in the name of the file.
   static Future<bool> exists(String fileName) async {
     final file = await get(fileName);
     // ignore: avoid_slow_async_io
     return file.exists();
   }
 
+  /// Return the File object of the specified file.
+  /// Pass in the name of the file.
   static Future<File> get(String fileName) async {
     final path = await localPath;
     return File('$path/$fileName');

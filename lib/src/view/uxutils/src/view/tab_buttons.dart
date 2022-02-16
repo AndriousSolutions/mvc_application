@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// Produces a list of Tabs long the screen.
 class TabButtons extends StatefulWidget {
+  /// Supply the 'general appearance' of the screen's [ListView]
   TabButtons({
     Key? key,
     this.foregroundOn = Colors.white,
@@ -15,18 +17,34 @@ class TabButtons extends StatefulWidget {
     this.durationOn = 150,
   }) : super(key: key);
 
-  // active button's foreground color
+  /// active button's foreground color
   final Color foregroundOn;
+
+  /// inactive button's foreground color
   final Color foregroundOff;
-  // active button's background color
+
+  /// active button's background color
   final Color? backgroundOn;
+
+  /// inactive button's background color
   final Color? backgroundOff;
 
+  /// Tabs' height
   final double? height;
+
+  /// Tabs' Scroll Physics
   final ScrollPhysics? physics;
+
+  /// Tabs' padding
   final double? padding;
+
+  /// Tabs' border thickness
   final double borderRadius;
+
+  /// Tabs' duration off
   final int? durationOff;
+
+  /// Tabs' duration on.
   final int? durationOn;
 
   /// The Tabs and Views displayed on the screen.

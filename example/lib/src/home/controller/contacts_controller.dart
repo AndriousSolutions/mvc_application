@@ -1,5 +1,3 @@
-import 'dart:async' show unawaited;
-
 import 'package:mvc_application_example/src/view.dart';
 
 import 'package:mvc_application_example/src/controller.dart';
@@ -57,9 +55,9 @@ class ContactsController extends AppController {
   Future<List<Contact>> getContacts() async {
     _contacts = await model.getContacts();
     if (_sortedAlpha) {
-      _contacts.sort();
+      _contacts!.sort();
     }
-    return _contacts;
+    return _contacts!;
   }
 
   @override
@@ -72,14 +70,14 @@ class ContactsController extends AppController {
   Future<List<Contact>> sort() async {
     _sortedAlpha = !_sortedAlpha;
     await Prefs.setBool(sortKEY, _sortedAlpha);
-    unawaited(refresh());
-    return _contacts;
+    await refresh();
+    return _contacts!;
   }
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<Contact>? get items => _contacts;
-  late List<Contact> _contacts;
+  List<Contact>? _contacts;
 
   Contact? itemAt(int index) => items?.elementAt(index);
 

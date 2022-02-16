@@ -1,6 +1,6 @@
 # Article: https://medium.com/podiihq/setting-up-lint-rules-in-dart-flutter-1ebbed0418a6
 
-#include: package:pedantic/analysis_options.yaml
+#include: package:flutter_lints/flutter.yaml
 
 #          OR
 
@@ -115,7 +115,7 @@ linter:
     - prefer_const_literals_to_create_immutables
     - prefer_constructors_over_static_methods
     - prefer_contains
-    # - prefer_double_quotes We use single quotes
+    # - prefer_double_quotes # We use single quotes
     - prefer_equal_for_default_values
     # - prefer_expression_function_bodies # conflicts with https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#consider-using--for-short-functions-and-methods
     - prefer_final_fields
@@ -143,7 +143,7 @@ linter:
     - prefer_typing_uninitialized_variables
     - prefer_void_to_null
     - provide_deprecation_message
-    # - public_member_api_docs # do not use for an application, only a library
+    - public_member_api_docs # do not use for an application, only a library
     - recursive_getters
     - slash_for_doc_comments
     - sort_child_properties_last

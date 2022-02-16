@@ -69,7 +69,7 @@ export 'package:flutter_local_notifications/flutter_local_notifications.dart'
 
 /// The Notification feature for the phone.
 class ScheduleNotifications with HandleError {
-//
+  /// Pass in all the possible settings for your App's Notificatoin feature.
   ScheduleNotifications(
     this.channelId,
     this.channelName,
@@ -287,6 +287,7 @@ class ScheduleNotifications with HandleError {
   String? _subtitle;
   String? _threadIdentifier;
 
+  /// Initialize the App's Notification system.
   @mustCallSuper
   Future<bool?> init({
     String? appIcon,
@@ -562,6 +563,8 @@ class ScheduleNotifications with HandleError {
   }
 
   @mustCallSuper
+
+  /// Supply a consistent API requiring the user to implement the dispose() function.
   void dispose() {
     // Not really necessary but provides a dispose() function for the user.
     _flutterLocalNotificationsPlugin = null;
@@ -634,8 +637,11 @@ class ScheduleNotifications with HandleError {
 
   // Flag indicating it's initialized.
   bool? _init = false;
+
+  /// A flag indicating Notification's is properly initialized.
   bool? get initialized => _init;
 
+  /// Show the Notification.
   int show({
     int? id,
     String? title,
@@ -770,6 +776,7 @@ class ScheduleNotifications with HandleError {
     return id;
   }
 
+  /// To display a scheduled Notification.
   @Deprecated('Deprecated due to problems with time zones. Use zonedSchedule '
       'instead.')
   int schedule(
@@ -887,6 +894,7 @@ class ScheduleNotifications with HandleError {
         threadIdentifier: threadIdentifier,
       );
 
+  /// Displays a scheduled Notification.
   int zonedSchedule(
     TZDateTime? schedule, {
     int? id,
@@ -946,7 +954,9 @@ class ScheduleNotifications with HandleError {
     String? threadIdentifier,
   }) {
     // May have already been supplied.
-    schedule ??= _schedule as TZDateTime;
+    if (schedule == null && _schedule != null) {
+      schedule ??= _schedule as TZDateTime;
+    }
 
     // Too late!
     if (schedule == null || DateTime.now().isAfter(schedule)) {
@@ -1038,6 +1048,7 @@ class ScheduleNotifications with HandleError {
     return id;
   }
 
+  /// Show a Notification periodically.
   int periodicallyShow(
     RepeatInterval? repeatInterval, {
     int? id,
@@ -1181,6 +1192,7 @@ class ScheduleNotifications with HandleError {
     return id;
   }
 
+  /// Show a Notification daily at a specific time.
   int showDailyAtTime(
     TZDateTime? schedule, {
     int? id,
@@ -1239,7 +1251,10 @@ class ScheduleNotifications with HandleError {
     String? subtitle,
     String? threadIdentifier,
   }) {
-    schedule ??= _schedule as TZDateTime;
+    //
+    if (schedule == null && _schedule != null) {
+      schedule ??= _schedule as TZDateTime;
+    }
 
     if (schedule == null) {
       return -1;
@@ -1330,6 +1345,7 @@ class ScheduleNotifications with HandleError {
     return id;
   }
 
+  /// Show a Notifications weekly on a specific day and time.
   int showWeeklyAtDayAndTime(
     Day? day,
     TZDateTime? schedule, {
@@ -1390,9 +1406,12 @@ class ScheduleNotifications with HandleError {
     String? subtitle,
     String? threadIdentifier,
   }) {
+    //
     day ??= _day;
 
-    schedule ??= _schedule as TZDateTime;
+    if (schedule == null && _schedule != null) {
+      schedule ??= _schedule as TZDateTime;
+    }
 
     if (day == null || schedule == null) {
       return -1;

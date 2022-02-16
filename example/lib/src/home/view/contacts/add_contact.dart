@@ -48,7 +48,7 @@ class _BuildAndroid extends StatelessWidget {
     final contact = state.contact;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title ?? 'Add a contact'),
+        title: Text(widget.title ?? 'Add a contact'.tr),
         actions: [
           TextButton(
             onPressed: () async {
@@ -100,7 +100,7 @@ class _BuildiOS extends StatelessWidget {
             Navigator.of(context).maybePop();
           },
         ),
-        middle: Text(widget.title ?? 'Add a contact'),
+        middle: Text(widget.title ?? 'Add a contact'.tr),
         trailing: Material(
           child: TextButton(
             onPressed: () async {

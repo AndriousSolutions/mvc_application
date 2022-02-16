@@ -90,4 +90,4 @@ export 'package:mvc_application/src/view/uxutils/view.dart';
 export 'package:prefs/prefs.dart' show Prefs;
 
 /// Translations
-export 'package:i10n_translator/i10n.dart' show I10n, I10nDelegate;
+export 'package:l10n_translator/l10n.dart';

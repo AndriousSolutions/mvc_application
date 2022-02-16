@@ -29,7 +29,7 @@ class _DetailsState extends StateMVC<ContactDetails> {
 
   // Provide a means to 'edit' the details
   Future<void> editContact(Contact? contact, BuildContext context) async {
-    final widget = AddContact(contact: contact, title: 'Edit a contact');
+    final widget = AddContact(contact: contact, title: 'Edit a contact'.tr);
     PageRoute<void> route;
     if (App.useMaterial) {
       route =
@@ -61,8 +61,8 @@ class _BuildAndroid extends StatelessWidget {
         TextButton(
           onPressed: () async {
             // Confirm the deletion
-            final delete =
-                await showBox(text: 'Delete this contact?', context: context);
+            final delete = await showBox(
+                text: 'Delete this contact?'.tr, context: context);
 
             if (delete) {
               //
@@ -131,7 +131,7 @@ class _BuildiOS extends StatelessWidget {
             child: IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () {
-                showBox(text: 'Delete this contact?', context: context)
+                showBox(text: 'Delete this contact?'.tr, context: context)
                     .then((bool delete) {
                   if (delete) {
                     contact.delete().then((_) {

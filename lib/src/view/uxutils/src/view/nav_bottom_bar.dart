@@ -28,7 +28,9 @@ import 'package:flutter/material.dart'
         TextStyle,
         ValueChanged;
 
+/// BottomNavigationBar Wrapper Class.
 class NavBottomBar {
+  /// Optionally supply all the BottomNavigationBar properties when instantiating.
   NavBottomBar({
     this.key,
     this.items,
@@ -52,33 +54,79 @@ class NavBottomBar {
     this.hide = false,
   });
 
+  /// The Widget Key.
   Key? key;
+
+  /// Defines the appearance of the button items that are arrayed within the
+  /// bottom navigation bar.
   List<BottomNavigationBarItem>? items;
+
+  /// Called when one of the [items] is tapped.
   ValueChanged<int>? onTap;
+
+  /// The index into [items] for the current active [BottomNavigationBarItem].
   int? currentIndex;
+
+  /// The z-coordinate of this [BottomNavigationBar].
   double? elevation;
+
+  /// Defines the layout and behavior of a [BottomNavigationBar].
   BottomNavigationBarType? type;
+
+  /// The value of [selectedItemColor].
   Color? fixedColor;
+
+  /// The color of the [BottomNavigationBar] itself.
   Color? backgroundColor;
+
+  /// The size of all of the [BottomNavigationBarItem] icons.
   double? iconSize;
+
+  /// The color of the selected [BottomNavigationBarItem.icon]
   Color? selectedItemColor;
+
+  /// The color of the unselected [BottomNavigationBarItem.icon] and
   Color? unselectedItemColor;
+
+  /// The size, opacity, and color of the icon in the currently selected
+  /// [BottomNavigationBarItem.icon].
   IconThemeData? selectedIconTheme;
+
+  /// The size, opacity, and color of the icon in the currently unselected
+  /// [BottomNavigationBarItem.icon]s.
   IconThemeData? unselectedIconTheme;
-  double? selectedFontSize;
-  double? unselectedFontSize;
+
+  /// The [TextStyle] of the [BottomNavigationBarItem] labels when they are
+  /// selected.
   TextStyle? selectedLabelStyle;
+
+  /// The [TextStyle] of the [BottomNavigationBarItem] labels when they are not
+  /// selected.
   TextStyle? unselectedLabelStyle;
+
+  /// The font size of the [BottomNavigationBarItem] labels when they are selected.
+  double? selectedFontSize;
+
+  /// The font size of the [BottomNavigationBarItem] labels when they are not
+  /// selected.
+  double? unselectedFontSize;
+
+  /// Whether the labels are shown for the unselected [BottomNavigationBarItem]s.
   bool? showSelectedLabels;
+
+  /// Whether the labels are shown for the selected [BottomNavigationBarItem].
   bool? showUnselectedLabels;
+
+  /// If true the show() funciton will not work. Bottom Bar is not displayed.
   bool? hide;
 
   int _lastIndex = 0;
 
+  /// Display the defined BottomNavigationBar
   @Deprecated('Use show() instead.')
   BottomNavigationBar? get bar => show();
 
-  /// Supply the defined BottomNavigationBar
+  /// Display the defined BottomNavigationBar
   BottomNavigationBar? show(
       {List<BottomNavigationBarItem>? items,
       ValueChanged<int>? onTap,

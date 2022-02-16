@@ -68,13 +68,13 @@ class TemplateController extends AppController {
 
     switch (_appNames[_appCount]) {
       case 'Word Pairs':
-        widget = WordPairs(key: AppState.homeKey, title: App.title!);
+        widget = WordPairs(key: AppState.homeKey);
         break;
       case 'Counter':
-        widget = CounterPage(key: AppState.homeKey, title: App.title!);
+        widget = CounterPage(key: AppState.homeKey);
         break;
       case 'Contacts':
-        widget = ContactsList(key: key, title: App.title!);
+        widget = ContactsList(key: key);
         break;
       default:
         widget = const SizedBox();

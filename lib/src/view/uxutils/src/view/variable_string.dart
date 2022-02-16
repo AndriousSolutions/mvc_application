@@ -21,16 +21,21 @@
 class VarStr {
   static final VariableString _varStr = VariableString();
 
+  /// Set a String value to the Variable String object.
   static String set(String str) => _varStr.value = str;
 
+  /// Return the Variable String Object's value.
   static String get get => _varStr.value;
 }
 
+/// Variable String Clas
 class VariableString {
+  /// Variable String Constructor.
   VariableString() {
     regExp = RegExp("'(.*?)'");
   }
 
+  /// Reg Expression.
   late RegExp regExp;
 
   String _value = '';
@@ -45,5 +50,6 @@ class VariableString {
     }
   }
 
+  /// Return the Variable String Object's value.
   String get value => _value;
 }

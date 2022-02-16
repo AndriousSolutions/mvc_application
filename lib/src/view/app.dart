@@ -39,9 +39,9 @@ import 'package:mvc_application/controller.dart'
     show ControllerMVC, DeviceInfo, HandleError;
 
 /// This class is available throughout the app
-/// Readily supply properties about the App.
+/// Readily supplies static properties about the App.
 class App {
-  //
+  /// Supply an error handler to the App.
   factory App({
     FlutterExceptionHandler? errorHandler,
     ErrorWidgetBuilder? errorScreen,
@@ -65,6 +65,7 @@ class App {
   }
   static App? _this;
 
+  /// Returns the current Error Handler.
   static v.AppErrorHandler? get errorHandler => _errorHandler;
   static v.AppErrorHandler? _errorHandler;
 
@@ -74,28 +75,19 @@ class App {
     _connectivitySubscription = null;
     _packageInfo = null;
     _themeData = null;
-    _appWidget = null;
+//    _appWidget = null;
     _appState = null;
     // Restore the original error handling.
     _errorHandler!.dispose();
     _errorHandler = null;
   }
 
-  /// Assign the AppStateful object
-  bool setAppStatefulWidget(v.AppStatefulWidget? appWidget) {
-    // Reassign with every StatefulWidget re-created.
-    _appWidget = appWidget;
-    return appWidget != null;
-  }
-
-  static v.AppStatefulWidget? _appWidget;
-
   /// Assign the class with the AppState object.
   bool setAppState(v.AppState? vw) {
-    final set = _appState == null && vw != null;
+    final set = vw != null && (_appState == null || hotReload);
     if (set) {
-      // Only assigned once with the first call.
-      _appState ??= vw;
+      //
+      _appState = vw;
       // Assign the 'app' object to the app's view
       vw.app = this;
     }
@@ -135,7 +127,7 @@ class App {
   static Future<void> getDeviceInfo() async {
     _packageInfo = await PackageInfo.fromPlatform();
     // Collect Device Information
-    await DeviceInfo.init();
+    await DeviceInfo.initAsync();
   }
 
   /// More efficient widget tree rebuilds
@@ -322,6 +314,7 @@ class App {
     }
   }
 
+  /// Set the App's general color theme supplying a [ColorSwatch] value.
   static ColorSwatch<int?>? setThemeData([ColorSwatch<int?>? value]) {
     //
     if (value != null) {
@@ -365,9 +358,12 @@ class App {
             WidgetsBinding.instance!.window.locales,
             _appState?.supportedLocales,
           );
-  static set locale(Locale? v) {
-    if (v != null) {
-      _appState?.locale = v;
+
+  /// Set the App's Locale
+  /// If 'supportedLocales' are specified, this Locale must be among them.
+  static set locale(Locale? locale) {
+    if (locale != null && v.L10n.setAppLocale(locale)) {
+      _appState?.locale = locale;
     }
   }
 
@@ -425,9 +421,10 @@ class App {
     }
   }
 
-  /// Returns an iteration of the App's locales.
-  static Iterable<Locale>? get supportedLocales => _appState?.supportedLocales;
-  static set supportedLocales(Iterable<Locale>? v) {
+  /// getter, supportedLocales, returns a List of the App's locales.
+  /// More flexible than an iteration.
+  static List<Locale>? get supportedLocales => _appState?.supportedLocales;
+  static set supportedLocales(List<Locale>? v) {
     if (v != null) {
       _appState?.supportedLocales = v;
     }
@@ -554,7 +551,7 @@ class App {
   static String? get buildNumber => _packageInfo?.buildNumber;
 
   /// Determines if running in an IDE or in production.
-  static bool get inDebugger => v.AppStatefulWidgetMVC.inDebugger;
+  static bool get inDebugger => _appState?.inDebugger ?? false;
 
   /// Refresh the root State object, AppView.
   static void refresh() => _appState?.refresh();
@@ -606,7 +603,7 @@ class App {
   }
 
   /// The BuildContext for the App's View.
-  static BuildContext? get context => _appWidget?.context;
+  static BuildContext? get context => _appState?.lastContext;
 
   /// The Scaffold object for this App's View.
   static ScaffoldState get scaffold => Scaffold.of(context!);
@@ -743,16 +740,18 @@ class App {
 
 /// A Listener for the device's own connectivity status at any point in time.
 mixin ConnectivityListener {
+  /// A listener method to respond if the device's connectivity changes.
   void onConnectivityChanged(ConnectivityResult result);
 }
 
 /// Supply an MVC State object that hooks into the App class.
 abstract class StateMVC<T extends StatefulWidget> extends mvc.StateMVC<T>
     with HandleError {
-  //
+  /// Optionally supply a State Controller to be linked to this 'State' object.
   StateMVC([ControllerMVC? controller]) : super(controller);
 
   /// Allow access to the static 'of' function
+  @Deprecated('ill-conceived capability')
   static T? of<T extends StateMVC>(BuildContext context) =>
       mvc.StateMVC.of<T>(context);
 
@@ -767,9 +766,12 @@ abstract class StateMVC<T extends StatefulWidget> extends mvc.StateMVC<T>
 
 /// A standard Drawer object for your Flutter app.
 class AppDrawer extends StatelessWidget {
+  /// Supply the properties to a Material Design [Drawer] Widget.
   AppDrawer({
     Key? key,
+    this.backgroundColor,
     this.elevation,
+    this.shape,
     this.semanticLabel,
     this.header,
     this.items,
@@ -780,9 +782,22 @@ class AppDrawer extends StatelessWidget {
     }
   }
 
+  /// The drawer's color.
+  final Color? backgroundColor;
+
+  /// The z-coordinate at which to place this drawer relative to its parent.
   final double? elevation;
+
+  /// The shape of the drawer.
+  final ShapeBorder? shape;
+
+  /// The semantic label of the dialog used by accessibility frameworks.
   final String? semanticLabel;
+
+  /// The top-most region of a material design drawer.
   final DrawerHeader? header;
+
+  /// The List of Widget items that make up the Drawer's contents.
   final List<ListTile>? items;
   final List<ListTile> _items = [];
 

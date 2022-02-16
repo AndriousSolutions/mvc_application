@@ -28,12 +28,16 @@ import 'package:flutter/material.dart'
         Simulation,
         Tolerance;
 
+/// A 'Snapping' Scrolling Physics
 class SnappingListScrollPhysics extends ScrollPhysics {
+  /// Supply the intended width of the items scrolled.
+  /// Optionally supply a 'parent' Physics object to encompass.
   const SnappingListScrollPhysics({
     required this.itemWidth,
     ScrollPhysics? parent,
   }) : super(parent: parent);
 
+  /// Supply the intended width of the items scrolled.
   final double itemWidth;
 
   @override

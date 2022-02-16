@@ -1,4 +1,4 @@
-import 'package:mvc_application_example/src/view.dart';
+import 'package:mvc_application_example/src/controller.dart';
 
 import 'package:mvc_application/view.dart' as s;
 
@@ -11,7 +11,7 @@ class ISOSpinner extends StatefulWidget {
   final int? initialItem;
 
   /// Retrieve the available locales.
-  List<Locale>? locales() => I10n.supportedLocales;
+  List<Locale> locales() => AppTrs.supportedLocales;
 
   /// Assign the specified Locale.
   Future<void> onSelectedItemChanged(int index) async {

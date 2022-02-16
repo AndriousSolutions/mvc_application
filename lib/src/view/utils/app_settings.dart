@@ -49,18 +49,22 @@ import 'package:flutter/foundation.dart' as p
 // ignore: avoid_classes_with_only_static_members
 /// Readily supply the app's settings in an about window.
 class AppSettings {
+  /// Return the 'default' [p.TargetPlatform] object.
   static p.TargetPlatform get defaultTargetPlatform => p.defaultTargetPlatform;
 
+  /// A simple Widget of Text to 'tap' on.
   static StatelessWidget tapText(String text, VoidCallback onTap,
       {TextStyle? style}) {
     return _TapText(text, onTap, style: style);
   }
 
+  /// A simple URL link Widget.
   static _LinkTextSpan linkTextSpan(
       {TextStyle? style, String? url, String? text}) {
     return _LinkTextSpan(style: style, url: url, text: text);
   }
 
+  /// Show a simple 'About' Screen displaying information about the App.
   static void showAbout({
     required BuildContext context,
     String? applicationName,

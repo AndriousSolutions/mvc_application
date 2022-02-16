@@ -1,4 +1,11 @@
 
+## 8.7.1
+ February 15, 2022
+- No longer pass 'con' to AppStatefulWidget. Supply to AppState instead.
+- Further documentation of public API's
+- Enhanced class CustomRaisedButton
+- getter, supportedLocales, returns a List of the App's locales.
+
 ## 8.7.0+04
  December 31, 2021
 - Corrected .github/workflows/ci.yml
@@ -11,7 +18,7 @@
  December 28, 2021
 - _routeInformationParser = v.AppRouteInformationParser();
 - if (_backButtonPushed(configuration.path!)) {
--  _currentConfiguration = _previousPath();
+- _currentConfiguration = _previousPath();
 - AppRoutePath.unknown([String? _path])
 - configuration = AppRouterDelegate._currentConfiguration;
 - PointerDeviceKind.touch,

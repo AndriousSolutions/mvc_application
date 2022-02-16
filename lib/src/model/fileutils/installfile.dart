@@ -25,13 +25,18 @@ import 'files.dart' show Files;
 
 /// Introduces a 'install file' unique to the app.
 class InstallFile {
+  /// The name of the 'install file.'
   static const String FILE_NAME = '.install';
 
+  /// The unique Id cotained with the 'install file.'
   static String? sID;
 
   static bool _justInstalled = false;
+
+  /// Indicate if this is the 'first' install of the app.
   bool get justInstalled => _justInstalled;
 
+  /// Return the unique identifier for this app installation.
   static Future<String?> id() async {
     if (sID != null) {
       return sID;
@@ -57,6 +62,8 @@ class InstallFile {
     return sID;
   }
 
+  /// Returns the content of the 'install file.'
+  /// Pass in a File object of the install file.
   static Future<String> readInstallationFile(File installFile) async {
     final file = await Files.get(FILE_NAME);
 
@@ -65,6 +72,8 @@ class InstallFile {
     return content;
   }
 
+  /// Write to the 'install file.'
+  /// Pass in a File object representing the install file.
   static String writeInstallationFile(File file) {
     const uuid = Uuid();
     // Generate a v4 (random) id

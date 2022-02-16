@@ -4,7 +4,7 @@ import 'package:mvc_application_example/src/view.dart';
 
 /// App
 class TemplateApp extends AppMVC {
-  TemplateApp({Key? key}) : super(key: key, con: TemplateController());
+  TemplateApp({Key? key}) : super(key: key, controller: TemplateController());
   // This is the 'View' of the application.
   @override
   AppState createState() => TemplateView();
@@ -16,12 +16,13 @@ class TemplateView extends AppState {
       : super(
           con: TemplateController(),
           controllers: [ContactsController(), WordPairsTimer(seconds: 2)],
-          inTitle: () => I10n.s('Demo App'),
+          inTitle: () => 'Demo App'.tr,
           debugShowCheckedModeBanner: false,
           switchUI: Prefs.getBool('switchUI'),
-          supportedLocales: I10n.supportedLocales,
+//          locale: AppTrs.appLocale,
+          supportedLocales: AppTrs.supportedLocales,
           localizationsDelegates: [
-            I10nDelegate(),
+            L10n.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,

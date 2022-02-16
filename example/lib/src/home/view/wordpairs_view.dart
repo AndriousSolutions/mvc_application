@@ -3,11 +3,7 @@ import 'package:mvc_application_example/src/view.dart';
 import 'package:mvc_application_example/src/controller.dart';
 
 class WordPairs extends StatefulWidget {
-  const WordPairs({
-    Key? key,
-    this.title = 'Startup Name Generator',
-  }) : super(key: key);
-  final String title;
+  const WordPairs({Key? key}) : super(key: key);
 
   @override
   State createState() => _WordPairsState();
@@ -43,12 +39,12 @@ class _RandomWordsAndroid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final widget = state.widget;
+//    final widget = state.widget;
     final con = state.con;
     final appCon = state.appCon;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('Startup Name Generator'.tr),
         actions: [
           IconButton(
             key: const Key('listSaved'),
@@ -91,7 +87,7 @@ class _RandomWordsAndroid extends StatelessWidget {
 
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Saved Suggestions'),
+              title: Text('Saved Suggestions'.tr),
             ),
             body: ListView(children: divided),
           );
@@ -108,14 +104,14 @@ class _RandomWordsiOS extends StatelessWidget {
   final _WordPairsState state;
   @override
   Widget build(BuildContext context) {
-    final widget = state.widget;
+//    final widget = state.widget;
     final con = state.con;
     final appCon = state.appCon;
     return CupertinoPageScaffold(
       child: CustomScrollView(
         slivers: <Widget>[
           CupertinoSliverNavigationBar(
-            largeTitle: Text(widget.title),
+            largeTitle: Text('Startup Name Generator'.tr),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -165,8 +161,8 @@ class _RandomWordsiOS extends StatelessWidget {
           return CupertinoPageScaffold(
             child: CustomScrollView(
               slivers: <Widget>[
-                const CupertinoSliverNavigationBar(
-                  largeTitle: Text('Saved Suggestions'),
+                CupertinoSliverNavigationBar(
+                  largeTitle: Text('Saved Suggestions'.tr),
                 ),
                 SliverSafeArea(
                   top: false,

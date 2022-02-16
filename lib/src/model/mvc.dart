@@ -26,6 +26,7 @@ import 'package:mvc_application/controller.dart' show HandleError;
 /// The Model for a simple app.
 /// Incorporates an Error Handler.
 class ModelMVC extends mvc.ModelMVC with HandleError {
+  /// The Singleton Pattern is used with only one stance instantiated.
   factory ModelMVC([v.StateMVC? state]) => _firstMod ??= ModelMVC._(state);
   ModelMVC._(v.StateMVC? state) : super(state);
   static ModelMVC? _firstMod;

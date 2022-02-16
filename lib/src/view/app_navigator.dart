@@ -7,8 +7,13 @@ import 'package:flutter/material.dart';
 
 import 'package:universal_html/html.dart' show window;
 
+/// A delegate that configures a widget, typically a [Navigator]
 class AppRouterDelegate extends RouterDelegate<AppRoutePath>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRoutePath> {
+    with
+        //ignore: prefer_mixin
+        ChangeNotifier,
+        PopNavigatorRouterDelegateMixin<AppRoutePath> {
+  /// Provide the Map of 'Routes' as well as ADD and Remove routines.
   factory AppRouterDelegate({
     required Map<String, WidgetBuilder> routes,
     void Function(VoidCallback listener)? add,
@@ -32,15 +37,22 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
   //
   static AppRouterDelegate? _this;
 
+  /// The Map of specified 'routes'
   final Map<String, WidgetBuilder> routes;
+
+  /// Add a listener when the route is called.
   final void Function(VoidCallback listener)? add;
+
+  /// Remove a listener
   final void Function(VoidCallback listener)? remove;
   final GlobalKey<NavigatorState>? _navigatorKey;
 
+  /// Specify the 'home' Page object.
   Page<dynamic>? homePage;
 
   final List<Page<dynamic>> _pages = [];
 
+  /// The Widget Builder to produce the home screen.
   late WidgetBuilder home;
 
   /// The current configuration
@@ -249,7 +261,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
 /// Converts a route into the user class type, <T>
 /// Using typed information instead of string allows for greater flexibility
 class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
-  //
+  /// Instantiate only one instance of the Parser.
   factory AppRouteInformationParser() =>
       _this ??= AppRouteInformationParser._();
   AppRouteInformationParser._();
@@ -318,32 +330,41 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
 
 /// Of course, You're free to override this class if you like
 class AppRoutePath {
-  //
+  /// Identified as the 'home' page.
   AppRoutePath.home()
       : path = '/',
         isUnknown = false,
         isHomePage = true;
 
+  /// Identified as a Page.
   AppRoutePath.page(this.path)
       : isUnknown = false,
         isHomePage = false;
 
+  /// Indentified as an 'unknown' page.
   AppRoutePath.unknown([String? _path])
       : path = _path ?? '/404',
         isUnknown = true,
         isHomePage = false;
 
 //  final AppRouteState? state;
+  /// The path
   final String? path;
+
+  /// Indicates if the page is unknown.
   final bool isUnknown;
+
+  /// Indicates if it is a 'home' page.
   final bool isHomePage;
 
+  /// Converts the AppRoutePath object as a Json object.
   Map<String, Object> toJson() => <String, Object>{
         'path': path ?? '',
         'isUnknown': isUnknown,
         'isHomePage': isHomePage,
       };
 
+  /// Returns an AppRoutePath object for a Json object.
   AppRoutePath fromJson(Map<String, dynamic> json) {
     AppRoutePath route;
 
@@ -376,6 +397,7 @@ class AppRoutePath {
 
 /// The Route Provider for the App
 class AppRouteInformationProvider extends PlatformRouteInformationProvider {
+  /// Route Provider for the App is instantiated any number of times.
   AppRouteInformationProvider()
       : super(initialRouteInformation: _initialRouteInformation());
 
@@ -405,14 +427,14 @@ class AppRouteInformationProvider extends PlatformRouteInformationProvider {
   /// Returns the url path if any
   /// Returns an empty string otherwise.
   static String urlPath() {
-    String path;
+    String? path;
     try {
-      path = window.location.pathname!;
+      // I get an 'Operand of null-aware' error otherwise. Strange.
+      path = window.location.pathname;
     } catch (ex) {
-      // Empty if there's a problem
-      path = '';
+      path = null;
     }
-    return path;
+    return path ?? '';
   }
 }
 

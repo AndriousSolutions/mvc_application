@@ -56,20 +56,30 @@ import 'package:flutter/material.dart'
         VoidCallback,
         Widget;
 
+/// Provides a simple Bottom Bar displayed on the screen.
 class SimpleBottomAppBar extends StatefulWidget {
+  /// Optionally supply up to four Bottom Bar buttons to be displayed.
   const SimpleBottomAppBar(
       {this.button01, this.button02, this.button03, this.button04, Key? key})
       : super(key: key);
+
+  /// The first bottom bar button
   final BarButton? button01;
+
+  /// The second bottom bar button
   final BarButton? button02;
+
+  /// The third bottom bar button
   final BarButton? button03;
+
+  /// The fourth bottom bar button
   final BarButton? button04;
 
   @override
-  State<StatefulWidget> createState() => SimpleBottomAppBarState();
+  State<StatefulWidget> createState() => _SimpleBottomAppBarState();
 }
 
-class SimpleBottomAppBarState extends State<SimpleBottomAppBar>
+class _SimpleBottomAppBarState extends State<SimpleBottomAppBar>
     with TickerProviderStateMixin {
   int currentIndex = 0;
   late int previousIndex;
@@ -246,14 +256,24 @@ class SimpleBottomAppBarState extends State<SimpleBottomAppBar>
   }
 }
 
+/// Represnts the 'Bottom Bar Button.'
 class BarButton {
+  /// Supply the Button's label, icon, and 'onPressed' routine.
   const BarButton({this.text, this.icon, this.onPressed});
+
+  /// Optionally supply the Button's label.
   final String? text;
+
+  /// Optionally supply an icon for the button.
   final IconData? icon;
+
+  /// Optionally supply the button's 'onPressed' routine.
   final VoidCallback? onPressed;
 }
 
+/// The pre-defined 'Home' Bottom Bar Button
 class HomeBarButton extends BarButton {
+  /// Optionally supply an 'onPressed' routine.
   HomeBarButton({VoidCallback? onPressed})
       : super(
           text: 'Home',
@@ -266,7 +286,9 @@ class HomeBarButton extends BarButton {
         );
 }
 
+/// The 'Delete' Bottom Bar Button
 class DeleteBarButton extends BarButton {
+  /// Optionally supply an 'onPressed' routine.
   DeleteBarButton({VoidCallback? onPressed})
       : super(
           text: 'Delete',
@@ -279,7 +301,9 @@ class DeleteBarButton extends BarButton {
         );
 }
 
+/// The 'Edit' Bottom Bar Button
 class EditBarButton extends BarButton {
+  /// Optionally supply an 'onPressed' routine.
   EditBarButton({VoidCallback? onPressed})
       : super(
           text: 'Edit',
@@ -292,7 +316,9 @@ class EditBarButton extends BarButton {
         );
 }
 
+/// The 'Search' Bottom Bar Button
 class SearchBarButton extends BarButton {
+  /// Optionally supply an 'onPressed' routine.
   SearchBarButton({VoidCallback? onPressed})
       : super(
           text: 'Search',
@@ -305,7 +331,9 @@ class SearchBarButton extends BarButton {
         );
 }
 
+/// The 'Stats' Bottom Bar Button
 class StatsBarButton extends BarButton {
+  /// Optionally supply an 'onPressed' routine.
   StatsBarButton({VoidCallback? onPressed})
       : super(
           text: 'Stats',
@@ -318,7 +346,9 @@ class StatsBarButton extends BarButton {
         );
 }
 
+/// The 'Events' Bottom Bar Button
 class EventsBarButton extends BarButton {
+  /// Optionally supply an 'onPressed' routine.
   EventsBarButton({VoidCallback? onPressed})
       : super(
           text: 'Events',
@@ -331,7 +361,9 @@ class EventsBarButton extends BarButton {
         );
 }
 
+/// The 'History' Bottom Bar Button
 class HistoryBarButton extends BarButton {
+  /// Optionally supply an 'onPressed' routine.
   HistoryBarButton({VoidCallback? onPressed})
       : super(
           text: 'History',

@@ -1,10 +1,4 @@
-import 'package:flutter/material.dart' show Key, TextButton;
-
-import 'package:flutter_test/flutter_test.dart';
-
 import '../../view.dart';
-
-import 'open_menu.dart';
 
 String _location = '========================== about_menu.dart';
 
@@ -22,7 +16,7 @@ Future<void> openAboutMenu(WidgetTester tester) async {
 
   /// Close window
   // Find the appropriate button even if translated.
-  final button = find.widgetWithText(TextButton, I10n.s('CLOSE'));
+  final button = find.widgetWithText(TextButton, L10n.s('CLOSE'));
   expect(button, findsOneWidget, reason: _location);
   await tester.tap(button);
   await tester.pumpAndSettle();

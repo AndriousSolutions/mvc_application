@@ -17,6 +17,7 @@
 ///
 
 // Replace 'dart:io' for Web applications
+
 import 'package:universal_platform/universal_platform.dart';
 
 import 'package:flutter/foundation.dart' show FlutterExceptionHandler, Key;
@@ -34,8 +35,8 @@ import 'package:mvc_application/view.dart' as v
         AppRouterDelegate,
         AppErrorHandler,
         AppRouteInformationParser,
-        I10n,
-        I10nDelegate,
+        L10n,
+        L10nDelegate,
         ReportErrorHandler;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
@@ -45,7 +46,7 @@ import 'package:flutter/rendering.dart' as debug;
 
 /// The View for the app. The 'look and feel' for the whole app.
 class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
-  //
+  /// Provide a huge array of options and features to the 'App State object.'
   AppState({
     this.key,
     this.home,
@@ -75,7 +76,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
     Iterable<LocalizationsDelegate<dynamic>>? localizationsDelegates,
     LocaleListResolutionCallback? localeListResolutionCallback,
     LocaleResolutionCallback? localeResolutionCallback,
-    Iterable<Locale>? supportedLocales,
+    List<Locale>? supportedLocales,
     this.useMaterial,
     this.useCupertino,
     this.switchUI,
@@ -89,6 +90,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
     Map<Type, Action<Intent>>? actions,
     String? restorationScopeId,
     ScrollBehavior? scrollBehavior,
+    bool? useInheritedMediaQuery,
     bool? debugShowWidgetInspector,
     bool? debugPaintSizeEnabled,
     bool? debugPaintBaselinesEnabled,
@@ -131,6 +133,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
     this.inActions,
     this.inRestorationScopeId,
     this.inScrollBehavior,
+    this.inInheritedMediaQuery,
     this.inError,
     this.inAsyncError,
   }) : super(
@@ -171,6 +174,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
           actions: actions,
           restorationScopeId: restorationScopeId,
           scrollBehavior: scrollBehavior,
+          useInheritedMediaQuery: useInheritedMediaQuery,
           debugShowWidgetInspector: debugShowWidgetInspector,
           debugPaintSizeEnabled: debugPaintSizeEnabled,
           debugPaintBaselinesEnabled: debugPaintBaselinesEnabled,
@@ -216,58 +220,136 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
     _isCupertino = useCupertino;
   }
 
-  Key? key;
+  /// The 'App State Objects' [Key]
+  final Key? key;
 
+  /// The App's 'home screen'
   final Widget? home;
 
-  // Explicitly use the Material theme
+  /// Explicitly use the Material theme
   bool? useMaterial;
-  // Explicitly use the Cupertino theme
+
+  /// Explicitly use the Cupertino theme
   bool? useCupertino;
-  // Use Cupertino UI in Android and vice versa.
+
+  /// Use Cupertino UI in Android and vice versa.
   bool? switchUI;
 
-  // The platform paradigm determined at startup. Can't be changed.
+  /// Is using the Material Design UI.
   bool? get isMaterial => _isMaterial;
   bool? _isMaterial;
+
+  /// Is using the Cupertino Design UI.
   bool? get isCupertino => _isCupertino;
   bool? _isCupertino;
 
+  /// Returns the home screen if any.
   final Widget Function()? inHome;
+
+  /// Returns the Route Provider if any.
   final RouteInformationProvider Function()? inRouteInformationProvider;
+
+  /// Returns the Route Parser if any.
   final RouteInformationParser<Object> Function()? inRouteInformationParser;
+
+  /// Returns the Route Delegate if any.
   final RouterDelegate<Object> Function()? inRouterDelegate;
+
+  /// Returns the 'Back Button' routine if any.
   final BackButtonDispatcher Function()? inBackButtonDispatcher;
+
+  /// Returns a Map of Routes if any.
   final Map<String, WidgetBuilder> Function()? inRoutes;
+
+  /// Returns the initial Route if any.
   final String Function()? inInitialRoute;
+
+  /// Returns the 'Generate Routes' routine if any.
   final RouteFactory Function()? inOnGenerateRoute;
+
+  /// Returns the 'Unknown Route' if any.
   final RouteFactory Function()? inOnUnknownRoute;
+
+  /// Returns a List of Navigation Observers if any.
   final List<NavigatorObserver> Function()? inNavigatorObservers;
+
+  /// Returns the 'Transition Builder' if any.
   final TransitionBuilder Function()? inTransBuilder;
+
+  /// Returns the App's title if any.
   final String Function()? inTitle;
+
+  /// Returns the 'Generate Title' routine if any.
   final GenerateAppTitle? inGenerateTitle;
+
+  /// Returns the App's [ThemeData] if any.
   final ThemeData Function()? inTheme;
+
+  /// Returns the App's [CupertinoThemeData] if any.
   final CupertinoThemeData Function()? iniOSTheme;
+
+  /// Returns the App's 'Dark Theme' [ThemeData] if any.
   final ThemeData Function()? inDarkTheme;
+
+  /// Returns the App's [ThemeMode] if any.
   final ThemeMode Function()? inThemeMode;
+
+  /// Returns the App's [Color] if any.
   final Color Function()? inColor;
+
+  /// Returns current [Locale] if any.
   final Locale Function()? inLocale;
+
+  /// Returns the 'Localization Delegates' if any.
   final Iterable<LocalizationsDelegate<dynamic>> Function()?
       inLocalizationsDelegates;
+
+  /// Returns 'Locale Resolutions' routine if any.
   final LocaleListResolutionCallback? inLocaleListResolutionCallback;
+
+  /// Returns 'Local Resolution' routine if any.
   final LocaleResolutionCallback? inLocaleResolutionCallback;
-  final Iterable<Locale> Function()? inSupportedLocales;
+
+  /// Returns the Locale Iteration if any.
+  final List<Locale> Function()? inSupportedLocales;
+
+  /// Returns 'Show Material Grid' boolean indicator if any.
   final bool Function()? inDebugShowMaterialGrid;
+
+  /// Returns 'Show Performance Overlay' boolean indicator if any.
   final bool Function()? inShowPerformanceOverlay;
+
+  /// Returns 'Raster Cache Checkerboard' boolean indicator if any.
   final bool Function()? inCheckerboardRasterCacheImages;
+
+  /// Returns 'Off Screen Layers Checkerboard' boolean indicator if any.
   final bool Function()? inCheckerboardOffscreenLayers;
+
+  /// Returns 'Show Semantics' boolean indicator if any.
   final bool Function()? inShowSemanticsDebugger;
+
+  /// Returns 'Show Debug Banner' boolean indicator if any.
   final bool Function()? inDebugShowCheckedModeBanner;
+
+  /// Returns Map of 'LogicalKeySets' if any.
   final Map<LogicalKeySet, Intent> Function()? inShortcuts;
+
+  /// Returns Map of 'Intent Actions' if any.
   final Map<Type, Action<Intent>> Function()? inActions;
+
+  /// Returns the 'Restore Scope Id' routine if any.
   final String Function()? inRestorationScopeId;
+
+  /// Returns the App's [ScrollBehavior] if any.
   final ScrollBehavior Function()? inScrollBehavior;
+
+  /// Returns the App's 'Inherited Media Query' routine if any.
+  final bool Function()? inInheritedMediaQuery;
+
+  /// Returns the App's 'Error Handler' if any.
   final void Function(FlutterErrorDetails details)? inError;
+
+  /// Returns the App's 'Async Error Handler' if any.
   final bool Function(FlutterErrorDetails details)? inAsyncError;
 
   // The error flag.
@@ -346,6 +428,8 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
         actions: actions ?? onActions(),
         restorationScopeId: restorationScopeId ?? onRestorationScopeId(),
         scrollBehavior: scrollBehavior ?? onScrollBehavior(),
+        useInheritedMediaQuery:
+            useInheritedMediaQuery ?? onInheritedMediaQuery(),
         // Let the parameters run before the home parameter.
         home: home ?? onHome(),
       );
@@ -401,6 +485,8 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
           actions: actions ?? onActions(),
           restorationScopeId: restorationScopeId ?? onRestorationScopeId(),
           scrollBehavior: scrollBehavior ?? onScrollBehavior(),
+          useInheritedMediaQuery:
+              useInheritedMediaQuery ?? onInheritedMediaQuery(),
           // Let the parameters run before the home parameter.
           home: home ?? onHome(),
         );
@@ -441,6 +527,8 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
           actions: actions ?? onActions(),
           restorationScopeId: restorationScopeId ?? onRestorationScopeId(),
           scrollBehavior: scrollBehavior ?? onScrollBehavior(),
+          useInheritedMediaQuery:
+              useInheritedMediaQuery ?? onInheritedMediaQuery(),
           routeInformationProvider:
               routeInformationProvider ?? onRouteInformationProvider(),
           routeInformationParser: _routeInformationParser!,
@@ -504,70 +592,92 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
     }
   }
 
+  /// Returns the App's Navigator's Key.
   GlobalKey<NavigatorState> onNavigatorKey() =>
       _navigatorKey ??= GlobalKey<NavigatorState>();
   GlobalKey<NavigatorState>? _navigatorKey;
 
-  RouteInformationProvider? onRouteInformationProvider() =>
-      inRouteInformationProvider != null ? inRouteInformationProvider!() : null;
-
-  RouteInformationParser<Object>? onRouteInformationParser() =>
-      inRouteInformationParser != null ? inRouteInformationParser!() : null;
-
-  RouteInformationParser<Object>? _routeInformationParser;
-
-  RouterDelegate<Object>? onRouterDelegate() =>
-      inRouterDelegate != null ? inRouterDelegate!() : null;
-
-  RouterDelegate<Object>? _routerDelegate;
-
-  BackButtonDispatcher? onBackButtonDispatcher() =>
-      inBackButtonDispatcher != null ? inBackButtonDispatcher!() : null;
-
+  /// Returns the App's ScaffoldMessenger Key.
   GlobalKey<ScaffoldMessengerState> onScaffoldMessengerKey() =>
       _scaffoldMessengerKey ??= GlobalKey<ScaffoldMessengerState>();
 
   GlobalKey<ScaffoldMessengerState>? _scaffoldMessengerKey;
 
+  /// Returns the home screen if any.
   Widget? onHome() => inHome != null ? inHome!() : null;
 
+  /// Returns the Route Provider if any.
+  RouteInformationProvider? onRouteInformationProvider() =>
+      inRouteInformationProvider != null ? inRouteInformationProvider!() : null;
+
+  /// Returns the Route Parser if any.
+  RouteInformationParser<Object>? onRouteInformationParser() =>
+      inRouteInformationParser != null ? inRouteInformationParser!() : null;
+
+  RouteInformationParser<Object>? _routeInformationParser;
+
+  /// Returns the Route Delegate if any.
+  RouterDelegate<Object>? onRouterDelegate() =>
+      inRouterDelegate != null ? inRouterDelegate!() : null;
+
+  RouterDelegate<Object>? _routerDelegate;
+
+  /// Returns the 'Back Button' routine if any.
+  BackButtonDispatcher? onBackButtonDispatcher() =>
+      inBackButtonDispatcher != null ? inBackButtonDispatcher!() : null;
+
+  /// Returns a Map of Routes if any.
   Map<String, WidgetBuilder>? onRoutes() =>
       inRoutes != null ? inRoutes!() : const <String, WidgetBuilder>{};
 
+  /// Returns the initial Route if any.
   String? onInitialRoute() => inInitialRoute != null ? inInitialRoute!() : null;
 
+  /// Returns the 'Generate Routes' routine if any.
   RouteFactory? onOnGenerateRoute() =>
       inOnGenerateRoute != null ? inOnGenerateRoute!() : null;
 
+  /// Returns the 'Unknown Route' if any.
   RouteFactory? onOnUnknownRoute() =>
       inOnUnknownRoute != null ? inOnUnknownRoute!() : null;
 
+  /// Returns a List of Navigation Observers if any.
   List<NavigatorObserver>? onNavigatorObservers() =>
       inNavigatorObservers != null
           ? inNavigatorObservers!()
           : const <NavigatorObserver>[];
 
+  /// Returns the 'Transition Builder' if any.
   TransitionBuilder? onBuilder() =>
       inTransBuilder != null ? inTransBuilder!() : null;
 
+  /// Returns the App's title if any.
   String onTitle() => inTitle != null ? inTitle!() : title ?? '';
 
-  GenerateAppTitle? onOnGenerateTitle(BuildContext context) => inGenerateTitle;
+  /// Returns the 'Generate Title' routine if any.
+  GenerateAppTitle? onOnGenerateTitle(BuildContext context) =>
+      inGenerateTitle ?? (context) => v.L10n.s(onTitle());
 
-  Color? onColor() => inColor != null ? inColor!() : null;
-
+  /// Returns the App's [ThemeData] if any.
   ThemeData? onTheme() => inTheme != null ? inTheme!() : null;
 
+  /// Returns the App's [CupertinoThemeData] if any.
   CupertinoThemeData? oniOSTheme() => iniOSTheme != null ? iniOSTheme!() : null;
 
+  /// Returns the App's 'Dark Theme' [ThemeData] if any.
   ThemeData? onDarkTheme() => inDarkTheme != null ? inDarkTheme!() : null;
 
+  /// Returns the App's [ThemeMode] if any.
   ThemeMode onThemeMode() =>
       inThemeMode != null ? inThemeMode!() : ThemeMode.system;
 
+  /// Returns the App's [Color] if any.
+  Color? onColor() => inColor != null ? inColor!() : null;
+
+  /// Returns current [Locale] if any.
   Locale? onLocale() => inLocale != null ? inLocale!() : null;
 
-  @mustCallSuper
+  /// Returns the 'Localization Delegates' if any.  @mustCallSuper
   Iterable<LocalizationsDelegate<dynamic>> onLocalizationsDelegates() sync* {
     if (localizationsDelegates != null) {
       yield* localizationsDelegates!;
@@ -578,59 +688,77 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
     // Supply MaterialLocalizations just in case you're in Cupertino interface.
     yield DefaultMaterialLocalizations.delegate;
     // Very important to allow Material to Cupertino and back!
-    yield v.I10nDelegate();
+    yield v.L10nDelegate();
   }
 
+  /// Returns 'Locale Resolutions' routine if any.
   LocaleListResolutionCallback? onLocaleListResolutionCallback() =>
       inLocaleListResolutionCallback;
 
+  /// Returns 'Local Resolution' routine if any.
   /// Turn to the I10n class to provide the locale.
   LocaleResolutionCallback? onLocaleResolutionCallback() =>
-      inLocaleResolutionCallback ?? v.I10n.localeResolutionCallback;
+      inLocaleResolutionCallback ?? v.L10n.localeResolutionCallback;
 
-  Iterable<Locale> onSupportedLocales() => inSupportedLocales != null
+  /// Returns the Locale Iteration if any.
+  List<Locale> onSupportedLocales() => inSupportedLocales != null
       ? inSupportedLocales!()
       : const <Locale>[Locale('en', 'US')];
 
+  /// Returns 'Show Material Grid' boolean indicator if any.
   bool onDebugShowMaterialGrid() =>
       // ignore: avoid_bool_literals_in_conditional_expressions
       inDebugShowMaterialGrid != null ? inDebugShowMaterialGrid!() : false;
 
+  /// Returns 'Show Performance Overlay' boolean indicator if any.
   bool onShowPerformanceOverlay() =>
       // ignore: avoid_bool_literals_in_conditional_expressions
       inShowPerformanceOverlay != null ? inShowPerformanceOverlay!() : false;
 
+  /// Returns 'Raster Cache Checkerboard' boolean indicator if any.
   bool onCheckerboardRasterCacheImages() =>
       // ignore: avoid_bool_literals_in_conditional_expressions
       inCheckerboardRasterCacheImages != null
           ? inCheckerboardRasterCacheImages!()
           : false;
 
+  /// Returns 'Off Screen Layers Checkerboard' boolean indicator if any.
   // ignore: avoid_bool_literals_in_conditional_expressions
   bool onCheckerboardOffscreenLayers() => inCheckerboardOffscreenLayers != null
       ? inCheckerboardOffscreenLayers!()
       : false;
 
+  /// Returns 'Show Semantics' boolean indicator if any.
   bool onShowSemanticsDebugger() =>
       // ignore: avoid_bool_literals_in_conditional_expressions
       inShowSemanticsDebugger != null ? inShowSemanticsDebugger!() : false;
 
+  /// Returns 'Show Debug Banner' boolean indicator if any.
   // ignore: avoid_bool_literals_in_conditional_expressions
   bool onDebugShowCheckedModeBanner() => inDebugShowCheckedModeBanner != null
       ? inDebugShowCheckedModeBanner!()
       : true;
 
+  /// Returns Map of 'LogicalKeySets' if any.
   Map<LogicalKeySet, Intent>? onShortcuts() =>
       inShortcuts != null ? inShortcuts!() : null;
 
+  /// Returns Map of 'Intent Actions' if any.
   Map<Type, Action<Intent>>? onActions() =>
       inActions != null ? inActions!() : null;
 
+  /// Returns the 'Restore Scope Id' routine if any.
   String? onRestorationScopeId() =>
       inRestorationScopeId != null ? inRestorationScopeId!() : null;
 
+  /// Returns the App's [ScrollBehavior] if any.
   ScrollBehavior? onScrollBehavior() =>
       inScrollBehavior != null ? inScrollBehavior!() : null;
+
+  /// Returns the App's 'Inherited Media Query' routine if any.
+  bool onInheritedMediaQuery() =>
+      // ignore: avoid_bool_literals_in_conditional_expressions
+      inInheritedMediaQuery != null ? inInheritedMediaQuery!() : false;
 }
 
 /// The underlying State object representing the App's View in the MVC pattern.
@@ -677,6 +805,7 @@ abstract class _AppState<T extends mvc.AppStatefulWidgetMVC>
     this.actions,
     this.restorationScopeId,
     this.scrollBehavior,
+    this.useInheritedMediaQuery,
     this.debugPaintSizeEnabled,
     this.debugPaintBaselinesEnabled,
     this.debugPaintPointersEnabled,
@@ -756,7 +885,7 @@ abstract class _AppState<T extends mvc.AppStatefulWidgetMVC>
   Iterable<LocalizationsDelegate<dynamic>>? localizationsDelegates;
   LocaleListResolutionCallback? localeListResolutionCallback;
   LocaleResolutionCallback? localeResolutionCallback;
-  Iterable<Locale>? supportedLocales;
+  List<Locale>? supportedLocales;
   bool? debugShowMaterialGrid;
   bool? showPerformanceOverlay;
   bool? checkerboardRasterCacheImages;
@@ -768,6 +897,7 @@ abstract class _AppState<T extends mvc.AppStatefulWidgetMVC>
   Map<Type, Action<Intent>>? actions;
   String? restorationScopeId;
   ScrollBehavior? scrollBehavior;
+  bool? useInheritedMediaQuery;
 
   /// Highlights UI while debugging.
   bool? debugPaintSizeEnabled;
@@ -791,22 +921,17 @@ abstract class _AppState<T extends mvc.AppStatefulWidgetMVC>
 
   @override
   void dispose() {
-    _app?.dispose();
+//    _app?.dispose();
     _app = null;
     _errorHandler?.dispose();
     _errorHandler = null;
     super.dispose();
   }
-
-  /// Supply the function as a instance member and not a static member in this framework
-  /// In such a framework touched by many hands, it's best to keep this function confinded.
-  void inheritWidget(BuildContext context) =>
-      mvc.AppStateMVC.inheritWidget(context);
 }
 
 /// The Error Screen if something happens at start up.
 class AppError extends AppState {
-  //
+  /// Supply an Exception object from the startup error.
   AppError(Object exception, {Key? key})
       : super(home: _AppError(exception, key: key));
 }

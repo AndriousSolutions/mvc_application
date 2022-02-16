@@ -23,7 +23,7 @@ dependencies:
   cupertino_icons: ^1.0.0
 
   # https://pub.dev/packages/dbutils
-  dbutils: ^4.0.0
+  dbutils: ^5.0.0
 
   # Generates English word pairs
   # https://pub.dev/packages/english_words
@@ -33,9 +33,8 @@ dependencies:
   flutter_material_color_picker: ^1.0.0
 
   # https://pub.dev/packages/mvc_application
-  mvc_application: ^8.0.0
-#      path: ../../packages/mvc_application
-
+  mvc_application: #^8.0.0
+      path: ../
 
 dev_dependencies:
   flutter_test:
@@ -69,9 +68,6 @@ flutter:
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
-
-  assets:
-    - assets/i10n/i10n.csv
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

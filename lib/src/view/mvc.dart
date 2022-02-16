@@ -40,6 +40,7 @@ import 'package:mvc_application/controller.dart' show AppController;
 
 /// Passed as 'View' to MVC class for a simple app.
 class ViewMVC extends AppState {
+  /// Supply the interface properties for this simple App
   ViewMVC({
     Widget? home,
     AppController? con,
@@ -57,7 +58,7 @@ class ViewMVC extends AppState {
     Locale? locale,
     Iterable<LocalizationsDelegate<dynamic>>? localizationsDelegates,
     LocaleResolutionCallback? localeResolutionCallback,
-    Iterable<Locale>? supportedLocales,
+    List<Locale>? supportedLocales,
     bool? debugShowMaterialGrid,
     bool? showPerformanceOverlay,
     bool? checkerboardRasterCacheImages,

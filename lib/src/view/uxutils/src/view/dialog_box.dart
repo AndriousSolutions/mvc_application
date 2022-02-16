@@ -200,11 +200,23 @@ class _DialogWindow with DialogOptions {
   }
 }
 
+/// A mixin to work with the class [DialogBox]
+/// or can be assigned to any class involving
+/// two buttons and their callback routines.
 mixin DialogOptions {
+  /// First button option
   Option? button01;
+
+  /// Second button option
   Option? button02;
+
+  /// First button's callback function
   VoidCallback? press01;
+
+  /// Second button's callback function
   VoidCallback? press02;
+
+  /// Boolean flag to switch display order of buttons.
   bool? switchButtons;
 
   List<Widget> _listOptions() {
@@ -253,15 +265,26 @@ mixin DialogOptions {
       );
 }
 
+/// The Button Option Class
 class Option {
+  /// Supply the button's text, callback and dynamic result value.
   Option({this.text, this.onPressed, this.result})
       : assert(result != null, 'Must provide a option result!');
+
+  /// The optional Button Text label.
   final String? text;
+
+  /// The optional callback function
   final VoidCallback? onPressed;
+
+  /// The result of any type that's assigned when the button is pressed.
   final dynamic result;
 }
 
+/// The 'OK' Button Option
 class OKOption extends Option {
+  /// Supply the optionally Callback when pressed.
+  /// Assigns a boolean True to the result property.
   OKOption({VoidCallback? onPressed})
       : super(
           text: 'OK',
@@ -274,7 +297,10 @@ class OKOption extends Option {
         );
 }
 
+/// The 'Cancel' Button Option
 class CancelOption extends Option {
+  /// Supply the optionally Callback when pressed.
+  /// Assigns a boolean False to the result property.
   CancelOption({VoidCallback? onPressed})
       : super(
           text: 'Cancel',
@@ -287,7 +313,9 @@ class CancelOption extends Option {
         );
 }
 
+/// Message Box Class
 class MsgBox {
+  /// Supply a Message box
   const MsgBox({
     required this.context,
     this.title,
@@ -295,12 +323,25 @@ class MsgBox {
     this.body,
     this.actions,
   });
+
+  /// Requires a BuildContext
   final BuildContext context;
+
+  /// Optional String to display as a title on the Message box.
   final String? title;
+
+  /// Optional String as the primary message of the Message box.
   final String? msg;
+
+  /// Optional List of Widgets that take precedence over [msg]
+  /// and will be displayed instead.
   final List<Widget>? body;
+
+  /// Optional set of actions that are displayed at the bottom of the
+  /// Message box.
   final List<Widget>? actions;
 
+  /// Call to display this Message box.
   Future<void> show({
     BuildContext? context,
     String? title,
@@ -328,6 +369,7 @@ class MsgBox {
         child: const Text('OK'),
       ),
     ];
+
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -346,6 +388,7 @@ class MsgBox {
 /// Display an extensive widget to a dialogue window.
 ///
 class DialogBox with DialogOptions {
+  /// Supply the Dialog window's buttons and Callback routines.
   DialogBox({
     this.title,
     Option? button01,
@@ -363,11 +406,20 @@ class DialogBox with DialogOptions {
     this.press02 = press02;
     this.switchButtons = switchButtons;
   }
+
+  /// The Dialog window's title.
   final String? title;
+
+  /// The Dialog window's title.
   final List<Widget>? body;
+
+  /// The Dialog window's title.
   final List<Widget>? actions;
+
+  /// Whether or not the Dialog window disables the rest of the interface or not.
   final bool? barrierDismissible;
 
+  /// Display the Dialog window.
   Future<void> show({
     String? title,
     Option? button01,

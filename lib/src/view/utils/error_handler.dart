@@ -51,11 +51,14 @@ import 'package:flutter/rendering.dart'
         TextAlign,
         TextDirection;
 
+/// Define the type of function to handle errors.
 typedef ReportErrorHandler = Future<void> Function(
     dynamic exception, StackTrace stack);
 
 /// Your App's error handler.
 class AppErrorHandler {
+  /// Singleton Pattern with only one instance of this Error Handler.
+  /// Optionally supply the Error handler, Builder, and Report routines.
   factory AppErrorHandler({
     FlutterExceptionHandler? handler,
     ErrorWidgetBuilder? builder,
@@ -131,12 +134,17 @@ class AppErrorHandler {
 
   static bool _inHandler = false;
 
+  /// Flag indicating the App has already executed.
+  @Deprecated('A mutable static property is discouraged.')
+  // Not certain why this is here in the first place.
   static bool ranApp = false;
 
+  /// Return the current 'Flutter Exception Handler.'
   FlutterExceptionHandler? get flutterExceptionHandler =>
       _flutterExceptionHandler;
   static FlutterExceptionHandler? _flutterExceptionHandler;
 
+  /// Return either the current and previous Error Handler.
   FlutterExceptionHandler? get onError => _onError ?? _oldOnError;
   static FlutterExceptionHandler? _onError;
 
@@ -300,6 +308,7 @@ class AppErrorHandler {
 
 /// A low-level widget to present instead of the failed widget.
 class DisplayErrorWidget extends LeafRenderObjectWidget {
+  /// Supply an error message to display and or a Error object.
   DisplayErrorWidget({this.message = '', Error? error})
       : _error = error,
         super(key: UniqueKey());
@@ -473,45 +482,4 @@ class _ErrorBox extends RenderBox {
       // Intentionally left empty.
     }
   }
-}
-
-@Deprecated('Use the AppErrorHandler class now.')
-class ErrorHandler {
-  ErrorHandler({
-    FlutterExceptionHandler? handler,
-    ErrorWidgetBuilder? builder,
-    ReportErrorHandler? report,
-  }) {
-    errorHandler = AppErrorHandler(
-      handler: handler,
-      builder: builder,
-      report: report,
-    );
-  }
-  late AppErrorHandler errorHandler;
-
-  void dispose() => errorHandler.dispose();
-
-  static bool get inDebugger => AppErrorHandler.inDebugger;
-
-  Future<void> reportError(
-    dynamic ex,
-    StackTrace stack, {
-    String? message,
-    String? library,
-    InformationCollector? informationCollector,
-  }) =>
-      errorHandler.reportError(
-        ex,
-        stack,
-        message: message,
-        library: library,
-        informationCollector: informationCollector,
-      );
-
-  void isolateError(dynamic ex, StackTrace stack) =>
-      errorHandler.isolateError(ex, stack);
-
-  void runZonedError(dynamic ex, StackTrace stack) =>
-      errorHandler.runZonedError(ex, stack);
 }

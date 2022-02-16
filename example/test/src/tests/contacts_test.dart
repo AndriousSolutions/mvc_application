@@ -41,10 +41,10 @@ Future<void> contactsTest(WidgetTester tester) async {
         text = 'Perry';
         break;
       case 3:
-        text = '647 823-3752';
+        text = '123 456-7890';
         break;
       case 4:
-        text = 'greg.perry@adnrioussolutions.com';
+        text = 'greg.perry@somewhere.com';
         break;
       case 5:
         text = 'Andrious Solutions Ltd.';

@@ -36,8 +36,10 @@ mixin HandleError {
   /// Simply display the error.
   String get errorMsg => _error == null ? '' : _error.toString();
 
-  /// Determine if app is 'in error.'
+  /// Indicate if app is 'in error.'
   bool get inError => _error != null;
+
+  /// Indicate if the app is 'in error.'
   bool get hasError => _error != null;
   Exception? _error;
 }

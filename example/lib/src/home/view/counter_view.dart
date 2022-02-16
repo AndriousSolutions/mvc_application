@@ -3,8 +3,7 @@ import 'package:mvc_application_example/src/view.dart';
 import 'package:mvc_application_example/src/controller.dart';
 
 class CounterPage extends StatefulWidget {
-  const CounterPage({Key? key, this.title = 'Counter Page'}) : super(key: key);
-  final String title;
+  const CounterPage({Key? key}) : super(key: key);
   @override
   State createState() => _CounterPageState();
 }
@@ -177,12 +176,12 @@ class _BuildAndroid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final widget = state.widget;
+//    final widget = state.widget;
     final con = state.con;
     final appCon = state.appCon;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('Counter Page Demo'.tr),
         actions: [
           appCon.popupMenu(),
         ],
@@ -193,7 +192,7 @@ class _BuildAndroid extends StatelessWidget {
           children: <Widget>[
             con.wordPair,
             const SizedBox(height: 30),
-            I10n.t('You have pushed the button this many times:',
+            Text('You have pushed the button this many times:'.tr,
                 style: const TextStyle(fontSize: 15)),
             Text(
               con.data,
@@ -209,7 +208,6 @@ class _BuildAndroid extends StatelessWidget {
             con.onPressed();
           });
         },
-        tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
     );
@@ -223,12 +221,12 @@ class _BuildiOS extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final widget = state.widget;
+//    final widget = state.widget;
     final con = state.con;
     final appCon = state.appCon;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(widget.title),
+        middle: Text('Counter Page Demo'.tr),
         trailing: appCon.popupMenu(),
       ),
       child: SafeArea(
@@ -240,7 +238,7 @@ class _BuildiOS extends StatelessWidget {
               children: [
                 con.wordPair,
                 const SizedBox(height: 30),
-                I10n.t('You have pushed the button this many times:'),
+                Text('You have pushed the button this many times:'.tr),
                 Text(con.data),
                 Expanded(
                   child: Align(

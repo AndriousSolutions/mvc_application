@@ -28,7 +28,7 @@ import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 /// A Controller for the 'app level'.
 class AppController extends ControllerMVC
     implements mvc.AppControllerMVC, v.ConnectivityListener {
-  //
+  /// Optionally supply a 'State' object to be linked to this State Controller.
   AppController([v.StateMVC? state]) : super(state);
 
   /// Initialize any immediate 'none time-consuming' operations
@@ -68,7 +68,7 @@ class AppController extends ControllerMVC
 /// Your 'working' class most concerned with the app's functionality.
 /// Incorporates an Error Handler.
 class ControllerMVC extends mvc.ControllerMVC with HandleError {
-  //
+  /// Optionally supply a 'State' object to be linked to this State Controller.
   ControllerMVC([v.StateMVC? state]) : super(state);
 
   /// The current StateMVC object from mvc_application/view.dart

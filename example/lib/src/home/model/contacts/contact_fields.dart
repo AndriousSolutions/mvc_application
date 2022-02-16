@@ -42,7 +42,7 @@ FormFields displayName(Contact contact) {
 class DisplayName extends FieldWidgets<Contact> with FormFields {
   DisplayName(String value, Widget child)
       : super(
-          label: 'Display Name',
+          label: 'Display Name'.tr,
           value: value,
           child: child,
         );
@@ -51,7 +51,7 @@ class DisplayName extends FieldWidgets<Contact> with FormFields {
 class GivenName extends FieldWidgets<Contact> with FormFields {
   GivenName([dynamic value])
       : super(
-          label: 'First Name',
+          label: 'First Name'.tr,
           value: value,
           validator: notEmpty,
           keyboardType: TextInputType.name,
@@ -61,7 +61,7 @@ class GivenName extends FieldWidgets<Contact> with FormFields {
 class MiddleName extends FieldWidgets<Contact> with FormFields {
   MiddleName([dynamic value])
       : super(
-          label: 'Middle Name',
+          label: 'Middle Name'.tr,
           value: value,
           keyboardType: TextInputType.name,
         );
@@ -70,7 +70,7 @@ class MiddleName extends FieldWidgets<Contact> with FormFields {
 class FamilyName extends FieldWidgets<Contact> with FormFields {
   FamilyName([dynamic value])
       : super(
-          label: 'Last Name',
+          label: 'Last Name'.tr,
           value: value,
           validator: notEmpty,
           keyboardType: TextInputType.name,
@@ -80,7 +80,7 @@ class FamilyName extends FieldWidgets<Contact> with FormFields {
 class Company extends FieldWidgets<Contact> with FormFields {
   Company([dynamic value])
       : super(
-          label: 'Company',
+          label: 'Company'.tr,
           value: value,
           keyboardType: TextInputType.name,
         );
@@ -89,7 +89,7 @@ class Company extends FieldWidgets<Contact> with FormFields {
 class JobTitle extends FieldWidgets<Contact> with FormFields {
   JobTitle([dynamic value])
       : super(
-          label: 'Job',
+          label: 'Job'.tr,
           value: value,
           keyboardType: TextInputType.name,
         );
@@ -99,7 +99,7 @@ class Phone extends FieldWidgets<Contact> with FormFields {
   //
   Phone([dynamic value])
       : super(
-          label: 'Phone',
+          label: 'Phone'.tr,
           value: value,
           inputDecoration: const InputDecoration(labelText: 'Phone'),
           keyboardType: TextInputType.phone,
@@ -132,8 +132,8 @@ class Phone extends FieldWidgets<Contact> with FormFields {
         mapItem: mapItem,
         onTap: onTap,
         onChanged: onChanged ?? (String? value) => state!.setState(() {}),
-        dropItems:
-            dropItems ?? const ['home', 'work', 'landline', 'mobile', 'other'],
+        dropItems: dropItems ??
+            ['home'.tr, 'work'.tr, 'landline'.tr, 'mobile'.tr, 'other'.tr],
       );
 
   @override
@@ -159,7 +159,7 @@ class Phone extends FieldWidgets<Contact> with FormFields {
 class Email extends FieldWidgets<Contact> with FormFields {
   Email([dynamic value])
       : super(
-          label: 'Email',
+          label: 'Email'.tr,
           value: value,
           inputDecoration: const InputDecoration(labelText: 'Email'),
           keyboardType: TextInputType.emailAddress,
@@ -189,7 +189,7 @@ class Email extends FieldWidgets<Contact> with FormFields {
         items: items,
         mapItem: mapItem,
         onTap: onTap,
-        dropItems: dropItems ?? ['home', 'work', 'other'],
+        dropItems: dropItems ?? ['home'.tr, 'work'.tr, 'other'.tr],
         onChanged: onChanged ??
             (String? value) {
               state!.setState(() {});
