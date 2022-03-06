@@ -1,5 +1,5 @@
 
-## 8.8.0
+## 8.8.0+01
  March 06, 2022
 - Dart sdk: '>=2.16.1 <3.0.0'
 - Removed factory constructor from example app class View
