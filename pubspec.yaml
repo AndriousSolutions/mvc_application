@@ -3,34 +3,34 @@ description: Flutter Framework for Applications using the MVC Design Pattern
 homepage: https://www.andrioussolutions.com
 repository: https://github.com/AndriousSolutions/mvc_application
 
-version: 8.7.1
+version: 8.8.0
 
 environment:
-  sdk: '>=2.15.0 <3.0.0'
+  sdk: '>=2.16.1 <3.0.0'
 
 dependencies:
+  # https://pub.dartlang.org/packages/connectivity_plus
+  connectivity_plus: ^2.0.0
+
+  # https://pub.dev/packages/device_info_plus
+  device_info_plus: ^3.0.0
+
   flutter:
     sdk: flutter
+
+  # https://pub.dev/packages/flutter_local_notifications
+  flutter_local_notifications: ^9.0.0
+
   # To support for other languages other than US English localizations
   flutter_localizations:
     sdk: flutter
 
-  # https://pub.dartlang.org/packages/connectivity_plus
-  connectivity_plus: ^2.0.0
+  # https://pub.dev/packages/flutter_native_timezone/
+  flutter_native_timezone: ^2.0.0
 
   # https://pub.dartlang.org/packages/mvc_pattern
   mvc_pattern: ^8.0.0
-#    path: ../../packages/mvc_pattern
-
-  # https://pub.dev/packages/i10n_translator/
-  # /// Proven very important in createElement()!
-  l10n_translator: ^1.0.0
-#    path: ../../packages/l10n_translator
-
-  # https://pub.dartlang.org/packages/url_launcher
-  # used in AppSettings.dart
-  url_launcher: ^6.0.0
-  url_launcher_web: ^2.0.0
+#      path: ../../packages/mvc_pattern
 
   # https://pub.dev/packages/package_info_plus
   package_info_plus: ^1.0.0
@@ -38,33 +38,29 @@ dependencies:
   # https://pub.dev/packages/path_provider
   path_provider: ^2.0.0
 
-  # https://pub.dev/packages/device_info_plus
-  device_info_plus: ^3.0.0
-
   # https://pub.dartlang.org/packages/prefs
   prefs: ^3.0.0
   #  path: ../../packages/prefs
 
-  # https://pub.dartlang.org/packages/uuid
-  uuid: ^3.0.0
-
-  # https://pub.dev/packages/flutter_local_notifications
-  flutter_local_notifications: ^9.0.0
-
   # https://pub.dev/packages/timezone
   timezone: ^0.8.0
-
-  # https://pub.dev/packages/flutter_native_timezone/
-  flutter_native_timezone: ^2.0.0
-
-  # https://pub.dev/packages/universal_platform
-  universal_platform: ^1.0.0
 
   # https://pub.dev/packages/universal_html/
   universal_html: ^2.0.0
 
+  # https://pub.dev/packages/universal_platform
+  universal_platform: ^1.0.0
+
+  # https://pub.dartlang.org/packages/url_launcher
+  # used in AppSettings.dart
+  url_launcher: ^6.0.0
+  url_launcher_web: ^2.0.0
+
   # https://pub.dev/packages/url_strategy
   url_strategy: ^0.2.0
+
+  # https://pub.dartlang.org/packages/uuid
+  uuid: ^3.0.0
 
 dev_dependencies:
   flutter_test:

@@ -26,15 +26,14 @@ import 'package:mvc_application/view.dart' as v
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
 
 /// A Controller for the 'app level'.
-class AppController extends ControllerMVC
-    implements mvc.AppControllerMVC, v.ConnectivityListener {
+class AppController extends ControllerMVC implements v.ConnectivityListener {
   /// Optionally supply a 'State' object to be linked to this State Controller.
   AppController([v.StateMVC? state]) : super(state);
 
   /// Initialize any immediate 'none time-consuming' operations
   /// at the very beginning.
   @override
-  @Deprecated('No need to replace the initState() function. Use initState()')
+  @Deprecated('No need. Use initState()')
   void initApp() {}
 
   @override
@@ -53,8 +52,8 @@ class AppController extends ControllerMVC
     return false;
   }
 
+  /// The 'App Level' Error Handler.
   /// Override if you like to customize your error handling.
-  @override
   void onError(FlutterErrorDetails details) {
     // Call the App's 'current' error handler.
     v.App?.onError(details);

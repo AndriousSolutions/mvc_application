@@ -2,8 +2,6 @@ import 'package:mvc_application_example/src/model.dart';
 
 import 'package:mvc_application_example/src/view.dart';
 
-import 'package:l10n_translator/L10n.dart';
-
 //ignore: non_constant_identifier_names
 final AppTrs = AppTranslations();
 

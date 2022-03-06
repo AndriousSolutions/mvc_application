@@ -553,7 +553,7 @@ class App {
   /// Determines if running in an IDE or in production.
   static bool get inDebugger => _appState?.inDebugger ?? false;
 
-  /// Refresh the root State object, AppView.
+  /// Refresh the root State object.
   static void refresh() => _appState?.refresh();
 
   /// Display the SnackBar

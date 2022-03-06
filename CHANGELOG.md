@@ -1,4 +1,11 @@
 
+## 8.8.0
+ March 06, 2022
+- Dart sdk: '>=2.16.1 <3.0.0'
+- Removed factory constructor from example app class View
+- Introduced class, l10n_translator
+- Introduce latest mvc_pattern package
+
 ## 8.7.1
  February 15, 2022
 - No longer pass 'con' to AppStatefulWidget. Supply to AppState instead.

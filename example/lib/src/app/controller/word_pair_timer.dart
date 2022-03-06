@@ -124,7 +124,7 @@ class WordPairsTimer extends ControllerMVC {
       /// and only that widget. Only it will be rebuilt; not the whole widget tree.
       appStateObject?.dataObject = twoWords.asString;
 
-      /// Alternate approach uses inheritWidget() and setStatesInherited() funtions.
+      /// Alternate approach uses inheritWidget() and setStatesInherited() functions.
       _wordPair = twoWords.asString;
 
       /// This calls the framework's InheritedWidget to rebuild
@@ -183,7 +183,10 @@ class WordPairsTimer extends ControllerMVC {
       _callback = callback!;
     }
 
-    timer = Timer.periodic(_duration, (timer) => _callback());
+    timer = Timer.periodic(
+      _duration,
+      (timer) => _callback(),
+    );
   }
 
   /// Cancel the timer
@@ -200,7 +203,7 @@ class _WordPair extends StatelessWidget {
   Widget build(BuildContext context) {
     /// This is where the magic happens.
     /// This Widget becomes a dependent of an InheritedWidget deep in the framework.
-    con.appStateObject?.inheritWidget(context);
+    con.appStateObject?.widgetInherited(context);
 
     // String data;
     //

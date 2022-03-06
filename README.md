@@ -66,8 +66,7 @@ class MyApp extends AppMVC {
 }
 
 class View extends AppState {
-  factory View() => _this ??= View._();
-  View._()
+  View()
       : super(
           title: 'Flutter Demo',
           home: const MyHomePage(),
@@ -76,7 +75,6 @@ class View extends AppState {
             primarySwatch: Colors.blue,
           ),
         );
-  static View? _this;
 }
 
 class MyHomePage extends StatefulWidget {

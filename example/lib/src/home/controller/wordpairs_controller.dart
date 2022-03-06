@@ -16,6 +16,12 @@ class WordPairsController extends ControllerMVC {
   final WordPairsTimer timer;
   final WordPairsModel model;
 
+  @override
+  void initState() {
+    super.initState();
+    model.addState(state);
+  }
+
   /// Start up the timer.
   void initTimer() => timer.initTimer();
 
