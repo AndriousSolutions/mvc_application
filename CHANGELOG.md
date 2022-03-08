@@ -1,4 +1,8 @@
 
+## 8.8.1
+ March 08, 2022
+- Collect the device's information but not in the Windows platform
+
 ## 8.8.0+01
  March 06, 2022
 - Dart sdk: '>=2.16.1 <3.0.0'

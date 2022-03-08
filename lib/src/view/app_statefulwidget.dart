@@ -106,9 +106,6 @@ abstract class AppMVC extends StatelessWidget {
         /// Collect installation & connectivity information
         await _app.initInternal();
 
-        /// Collect the device's information
-        await v.App.getDeviceInfo();
-
         /// Set theme using App's menu system if any theme was saved.
         v.App.setThemeData();
 
@@ -131,6 +128,11 @@ abstract class AppMVC extends StatelessWidget {
 
         // Now add the AppController passed in through the runApp() function
         _vw!.add(controller);
+
+        /// Collect the device's information but not in the Windows platform
+        if (!UniversalPlatform.isWindows) {
+          await v.App.getDeviceInfo();
+        }
 
         // //todo: No need. Replaced with the controller's initState() function.
         // if (init) {

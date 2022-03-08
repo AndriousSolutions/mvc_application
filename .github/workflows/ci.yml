@@ -22,8 +22,8 @@ jobs:
     runs-on: ubuntu-latest
 
     # A job contains a sequence of tasks called steps.
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       # Setup Java environment in order to build the Android app.
       - uses: actions/setup-java@v1
