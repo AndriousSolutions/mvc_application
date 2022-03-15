@@ -1,4 +1,10 @@
 
+## 8.8.2
+ March 15, 2022
+- Widget build(BuildContext context) => buildApp(context); // Override build()
+- Use latest l10n_translator
+- import InheritedStateMVC from mvc_pattern
+
 ## 8.8.1
  March 08, 2022
 - Collect the device's information but not in the Windows platform

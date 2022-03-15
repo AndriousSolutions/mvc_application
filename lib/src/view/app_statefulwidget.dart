@@ -163,6 +163,7 @@ abstract class AppMVC extends StatelessWidget {
   /// Run the CircularProgressIndicator() until asynchronous operations are
   /// completed before the app proceeds.
   Widget _futureBuilder(AsyncSnapshot<bool> snapshot, Widget? loading) {
+    //
     if (snapshot.hasData &&
         snapshot.data! &&
         (v.App.isInit != null && v.App.isInit!)) {

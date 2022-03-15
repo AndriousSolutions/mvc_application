@@ -19,10 +19,10 @@ class TemplateView extends AppState {
           inTitle: () => 'Demo App'.tr,
           debugShowCheckedModeBanner: false,
           switchUI: Prefs.getBool('switchUI'),
-//          locale: AppTrs.appLocale,
+          locale: AppTrs.textLocale,
           supportedLocales: AppTrs.supportedLocales,
           localizationsDelegates: [
-            L10n.delegate,
+            L10n.delegate!,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,

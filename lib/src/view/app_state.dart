@@ -538,6 +538,11 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
     }
   }
 
+  /// Override the FutureBuilder(). 
+  /// This package has its own FutureBuilder() and it's already run.
+  @override
+  Widget build(BuildContext context) => buildApp(context);
+  
   @override
   void dispose() {
     _navigatorKey = null;
@@ -685,10 +690,9 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
     if (inLocalizationsDelegates != null) {
       yield* inLocalizationsDelegates!();
     }
-    // Supply MaterialLocalizations just in case you're in Cupertino interface.
-    yield DefaultMaterialLocalizations.delegate;
-    // Very important to allow Material to Cupertino and back!
-    yield v.L10nDelegate();
+    if (v.L10n.delegate != null) {
+      yield v.L10n.delegate!;
+    }
   }
 
   /// Returns 'Locale Resolutions' routine if any.
@@ -698,7 +702,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
   /// Returns 'Local Resolution' routine if any.
   /// Turn to the I10n class to provide the locale.
   LocaleResolutionCallback? onLocaleResolutionCallback() =>
-      inLocaleResolutionCallback ?? v.L10n.localeResolutionCallback;
+      inLocaleResolutionCallback; // ?? v.L10n.localeResolutionCallback;
 
   /// Returns the Locale Iteration if any.
   List<Locale> onSupportedLocales() => inSupportedLocales != null

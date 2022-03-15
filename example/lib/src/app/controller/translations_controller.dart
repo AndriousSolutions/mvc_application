@@ -5,7 +5,7 @@ import 'package:mvc_application_example/src/view.dart';
 //ignore: non_constant_identifier_names
 final AppTrs = AppTranslations();
 
-class AppTranslations extends L10nTranslations {
+class AppTranslations extends L10n {
   factory AppTranslations() => _this ??= AppTranslations._();
   AppTranslations._();
   static AppTranslations? _this;

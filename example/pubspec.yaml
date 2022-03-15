@@ -32,11 +32,6 @@ dependencies:
   # https://pub.dev/packages/flutter_material_color_picker/
   flutter_material_color_picker: ^1.0.0
 
-  # https://pub.dev/packages/i10n_translator/
-  # /// Proven very important in createElement()!
-  l10n_translator: ^2.0.0
-#    path: ../../../packages/l10n_translator
-
   # https://pub.dev/packages/mvc_application
   mvc_application: #^8.0.0
       path: ../

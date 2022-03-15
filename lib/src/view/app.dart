@@ -362,7 +362,7 @@ class App {
   /// Set the App's Locale
   /// If 'supportedLocales' are specified, this Locale must be among them.
   static set locale(Locale? locale) {
-    if (locale != null && v.L10n.setAppLocale(locale)) {
+    if (locale != null && v.L10n.setLocale(locale)) {
       _appState?.locale = locale;
     }
   }
