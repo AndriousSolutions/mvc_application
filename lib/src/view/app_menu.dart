@@ -16,36 +16,8 @@
 ///          Created  09 Feb 2019
 ///
 ///
-import 'package:flutter/material.dart'
-    show
-        BuildContext,
-        Builder,
-        Color,
-        ColorSwatch,
-        EdgeInsets,
-        EdgeInsetsGeometry,
-        FloatingActionButtonThemeData,
-        Key,
-        Material,
-        Offset,
-        PopupMenuButton,
-        PopupMenuCanceled,
-        PopupMenuDivider,
-        PopupMenuEntry,
-        PopupMenuItem,
-        PopupMenuItemBuilder,
-        PopupMenuItemSelected,
-        ScaffoldMessenger,
-        ShapeBorder,
-        SnackBar,
-        Text,
-        ThemeData,
-        Widget,
-        showAboutDialog;
 
-import 'package:mvc_application/view.dart' show App, L10n, StateMVC;
-
-import 'package:mvc_application/controller.dart' show Prefs;
+import 'package:mvc_application/view.dart';
 
 /// Exports that will be likely required by the subclass.
 export 'package:flutter/material.dart'
@@ -135,16 +107,7 @@ class AppMenu {
     if (value is! String) {
       return;
     }
-    // Set the current colour.
-    // ColorPicker.color = App.themeData!.primaryColor;
     switch (value) {
-      case 'Color':
-        // ColorPicker.showColorPicker(
-        //     context: _state!.context,
-        //     onColorChange: AppMenu.onColorChange,
-        //     onChange: AppMenu.onChange,
-        //     shrinkWrap: true);
-        break;
       case 'About':
         showAboutDialog(
             context: _state!.context,
@@ -157,45 +120,6 @@ class AppMenu {
       default:
     }
   }
-
-  /// Implement to take in a color change.
-  static void onColorChange(Color value) {}
-
-  /// In response to a color change
-  /// Pass in the new value.
-  static void onChange([ColorSwatch<int?>? value]) {
-    //
-    if (value == null) {
-      final swatch = Prefs.getInt('colorTheme', -1);
-      // If never set in the first place, ignore
-      if (swatch > -1) {
-        // value = ColorPicker.colors[swatch];
-        // ColorPicker.colorSwatch = value;
-      }
-    } else {
-      // Prefs.setInt('colorTheme', ColorPicker.colors.indexOf(value));
-    }
-
-    if (value == null) {
-      return;
-    }
-
-    /// Assign the colour to the floating button as well.
-    App.themeData = ThemeData(
-      primaryColor: value,
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: value,
-      ),
-    );
-
-    App.iOSTheme = value;
-
-    // Rebuild the state.
-    _state?.refresh();
-  }
-
-  /// Turn to the App's menu to set the App's theme.
-  static void setThemeData() => onChange();
 }
 
 /// Abstract class to implement the App's popup menu.

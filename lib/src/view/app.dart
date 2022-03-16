@@ -267,6 +267,7 @@ class App {
   // Allow it to be assigned null.
   /// The App's current Material theme.
   static ThemeData? get themeData => _themeData;
+
   static set themeData(dynamic value) {
     if (value == null) {
       return;

@@ -1,4 +1,11 @@
 
+## 8.8.3
+ March 16, 2022
+- var init = v.App.isInit; // In case this app is called by another app.
+- Error fix: "dependOnInheritedElement() was called before initState() completed"
+- Removed any reference to ColorPicker in app_menu.dart
+- v.App.themeData ??= ThemeData.light();  Assigned the default Flutter theme
+
 ## 8.8.2+01
  March 15, 2022
 - Widget build(BuildContext context) => buildWidget(context); // Override build()

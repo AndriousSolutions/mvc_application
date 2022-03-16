@@ -358,39 +358,14 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
   /// Allows you to 're-create' the home widget's state object.
   static Key homeKey = UniqueKey();
 
-  /// The App State's initialization function.
-  @override
-  void initState() {
-    /// If not already, have the app assign the theme in the Material platform.
-    final themeData = theme ?? onTheme();
-
-    if (themeData != null) {
-      v.App.themeData = themeData;
-    }
-
-    // The app may supply a theme.
-    v.App.themeData ??= ThemeData.light();
-
-    /// If not already, have the app assign the theme in the Cupertino platform.
-    final iOSThemeData = iOSTheme ?? oniOSTheme();
-
-    if (iOSThemeData != null) {
-      v.App.iOSTheme = iOSThemeData;
-    }
-
-    v.App.iOSTheme ??=
-        MaterialBasedCupertinoThemeData(materialTheme: v.App.themeData!);
-
-    /// Called last. A Controller may want to change the 'theme.'
-    super.initState();
-  }
-
   /// Override to impose your own WidgetsApp (like CupertinoApp or MaterialApp)
   @override
   Widget buildApp(BuildContext context) {
     //
+    Widget app;
+
     if (useCupertino!) {
-      return CupertinoApp(
+      app = CupertinoApp(
         key: key ?? v.App.widgetsAppKey,
         navigatorKey: navigatorKey ?? onNavigatorKey(),
         routes: routes ?? onRoutes() ?? const <String, WidgetBuilder>{},
@@ -404,7 +379,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
         title: title = onTitle(),
         onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
         color: color ?? onColor() ?? Colors.blue,
-        theme: iOSTheme ?? oniOSTheme() ?? v.App.iOSTheme,
+        theme: v.App.iOSTheme ??= iOSTheme ?? oniOSTheme(),
         locale: locale ?? onLocale(),
         localizationsDelegates:
             localizationsDelegates ?? onLocalizationsDelegates(),
@@ -442,7 +417,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
         _routeInformationParser = v.AppRouteInformationParser();
       }
       if (_routerDelegate == null || _routeInformationParser == null) {
-        return MaterialApp(
+        app = MaterialApp(
           key: key ?? v.App.widgetsAppKey,
           navigatorKey: navigatorKey ?? onNavigatorKey(),
           scaffoldMessengerKey:
@@ -458,7 +433,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
           title: title = onTitle(),
           onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
           color: color ?? onColor() ?? Colors.white,
-          theme: theme ?? onTheme() ?? v.App.themeData,
+          theme: v.App.themeData ??= theme ?? onTheme(),
           darkTheme: darkTheme ?? onDarkTheme(),
           themeMode: themeMode ?? onThemeMode(),
           locale: locale ?? onLocale(),
@@ -490,7 +465,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
           home: home ?? onHome(),
         );
       } else {
-        return MaterialApp.router(
+        app = MaterialApp.router(
           key: key ?? v.App.widgetsAppKey,
           backButtonDispatcher:
               backButtonDispatcher ?? onBackButtonDispatcher(),
@@ -500,7 +475,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
           title: title = onTitle(),
           onGenerateTitle: onGenerateTitle ?? onOnGenerateTitle(context),
           color: color ?? onColor() ?? Colors.white,
-          theme: theme ?? onTheme() ?? v.App.themeData,
+          theme: v.App.themeData ??= theme ?? onTheme(),
           darkTheme: darkTheme ?? onDarkTheme(),
           themeMode: themeMode ?? onThemeMode(),
           locale: locale ?? onLocale(),
@@ -535,6 +510,16 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
         );
       }
     }
+
+    // The theme may not have been set. This property must have a value.
+    // Assign Flutter's current theme default
+    v.App.themeData ??= ThemeData.light();
+
+    // Supply the iOS theme if necessary.
+    v.App.iOSTheme ??=
+        MaterialBasedCupertinoThemeData(materialTheme: v.App.themeData!);
+
+    return app;
   }
 
   /// Override the FutureBuilder().

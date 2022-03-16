@@ -109,6 +109,7 @@ class TemplateController extends AppController {
 
   /// Working with the ColorPicker to change the app's color theme
   void onColorPicker([ColorSwatch<int?>? value]) {
+    //
     App.setThemeData(value);
     App.refresh();
   }

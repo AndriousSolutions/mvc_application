@@ -95,7 +95,16 @@ abstract class AppMVC extends StatelessWidget {
 
   /// Runs all the asynchronous operations necessary before the app can proceed.
   Future<bool> initAsync() async {
-    var init = true;
+    //
+    var init = v.App.isInit;
+
+    // This has already been called??
+    // Possibly this app's called by another app.
+    if (init != null) {
+      return init;
+    }
+
+    init = true;
 
     try {
       //
@@ -129,15 +138,10 @@ abstract class AppMVC extends StatelessWidget {
         // Now add the AppController passed in through the runApp() function
         _vw!.add(controller);
 
-        /// Collect the device's information but not in the Windows platform
-        if (!UniversalPlatform.isWindows) {
+        // Collect the device's information but not in certain platforms
+        if (!UniversalPlatform.isWindows && !UniversalPlatform.isWeb) {
           await v.App.getDeviceInfo();
         }
-
-        // //todo: No need. Replaced with the controller's initState() function.
-        // if (init) {
-        //   _vw?.con?.initApp();
-        // }
       }
     } catch (e) {
       init = false;
