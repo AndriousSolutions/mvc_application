@@ -1,7 +1,7 @@
 
-## 8.8.2
+## 8.8.2+01
  March 15, 2022
-- Widget build(BuildContext context) => buildApp(context); // Override build()
+- Widget build(BuildContext context) => buildWidget(context); // Override build()
 - Use latest l10n_translator
 - import InheritedStateMVC from mvc_pattern
 

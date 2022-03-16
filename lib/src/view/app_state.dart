@@ -36,7 +36,6 @@ import 'package:mvc_application/view.dart' as v
         AppErrorHandler,
         AppRouteInformationParser,
         L10n,
-        L10nDelegate,
         ReportErrorHandler;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
@@ -538,11 +537,11 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
     }
   }
 
-  /// Override the FutureBuilder(). 
+  /// Override the FutureBuilder().
   /// This package has its own FutureBuilder() and it's already run.
   @override
-  Widget build(BuildContext context) => buildApp(context);
-  
+  Widget build(BuildContext context) => buildWidget(context);
+
   @override
   void dispose() {
     _navigatorKey = null;
