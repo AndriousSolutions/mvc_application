@@ -54,8 +54,10 @@ class DataFields<T> extends _AddFields<T> {
 
   FormState? _formState;
 
+  ///
   Widget linkForm(Widget child) => _ChildForm<T>(parent: this, child: child);
 
+  ///
   bool saveForm() {
     final save = _formState?.validate() ?? true;
     if (save) {
@@ -368,16 +370,19 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     crossAxisEndOffset ??= 0.0;
   }
 
+  ///
   T? object;
 
   dynamic _initValue;
 
   bool _valueChanged = false;
 
+  ///
   Iterable<DataFieldItem>? items;
 
   static final ThemeData? _theme = App.themeData;
 
+  ///
   String? get key => _key;
   String? _key;
 
@@ -430,24 +435,40 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
 
   /// The maximum string length that can be entered into the TextField.
   int? maxLength;
+
+  ///
   ValueChanged<String>? changed;
+
+  ///
   VoidCallback? editingComplete;
+
+  ///
   ValueChanged<String>? fieldSubmitted;
+
+  ///
   FormFieldSetter<String>? saved;
+
+  ///
   FormFieldValidator<String>? validator;
 
   /// Optional input validation and formatting overrides.
   List<TextInputFormatter>? inputFormatters;
 
   /// If false the text field is "disabled": it ignores taps and its
-  /// [decoration] is rendered in grey.
+  /// decoration is rendered in grey.
   bool? enabled;
 
   /// The appearance of the keyboard.
   /// This setting is only honored on iOS devices.
   Brightness? keyboardAppearance;
+
+  ///
   EdgeInsets? scrollPadding;
+
+  ///
   InputCounterWidgetBuilder? buildCounter;
+
+  ///
   ScrollPhysics? scrollPhysics;
 
   /// A list of strings that helps the autofill service identify the type of this
@@ -464,7 +485,10 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
 
   // final TextStyle style;
   // final TextAlign textAlign;
+  ///
   TextDirection? textDirection;
+
+  ///
   Locale? locale;
 
   /// If the [softWrap] is true or null, the glyph causing overflow, and those that follow,
@@ -510,7 +534,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
   /// Defines how compact the list tile's layout will be.
   VisualDensity? visualDensity;
 
-  /// Defines the tile's [InkWell.customBorder] and [Ink.decoration] shape.
+  /// Defines the tile's ['InkWell.customBorder'] and [Ink.decoration] shape.
   ShapeBorder? shape;
 
   /// Defines the color used for icons and text when the list tile is selected.
@@ -581,33 +605,62 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
   /// The size of the avatar, expressed as the radius (half the diameter).
   double? radius;
 
+  ///
   double? minRadius;
 
+  ///
   double? maxRadius;
 
   ///todo: [Dismissible]
   Widget? child;
+
+  ///
   Widget? background;
+
+  ///
   Widget? secondaryBackground;
+
+  ///
   VoidCallback? resize;
+
+  ///
   DismissDirectionCallback? dismissed;
+
+  ///
   DismissDirection? direction;
+
+  ///
   Duration? resizeDuration;
+
+  ///
   Map<DismissDirection, double>? dismissThresholds;
+
+  ///
   Duration? movementDuration;
+
+  ///
   double? crossAxisEndOffset;
 
-  ///todo: [CheckBox]
+  ///todo: ['CheckBox']
   bool? _checkValue;
+
+  ///
   ValueChanged<bool>? toggle;
+
+  ///
   Color? activeColor;
+
+  ///
   bool? tristate;
+
+  ///
   MaterialTapTargetSize? materialTapTargetSize;
 
   m.Widget? _textFormField;
   Dismissible? _dismissible;
   Checkbox? _checkbox;
 
+  ///
   m.Widget get textFormField {
     // if (items == null && value != null && value is! String) {
     //   items = value;
@@ -661,6 +714,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     ));
   }
 
+  ///
   m.TextFormField onTextFormField({
     TextEditingController? controller,
     String? initialValue,
@@ -731,6 +785,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     return newWidget as m.TextFormField;
   }
 
+  ///
   // ignore: non_constant_identifier_names
   m.Widget TextFormField({
     TextEditingController? controller,
@@ -830,6 +885,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     return valid;
   }
 
+  ///
   Text get text {
     // if (items == null && value != null && value is! String) {
     //   items = value;
@@ -862,6 +918,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     );
   }
 
+  ///
   Text onText({
     TextSpan? textSpan,
     TextStyle? style,
@@ -899,6 +956,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     return newWidget;
   }
 
+  ///
   Text get richText {
     if (textSpan == null) {
       return text;
@@ -921,6 +979,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     }
   }
 
+  ///
   Text onRichText({
     TextSpan? textSpan,
     TextStyle? style,
@@ -958,6 +1017,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     return newWidget;
   }
 
+  ///
   DefaultTextStyle get defaultTextStyle => DefaultTextStyle(
         key: Key('DefaultTextStyle$_key'),
         style: style!,
@@ -970,6 +1030,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
         child: child ?? text,
       );
 
+  ///
   DefaultTextStyle onDefaultTextStyle({
     TextStyle? style,
     TextAlign? textAlign,
@@ -991,6 +1052,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     return defaultTextStyle;
   }
 
+  ///
   Widget get listTile => App.useCupertino
       ? CupertinoListTile(
           key: Key('ListTile$_key'),
@@ -1025,6 +1087,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
           selectedTileColor: selectedTileColor,
         );
 
+  ///
   Widget onListTile({
     Widget? leading,
     Widget? title,
@@ -1063,13 +1126,16 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
   }
 
   //for LisTile
+  ///
   Widget? onLeading() => null;
 
+  ///
   Widget onTitle() => text;
 
   /// Override to produce a subtitle.
   Widget onSubtitle() => Text(label!);
 
+  ///
   Widget? onTrailing() => null;
 
   /// Override to place what happens when the field is tapped.
@@ -1078,6 +1144,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
   /// Override to place what happens when the field is 'long' pressed.
   void onLongPress() {}
 
+  ///
   CheckboxListTile get checkboxListTile => CheckboxListTile(
         key: Key('CheckboxListTile$_key'),
         value: _checkValue,
@@ -1093,6 +1160,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
         controlAffinity: controlAffinity!,
       );
 
+  ///
   CheckboxListTile onCheckboxListTile({
     bool? value,
     ValueChanged<bool>? onChanged,
@@ -1121,6 +1189,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
   /// A widget to display on the opposite side of the tile from the checkbox.
   Widget? onSecondary() => null;
 
+  ///
   CircleAvatar get circleAvatar => CircleAvatar(
         key: Key('CircleAvatar$_key'),
         backgroundColor: backgroundColor,
@@ -1132,6 +1201,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
         child: Text(initials(value)),
       );
 
+  ///
   CircleAvatar onCircleAvatar({
     Color? backgroundColor,
     Color? foregroundColor,
@@ -1149,6 +1219,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     return circleAvatar;
   }
 
+  ///
   Dismissible get dismissible => _dismissible ??= Dismissible(
         key: Key('Dismissible$_key'),
         background: background ?? onBackground(),
@@ -1164,6 +1235,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
         child: child ?? onChild(),
       );
 
+  ///
   Dismissible onDismissible({
     Widget? child,
     Widget? background,
@@ -1199,6 +1271,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
   }
 
   // for Dismissible
+  ///
   Widget onBackground() {
     return Container(
       color: Colors.red,
@@ -1223,6 +1296,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
   /// Override to place here what happens when the field is dismissed.
   void onDismissed(DismissDirection direction) {}
 
+  ///
   Checkbox get checkbox => _checkbox ??= Checkbox(
         key: Key('Checkbox$_key'),
         value: _checkValue,
@@ -1233,6 +1307,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
         materialTapTargetSize: materialTapTargetSize,
       );
 
+  ///
   Checkbox onCheckBox({
     bool? value,
     ValueChanged<bool>? onChanged,
@@ -1255,6 +1330,8 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
 
   @mustCallSuper
   @protected
+
+  ///
   void onChanged(String? value) {
     if (_initValue == null) {
       _valueChanged = value != null;
@@ -1264,6 +1341,8 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
   }
 
   @protected
+
+  ///
   bool isChanged({bool? changed}) {
     // Only record a change
     if (changed != null && changed) {
@@ -1272,8 +1351,10 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     return _valueChanged;
   }
 
+  ///
   void onToggle({bool? value}) {}
 
+  ///
   ListItems<T> get listItems => ListItems<T>(
         this,
         title: label,
@@ -1281,6 +1362,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
         dropItems: onDropItems() ?? [''],
       );
 
+  ///
   ListItems<T> onListItems({
     String? title,
     List<FieldWidgets<T>>? items,
@@ -1328,6 +1410,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     items = fields;
   }
 
+  ///
   List<Map<String, dynamic>> mapItems<U extends FieldWidgets<T>>(String key,
       List<DataFieldItem>? items, U Function(DataFieldItem dataItem) create,
       [U? itemsObj]) {
@@ -1366,6 +1449,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
     return list;
   }
 
+  ///
   String initials(String fullName) {
     //
     final names = fullName.split(' ');
@@ -1385,6 +1469,7 @@ class FieldWidgets<T> extends DataFieldItem with StateGetter {
 /// Cupertino needs a ListTile equivalent
 /// https://github.com/flutter/flutter/issues/50668
 class CupertinoListTile extends StatefulWidget {
+  ///
   const CupertinoListTile({
     Key? key,
     this.leading,
@@ -1393,10 +1478,20 @@ class CupertinoListTile extends StatefulWidget {
     this.trailing,
     this.onTap,
   }) : super(key: key);
+
+  ///
   final Widget? leading;
+
+  ///
   final Widget? title;
+
+  ///
   final Widget? subtitle;
+
+  ///
   final Widget? trailing;
+
+  ///
   final Function? onTap;
   @override
   _StatefulStateCupertino createState() => _StatefulStateCupertino();
@@ -1483,9 +1578,17 @@ class DataFieldItem {
     this.value = m[_value];
     this.type = m[_type];
   }
+
+  ///
   dynamic id;
+
+  ///
   String? label;
+
+  ///
   dynamic value;
+
+  ///
   dynamic type;
 
   String _id = 'id';
@@ -1510,6 +1613,7 @@ class DataFieldItem {
   }
 
   // Fix Error: type '_InternalLinkedHashMap<dynamic, dynamic>' is not a subtype of type 'Map<String, String>'
+  ///
   Map<String, dynamic> get toMap =>
       {_id: id, _label: label, _value: value, _type: type};
 }
@@ -1577,7 +1681,9 @@ mixin StateGetter {
   bool rebuild() => refresh();
 }
 
+///
 class ListItems<T> extends StatefulWidget {
+  ///
   const ListItems(
     this.field, {
     Key? key,
@@ -1589,12 +1695,25 @@ class ListItems<T> extends StatefulWidget {
     this.dropItems,
   }) : super(key: key);
 
+  ///
   final FieldWidgets<T> field;
+
+  ///
   final String? title;
+
+  ///
   final List<DataFieldItem>? items;
+
+  ///
   final MapItemFunction? mapItem;
+
+  ///
   final GestureTapCallback? onTap;
+
+  ///
   final ValueChanged<String?>? onChanged;
+
+  ///
   final List<String>? dropItems;
   @override
   State createState() => _LIstItemsState<T>();
@@ -1737,6 +1856,7 @@ class _LIstItemsState<T> extends State<ListItems<T>> {
   }
 }
 
+///
 typedef MapItemFunction = Widget Function(DataFieldItem i);
 
 /// Overcome ListView bug.
@@ -1747,10 +1867,13 @@ class FieldController extends TextEditingController {
 
 /// Used to test for a Map object before attempting to access it.
 class MapClass {
+  ///
   MapClass(this.map);
 
+  ///
   final Map<String, dynamic>? map;
 
+  ///
   dynamic p(String? key) {
     if (key == null || key.isEmpty) {
       return null;

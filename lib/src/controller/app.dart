@@ -32,7 +32,6 @@ class AppController extends ControllerMVC implements v.ConnectivityListener {
 
   /// Initialize any immediate 'none time-consuming' operations
   /// at the very beginning.
-  @override
   @Deprecated('No need. Use initState()')
   void initApp() {}
 
