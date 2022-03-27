@@ -1,4 +1,10 @@
 
+## 8.9.0
+ March 27, 2022
+- create the app-level State object with createAppState();
+- class AppMVC is deprecated replaced by AppStatefulWidget
+- Widget build(BuildContext context) => buildWidget(context);
+
 ## 8.8.3+01
  March 16, 2022
 - var init = v.App.isInit; // In case this app is called by another app.

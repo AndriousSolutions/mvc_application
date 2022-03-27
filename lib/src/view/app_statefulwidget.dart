@@ -15,41 +15,61 @@
 ///
 ///          Created  24 Dec 2018
 ///
-import 'dart:async' show Future;
 
 import 'package:flutter/cupertino.dart';
 
-import 'package:flutter/foundation.dart'
-    show FlutterExceptionHandler, Key, mustCallSuper, protected;
+import 'package:flutter/foundation.dart' show FlutterExceptionHandler, Key;
 
 import 'package:flutter/material.dart';
 
-import 'package:mvc_application/controller.dart'
-    show Assets, AppController, ControllerMVC;
+import 'package:mvc_application/controller.dart' show Assets, ControllerMVC;
 
 import 'package:mvc_application/view.dart' as v
-    show App, AppStatefulWidgetMVC, AppState, ReportErrorHandler, SetState;
-
-import 'package:prefs/prefs.dart' show Prefs;
-
-/// Replace 'dart:io' for Web applications
-import 'package:universal_platform/universal_platform.dart';
+    show App, AppState, AppStatefulWidgetMVC, ReportErrorHandler, SetState;
 
 /// Export the classes needed to use this file.
 export 'package:connectivity_plus/connectivity_plus.dart'
     show Connectivity, ConnectivityResult;
+
+import 'package:prefs/prefs.dart' show Prefs;
+
+import 'package:universal_platform/universal_platform.dart';
 
 /// Error Screen Builder if an error occurs.
 typedef ErrorWidgetBuilder = Widget Function(
     FlutterErrorDetails flutterErrorDetails);
 
 /// The widget passed to runApp().
-abstract class AppMVC extends StatelessWidget {
+@Deprecated("Use AppStatefulWidget instead. It's a StatefulWidget after all!")
+abstract class AppMVC extends AppStatefulWidget {
   /// The entrypoint of the framework passed to runApp()
   /// This is a StatelessWidget where you can define
   /// the loading screen or the App's error handling.
   AppMVC({
-    this.controller,
+    Key? key,
+    Widget? loadingScreen,
+    FlutterExceptionHandler? errorHandler,
+    ErrorWidgetBuilder? errorScreen,
+    v.ReportErrorHandler? errorReport,
+    bool allowNewHandlers = true,
+  }) : super(
+          key: key,
+          loadingScreen: loadingScreen,
+          errorHandler: errorHandler,
+          errorScreen: errorScreen,
+          errorReport: errorReport,
+          allowNewHandlers: allowNewHandlers,
+        );
+}
+
+/// The widget passed to runApp().
+/// The 'App' Stateful Widget. It's the StatefulWidget for the 'App' State object.
+/// extends the AppStatefulWidgetMVC found in the package, mvc_pattern.
+abstract class AppStatefulWidget extends StatefulWidget {
+  /// The entrypoint of the framework passed to runApp()
+  /// This is a StatelessWidget where you can define
+  /// the loading screen or the App's error handling.
+  AppStatefulWidget({
     Key? key,
     this.loadingScreen,
     FlutterExceptionHandler? errorHandler,
@@ -62,25 +82,27 @@ abstract class AppMVC extends StatelessWidget {
           errorReport: errorReport,
           allowNewHandlers: allowNewHandlers,
         ),
-        super(key: key) {
-    // Listen to the device's connectivity.
-    v.App.addConnectivityListener(controller);
-  }
+        super(key: key);
+
+  /// A simple screen displayed then starting up.
+  final Widget? loadingScreen;
+
+  // /// Reference to the 'app' object.
+  // v.App? get app => _app;
   final v.App _app;
 
-  /// The 'App' Controller passed in to have its initAsync() function called.
-  final AppController? controller;
+  /// Create the app-level State object.
+  v.AppState createAppState();
 
-  /// Create the app-level State object of type, AppState.
-  @protected
-  v.AppState createState();
+  /// Creates the App's State object.
+  @override
+  State createState() => _AppState();
+}
 
-  /// Gives access to the App's View.
-  static v.AppState? get vw => _vw;
-  static v.AppState? _vw;
-
-  /// Supply a loading screen.
-  final Widget? loadingScreen;
+class _AppState extends State<AppStatefulWidget> {
+  //
+  //
+  v.AppState? _appState;
 
   /// Implement from the abstract v.AppStatefulWidgetMVC to create the View!
   @override
@@ -90,7 +112,8 @@ abstract class AppMVC extends StatelessWidget {
         key: UniqueKey(), // UniqueKey() for hot reload
         future: initAsync(),
         initialData: false,
-        builder: (_, snapshot) => _futureBuilder(snapshot, loadingScreen));
+        builder: (_, snapshot) =>
+            _futureBuilder(snapshot, widget.loadingScreen));
   }
 
   /// Runs all the asynchronous operations necessary before the app can proceed.
@@ -106,6 +129,8 @@ abstract class AppMVC extends StatelessWidget {
 
     init = true;
 
+    final _widget = widget;
+
     try {
       //
       if (!v.App.hotReload) {
@@ -113,36 +138,25 @@ abstract class AppMVC extends StatelessWidget {
         await Prefs.init();
 
         /// Collect installation & connectivity information
-        await _app.initInternal();
+        await _widget._app.initInternal();
 
         /// Set theme using App's menu system if any theme was saved.
         v.App.setThemeData();
-
-        // Calls AppController passed in through the runApp() function
-        if (controller != null) {
-          init = await controller!.initAsync();
-        }
       }
 
-      if (init) {
-        // Create 'the View' for this MVC app.
-        _vw = createState();
+      // Create 'the View' for this MVC app.
+      _appState = _widget.createAppState();
 
-        // Supply the state object to the App object.
-        init = _app.setAppState(_vw);
+      // Supply the state object to the App object.
+      init = _widget._app.setAppState(_appState);
 
-        if (init) {
-          init = await _vw!.initAsync();
-        }
-
-        // Now add the AppController passed in through the runApp() function
-        _vw!.add(controller);
-
-        // Collect the device's information but not in certain platforms
-        if (!UniversalPlatform.isWindows && !UniversalPlatform.isWeb) {
-          await v.App.getDeviceInfo();
-        }
+      // Collect the device's information but not in certain platforms
+      if (!UniversalPlatform.isWindows && !UniversalPlatform.isWeb) {
+        await v.App.getDeviceInfo();
       }
+
+      // Perform any asynchronous operations.
+      await _appState!.initAsync();
     } catch (e) {
       init = false;
       v.App.isInit = false;
@@ -152,6 +166,7 @@ abstract class AppMVC extends StatelessWidget {
   }
 
   /// Clean up resources before the app is finally terminated.
+  @override
   @mustCallSuper
   void dispose() {
     //
@@ -159,9 +174,12 @@ abstract class AppMVC extends StatelessWidget {
     // Assets.init(context); called in App.build() -gp
     Assets.dispose();
     //
-    _app.dispose();
+    widget._app.dispose();
+
     // Remove the reference to the app's view
-    _vw = null;
+    _appState = null;
+    //
+    super.dispose();
   }
 
   /// Run the CircularProgressIndicator() until asynchronous operations are
@@ -172,7 +190,7 @@ abstract class AppMVC extends StatelessWidget {
         snapshot.data! &&
         (v.App.isInit != null && v.App.isInit!)) {
       //
-      return AppStatefulWidget(appState: _vw!);
+      return _AppStatefulWidget(appState: _appState!);
       //
     } else if (snapshot.hasError) {
       //
@@ -187,14 +205,14 @@ abstract class AppMVC extends StatelessWidget {
 
       var handled = false;
 
-      if (_vw != null) {
+      if (_appState != null) {
         //
-        handled = _vw!.onAsyncError(details);
+        handled = _appState!.onAsyncError(details);
       }
 
       if (!handled) {
         //
-        _app.onAsyncError(snapshot);
+        widget._app.onAsyncError(snapshot);
       }
       return v.App.errorHandler!.displayError(details);
       //
@@ -211,10 +229,6 @@ abstract class AppMVC extends StatelessWidget {
       FlutterError.reportError(details);
 
       return ErrorWidget.builder(details);
-
-      // } else if (snapshot.connectionState == ConnectionState.done ||
-      //     (v.App.isInit != null && v.App.isInit!)) {
-      //   return const v.AppStateWidget();
     } else {
       //
       Widget widget;
@@ -239,20 +253,15 @@ abstract class AppMVC extends StatelessWidget {
 
 /// The 'App' Stateful Widget. It's the StatefulWidget for the 'App' State object.
 /// extends the AppStatefulWidgetMVC found in the package, mvc_pattern.
-class AppStatefulWidget extends v.AppStatefulWidgetMVC {
+class _AppStatefulWidget extends v.AppStatefulWidgetMVC {
   /// Requires its 'App' State object be passed as a parameter.
-  const AppStatefulWidget({
+  const _AppStatefulWidget({
     Key? key,
     required this.appState,
-    @Deprecated("No longer pass 'con' to AppStatefulWidget. Supply to AppState instead.")
-        AppController? con,
   }) : super(key: key);
 
   /// The framework's 'App' State object.
   final v.AppState appState;
-
-  // /// Display the 'app State object' the developer has defined.
-  // Widget build(BuildContext context) => appState.build(context);
 
   /// Programmatically creates the App's State object.
   @override
@@ -282,7 +291,7 @@ class ConConsumer<T extends ControllerMVC> extends StatelessWidget {
   Widget build(BuildContext context) => v.SetState(
       builder: (context, [object]) => builder(
             context,
-            AppMVC._vw?.controllerByType<T>(),
+            v.App.vw!.controllerByType<T>(),
             child,
           ));
 }

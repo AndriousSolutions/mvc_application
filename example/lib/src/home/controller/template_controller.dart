@@ -102,9 +102,7 @@ class TemplateController extends AppController {
 
     unawaited(Prefs.setBool('words', _appNames[_appCount] == 'Word'));
 
-    unawaited(Prefs.setInt('appRun', _appCount));
-
-    App.refresh();
+    Prefs.setInt('appRun', _appCount).then((value) => App.refresh());
   }
 
   /// Working with the ColorPicker to change the app's color theme

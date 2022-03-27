@@ -3,11 +3,12 @@ import 'package:mvc_application_example/src/controller.dart';
 import 'package:mvc_application_example/src/view.dart';
 
 /// App
-class TemplateApp extends AppMVC {
-  TemplateApp({Key? key}) : super(key: key, controller: TemplateController());
+class TemplateApp extends AppStatefulWidget {
+  TemplateApp({Key? key}) : super(key: key);
+
   // This is the 'View' of the application.
   @override
-  AppState createState() => TemplateView();
+  AppState createAppState() => TemplateView();
 }
 
 // This is the 'View' of the application. The 'look and feel' of the app.

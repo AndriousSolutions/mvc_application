@@ -27,7 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:mvc_application/controller.dart'
-    show AppController, ControllerMVC;
+    show Assets, AppController, ControllerMVC;
 
 import 'package:mvc_application/view.dart' as v
     show
@@ -39,6 +39,8 @@ import 'package:mvc_application/view.dart' as v
         ReportErrorHandler;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
+
+import 'package:prefs/prefs.dart' show Prefs;
 
 /// Highlights UI while debugging.
 import 'package:flutter/rendering.dart' as debug;
@@ -358,6 +360,41 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
   /// Allows you to 're-create' the home widget's state object.
   static Key homeKey = UniqueKey();
 
+  /// Reference to the 'app' object.
+  v.App? get app => _app;
+
+  /// Set the 'app' object but only once!
+  set app(v.App? app) {
+    if (app != null) {
+      _app ??= app;
+    }
+  }
+
+  /// The app's representation
+  v.App? _app;
+
+  /// Clean up resources before the app is finally terminated.
+  @override
+  @mustCallSuper
+  void dispose() {
+    //
+    Prefs.dispose();
+    // Assets.init(context); called in App.build() -gp
+    Assets.dispose();
+    //
+    _app?.dispose();
+
+    _app = null;
+
+    _navigatorKey = null;
+
+    super.dispose();
+  }
+
+  /// Override build to avoid the built-in Future Builder. It's been run.
+  @override
+  Widget build(BuildContext context) => buildWidget(context);
+
   /// Override to impose your own WidgetsApp (like CupertinoApp or MaterialApp)
   @override
   Widget buildApp(BuildContext context) {
@@ -522,16 +559,11 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
     return app;
   }
 
-  /// Override the FutureBuilder().
-  /// This package has its own FutureBuilder() and it's already run.
-  @override
-  Widget build(BuildContext context) => buildWidget(context);
-
-  @override
-  void dispose() {
-    _navigatorKey = null;
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _navigatorKey = null;
+  //   super.dispose();
+  // }
 
   /// Override if you like to customize error handling.
   @override
@@ -894,23 +926,9 @@ abstract class _AppState<T extends mvc.AppStatefulWidgetMVC>
   bool? debugPaintLayerBordersEnabled;
   bool? debugRepaintRainbowEnabled;
 
-  /// Reference to the 'app' object.
-  v.App? get app => _app;
-
-  /// Set the 'app' object but only once!
-  set app(v.App? app) {
-    if (app != null) {
-      _app ??= app;
-    }
-  }
-
-  /// The app's representation
-  v.App? _app;
-
   @override
   void dispose() {
-//    _app?.dispose();
-    _app = null;
+    //
     _errorHandler?.dispose();
     _errorHandler = null;
     super.dispose();
