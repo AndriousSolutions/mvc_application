@@ -1,7 +1,8 @@
 
-## 8.10.0+01
+## 8.10.0+02
  March 31, 2022
 - super(key: key ?? GlobalKey()); in AppStatefulWidget
+- static bool disposeStatic = true; // Flag to dispose static objects
 
 ## 8.9.1
  March 30, 2022

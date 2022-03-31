@@ -171,16 +171,32 @@ class _AppState extends State<AppStatefulWidget> {
     return v.App.isInit = init;
   }
 
+  @override
+  @mustCallSuper
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Determine if this app has been called by another app.
+    final state = context.findRootAncestorStateOfType<_AppState>();
+    // Don't dispose if this app is called by another app
+    disposeStatic = state == null || state == this;
+  }
+
+  // Flag to dispose static objects
+  static bool disposeStatic = true;
+
   /// Clean up resources before the app is finally terminated.
   @override
   @mustCallSuper
   void dispose() {
-    //
-    Prefs.dispose();
-    // Assets.init(context); called in App.build() -gp
-    Assets.dispose();
-    //
-    widget._app.dispose();
+    // Don't dispose static references (i.e. App called an app)
+    if (disposeStatic) {
+      //
+      Prefs.dispose();
+      // Assets.init(context); called in App.build() -gp
+      Assets.dispose();
+      //
+      widget._app.dispose();
+    }
     // Remove the reference to the app's view
     _appState = null;
     //
