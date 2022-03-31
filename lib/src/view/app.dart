@@ -84,6 +84,7 @@ class App {
 
   /// Assign the class with the AppState object.
   bool setAppState(v.AppState? vw) {
+    // Don't continue if an app called an app.
     final set = vw != null && (_appState == null || hotReload);
     if (set) {
       //
@@ -130,8 +131,9 @@ class App {
     await DeviceInfo.initAsync();
   }
 
-  /// More efficient widget tree rebuilds
-  static final widgetsAppKey = GlobalKey();
+  /// Passed to the CupertinoApp or MaterialApp
+  @Deprecated('Prone to misuse. Can not be used more than once.')
+  static final widgetsAppKey = GlobalKey(debugLabel: 'mvc_app');
 
   /// Determine if the App initialized successfully.
   // ignore: unnecessary_getters_setters
@@ -318,6 +320,10 @@ class App {
   /// Set the App's general color theme supplying a [ColorSwatch] value.
   static ColorSwatch<int?>? setThemeData([ColorSwatch<int?>? value]) {
     //
+    if (!Prefs.ready()) {
+      return value;
+    }
+
     if (value != null) {
       Prefs.setInt(
         'colorTheme',
@@ -702,7 +708,7 @@ class App {
   /// Internal Initialization routines.
   Future<void> initInternal() async {
     //
-    _connectivitySubscription =
+    _connectivitySubscription ??=
         _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
       for (final listener in _listeners) {
         listener.onConnectivityChanged(result);
@@ -721,10 +727,10 @@ class App {
     }
 
     // Get the installation number
-    _installNum = await InstallFile.id();
+    _installNum ??= await InstallFile.id();
 
     // Determine the location to the files directory.
-    _path = await Files.localPath;
+    _path ??= await Files.localPath;
   }
 
   static Future<String> _initConnectivity() async {

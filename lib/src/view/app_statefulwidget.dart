@@ -104,6 +104,14 @@ class _AppState extends State<AppStatefulWidget> {
   //
   v.AppState? _appState;
 
+  @override
+  void initState() {
+    super.initState();
+    appKey = GlobalKey();
+  }
+
+  late GlobalKey appKey;
+
   /// Implement from the abstract v.AppStatefulWidgetMVC to create the View!
   @override
   Widget build(BuildContext context) {
@@ -119,44 +127,42 @@ class _AppState extends State<AppStatefulWidget> {
   /// Runs all the asynchronous operations necessary before the app can proceed.
   Future<bool> initAsync() async {
     //
-    var init = v.App.isInit;
+    var init = _appState != null;
 
-    // This has already been called??
     // Possibly this app's called by another app.
-    if (init != null) {
+    if (init && !v.App.hotReload) {
       return init;
     }
+    // or it's a hot reload
 
     init = true;
 
     final _widget = widget;
 
     try {
-      //
-      if (!v.App.hotReload) {
-        /// Initialize System Preferences
-        await Prefs.init();
+      /// Initialize System Preferences
+      await Prefs.init();
 
-        /// Collect installation & connectivity information
-        await _widget._app.initInternal();
+      /// Collect installation & connectivity information
+      await _widget._app.initInternal();
 
-        /// Set theme using App's menu system if any theme was saved.
-        v.App.setThemeData();
-      }
+      /// Set theme using App's menu system if any theme was saved.
+      v.App.setThemeData();
 
       // Create 'the View' for this MVC app.
       _appState = _widget.createAppState();
 
       // Supply the state object to the App object.
-      init = _widget._app.setAppState(_appState);
+      _widget._app.setAppState(_appState);
 
       // Collect the device's information but not in certain platforms
-      if (!UniversalPlatform.isWindows && !UniversalPlatform.isWeb) {
+      if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS) {
         await v.App.getDeviceInfo();
       }
 
       // Perform any asynchronous operations.
       await _appState!.initAsync();
+      //
     } catch (e) {
       init = false;
       v.App.isInit = false;
@@ -189,8 +195,8 @@ class _AppState extends State<AppStatefulWidget> {
     if (snapshot.hasData &&
         snapshot.data! &&
         (v.App.isInit != null && v.App.isInit!)) {
-      //
-      return _AppStatefulWidget(appState: _appState!);
+      // Supply a GlobalKey so the 'App' State object is not disposed of if moved in Widget tree.
+      return _AppStatefulWidget(key: appKey, appState: _appState!);
       //
     } else if (snapshot.hasError) {
       //

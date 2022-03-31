@@ -22,8 +22,6 @@ class CounterController extends AppController {
     super.initState();
     // Add this controller to the State object's lifecycle.
     wordPairsTimer.addState(state);
-    // initialize the timer
-    wordPairsTimer.initTimer();
   }
 
   // Merely for demonstration purposes. Erase if not using.
@@ -54,12 +52,6 @@ class CounterController extends AppController {
 
   /// Access to the timer
   WordPairsTimer get timer => wordPairsTimer;
-
-  /// Start up the timer
-  void initTimer() => wordPairsTimer.initTimer();
-
-  /// Cancel the timer
-  void cancelTimer() => wordPairsTimer.cancelTimer();
 
   /// The 'Controller' is calling the 'View' to call setState()
 //  void onPressed() => setState(() => _model.onPressed());

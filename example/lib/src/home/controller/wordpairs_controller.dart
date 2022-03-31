@@ -9,7 +9,7 @@ class WordPairsController extends ControllerMVC {
   factory WordPairsController([StateMVC? state]) =>
       _this ??= WordPairsController._(state);
   WordPairsController._(StateMVC? state)
-      : timer = WordPairsTimer(),
+      : timer = WordPairsTimer(seconds: 2),
         model = WordPairsModel(),
         super(state);
   static WordPairsController? _this;

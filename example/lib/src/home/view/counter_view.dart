@@ -176,7 +176,7 @@ class _BuildAndroid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-//    final widget = state.widget;
+    final widget = state.widget;
     final con = state.con;
     final appCon = state.appCon;
     return Scaffold(

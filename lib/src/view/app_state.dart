@@ -27,7 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:mvc_application/controller.dart'
-    show Assets, AppController, ControllerMVC;
+    show AppController, ControllerMVC;
 
 import 'package:mvc_application/view.dart' as v
     show
@@ -39,8 +39,6 @@ import 'package:mvc_application/view.dart' as v
         ReportErrorHandler;
 
 import 'package:mvc_pattern/mvc_pattern.dart' as mvc;
-
-import 'package:prefs/prefs.dart' show Prefs;
 
 /// Highlights UI while debugging.
 import 'package:flutter/rendering.dart' as debug;
@@ -358,6 +356,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
 
   /// Supply to the 'home' StatefulWidget
   /// Allows you to 're-create' the home widget's state object.
+  @Deprecated('Prone to misuse. Recursive deactivation if used more than once.')
   static Key homeKey = UniqueKey();
 
   /// Reference to the 'app' object.
@@ -373,17 +372,25 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
   /// The app's representation
   v.App? _app;
 
+  /// Supply a GlobalKey to the CupertinoApp and the MaterialApp
+  @override
+  void initState() {
+    super.initState();
+    cupertinoKey = GlobalKey();
+    materialKey = GlobalKey();
+  }
+
+  /// Key for the CupertinoApp
+  late GlobalKey cupertinoKey;
+
+  /// Key for the MaterialApp;
+  late GlobalKey materialKey;
+
   /// Clean up resources before the app is finally terminated.
   @override
   @mustCallSuper
   void dispose() {
     //
-    Prefs.dispose();
-    // Assets.init(context); called in App.build() -gp
-    Assets.dispose();
-    //
-    _app?.dispose();
-
     _app = null;
 
     _navigatorKey = null;
@@ -403,7 +410,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
 
     if (useCupertino!) {
       app = CupertinoApp(
-        key: key ?? v.App.widgetsAppKey,
+        key: key ?? cupertinoKey,
         navigatorKey: navigatorKey ?? onNavigatorKey(),
         routes: routes ?? onRoutes() ?? const <String, WidgetBuilder>{},
         initialRoute: initialRoute ?? onInitialRoute(),
@@ -455,7 +462,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
       }
       if (_routerDelegate == null || _routeInformationParser == null) {
         app = MaterialApp(
-          key: key ?? v.App.widgetsAppKey,
+          key: key ?? materialKey,
           navigatorKey: navigatorKey ?? onNavigatorKey(),
           scaffoldMessengerKey:
               scaffoldMessengerKey ?? onScaffoldMessengerKey(),
@@ -503,7 +510,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
         );
       } else {
         app = MaterialApp.router(
-          key: key ?? v.App.widgetsAppKey,
+          key: key ?? materialKey,
           backButtonDispatcher:
               backButtonDispatcher ?? onBackButtonDispatcher(),
           scaffoldMessengerKey:

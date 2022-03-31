@@ -9,6 +9,7 @@ import 'package:mvc_application/controller.dart';
 import 'package:english_words/english_words.dart';
 
 class WordPairsTimer extends ControllerMVC {
+  /// Only one instance of the class is necessary and desired.
   factory WordPairsTimer({
     int? seconds,
     Duration? duration,
@@ -36,7 +37,7 @@ class WordPairsTimer extends ControllerMVC {
   /// that this Controller is 'attached' to.
 
   TemplateView? get appStateObject =>
-      _appStateObject ??= ofState<TemplateView>();
+      _appStateObject ??= rootState as TemplateView;
   TemplateView? _appStateObject;
 
   final suggestions = <WordPair>[];
@@ -54,20 +55,24 @@ class WordPairsTimer extends ControllerMVC {
 
   @override
   void deactivate() {
-    timer.cancel();
-    super.deactivate();
+    cancelTimer();
+  }
+
+  @override
+  void activate() {
+    initTimer();
   }
 
   @override
   void dispose() {
     _appStateObject = null;
-    timer.cancel();
+    cancelTimer();
     super.dispose();
   }
 
   @override
   Future<bool> didPopRoute() {
-    timer.cancel();
+    cancelTimer();
     return super.didPopRoute();
   }
 
@@ -84,7 +89,7 @@ class WordPairsTimer extends ControllerMVC {
       /// AppLifecycleState.paused (may enter the suspending state at any time)
       /// AppLifecycleState.inactive (may be paused at any time)
       /// AppLifecycleState.suspending (Android only)
-      timer.cancel();
+      cancelTimer();
     }
   }
 
@@ -106,6 +111,7 @@ class WordPairsTimer extends ControllerMVC {
         return widget;
       });
 
+  /// Alternate approach. See class _WordPair
 //  Widget get wordPair => _WordPair(this);
   String _wordPair = '';
 
@@ -120,17 +126,19 @@ class WordPairsTimer extends ControllerMVC {
         twoWords = getWordPair();
       }
 
-      /// Changing the 'dataObject' will call the SetState class implemented above
-      /// and only that widget. Only it will be rebuilt; not the whole widget tree.
-      appStateObject?.dataObject = twoWords.asString;
-
       /// Alternate approach uses inheritWidget() and setStatesInherited() functions.
       _wordPair = twoWords.asString;
 
+      /// Option 1:  Simply rebuild the InheritedWidget
       /// This calls the framework's InheritedWidget to rebuild
-      // appStateObject?.setStatesInherited();
-      // appStateObject?.inheritedNeedsBuild();
+//      appStateObject?.buildInherited();
 
+      /// Option 2: Change dataObject will rebuild the InheritedWidget
+      /// Changing the 'dataObject' will call the SetState class implemented above
+      /// and only that widget.
+      appStateObject?.dataObject = _wordPair;
+
+      /// Option 3: Also changes dataObject and rebuilds the InheritedWidget
 //      appStateObject?.inheritedNeedsBuild(_wordPair);
     } catch (ex) {
       // Record the error.
@@ -138,7 +146,7 @@ class WordPairsTimer extends ControllerMVC {
 
       /// Stop the timer.
       /// Something is not working. Don't have the timer repeat it over and over.
-      timer.cancel();
+      cancelTimer();
 
       // Rethrow the error so to get processed by the App's error handler.
       rethrow;
@@ -158,8 +166,23 @@ class WordPairsTimer extends ControllerMVC {
     return suggestions[index];
   }
 
+  bool _initTimer = false;
+
+  /// Cancel the timer
+  void cancelTimer() {
+    _initTimer = false;
+    timer.cancel();
+  }
+
   /// Create a Timer to run periodically.
   void initTimer() {
+    // Initialize once.
+    if (_initTimer) {
+      return;
+    }
+
+    _initTimer = true;
+
     Duration _duration;
     void Function() _callback;
 
@@ -188,9 +211,6 @@ class WordPairsTimer extends ControllerMVC {
       (timer) => _callback(),
     );
   }
-
-  /// Cancel the timer
-  void cancelTimer() => timer.cancel();
 }
 
 /// Alternate approach to spontaneous rebuilds using the framework's InheritedWidget.

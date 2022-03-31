@@ -1,4 +1,13 @@
 
+## 8.9.1
+ March 30, 2022
+- Removed Prefs.dispose() from AppState dispose()
+- if (init && !v.App.hotReload) {  if called by another app
+- if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS)
+- Deprecated widgetsAppKey and homeKey
+- Supplied cupertinoKey and materialKey
+- Corrected example app: WordPairsTimer() removed and CounterPage(key: key);
+
 ## 8.9.0
  March 27, 2022
 - create the app-level State object with createAppState();

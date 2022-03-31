@@ -3,7 +3,7 @@ description: Flutter Framework for Applications using the MVC Design Pattern
 homepage: https://www.andrioussolutions.com
 repository: https://github.com/AndriousSolutions/mvc_application
 
-version: 8.9.0
+version: 8.9.1
 
 environment:
   sdk: '>=2.16.1 <3.0.0'
@@ -37,7 +37,7 @@ dependencies:
 
   # https://pub.dartlang.org/packages/mvc_pattern
   mvc_pattern: ^8.0.0
-      #path: ../../packages/mvc_pattern
+#    path: ../../packages/mvc_pattern
 
   # https://pub.dev/packages/package_info_plus
   package_info_plus: ^1.0.0
@@ -47,7 +47,7 @@ dependencies:
 
   # https://pub.dartlang.org/packages/prefs
   prefs: ^3.0.0
-  #  path: ../../packages/prefs
+#    path: ../../packages/prefs
 
   # https://pub.dev/packages/timezone
   timezone: ^0.8.0

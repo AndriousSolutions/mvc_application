@@ -55,11 +55,6 @@ class TemplateController extends AppController {
 
   Widget onHome() {
     //
-    final con = state?.controllerByType<WordPairsTimer>();
-
-    // Turn off the timer
-    con?.timer.cancel();
-
     _appCount = Prefs.getInt('appRun');
 
     final Key key = UniqueKey();
@@ -68,10 +63,10 @@ class TemplateController extends AppController {
 
     switch (_appNames[_appCount]) {
       case 'Word Pairs':
-        widget = WordPairs(key: AppState.homeKey);
+        widget = WordPairs(key: key);
         break;
       case 'Counter':
-        widget = CounterPage(key: AppState.homeKey);
+        widget = CounterPage(key: key);
         break;
       case 'Contacts':
         widget = ContactsList(key: key);
