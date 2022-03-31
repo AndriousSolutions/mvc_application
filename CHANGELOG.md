@@ -1,4 +1,9 @@
 
+## 8.10.0
+ March 31, 2022
+- // Don't dispose if this app is called by another app
+- super(key: key ?? GlobalKey()); in AppStatefulWidget
+
 ## 8.9.1
  March 30, 2022
 - Removed Prefs.dispose() from AppState dispose()

@@ -82,7 +82,7 @@ abstract class AppStatefulWidget extends StatefulWidget {
           errorReport: errorReport,
           allowNewHandlers: allowNewHandlers,
         ),
-        super(key: key);
+        super(key: key ?? GlobalKey());
 
   /// A simple screen displayed then starting up.
   final Widget? loadingScreen;
@@ -175,13 +175,16 @@ class _AppState extends State<AppStatefulWidget> {
   @override
   @mustCallSuper
   void dispose() {
-    //
-    Prefs.dispose();
-    // Assets.init(context); called in App.build() -gp
-    Assets.dispose();
-    //
-    widget._app.dispose();
-
+    // Determine if this app has been called by another app.
+    final state = context.findRootAncestorStateOfType<_AppState>();
+    // Don't dispose if this app is called by another app
+    if (state == this) {
+      Prefs.dispose();
+      // Assets.init(context); called in App.build() -gp
+      Assets.dispose();
+      //
+      widget._app.dispose();
+    }
     // Remove the reference to the app's view
     _appState = null;
     //
