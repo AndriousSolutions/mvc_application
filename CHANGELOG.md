@@ -1,7 +1,6 @@
 
-## 8.10.0
+## 8.10.0+01
  March 31, 2022
-- // Don't dispose if this app is called by another app
 - super(key: key ?? GlobalKey()); in AppStatefulWidget
 
 ## 8.9.1
