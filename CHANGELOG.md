@@ -1,4 +1,11 @@
 
+## 8.10.1
+ April 01, 2022
+- AppState refresh(); // Critical to have the App 'refresh' first.
+- State? get parentState /// Reference the 'parent' State object
+- void reload() /// Reload the whole App
+- sdk: '>=2.16.2 <3.0.0'
+
 ## 8.10.0+02
  March 31, 2022
 - super(key: key ?? GlobalKey()); in AppStatefulWidget

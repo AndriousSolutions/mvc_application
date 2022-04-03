@@ -179,10 +179,7 @@ class App {
           (_appState == null || _appState!.switchUI!));
 
   /// Explicitly change to a particular interface.
-  static void changeUI(String ui) {
-    _appState?.changeUI(ui);
-    refresh();
-  }
+  static void changeUI(String ui) => _appState?.changeUI(ui);
 
   /// Return the navigator key used by the App's View.
   static GlobalKey<NavigatorState>? get navigatorKey => _appState?.navigatorKey;
@@ -765,8 +762,11 @@ abstract class StateMVC<T extends StatefulWidget> extends mvc.StateMVC<T>
   @override
   void refresh() {
     if (mounted) {
-      super.refresh();
+      // Critical to have the App 'refresh' first.
+      // It uses a built-in InheritedWidget.
       App.refresh();
+      // Next refresh the current State object itself.
+      super.refresh();
     }
   }
 }

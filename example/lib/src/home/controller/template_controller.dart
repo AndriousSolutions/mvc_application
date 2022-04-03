@@ -22,6 +22,7 @@ class TemplateController extends AppController {
     //
     Navigator.popUntil(App.context!, ModalRoute.withName('/'));
 
+    // This has to be called first.
     App.changeUI(App.useMaterial ? 'Cupertino' : 'Material');
 
     bool switchUI;

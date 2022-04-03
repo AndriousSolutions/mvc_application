@@ -359,15 +359,18 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
   @Deprecated('Prone to misuse. Recursive deactivation if used more than once.')
   static Key homeKey = UniqueKey();
 
+  /// Reference the 'parent' State object
+  State? get parentState => _parentState;
+  State? _parentState;
+
+  /// Set the 'parent' State object but only once!
+  set parentState(State? state) => _parentState ??= state;
+
   /// Reference to the 'app' object.
   v.App? get app => _app;
 
   /// Set the 'app' object but only once!
-  set app(v.App? app) {
-    if (app != null) {
-      _app ??= app;
-    }
-  }
+  set app(v.App? app) => _app ??= app;
 
   /// The app's representation
   v.App? _app;
@@ -600,11 +603,11 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
 
   /// Explicity change to a particular interface.
   void changeUI(String? ui) {
+    //
     if (ui == null || ui.isEmpty) {
       return;
     }
-    // Assigned to the 'home' StatefulWidget to re-create Stat object.
-    homeKey = UniqueKey();
+
     ui = ui.trim();
     if (ui != 'Material' && ui != 'Cupertino') {
       return;
@@ -618,7 +621,12 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
       useCupertino = true;
       switchUI = UniversalPlatform.isAndroid;
     }
+    // Reload the whole App
+    reload();
   }
+
+  /// Reload the whole App
+  void reload() => _parentState?.setState(() {});
 
   /// Returns the App's Navigator's Key.
   GlobalKey<NavigatorState> onNavigatorKey() =>

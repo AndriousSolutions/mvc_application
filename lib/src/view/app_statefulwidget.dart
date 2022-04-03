@@ -107,10 +107,10 @@ class _AppState extends State<AppStatefulWidget> {
   @override
   void initState() {
     super.initState();
-    appKey = GlobalKey();
+    _appGlobalKey = GlobalKey();
   }
 
-  late GlobalKey appKey;
+  late GlobalKey _appGlobalKey;
 
   /// Implement from the abstract v.AppStatefulWidgetMVC to create the View!
   @override
@@ -152,6 +152,9 @@ class _AppState extends State<AppStatefulWidget> {
       // Create 'the View' for this MVC app.
       _appState = _widget.createAppState();
 
+      // Record this State object.
+      _appState?.parentState = this;
+
       // Supply the state object to the App object.
       _widget._app.setAppState(_appState);
 
@@ -179,10 +182,15 @@ class _AppState extends State<AppStatefulWidget> {
     final state = context.findRootAncestorStateOfType<_AppState>();
     // Don't dispose if this app is called by another app
     disposeStatic = state == null || state == this;
+    _appInApp = state != null && state != this;
   }
 
   // Flag to dispose static objects
   static bool disposeStatic = true;
+
+  // This App is within another App
+  static get appInApp => _appInApp;
+  static bool _appInApp = false;
 
   /// Clean up resources before the app is finally terminated.
   @override
@@ -203,6 +211,15 @@ class _AppState extends State<AppStatefulWidget> {
     super.dispose();
   }
 
+  /// Rebuild the State object
+  /// and supply and new key to 'reload' the app.
+  @override
+  void setState(VoidCallback fn) {
+    v.App.hotReload = true;
+    _appGlobalKey = GlobalKey();
+    super.setState(() {});
+  }
+
   /// Run the CircularProgressIndicator() until asynchronous operations are
   /// completed before the app proceeds.
   Widget _futureBuilder(AsyncSnapshot<bool> snapshot, Widget? loading) {
@@ -211,7 +228,7 @@ class _AppState extends State<AppStatefulWidget> {
         snapshot.data! &&
         (v.App.isInit != null && v.App.isInit!)) {
       // Supply a GlobalKey so the 'App' State object is not disposed of if moved in Widget tree.
-      return _AppStatefulWidget(key: appKey, appState: _appState!);
+      return _AppStatefulWidget(key: _appGlobalKey, appState: _appState!);
       //
     } else if (snapshot.hasError) {
       //
