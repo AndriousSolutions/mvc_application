@@ -82,7 +82,7 @@ abstract class AppStatefulWidget extends StatefulWidget {
           errorReport: errorReport,
           allowNewHandlers: allowNewHandlers,
         ),
-        super(key: key ?? GlobalKey());
+        super(key: key ?? GlobalKey<_StateApp>()); // Allows app calling app
 
   /// A simple screen displayed then starting up.
   final Widget? loadingScreen;
@@ -96,18 +96,18 @@ abstract class AppStatefulWidget extends StatefulWidget {
 
   /// Creates the App's State object.
   @override
-  State createState() => _AppState();
+  State createState() => _StateApp();
 }
 
-class _AppState extends State<AppStatefulWidget> {
-  //
+/// This State object sets up the App to run.
+class _StateApp extends State<AppStatefulWidget> {
   //
   v.AppState? _appState;
 
   @override
   void initState() {
     super.initState();
-    _appGlobalKey = GlobalKey();
+    _appGlobalKey = GlobalKey<v.AppState>();
   }
 
   late GlobalKey _appGlobalKey;
@@ -179,9 +179,10 @@ class _AppState extends State<AppStatefulWidget> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Determine if this app has been called by another app.
-    final state = context.findRootAncestorStateOfType<_AppState>();
+    final state = context.findRootAncestorStateOfType<_StateApp>();
     // Don't dispose if this app is called by another app
     disposeStatic = state == null || state == this;
+    // A flag indicating if this app is called by another app
     _appInApp = state != null && state != this;
   }
 
@@ -216,7 +217,7 @@ class _AppState extends State<AppStatefulWidget> {
   @override
   void setState(VoidCallback fn) {
     v.App.hotReload = true;
-    _appGlobalKey = GlobalKey();
+    _appGlobalKey = GlobalKey<v.AppState>();
     super.setState(() {});
   }
 

@@ -26,7 +26,7 @@ class WordPairsController extends ControllerMVC {
   void initTimer() => timer.initTimer();
 
   /// Cancel the timer
-  void cancelTimer() => timer.timer.cancel();
+  void cancelTimer() => timer.timer?.cancel();
 
   Widget get wordPair => timer.wordPair;
 

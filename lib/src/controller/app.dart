@@ -71,6 +71,4 @@ class ControllerMVC extends mvc.ControllerMVC with HandleError {
 
   /// The current StateMVC object from mvc_application/view.dart
   v.StateMVC? get stateMVC => state as v.StateMVC?;
-
-  // String addState(v.StateMVC? state) => super.addState(state as mvc.StateMVC);
 }

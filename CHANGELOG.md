@@ -1,10 +1,20 @@
 
+## 8.11.0
+ April 16, 2022
+- // address the possibility an App has called another App.
+- _state = lastContext?.findAncestorStateOfType<_AppState>();
+- // Determine if this app has been called by another app.
+- final state = context.findRootAncestorStateOfType<_AppState>();
+- /// Current Screen Size
+- static Size get screenSize => MediaQueryData.fromWindow(mainWindow).size;
+- sdk: ">=2.16.2 <3.0.0"
+
 ## 8.10.1+02
  April 01, 2022
 - AppState refresh(); // Critical to have the App 'refresh' first.
 - State? get parentState /// Reference the 'parent' State object
 - void reload() /// Reload the whole App
-- sdk: ^2.16.0 #'>=2.16.2 <3.0.0'
+- sdk: ^2.16.0 #'>=2.16.2 <3.0.0'  <--- Incorrect.
 
 ## 8.10.0+02
  March 31, 2022

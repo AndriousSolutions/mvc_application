@@ -19,6 +19,8 @@
 
 import 'dart:async' show Future, StreamSubscription;
 
+import 'dart:ui' as ui show SingletonFlutterWindow;
+
 // Replace 'dart:io' for Web applications
 import 'package:universal_platform/universal_platform.dart';
 
@@ -180,6 +182,11 @@ class App {
 
   /// Explicitly change to a particular interface.
   static void changeUI(String ui) => _appState?.changeUI(ui);
+
+  /// Flutter application's main window.
+  static ui.SingletonFlutterWindow get mainWindow =>
+      _window ??= WidgetsBinding.instance!.window;
+  static ui.SingletonFlutterWindow? _window;
 
   /// Return the navigator key used by the App's View.
   static GlobalKey<NavigatorState>? get navigatorKey => _appState?.navigatorKey;
@@ -359,7 +366,7 @@ class App {
   static Locale? get locale =>
       _appState?.locale ??= Localizations.maybeLocaleOf(context!) ??
           _resolveLocales(
-            WidgetsBinding.instance!.window.locales,
+            mainWindow.locales,
             _appState?.supportedLocales,
           );
 
@@ -635,8 +642,20 @@ class App {
         kBottomNavigationBarHeight;
   }
 
-  /// Screen Size
-  static Size get screenSize => MediaQuery.of(context!).size;
+  // /// Current Screen Size
+  // static Size get screenSize {
+  //   Size? size;
+  //   final _context = context;
+  //   if (_context == null) {
+  //     size = MediaQueryData.fromWindow(mainWindow).size;
+  //   } else {
+  //     size = MediaQuery.of(_context).size;
+  //   }
+  //   return size;
+  // }
+
+  /// Current Screen Size
+  static Size get screenSize => MediaQueryData.fromWindow(mainWindow).size;
 
   /// Set whether the app is to use a 'small screen' or not.
   /// Determine if running on a desktop or on a phone or tablet

@@ -31,7 +31,7 @@ class WordPairsTimer extends ControllerMVC {
   final int? count;
   final WordPairsModel model;
 
-  late Timer timer;
+  Timer? timer;
 
   /// Retrieve a particular State object of a specific type
   /// that this Controller is 'attached' to.
@@ -171,7 +171,7 @@ class WordPairsTimer extends ControllerMVC {
   /// Cancel the timer
   void cancelTimer() {
     _initTimer = false;
-    timer.cancel();
+    timer?.cancel();
   }
 
   /// Create a Timer to run periodically.

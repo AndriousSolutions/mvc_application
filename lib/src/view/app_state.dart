@@ -594,6 +594,22 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
     _inError = false;
   }
 
+  /// Refresh the most 'recent' app.
+  /// This is to address the possibility an App has called another App.
+  @override
+  void refresh() {
+    _AppState? _state;
+    if (_AppState._appInApp) {
+      _state = lastContext?.findAncestorStateOfType<_AppState>();
+    }
+    if (_state == null) {
+      // Refresh the 'root' State object.
+      super.refresh();
+    } else {
+      _state.setState(() {});
+    }
+  }
+
   /// During development, if a hot reload occurs, the reassemble method is called.
   @override
   void reassemble() {
@@ -601,7 +617,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
     super.reassemble();
   }
 
-  /// Explicity change to a particular interface.
+  /// Explicitly change to a particular interface.
   void changeUI(String? ui) {
     //
     if (ui == null || ui.isEmpty) {
@@ -940,6 +956,22 @@ abstract class _AppState<T extends mvc.AppStatefulWidgetMVC>
   bool? debugPaintPointersEnabled;
   bool? debugPaintLayerBordersEnabled;
   bool? debugRepaintRainbowEnabled;
+
+  @override
+  @mustCallSuper
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Determine if this app has been called by another app.
+    final state = context.findRootAncestorStateOfType<_AppState>();
+
+    if (state != null && !_appInApp) {
+      // A flag indicating if this app is called by another app
+      _appInApp = state != this;
+    }
+  }
+
+  // This App is within another App
+  static bool _appInApp = false;
 
   @override
   void dispose() {
