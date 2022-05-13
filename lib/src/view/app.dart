@@ -564,8 +564,14 @@ class App {
   /// Determines if running in an IDE or in production.
   static bool get inDebugger => _appState?.inDebugger ?? false;
 
+  /// Refresh the root State object with the passed function.
+  static void setState(VoidCallback fn) => _appState?.setState(fn);
+
   /// Refresh the root State object.
   static void refresh() => _appState?.refresh();
+
+  /// Rebuild the InheritedWidget of the 'closes' InheritedStateMVC object if any.
+  static void buildInherited() => _appState?.buildInherited();
 
   /// Display the SnackBar
   static void snackBar({
@@ -780,10 +786,10 @@ abstract class StateMVC<T extends StatefulWidget> extends mvc.StateMVC<T>
 
   @override
   void refresh() {
+    // Critical to have the App 'refresh' first.
+    // It uses a built-in InheritedWidget.
+    App.refresh();
     if (mounted) {
-      // Critical to have the App 'refresh' first.
-      // It uses a built-in InheritedWidget.
-      App.refresh();
       // Next refresh the current State object itself.
       super.refresh();
     }

@@ -1,4 +1,9 @@
 
+## 8.12.0
+ May 13, 2022
+- Introduced setState() and buildInherited() to the App class.
+- Introduced CupertinoApp.router() to the framework.
+
 ## 8.11.0
  April 16, 2022
 - // address the possibility an App has called another App.
