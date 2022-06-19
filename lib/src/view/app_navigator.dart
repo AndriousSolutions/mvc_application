@@ -402,7 +402,7 @@ class AppRouteInformationProvider extends PlatformRouteInformationProvider {
       : super(initialRouteInformation: _initialRouteInformation());
 
   static RouteInformation _initialRouteInformation() {
-    String path = WidgetsBinding.instance!.window.defaultRouteName;
+    String path = WidgetsBinding.instance.window.defaultRouteName;
     final String url = urlPath();
     if (url.isNotEmpty && url != path) {
       path = url;

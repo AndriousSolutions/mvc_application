@@ -47,5 +47,8 @@ export 'package:mvc_application/src/controller/device_info.dart'
 // Assets
 export 'package:mvc_application/src/controller/assets/assets.dart';
 
+// Get Utils
+export 'package:mvc_application/src/controller/get_utils/get_utils.dart';
+
 // Preferences
 export 'package:prefs/prefs.dart' show Prefs, SharedPreferences;

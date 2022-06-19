@@ -1,4 +1,10 @@
 
+## 8.13.0
+ June 18, 2022
+- Updated Dart   sdk: '>=2.17.1 <3.0.0'
+- Null operator '!' not longer necessary for 'WidgetsBinding' in Flutter 3.x 
+- Supplied Jonny Borges's extensions from is Getx package under an MIT licence.
+
 ## 8.12.0
  May 13, 2022
 - Introduced setState() and buildInherited() to the App class.

@@ -50,15 +50,13 @@ Implementing the MVC framework using two common example apps:
 
 ##### The Counter App
 ```dart
-import 'package:flutter/material.dart';
+import 'package:mvc_application/view.dart';
 
-import 'package:mvc_application/view.dart' show AppMVC, AppState, StateMVC;
-
-import 'package:mvc_application/controller.dart' show ControllerMVC;
+import 'package:mvc_application/controller.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends AppMVC {
+class MyApp extends AppStatefulWidget {
   MyApp({Key? key}) : super(key: key);
 
   @override

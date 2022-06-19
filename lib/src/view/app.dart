@@ -185,7 +185,7 @@ class App {
 
   /// Flutter application's main window.
   static ui.SingletonFlutterWindow get mainWindow =>
-      _window ??= WidgetsBinding.instance!.window;
+      _window ??= WidgetsBinding.instance.window;
   static ui.SingletonFlutterWindow? _window;
 
   /// Return the navigator key used by the App's View.
