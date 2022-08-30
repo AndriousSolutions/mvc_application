@@ -223,7 +223,7 @@ class _WordPair extends StatelessWidget {
   Widget build(BuildContext context) {
     /// This is where the magic happens.
     /// This Widget becomes a dependent of an InheritedWidget deep in the framework.
-    con.appStateObject?.widgetInherited(context);
+    con.appStateObject?.dependOnInheritedWidget(context);
 
     // String data;
     //

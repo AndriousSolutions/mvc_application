@@ -407,7 +407,7 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
 
   /// Override to impose your own WidgetsApp (like CupertinoApp or MaterialApp)
   @override
-  Widget buildApp(BuildContext context) {
+  Widget buildChild(BuildContext context) {
     //
     Widget app;
 
@@ -780,9 +780,6 @@ class AppState<T extends mvc.AppStatefulWidgetMVC> extends _AppState<T> {
     }
     if (inLocalizationsDelegates != null) {
       yield* inLocalizationsDelegates!();
-    }
-    if (v.L10n.delegate != null) {
-      yield v.L10n.delegate!;
     }
   }
 

@@ -23,7 +23,7 @@ class TemplateView extends AppState {
           locale: AppTrs.textLocale,
           supportedLocales: AppTrs.supportedLocales,
           localizationsDelegates: [
-            L10n.delegate!,
+            AppTrs.delegate!,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,

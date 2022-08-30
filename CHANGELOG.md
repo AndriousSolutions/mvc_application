@@ -1,4 +1,9 @@
 
+## 8.13.1
+ August 30, 2022
+- Widget buildApp(BuildContext context) { to Widget buildChild(BuildContext context) {
+- L10n.delegate to AppTrs.delegate
+
 ## 8.13.0
  June 18, 2022
 - Updated Dart   sdk: '>=2.17.1 <3.0.0'
