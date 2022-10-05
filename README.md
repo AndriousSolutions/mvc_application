@@ -44,6 +44,7 @@ For more information on version numbers: [The importance of semantic versioning]
 Like many other design patterns, MVC separates three common 'areas of concern' found in computer programs. Specifically, there's the separation of the program's logic from its inteface and from its data. The many design patterns that have come into vogue since MVC's inception in the early 1970's are decendants of MVC.
 
 Note, computer platforms themselves have come full circle in the last 40 years. From mainframes to desktop computers in the first twenty years, and then website applications to mobile apps in the last twenty years. A computer now fits in the palm of your hand, and because of this, MVC again fits as the design pattern and framework for the apps it runs.
+
 ![mvcTypes](https://user-images.githubusercontent.com/32497443/104035805-2d310c00-5198-11eb-8a4a-99f02115ff82.jpg)
 
 Implementing the MVC framework using two common example apps:
